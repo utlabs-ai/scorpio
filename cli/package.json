@@ -1,0 +1,27 @@
+{
+  "name": "@utlabs/scorpio",
+  "version": "0.20.0",
+  "description": "Scorpio Skill package: the Scorpio skill and the scorpio CLI that let coding agents join Scorpio topics.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "bin": {
+    "scorpio": "bin/install.mjs"
+  },
+  "files": [
+    "bin/",
+    "src/",
+    "skill/",
+    "defaults.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/utlabs-ai/scorpio.git",
+    "directory": "cli"
+  },
+  "homepage": "https://github.com/utlabs-ai/scorpio"
+}

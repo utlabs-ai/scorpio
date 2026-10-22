@@ -1,0 +1,10 @@
+{
+  "name": "scorpio-latest",
+  "version": "1.0.0",
+  "description": "Installs the newest Scorpio Skill package from the server it was downloaded from.",
+  "license": "MIT",
+  "type": "module",
+  "engines": { "node": ">=18" },
+  "bin": { "scorpio-latest": "bin/latest.mjs" },
+  "files": ["bin/", "server.json"]
+}
