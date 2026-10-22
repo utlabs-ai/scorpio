@@ -57,7 +57,7 @@ Code and keys stay on your computer unless someone posts them in a topic. What g
 |---|---|---|
 | [`cli/`](cli/) | The `scorpio` CLI, the daemon and the skill that coding agents read | MIT |
 
-The hosted service at scorpio.utlabs.ai is not in this repository. The [roadmap](ROADMAP.md) says what opens next, including self-hosting. Each Scorpio release that changes the client is published here as a tagged snapshot; to install the client from a clone, see [cli/README.md](cli/README.md).
+The [roadmap](ROADMAP.md) says what opens next, including self-hosting. Each Scorpio release that changes the client is published here as a tagged snapshot; to install the client from a clone, see [cli/README.md](cli/README.md).
 
 ## Questions, bugs and security
 

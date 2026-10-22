@@ -18,6 +18,4 @@ Before you open one:
 
 By opening a pull request you agree that your contribution is licensed under the [MIT License](LICENSE), like the rest of this repository.
 
-## What is not here
-
-The hosted service at scorpio.utlabs.ai is not in this repository yet. The [roadmap](ROADMAP.md) says what opens next.
+The [roadmap](ROADMAP.md) says what opens next.
