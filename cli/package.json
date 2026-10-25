@@ -1,6 +1,6 @@
 {
   "name": "@utlabs/scorpio",
-  "version": "0.22.0",
+  "version": "0.22.1",
   "description": "Scorpio Skill package: the Scorpio skill and the scorpio CLI that let coding agents join Scorpio topics.",
   "license": "MIT",
   "type": "module",

@@ -1,5 +1,6 @@
+import fs from 'node:fs'
 import { randomUUID } from 'node:crypto'
-import { CliError, api, done, remember, roomCtx, roomPath, textArg } from '../client.mjs'
+import { CliError, api, done, remember, roomCtx, roomPath } from '../client.mjs'
 
 const RULE_KEYS = ['at', 'daily', 'weekly', 'every']
 const OPS = ['show', 'edit', 'on', 'off', 'send', 'delete']
@@ -162,6 +163,12 @@ function withNext(res, fallbackTz = null) {
   return res
 }
 
+function textArg(value) {
+  const text = value === '-' ? fs.readFileSync(0, 'utf8').replace(/\n$/, '') : value
+  if (typeof text !== 'string' || !text.trim()) throw new CliError('bad_request', "text= needs the scheduled message (an agent's must @ someone); text=- reads stdin.")
+  return text
+}
+
 function reviveArg(value) {
   if (value === undefined) return undefined
   if (value !== 'true' && value !== 'false') throw new CliError('bad_request', 'revive= takes true or false.')
@@ -175,32 +182,31 @@ async function schedule(args) {
   if (ops.length > 1) throw new CliError('bad_request', 'Use one of show=, edit=, on=, off=, send= or delete= at a time.')
   const op = ops[0]
   const base = roomPath(ctx.roomId, '/schedules')
-  const hasText = args.text !== undefined || args.textFile !== undefined
   let res, tz = null
-  if (!op && !hasText && !RULE_KEYS.some((k) => args[k] !== undefined)) {
+  if (!op && args.text === undefined && !RULE_KEYS.some((k) => args[k] !== undefined)) {
     if (args.step !== undefined || args.from !== undefined || args.tz !== undefined || args.revive !== undefined || args.nonce !== undefined) throw new CliError('bad_request', 'A schedule needs text= and one time rule; leave them all out to list.')
     res = await api('GET', base, { role: ctx.role })
   } else if (!op) {
     const parsed = ruleArg(args, { required: true })
     tz = parsed.tz
-    const body = { op: 'add', text: textArg(args), rule: parsed.rule, nonce: args.nonce || randomUUID() }
+    const body = { op: 'add', text: textArg(args.text), rule: parsed.rule, nonce: args.nonce || randomUUID() }
     const revive = reviveArg(args.revive)
     if (revive !== undefined) body.revive = revive
     res = await api('POST', base, { role: ctx.role, body })
   } else if (op === 'show') {
-    if (hasText || RULE_KEYS.some((k) => args[k] !== undefined) || args.step !== undefined || args.from !== undefined || args.tz !== undefined || args.revive !== undefined || args.nonce !== undefined) throw new CliError('bad_request', 'show= takes only a schedule id.')
+    if (args.text !== undefined || RULE_KEYS.some((k) => args[k] !== undefined) || args.step !== undefined || args.from !== undefined || args.tz !== undefined || args.revive !== undefined || args.nonce !== undefined) throw new CliError('bad_request', 'show= takes only a schedule id.')
     res = await api('GET', `${base}/${scheduleId(args.show, 'show')}`, { role: ctx.role })
   } else {
     const body = { op: op === 'off' && args.off === 'all' ? 'stop_all' : op }
     if (body.op !== 'stop_all') body.id = scheduleId(args[op], op)
     if (op === 'edit') {
-      if (hasText) body.text = textArg(args)
+      if (args.text !== undefined) body.text = textArg(args.text)
       const parsed = ruleArg(args)
       if (parsed) { body.rule = parsed.rule; tz = parsed.tz }
       const revive = reviveArg(args.revive)
       if (revive !== undefined) body.revive = revive
       if (!Object.hasOwn(body, 'text') && !parsed && revive === undefined) throw new CliError('bad_request', 'edit= needs text=, one time rule or revive=.')
-    } else if (hasText || RULE_KEYS.some((k) => args[k] !== undefined) || args.step !== undefined || args.from !== undefined || args.tz !== undefined || args.revive !== undefined) throw new CliError('bad_request', `${op}= takes only a schedule id.`)
+    } else if (args.text !== undefined || RULE_KEYS.some((k) => args[k] !== undefined) || args.step !== undefined || args.from !== undefined || args.tz !== undefined || args.revive !== undefined) throw new CliError('bad_request', `${op}= takes only a schedule id.`)
     if (args.nonce !== undefined && !['send'].includes(op)) throw new CliError('bad_request', 'nonce= goes with create or send= only.')
     if (op === 'send') body.nonce = args.nonce || randomUUID()
     res = await api('POST', base, { role: ctx.role, body })

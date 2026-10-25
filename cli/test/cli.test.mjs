@@ -61,7 +61,7 @@ function cli(...args) {
   const options = typeof args.at(-1) === 'object' ? args.pop() : null
   const before = seen.length
   return new Promise((resolve) => {
-    const child = execFile(process.execPath, [CLI, ...args, 'role=api'], { env: testEnv(home, { SCORPIO_HOME: home, SCORPIO_SERVER: url, ...options?.env }), timeout: 30_000 }, (err, stdout) => {
+    const child = execFile(process.execPath, [CLI, ...args, 'role=api'], { env: testEnv(home, { SCORPIO_HOME: home, SCORPIO_SERVER: url }), timeout: 30_000 }, (err, stdout) => {
       resolve({ code: err ? err.code : 0, out: JSON.parse(stdout || '{}'), sent: seen.length > before ? seen.at(-1) : null })
     })
     if (options?.stdin !== undefined) child.stdin.end(options.stdin)
@@ -341,73 +341,4 @@ scorpio roleCard roomId=${TOPIC_ID} roleCard='impl: server'
     assert.equal(r.code, 0, `${action} ${rest.join(' ')} → ${JSON.stringify(r.out)}`)
     assert.ok(r.sent?.url.startsWith(`/api/v1/rooms/${TOPIC_ID}/`), `${action} reached the server: ${r.sent?.url}`)
   }
-})
-
-test('send textFile preserves bytes and rejects empty, missing and conflicting text before requests', async () => {
-  const file = path.join(home, 'message.md')
-  const text = '@kai First line\n`literal $text` and \\n\n'
-  fs.writeFileSync(file, text)
-  const sent = await cli('send', 'topicId=R', `textFile=${file}`)
-  assert.equal(sent.code, 0)
-  assert.equal(sent.sent.body.text, text)
-  for (const extra of [['text=other', `textFile=${file}`], [`textFile=${file}.missing`]]) {
-    const result = await cli('send', 'topicId=R', ...extra)
-    assert.equal(result.out.error, 'bad_request'); assert.equal(result.sent, null)
-  }
-  fs.writeFileSync(file, ' \n')
-  const empty = await cli('send', 'topicId=R', `textFile=${file}`)
-  assert.equal(empty.out.error, 'bad_request'); assert.equal(empty.sent, null)
-})
-
-test('Codex sandbox fails immediately without a server request; local help and version work', async () => {
-  const probeHome = fs.mkdtempSync(path.join(os.tmpdir(), 'scorpio-cli-sandbox-'))
-  const state = path.join(probeHome, 'state')
-  fs.mkdirSync(state, { mode: 0o500 })
-  try {
-    const before = seen.length
-    for (const action of ['send', 'join', 'whoami', 'daemon']) {
-      const result = await cli(action, 'topicId=R', 'text=@kai hi', { env: { SCORPIO_HOME: probeHome, CODEX_SANDBOX_NETWORK_DISABLED: '1' } })
-      assert.equal(result.code, 1)
-      assert.equal(result.out.error, 'sandboxed')
-      assert.match(result.out.next, /outside the sandbox/)
-      assert.equal(result.sent, null)
-    }
-    assert.equal(seen.length, before)
-  } finally {
-    fs.chmodSync(state, 0o700)
-    fs.rmSync(probeHome, { recursive: true, force: true })
-  }
-  for (const action of ['help', 'version']) {
-    const result = await new Promise((resolve) => execFile(process.execPath, [CLI, action],
-      { env: testEnv(home, { CODEX_SANDBOX_NETWORK_DISABLED: '1' }), timeout: 3000 }, (error, stdout) => resolve({ error, stdout })))
-    assert.equal(result.error, null)
-    assert.ok(result.stdout.includes(VERSION))
-  }
-})
-
-test('Codex sandbox marker outside the sandbox allows requests and leaves no probe file', async () => {
-  const probeHome = fs.mkdtempSync(path.join(os.tmpdir(), 'scorpio-cli-approved-'))
-  const state = path.join(probeHome, 'state')
-  fs.mkdirSync(state, { mode: 0o700 })
-  fs.writeFileSync(path.join(probeHome, 'token'), 'tok')
-  try {
-    const before = seen.length
-    const result = await cli('topics', { env: { SCORPIO_HOME: probeHome, CODEX_SANDBOX_NETWORK_DISABLED: '1' } })
-    assert.equal(result.code, 0)
-    assert.equal(result.out.error, undefined)
-    assert.equal(seen.length, before + 1)
-    assert.equal(result.sent.url, '/api/v1/rooms')
-    assert.deepEqual(fs.readdirSync(state), [])
-  } finally {
-    fs.rmSync(probeHome, { recursive: true, force: true })
-  }
-})
-
-test('Codex approval hook with sandbox marker and no local socket exits silently', async () => {
-  const result = await new Promise((resolve) => execFile(process.execPath, [CLI, 'approval-hook', 'codex'],
-    { env: testEnv(home, { SCORPIO_HOME: home, CODEX_SANDBOX_NETWORK_DISABLED: '1', HERDR_PANE_ID: 'w:p1' }), timeout: 3000 },
-    (error, stdout, stderr) => resolve({ error, stdout, stderr })))
-  assert.equal(result.error, null)
-  assert.equal(result.stdout, '')
-  assert.equal(result.stderr, '')
 })

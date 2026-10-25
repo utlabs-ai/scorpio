@@ -1,6 +1,6 @@
 // This directory is published as is, so its comments and documentation are public text. A pointer
-// to something that is not here (a task or message number, a team role cited as the source, a document
-// or repository outside this directory) tells the reader nothing. This test
+// into private material (a task or message number, a team role cited as the source, a document or
+// repository that is not here) tells a public reader nothing and can leak internal context. This test
 // scans the comments, test titles and assertion messages in .mjs/.js files and the prose in .md files,
 // and names each hit by file and line.
 import assert from 'node:assert/strict'

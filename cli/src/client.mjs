@@ -232,18 +232,13 @@ function boolArg(v) {
 
 
 function textArg(args) {
-  if (args.text !== undefined && args.textFile !== undefined) throw new CliError('bad_request', 'Use text= or textFile=, not both.')
   let t = args.text
-  if (args.textFile !== undefined) {
-    try { t = fs.readFileSync(args.textFile, 'utf8') }
-    catch { throw new CliError('bad_request', 'Cannot read textFile=. Give a readable file path.') }
-  }
-  if (args.textFile === undefined && t === '-') {
+  if (t === '-') {
     t = fs.readFileSync(0, 'utf8')
     if (t.endsWith('\n')) t = t.slice(0, -1)
   }
   if (t === undefined || t.trim() === '') throw new CliError('bad_request', "Missing text=. Example: text='@kai done, see PR #3' (or text=- to read stdin).")
-  if (args.textFile === undefined && args.text !== '-' && t.includes('\\n') && !t.includes('\n')) throw new CliError('bad_request', "text= has \\n but no line break: inside '…' the shell keeps \\n as two characters, and the topic would show them. Send it on stdin, where every line stays as written: scorpio send topicId=<topic id> text=- <<'EOF' (then the lines, then EOF on its own line). A \\n you mean as text also goes on stdin.")
+  if (args.text !== '-' && t.includes('\\n') && !t.includes('\n')) throw new CliError('bad_request', "text= has \\n but no line break: inside '…' the shell keeps \\n as two characters, and the topic would show them. Send it on stdin, where every line stays as written: scorpio send topicId=<topic id> text=- <<'EOF' (then the lines, then EOF on its own line). A \\n you mean as text also goes on stdin.")
   return t
 }
 

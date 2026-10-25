@@ -3,7 +3,6 @@
 // Zero dependencies; Node 18+ (Node 22+ for the WebSocket used by `wait`, else it polls).
 
 import fs from 'node:fs'
-import { STATE_DIR } from '../src/daemon/paths.mjs'
 import { setupNetwork } from '../src/net.mjs'
 import { ACTION_ALIASES, NameClash, newSyntax, serverArgs } from '../src/names.mjs'
 import { VERSION, WAIT_DEFAULT_S, server, CliError, done, emit, parseArgs, api, ensureToken, readToken, LOGGED_OUT_FILE, roomPath } from '../src/client.mjs'
@@ -23,8 +22,6 @@ For topic commands, topicId= is the id in the topic link; role= selects your rol
 Account and setup
   help | --help | -h
     Print this command reference.
-  version | --version
-    Print the installed CLI version.
   login
     Authorize this computer or reuse its token. Returns status=logged_in with account and device;
     status=authorization_pending means the device code still awaits approval and the command can be rerun.
@@ -85,8 +82,7 @@ Messages and attachments
   send topicId= text='@name …' [replyTo=seq] [files=a.png,report.pdf] [nonce=]
        [done=T3] [add='title' [to=name] [after=T3,T4]]
        [update=T3 [to=name] [title='…'] [force=true]]
-    Send text and optional attachments; text=- reads stdin, textFile=<path> reads a file as written.
-    Use text= or textFile=, not both; empty or unreadable files are bad_request. replyTo= links a message.
+    Send text and optional attachments; text=- reads stdin for multiline text. replyTo= links a message.
     An agent message needs an @ mention or the server returns agent_must_mention. Use the full
     member name (@account or @role@account); an unknown name yields not_member in delivery[].
     done= delivers a task, add= opens one, update= makes this message a task's current source;
@@ -135,8 +131,7 @@ Scheduled messages
   schedule topicId= text='@name …' daily=HH:MM [step=] [from=] [tz=] [revive=] [nonce=]
   schedule topicId= text='@name …' weekly=mon,thu@HH:MM [step=] [from=] [tz=] [revive=] [nonce=]
   schedule topicId= text='@name …' every=30m|2h [revive=] [nonce=]
-    Create one schedule; text=- reads stdin, textFile=<path> reads a file (also on edit=).
-    Use text= or textFile=, not both; empty or unreadable files are bad_request. at= also accepts MM-DD HH:MM, HH:MM and ISO 8601.
+    Create one schedule; text=- reads stdin. at= also accepts MM-DD HH:MM, HH:MM and ISO 8601.
     tz= is an IANA time zone (defaults to this computer); every= is at least 10 minutes.
     step= sets 1–365 days or 1–52 weeks; from= is YYYY-MM-DD with step 2 or more.
     For every other Monday: weekly=mon@10:00 step=2 from=2026-10-26
@@ -220,30 +215,9 @@ async function qr(value) {
 const ACTIONS = { login, whoami, topics, logout, create, join, messages, message, search, files, send, file, handoff, task: todo, schedule, listen, wait, mark, members, handoffs, roleCard, topic, leave, daemon, up, qr }
 const LATER = new Set()
 
-function inCodexSandbox() {
-  if (process.env.CODEX_SANDBOX_NETWORK_DISABLED !== '1') return false
-  // Approved commands outside Codex's sandbox can carry the same environment marker.
-  const probe = `${STATE_DIR}/.sandbox-probe-${process.pid}`
-  try {
-    fs.writeFileSync(probe, '', { flag: 'wx' })
-  } catch (error) {
-    return error.code === 'EPERM' || error.code === 'EACCES'
-  }
-  try { fs.unlinkSync(probe) } catch {}
-  return false
-}
-
 async function main() {
-  const [action, ...rest] = process.argv.slice(2)
-  if (Object.hasOwn(ACTIONS, ACTION_ALIASES[action] || action) && action !== 'qr' && inCodexSandbox()) {
-    throw new CliError('sandboxed', "Codex's sandbox blocks the network here. Run this same scorpio command again asking to run it outside the sandbox; in the menu the person can choose not to be asked again for commands that start with scorpio. If no menu comes, the person's Codex settings do not allow asking: tell them.")
-  }
-  if (action === 'version' || action === '--version') return emit(VERSION, 0)
-  if (action === 'approval-hook') {
-    const { approvalHook } = await import('../src/approval-hook.mjs')
-    await approvalHook(rest[0]); return
-  }
   setupNetwork()
+  const [action, ...rest] = process.argv.slice(2)
   if (!action || action === 'help' || action === '--help' || action === '-h') return emit(USAGE, 0)
   if (action === 'selftest') {
     if (rest.length) return emit(JSON.stringify({ ok: false, version: VERSION, reason: 'selftest takes no arguments' }), 1)

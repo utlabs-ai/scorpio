@@ -1,16 +1,14 @@
-// CLI adapters: one per agent CLI the daemon can start. Each says how to start it with the user approval settings and with an explicit model and effort, which dialogs must never be touched, and
+// CLI adapters: one per agent CLI the daemon can start. Each says how to start it without
+// approval prompts and with an explicit model and effort, which dialogs must never be touched, and
 // whether it needs keep-alives. The daemon answers no dialog itself.
 // Defaults can be overridden per computer in ~/.scorpio/config.json: {"spawn": {"claude": [args…]}}.
 
-import path from 'node:path'
-import { CONFIG_FILE, LAUNCHER, STATE_DIR, readJson } from '../../daemon/paths.mjs'
-
-import { approvalSettings } from './codex-settings.mjs'
+import { CONFIG_FILE, readJson } from '../../daemon/paths.mjs'
 
 export const CLIS = {
   claude: {
     label: 'Claude Code',
-    args: ['--model', 'claude-opus-5-5', '--effort', 'medium'],
+    args: ['--dangerously-skip-permissions', '--model', 'claude-opus-5-5', '--effort', 'medium'],
     // Its prompt cache lives an hour; a quiet agent loses it unless touched.
     keepalive: true,
     usage: 'quota-api', // its login asks the API behind its /usage panel (usage.mjs)
@@ -18,7 +16,8 @@ export const CLIS = {
   codex: {
     label: 'Codex',
     // Don't let Codex open with "update now?": one Enter in that dialog runs npm install -g on someone's computer.
-    args: ['-m', 'gpt-6.1-sol', '-c', 'model_reasoning_effort=medium', '-c', 'check_for_update_on_startup=false'],
+    args: ['-m', 'gpt-6.1-sol', '-c', 'model_reasoning_effort=medium', '-c', 'check_for_update_on_startup=false',
+      '--ask-for-approval', 'never', '--sandbox', 'danger-full-access'],
     // OpenAI does not say how long its cache lives under a ChatGPT login; keep-alives are the traffic most
     // like "a program using the account", so none.
     keepalive: false,
@@ -27,23 +26,9 @@ export const CLIS = {
 }
 export const KINDS = Object.keys(CLIS)
 
-// Keep the whole Codex definition stable: its trust is keyed by the definition hash.
-export const codexHookDefinition = (launcher = LAUNCHER) => `hooks.PermissionRequest=[{matcher=".*",hooks=[{type="command",command=${JSON.stringify(`${launcher} approval-hook codex`)},timeout=10}]}]`
-export function fullPermission(kind, args = []) {
-  const is = (flags, value) => args.some((arg, i) => flags.includes(arg) && args[i + 1] === value || flags.some((flag) => arg === `${flag}=${value}`))
-  return kind === 'claude'
-    ? args.includes('--dangerously-skip-permissions') || is(['--permission-mode'], 'bypassPermissions')
-    : args.includes('--dangerously-bypass-approvals-and-sandbox') || args.includes('--yolo') || is(['--ask-for-approval', '-a'], 'never')
-}
-
-export function argsFor(kind, config = readJson(CONFIG_FILE), perm = 'default') {
+export function argsFor(kind, config = readJson(CONFIG_FILE)) {
   const custom = config?.spawn?.[kind]
-  const own = Array.isArray(custom) && custom.every((a) => typeof a === 'string')
-  const args = [...(own ? custom : CLIS[kind].args)]
-  if (!own && perm === 'all') args.push(...(kind === 'claude' ? ['--dangerously-skip-permissions'] : ['--ask-for-approval', 'never', '--sandbox', 'danger-full-access']))
-  if (kind === 'codex' && !own && perm === 'default' && approvalSettings().policy === undefined) args.push('--ask-for-approval', 'on-request')
-  if (!fullPermission(kind, args)) args.push(...(kind === 'claude' ? ['--settings', path.join(STATE_DIR, 'hooks', 'claude.json')] : ['-c', codexHookDefinition()]))
-  return args
+  return Array.isArray(custom) && custom.every((a) => typeof a === 'string') ? custom : CLIS[kind].args
 }
 
 /** Model and effort in a CLI's arguments (the defaults, or a running agent's command line). */
@@ -86,21 +71,9 @@ export function modelText(kind, args) {
 // here is "update now". Seen on screen, the daemon types nothing.
 export const NEVER_ANSWER = /Update available|Update now|Skip until next version/i
 
-// Herdr through 0.9.5 misses Codex hook trust; older versions also miss folder trust.
-// Match only these paired phrases: an ordinary Codex input prompt also starts with ›.
-export function unseenDialog(screen) {
-  const recent = String(screen || '').split('\n').filter((line) => line.trim()).slice(-30).join('\n')
-  return recent.includes('Hooks need review') && recent.includes('Trust all and continue') ||
-    recent.includes('Trust this folder?') && recent.includes('Trust and continue')
-}
-
-export function dialogBlocked(status, screen) {
-  return status === 'blocked' || status !== 'working' && unseenDialog(screen)
-}
-
 // Every other dialog (trust this folder, CLAUDE.md imports from outside it, the no-approval mode's warning) is
 // the person's to answer, never the daemon's: herdr reports the pane blocked, the daemon types
-// nothing into it; the owner answers the menu on their phone or computer.
+// nothing into it and shows the screen in the topic, and /keys answers it once the person said how.
 
 /** Is the CLI of this kind in the pane's foreground (herdr's process info), not a shell it exited to? */
 export function runsCli(info, kind) {

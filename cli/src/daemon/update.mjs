@@ -4,14 +4,13 @@ import { createHash } from 'node:crypto'
 import { execFile } from 'node:child_process'
 import { promisify } from 'node:util'
 import { buildId } from '../build-id.mjs'
-import { HOME, PKG_DIR, readJson, server, version, writeJson } from './paths.mjs'
+import { HOME, readJson, server, version, writeJson } from './paths.mjs'
 
 const execFileP = promisify(execFile)
 const SHA256 = /^[0-9a-f]{64}$/
-let cachedBuild
 
 export async function selfUpdate({
-  home = HOME, serverUrl = server(), currentVersion = version(), currentBuild, newer, whoami,
+  home = HOME, serverUrl = server(), currentVersion = version(), newer, whoami,
   fetchImpl = fetch, execute = execFileP, childEnv = process.env, log = () => {}, checked = () => {},
 } = {}) {
   let latest
@@ -28,9 +27,7 @@ export async function selfUpdate({
     checked({ at: Date.now(), state: 'failed' })
     return
   }
-  const sameVersion = latest.version === currentVersion
-  if (sameVersion && !SHA256.test(currentBuild)) currentBuild = cachedBuild ??= buildId(PKG_DIR)
-  if (!newer(latest.version, currentVersion) && !(sameVersion && latest.build !== currentBuild)) {
+  if (!newer(latest.version, currentVersion)) {
     checked({ at: Date.now(), state: 'current' })
     return
   }

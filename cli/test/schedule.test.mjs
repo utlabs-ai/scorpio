@@ -111,7 +111,7 @@ test('local rejection and server errors preserve code and next', async () => {
     assert.equal(r.sent, null)
   }
   assert.deepEqual((await cli('text=', 'daily=10:00')).out,
-    { error: 'bad_request', next: "Missing text=. Example: text='@kai done, see PR #3' (or text=- to read stdin)." })
+    { error: 'bad_request', next: "text= needs the scheduled message (an agent's must @ someone); text=- reads stdin." })
   const past = await cli('text=@agent@kai x', 'at=2020-01-01T00:00:00Z')
   assert.deepEqual(past.out, { error: 'schedule_in_past', next: 'Choose a future time.' })
   const pro = await cli('text=@free x', 'every=1h')
@@ -139,25 +139,5 @@ test('calendar step arguments are sent on create and edit and invalid combinatio
     const result = await cli(...args, ...(args.some((a) => /^(edit|show|off)=/.test(a)) || args[0] === 'step=2' ? [] : ['text=@agent@kai check']))
     assert.equal(result.out.error, 'bad_request', JSON.stringify(args))
     assert.equal(result.sent, null, JSON.stringify(args))
-  }
-})
-
-test('schedule textFile shares send text validation on create and edit', async () => {
-  const file = path.join(home, 'schedule.md')
-  const text = '@agent@kai First\nSecond `literal $text`\n'
-  fs.writeFileSync(file, text)
-  for (const mode of [['daily=10:00'], ['edit=S3']]) {
-    const result = await cli(...mode, `textFile=${file}`)
-    assert.equal(result.code, 0)
-    assert.equal(result.sent.body.text, text)
-    for (const extra of [['text=other', `textFile=${file}`], [`textFile=${file}.missing`]]) {
-      const bad = await cli(...mode, ...extra)
-      assert.equal(bad.out.error, 'bad_request'); assert.equal(bad.sent, null)
-    }
-  }
-  fs.writeFileSync(file, '')
-  for (const mode of [['daily=10:00'], ['edit=S3']]) {
-    const bad = await cli(...mode, `textFile=${file}`)
-    assert.equal(bad.out.error, 'bad_request'); assert.equal(bad.sent, null)
   }
 })
