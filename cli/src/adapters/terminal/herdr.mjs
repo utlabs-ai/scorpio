@@ -120,6 +120,14 @@ export function createHerdr({ bin = HERDR_BIN, exec = null, sleep = (ms) => new 
   async function read(pane, lines = 200, source = 'recent-unwrapped') {
     try { return await call(['pane', 'read', pane, '--source', source, '--lines', String(lines)], { text: true }) } catch { return '' }
   }
+  async function paneWidth(pane) {
+    try {
+      const layout = (await call(['pane', 'layout', '--pane', pane]))?.result?.layout
+      const width = layout?.panes?.find((p) => p.pane_id === pane)?.rect?.width
+      // Herdr layout reserves the final column; stty in the same pane reports one fewer.
+      return Number.isInteger(width) && width > 1 ? width - 1 : null
+    } catch { return null }
+  }
   async function processInfo(pane) {
     try { return (await call(['pane', 'process-info', '--pane', pane]))?.result?.process_info || null } catch { return null }
   }
@@ -191,7 +199,7 @@ export function createHerdr({ bin = HERDR_BIN, exec = null, sleep = (ms) => new 
   return {
     // Its column in the key table (keys.mjs): how /keys names a key to this terminal.
     adapter: 'herdr',
-    bin, panes, paneStatus, agents, read, processInfo, inject, injectAndWatch, sendKeys, sendText, run: runIn, explain,
+    bin, panes, paneStatus, paneWidth, agents, read, processInfo, inject, injectAndWatch, sendKeys, sendText, run: runIn, explain,
     newTab, renameTab, closeTab, closePane, waitShell, startAgent, tabs, workspaces, sleep,
     maxPromptBytes: MAX_PROMPT_BYTES, nameOk: (n) => AGENT_NAME.test(n),
   }

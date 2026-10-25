@@ -13,6 +13,7 @@ import { testEnv } from './env.mjs'
 
 const home = fs.mkdtempSync(path.join(os.tmpdir(), 'scorpio-test-'))
 process.env.SCORPIO_HOME = home
+process.env.CODEX_HOME = path.join(home, "codex")
 
 test('daemon tabs use the exact home-specific label for creation and idle reuse', () => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'scorpio-daemon-label-'))
@@ -649,7 +650,7 @@ test('registry: register, pane-guarded unregister, prune', () => {
 test('CLI adapters: model and effort in the arguments', () => {
   assert.equal(modelText('claude', argsFor('claude', {})), 'claude-opus-5-5, effort medium')
   assert.equal(modelText('codex', argsFor('codex', {})), 'gpt-6.1-sol, reasoning medium')
-  assert.deepEqual(argsFor('claude', { spawn: { claude: ['--model', 'x'] } }), ['--model', 'x'])
+  assert.deepEqual(argsFor('claude', { spawn: { claude: ['--model', 'x'] } }), ['--model', 'x', '--settings', path.join(home, 'state', 'hooks', 'claude.json')])
   assert.deepEqual(withModel('claude', ['--model', 'a', '--effort', 'high'], { effort: 'max' }), ['--model', 'a', '--effort', 'max'])
   assert.deepEqual(withModel('codex', ['-m', 'a', '-c', 'model_reasoning_effort=high'], { model: 'b', effort: 'low' }), ['-m', 'b', '-c', 'model_reasoning_effort=low'])
   assert.deepEqual(modelOf('claude', ['--dangerously-skip-permissions', '--model', 'claude-opus-5-5', '--effort', 'xhigh', 'hi']), { model: 'claude-opus-5-5', effort: 'xhigh' })
@@ -706,7 +707,7 @@ test('delivery checks this pane again before typing; blocked or unavailable neve
   calls.length = 0
   assert.equal(await injectWhenReady(terminal, 'w:p1', 'hello'), 'dialog')
   assert.deepEqual(calls, ['status', 'read'], 'the update prompt on screen still stops typing')
-  // A trust dialog herdr does not call blocked is no longer read off the screen: herdr's status decides.
+  // Other trust wording still relies on herdr; only the known Codex dialogs supplement its status.
   screen = 'Do you trust the files in this folder?\n\n ❯ 1. Yes, proceed\n   2. No, exit'
   calls.length = 0
   assert.equal(await injectWhenReady(terminal, 'w:p1', 'hello'), 'sent')
@@ -1160,7 +1161,7 @@ test('seat: nameless spawn skips left names; last directory is suggested but nev
   await m.tick()
   for (let i = 0; i < 20 && !m.said.some((s) => s.includes('Started claude-2')); i++) await new Promise((r) => setImmediate(r))
   assert.match(m.said.at(-1), /Started claude-2 .* in \/work, a new name in this topic\./)
-  assert.deepEqual(readJson(spawnRecordPath(ROOM, 'claude-2@kai')), { kind: 'claude', dir: '/work', explicitDir: true, model: 'claude-opus-5-5', effort: 'medium', pane: 'w:p9', at: 1_000_000 })
+  assert.deepEqual(readJson(spawnRecordPath(ROOM, 'claude-2@kai')), { kind: 'claude', dir: '/work', explicitDir: true, model: 'claude-opus-5-5', effort: 'medium', pane: 'w:p9', perm: 'default', at: 1_000_000 })
 
   writeJson(spawnRecordPath(ROOM, 'web@kai'), { kind: 'codex', dir: '/last', model: 'gpt-6-sol', effort: 'high', at: 1 })
   m.ask('@daemon.box@kai /spawn claude web do new work')
@@ -1558,7 +1559,7 @@ test('handoff instructions (the skill\'s Handing off): write, store with scorpio
   assert.ok(!/handover/i.test(h))
   assert.equal(parseCommand(steps[5].split('\n').slice(1, 5).map((l) => l.trim()).join('\n')), null, 'the takeover example is not run as a command')
   for (const c of COMMANDS) assert.ok(!/handover/i.test(c.help), c.name)
-  assert.ok(HELP_FULL.includes('`/spawn claude|codex [name] [<dir>|cwd="…"] [model=…] [effort=…] [handoff=skip] [prompt]`'))
+  assert.ok(HELP_FULL.includes('`/spawn claude|codex [name] [<dir>|cwd="…"] [model=…] [effort=…] [handoff=skip] [perm=all] [prompt]`'))
 })
 
 const API = { roomId: ROOM, name: 'api@kai', role: 'api', pane: 'w:p1' }
@@ -1796,14 +1797,14 @@ const CLAUDE_FG = { foreground_processes: [{ name: 'claude', argv: ['claude', '-
 const BASH_FG = { foreground_processes: [{ name: 'bash', argv: ['/bin/bash'], pid: 6 }] }
 
 /** A /spawn qa that stopped at a dialog while starting (herdr: blocked), not joined yet. */
-async function spawnedAtDialog(seatOpts = {}, { kind = 'claude', dir = '/work', from = 'kai', fromKind = 'human' } = {}) {
+async function spawnedAtDialog(seatOpts = {}, { kind = 'claude', dir = '/work', from = 'kai', fromKind = 'human', perm = '' } = {}) {
   const m = fakeMachine({ isDir: () => true, ...seatOpts })
   const pane = { ...QA_PANE, agent: kind, agent_status: 'blocked' }
   m.panes.push(pane)
   m.screen.byPane = { 'w:p9': ' Quick safety check: Is this a project you created or one you trust?\n\n ❯ No, exit\n   Yes, I trust this folder\n\n Enter to confirm · Esc to cancel' }
-  m.ask(`@daemon.box@kai /spawn ${kind} qa ${dir} do things`, from, fromKind)
+  m.ask(`@daemon.box@kai /spawn ${kind} qa ${dir} ${perm} do things`, from, fromKind)
   await m.tick()
-  for (let i = 0; i < 20 && !m.said.some((t) => t.includes('has not joined yet')); i += 1) await new Promise((r) => setImmediate(r))
+  for (let i = 0; i < 20 && !m.said.some((t) => /has not joined yet|Started qa /.test(t)); i += 1) await new Promise((r) => setImmediate(r))
   return { m, pane }
 }
 
@@ -2196,8 +2197,8 @@ async function updateFixture(t) {
     state.manifest = { file: 'scorpio.tgz', version: UPDATE_VERSION, build: candidate.build, sha256: createHash('sha256').update(state.archive).digest('hex') }
     return candidate
   }
-  const run = (whoami = async () => ({ account: 'test' })) => selfUpdate({
-    home: installHome, serverUrl: url, currentVersion: '0.0.0', newer, whoami, childEnv,
+  const run = (whoami = async () => ({ account: 'test' }), options = {}) => selfUpdate({
+    home: installHome, serverUrl: url, currentVersion: '0.0.0', newer, whoami, childEnv, ...options,
   })
   return { temp, installHome, childEnv, url, state, old, publish, run }
 }
@@ -2214,6 +2215,53 @@ test('selftest loads source modules, checks the installer, calls whoami, and wri
     return true
   })
   assert.deepEqual(treeContents(f.installHome), before)
+})
+
+test('same-version update keeps the same build without downloading', async (t) => {
+  const f = await updateFixture(t)
+  f.publish()
+  f.state.manifest.build = f.old.build
+  const checks = []
+  await f.run(undefined, { currentVersion: UPDATE_VERSION, currentBuild: f.old.build, checked: (result) => checks.push(result) })
+  assert.equal(f.state.downloads, 0)
+  assert.equal(checks.at(-1).state, 'current')
+})
+
+test('same-version update installs a different build and retains the previous build', async (t) => {
+  const f = await updateFixture(t)
+  const candidate = f.publish()
+  const checks = []
+  await f.run(undefined, { currentVersion: UPDATE_VERSION, currentBuild: f.old.build, checked: (result) => checks.push(result) })
+  assert.equal(f.state.downloads, 1)
+  assert.equal(checks.at(-1).state, 'new')
+  assert.equal(fs.readFileSync(path.join(f.installHome, 'app', '.build'), 'utf8').trim(), candidate.build)
+  assert.equal(fs.readFileSync(path.join(f.installHome, 'app.prev', '.build'), 'utf8').trim(), f.old.build)
+})
+
+test('same-version update rejects builds recorded in skip.json or rollback.json', async (t) => {
+  const f = await updateFixture(t)
+  const candidate = f.publish()
+  const checks = []
+  const options = { currentVersion: UPDATE_VERSION, currentBuild: f.old.build, checked: (result) => checks.push(result) }
+  fs.mkdirSync(path.join(f.installHome, 'state'), { recursive: true })
+  fs.writeFileSync(path.join(f.installHome, 'state', 'skip.json'), JSON.stringify({ build: candidate.build }))
+  await f.run(undefined, options)
+  assert.equal(checks.at(-1).state, 'failed')
+  fs.rmSync(path.join(f.installHome, 'state', 'skip.json'))
+  fs.writeFileSync(path.join(f.installHome, 'state', 'rollback.json'), JSON.stringify({ bad: { build: candidate.build } }))
+  await f.run(undefined, options)
+  assert.equal(checks.at(-1).state, 'failed')
+  assert.equal(f.state.downloads, 0)
+  assert.equal(fs.readFileSync(path.join(f.installHome, 'app', '.build'), 'utf8').trim(), f.old.build)
+})
+
+test('update never downloads an older version even with a different build', async (t) => {
+  const f = await updateFixture(t)
+  f.publish()
+  const checks = []
+  await f.run(undefined, { currentVersion: '999.0.0', currentBuild: f.old.build, checked: (result) => checks.push(result) })
+  assert.equal(f.state.downloads, 0)
+  assert.equal(checks.at(-1).state, 'current')
 })
 
 test('update precheck rejects a module that throws on import, without replacing app', async (t) => {
@@ -2332,4 +2380,230 @@ test('spawn guidance keeps the three approved lines and the new notice reference
     assert.ok(!text.includes('has not joined after 3 minutes'))
     assert.ok(text.includes('/read') && text.includes('/keys') && text.includes('/text'))
   }
+})
+
+test('spawn permission inheritance follows this daemon current pane record; humans may choose all', async () => {
+  const run = async (name, from, fromKind) => {
+    const m = fakeMachine()
+    m.panes.push({ pane_id: 'w:p9', agent: 'codex', agent_status: 'working' })
+    m.ask(`@daemon.box@kai /spawn codex ${name} perm=all work`, from, fromKind)
+    await m.tick(); await m.seat.settle()
+    return m
+  }
+  const human = await run('human-helper', 'kai', 'human')
+  assert.equal(human.tabs.length, 1)
+  assert.equal(readJson(spawnRecordPath(ROOM, 'human-helper@kai')).perm, 'all')
+  register({ roomId: ROOM, name: 'api@kai', role: 'api', pane: 'w:p1' })
+  try {
+    fs.rmSync(spawnRecordPath(ROOM, 'api@kai'), { force: true })
+    const manual = await run('manual-helper', 'api@kai', 'agent')
+    assert.equal(manual.tabs.length, 0); assert.match(manual.said.at(-1), /was not started with perm=all/)
+    writeJson(spawnRecordPath(ROOM, 'api@kai'), { perm: 'default', pane: 'w:p1' })
+    assert.equal((await run('default-helper', 'api@kai', 'agent')).tabs.length, 0)
+    writeJson(spawnRecordPath(ROOM, 'api@kai'), { perm: 'all', pane: 'old-pane' })
+    assert.equal((await run('stale-helper', 'api@kai', 'agent')).tabs.length, 0)
+    writeJson(spawnRecordPath(ROOM, 'api@kai'), { perm: 'all', pane: 'w:p1' })
+    assert.equal((await run('all-helper', 'api@kai', 'agent')).tabs.length, 1)
+  } finally { unregister({ roomId: ROOM, name: 'api@kai' }) }
+})
+
+test('/handoff with an approval card omits the screen; a dialog without a card keeps it', async () => {
+  for (const shown of [true, false]) {
+    const m = fakeMachine({ approvalBusy: () => true, approvalShown: () => shown })
+    m.screen.text = 'Bash command: cat /work/private-approval-command.txt\n1. Yes\n2. No'
+    m.panes[0].agent_status = 'blocked'
+    m.ask('@daemon.box@kai /handoff api')
+    await m.tick()
+    const line = m.said.find((text) => text.includes('the handoff instructions were not typed in'))
+    assert.ok(line)
+    assert.deepEqual(m.typed, [])
+    if (shown) {
+      assert.equal(line, "@kai ✗ api · waiting on an approval card on its owner's phone; the handoff instructions were not typed in, nothing done.")
+      assert.doesNotMatch(line, /Screen:|private-approval-command/)
+    } else {
+      assert.match(line, /stuck on a dialog/)
+      assert.ok(line.includes(`Screen:\n\`\`\`\n${m.screen.text}\n\`\`\``))
+    }
+  }
+})
+
+test('idle handoff with a newly opened approval card omits the screen; a dialog without a card keeps it', async () => {
+  for (const shown of [true, false]) {
+    let busy = false
+    const m = fakeMachine({ approvalBusy: () => busy, approvalShown: () => shown && busy })
+    await m.tick()
+    const send = m.api.send
+    m.api.send = async (...args) => {
+      const result = await send(...args)
+      busy = shown
+      m.panes[0].agent_status = 'blocked'
+      m.screen.text = 'Bash command: cat /work/private-approval-command.txt\n1. Yes\n2. No'
+      return result
+    }
+    assert.equal(await m.seat.idleHandoff({ entry: API, minutes: 60, panes: m.panes }), 'a dialog is open')
+    const line = m.said.find((text) => text.includes('the handoff instructions were not typed in'))
+    assert.ok(line)
+    assert.deepEqual(m.typed, [])
+    if (shown) {
+      assert.equal(line, "@kai ✗ api · waiting on an approval card on its owner's phone; the handoff instructions were not typed in, nothing done.")
+      assert.doesNotMatch(line, /Screen:|private-approval-command/)
+    } else {
+      assert.match(line, /a dialog opened just now/)
+      assert.ok(line.includes(`Screen:\n\`\`\`\n${m.screen.text}\n\`\`\``))
+    }
+  }
+})
+
+test('approval gate pauses handoff clock and suppresses spawn stall until refused', async () => {
+  let blocked = false
+  const m = fakeMachine({ approvalBusy: () => blocked, approvalShown: () => blocked })
+  m.ask('@daemon.box@kai /handoff api'); await m.tick()
+  blocked = true
+  m.advance(HANDOFF_MS + 1000); await m.tick()
+  assert.equal(m.seat.ops.some((op) => op.type === 'handoff'), true)
+  assert.equal(m.said.some((line) => line.includes('did not leave within 2 hours')), false)
+  blocked = false; m.advance(1000); await m.tick()
+  assert.equal(m.seat.ops.some((op) => op.type === 'handoff'), true)
+  m.advance(HANDOFF_MS + 1000); await m.tick()
+  assert.match(m.said.at(-1), /did not leave within 2 hours/)
+  const n = fakeMachine({ approvalBusy: () => true, approvalShown: () => true })
+  n.panes.push({ pane_id: 'w:p9', agent: 'codex', agent_status: 'blocked' })
+  n.ask('@daemon.box@kai /spawn codex gated-helper work'); await n.tick()
+  assert.equal(n.said.some((line) => line.includes('has not joined yet')), false)
+  n.advance(SPAWN_JOIN_MS + 1000); await n.tick()
+  assert.equal(n.said.some((line) => line.includes('has not joined after')), false)
+})
+
+test('approval routing uses spawn room before join, else all registry rooms, and forgets a left agent', async () => {
+  const m = fakeMachine()
+  register({ roomId: ROOM, name: 'api@kai', role: 'api', pane: 'w:p1' })
+  register({ roomId: 'OtherTopic0123456789012', name: 'api@kai', role: 'api', pane: 'w:p1' })
+  fs.rmSync(spawnRecordPath(ROOM, 'api@kai'), { force: true })
+  assert.equal(m.seat.approvalTargets(m.panes)[0].rooms.length, 2)
+  writeJson(spawnRecordPath(ROOM, 'api@kai'), { kind: 'claude', pane: 'w:p1' })
+  assert.deepEqual(m.seat.approvalTargets(m.panes)[0].rooms, [ROOM])
+  unregister({ roomId: ROOM, name: 'api@kai' }); unregister({ roomId: 'OtherTopic0123456789012', name: 'api@kai' })
+  m.panes.push({ pane_id: 'w:p9', agent: 'codex', agent_status: 'working' })
+  m.ask('@daemon.box@kai /spawn codex before-join work'); await m.tick()
+  assert.ok(m.seat.approvalTargets(m.panes).some((t) => t.name === 'before-join@kai' && t.rooms[0] === ROOM))
+})
+
+test('handoff takes permission from the actual CLI argv, including a Node launcher', async () => {
+  for (const all of [false, true]) {
+    const m = fakeMachine()
+    m.fg['w:p1'] = { foreground_processes: [{ name: 'node', argv: ['node', '/tmp/bin/claude', '--model', 'custom', ...(all ? ['--dangerously-skip-permissions'] : [])] }] }
+    m.ask('@daemon.box@kai /handoff api'); await m.tick()
+    const text = m.typed.at(-1)[1]
+    assert.equal(text.includes('perm=all <what to do next>'), all)
+    assert.ok(text.includes('model=custom'))
+  }
+})
+
+test('spawn relay suppresses early blocked screen and a card suppresses the later notice', async () => {
+  let shown = false
+  const { m } = await spawnedAtDialog({ approvalsRunning: () => true, approvalShown: () => shown })
+  assert.equal(m.said.some((text) => text.includes('Screen:')), false)
+  assert.equal(m.said.filter((text) => text.includes('Started qa ')).length, 1)
+  assert.equal(m.seat.ops[0].stage, 'joining')
+  shown = true
+  m.advance(3000); await m.tick()
+  m.advance(30000); await m.tick()
+  assert.equal(m.said.some((text) => text.includes('Screen:')), false)
+  shown = false
+  m.advance(30000); await m.tick()
+  assert.equal(m.said.filter((text) => text.includes('has not joined yet')).length, 1)
+})
+
+test('custom spawn arguments report when requested full permission was not applied', async () => {
+  const before = readJson(CONFIG_FILE)
+  try {
+    for (const kind of ['claude', 'codex']) {
+      writeJson(CONFIG_FILE, { spawn: { [kind]: ['--model', 'custom'] } })
+      const m = fakeMachine()
+      m.panes.push({ pane_id: 'w:p9', agent: kind, agent_status: 'working' })
+      m.ask(`@daemon.box@kai /spawn ${kind} custom-${kind} perm=all work`)
+      await m.tick()
+      assert.equal(readJson(spawnRecordPath(ROOM, `custom-${kind}@kai`)).perm, 'default')
+      assert.ok(m.said.find((text) => text.includes('Started '))?.endsWith(`perm=all was not applied: this computer's ${CONFIG_FILE.startsWith(os.homedir() + path.sep) ? '~' + CONFIG_FILE.slice(os.homedir().length) : CONFIG_FILE} spawn.${kind} sets the arguments.`))
+    }
+  } finally {
+    if (before) writeJson(CONFIG_FILE, before)
+    else fs.rmSync(CONFIG_FILE, { force: true })
+  }
+})
+
+
+test('blocked spawn with relay sends Started and the custom permission notice without a screen', async () => {
+  const before = readJson(CONFIG_FILE)
+  try {
+    writeJson(CONFIG_FILE, { spawn: { claude: ['--model', 'custom'] } })
+    const { m } = await spawnedAtDialog({ approvalsRunning: () => true }, { perm: 'perm=all' })
+    const started = m.said.filter((text) => text.includes('Started qa '))
+    assert.equal(started.length, 1)
+    assert.ok(started[0].includes('perm=all was not applied:'))
+    assert.ok(started[0].includes(CONFIG_FILE))
+    assert.equal(m.said.some((text) => text.includes('Screen:')), false)
+    assert.equal(m.seat.ops[0].stage, 'joining')
+  } finally {
+    if (before) writeJson(CONFIG_FILE, before)
+    else fs.rmSync(CONFIG_FILE, { force: true })
+  }
+})
+
+const codexTrustScreens = [
+  "Hooks need review\n\n1 hook is new or changed.\n\n› 1. Review hooks\n  2. Trust all and continue\n  3. Continue without trusting (hooks won't run)\n\nenter confirm · esc skip",
+  'Trust this folder?\n\n› 1. Trust and continue\n  2. Quit\n\nenter continue · esc quit',
+].map((screen) => screen + '\n'.repeat(60))
+
+for (const [i, screen] of codexTrustScreens.entries()) {
+  test(`Codex trust screen ${i}: idle delivery and handoff type nothing`, async () => {
+    const m = fakeMachine()
+    m.screen.text = screen
+    m.terminal.read = async (_, lines) => screen.split('\n').slice(-lines).join('\n')
+    m.terminal.inject = async () => assert.fail('must not inject into trust dialog')
+    assert.equal(await injectWhenReady(m.terminal, 'w:p1', 'hello'), 'blocked')
+    m.ask('@daemon.box@kai /handoff api'); await m.tick()
+    assert.deepEqual(m.typed, [])
+    assert.equal(await m.seat.idleHandoff({ entry: API, minutes: 60, panes: m.panes }), 'a dialog is open')
+  })
+  for (const relay of [false, true]) test(`Codex trust screen ${i}: idle spawn with relay ${relay} reads the whole screen`, async () => {
+    const m = fakeMachine({ isDir: () => true, approvalsRunning: () => relay })
+    m.panes.push({ ...QA_PANE, agent: 'codex', agent_status: 'idle' })
+    m.terminal.read = async (_, lines) => screen.split('\n').slice(-lines).join('\n')
+    m.ask('@daemon.box@kai /spawn codex qa /work go')
+    await m.tick()
+    assert.equal(m.seat.ops[0].stage, 'joining')
+    assert.deepEqual(m.pressed, [])
+    if (relay) {
+      assert.equal(m.said.filter((text) => text.includes('Started qa ')).length, 1)
+      assert.equal(m.said.some((text) => text.includes('Screen:')), false)
+    } else {
+      assert.ok(m.said.find((text) => text.includes('Screen:'))?.includes(screen.split('\n')[0]))
+    }
+  })
+}
+
+test('Started explains added Codex asking policy and preserves an explicit never policy', async () => {
+  const dir = process.env.CODEX_HOME
+  fs.mkdirSync(dir, { recursive: true })
+  const file = path.join(dir, 'config.toml')
+  try {
+    for (const [source, expected] of [
+      ['', 'Added --ask-for-approval on-request, since your Codex settings set no approval policy: it asks you (a card on your phone) before it runs a command outside its sandbox; nothing is allowed by itself.'],
+      ['approval_policy = "never"', `Your Codex settings (approval_policy = "never" with a sandbox) keep it from asking to leave the sandbox, so it cannot reach the topic. Use perm=all for this session or change approval_policy in ${file}.`],
+      ['approval_policy = "never"\nsandbox_mode = "danger-full-access"', ''],
+    ]) {
+      fs.writeFileSync(file, source)
+      const m = fakeMachine({ isDir: () => true })
+      m.panes.push({ pane_id: 'w:p9', agent: 'codex', agent_status: 'working' })
+      m.ask('@daemon.box@kai /spawn codex qa /work go')
+      await m.tick()
+      await until(() => m.said.some((text) => text.includes('Started qa ')))
+      const line = m.said.find((text) => text.includes('Started qa '))
+      assert.ok(line, m.said.join('\n'))
+      if (expected) assert.ok(line.endsWith(expected), line)
+      else assert.ok(line.endsWith('waiting for it to join.'), line)
+      assert.equal(readJson(spawnRecordPath(ROOM, 'qa@kai')).perm, 'default')
+    }
+  } finally { fs.rmSync(file, { force: true }) }
 })

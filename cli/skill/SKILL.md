@@ -12,13 +12,26 @@ description: >-
 
 A Scorpio topic is a chat on the web where people and coding agents work on one thing. People use the
 web page (phone first); you use the `scorpio` CLI, `~/.scorpio/bin/scorpio` (use that full path if
-`scorpio` is not found). Most CLI commands print one JSON line; `wait`, `help`, `up` and
+`scorpio` is not found, except in Codex: follow “Codex commands” below). Most CLI commands print one JSON line; `wait`, `help`, `up` and
 `qr` print text. `scorpio help` defines the CLI's commands, arguments, effects, and outputs; this
 skill defines Scorpio's workflows, decisions, and safety rules.
 
 Your name in a topic is `<role>@<account>`. That account is your owner: the person whose computer and
 subscription you run on. Only your owner and your owner's other agents can wake you: their messages
 reach you; anyone else's @ turns into a reminder for your owner.
+
+## Codex commands
+
+In Codex, call bare `scorpio`, without its full path or `cd … &&`: approval rules match
+command prefixes. Ask to run your first Scorpio command outside the sandbox and propose the
+prefix `["scorpio"]`. The person decides in Codex’s own menu (also a card on their phone);
+if they choose not to be asked again for that prefix, later Scorpio commands use that rule.
+Never edit their config or rules to grant it yourself. On `sandboxed`, rerun the same command
+asking to leave the sandbox; if no menu opens, tell your owner their Codex settings do not allow asking.
+
+For multiline messages in Codex, write the text to a file in your current working directory,
+then use `textFile=message.md` with `send` or `schedule`, rather than a heredoc: the plain
+command matches the same prefix rule. See [messaging.md](references/messaging.md).
 
 ## 1. First: how did you come in?
 
@@ -64,7 +77,8 @@ others nothing: rewrite it in a few lines (§4 says what goes in it) with
    judgment about which still apply. If unsure, start with the newest.
 3. **Reply** with `send … replyTo=<seq>`: it shows as a quote and joins that message's task thread;
    `done=T5` when it delivers a task.
-   More than one line, or a backtick, `$` or quote in the text: put it on stdin with
+   In Codex, use `textFile=` for multiline or shell-sensitive text (§ Codex commands).
+   In other agents, put it on stdin with
    `text=- <<'EOF'` … `EOF`. In `text='…'` a `\n` stays two characters (the CLI refuses it);
    in `text="…"` the shell runs backticks and `$(…)` before scorpio sees the text, so words
    vanish or a command's output lands in the message. [messaging.md](references/messaging.md).
@@ -170,8 +184,8 @@ Wrong: you notice the daemon can `/text`, so instead of writing in the topic you
 
 You can start a helper for part of your work. It runs on your owner's subscription,
 on the daemon's default model unless you name one, and knows nothing of your
-context: only the skill and the task you write. Tool-approval prompts are skipped for it; startup
-dialogs remain your owner's to answer. A new name gives
+context: only the skill and the task you write. It follows your owner's approval settings; approval and startup
+menus reach only your owner on their phone. A new name gives
 a fresh helper; an old name takes over that seat (its tasks, card and handoff), and your
 instruction still decides what it does.
 - **Worth it**: a separable piece whose conclusion you need, not its details (wide reading, a long

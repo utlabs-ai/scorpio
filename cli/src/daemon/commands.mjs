@@ -19,7 +19,7 @@ export const READ_MAX = 100
 export const COMMANDS = [
   { name: 'attach', argsSpec: '<one-time-code>', staleAfter: 2 * MIN,
     help: 'bind a manually joined agent to the one Herdr pane showing its short-lived code; only that agent can request it.' },
-  { name: 'spawn', argsSpec: 'claude|codex [name] [<dir>|cwd="…"] [model=…] [effort=…] [handoff=skip] [prompt]', staleAfter: 10 * MIN,
+  { name: 'spawn', argsSpec: 'claude|codex [name] [<dir>|cwd="…"] [model=…] [effort=…] [handoff=skip] [perm=all] [prompt]', staleAfter: 10 * MIN,
     help: 'start a new agent in this topic\'s workspace on this computer, or in a directory you name (use cwd="…" for spaces). It joins this topic and reports to you, then does the prompt. Without a name it becomes claude-1 and so on; model= and effort= override the configured defaults. The name is the seat: spawning a name the topic had before takes it over, with its open tasks, role card and last handoff (the one in the cloud, or this computer\'s copy if that is newer); handoff=skip leaves the handoff out, and the agent reads it only if your text says so. A takeover that previously named a directory must name it again; it never silently switches to the topic workspace. Your text after the directory (and model=, effort=, handoff=) reaches it word for word as its instruction and outranks the handoff\'s plans and next steps, so a returning agent can be given new work; rules on its card and in its handoff still hold unless the instruction names the rule and lifts it. For an agent with no history, use a new name, or none (it becomes claude-1, codex-1…, skipping every name the topic ever had).' },
   { name: 'handoff', argsSpec: 'name…|all', staleAfter: 10 * MIN,
     help: 'have it write a handoff (stored in the cloud unless the account keeps handoffs on agents\' computers), post a takeover command, and leave; then its pane is closed.' },
@@ -128,7 +128,7 @@ export function judge({ message, account, seatName, now, members = null }) {
 }
 
 /**
- * /spawn claude|codex [name] [<dir>|cwd="…"] [model=…] [effort=…] [handoff=skip] [prompt].
+ * /spawn claude|codex [name] [<dir>|cwd="…"] [model=…] [effort=…] [handoff=skip] [perm=all] [prompt].
  * A bare path starts with / or ~; cwd="…" allows spaces. With neither, the topic workspace is used.
  * Chinese punctuation right after a bare path separates too, and full-width ～ counts as ~.
  */
@@ -158,7 +158,11 @@ export function parseSpawn(rest) {
   // model=, effort= and handoff=skip follow the directory, or the name when using the default.
   const opts = { model: null, effort: null }
   let skipHandoff = false
-  for (let o; (o = after.match(/^(model|effort|handoff)=(\S*)(?:\s+|$)([\s\S]*)$/));) {
+  for (let o; (o = after.match(/^(model|effort|handoff|perm)=(\S*)(?:\s+|$)([\s\S]*)$/));) {
+    if (o[1] === 'perm') {
+      if (o[2] !== 'all') return { error: 'perm= only takes all.' }
+      opts.perm = 'all'; after = o[3]; continue
+    }
     if (o[1] === 'handoff') {
       if (o[2] !== 'skip') return { error: 'handoff= only takes skip: handoff=skip starts it without reading its handoff.' }
       skipHandoff = true; after = o[3]; continue
@@ -373,7 +377,7 @@ export function nudgePrompt({ file }) {
 export const SPACE_FULL_LINE = 'Cloud handoffs for this account in this topic are full (2.5 MB), so this handoff was not uploaded. Delete handoffs of seats you no longer need from their member cards; the next handoff will then upload.'
 
 /** targets: what followed /handoff (roles or all), shown back to the agent. file: the seat's fallback path. */
-export function handoffPrompt({ account, by = account, roomId, roomName, seq, targets, file, daemonName, kind, name, dir, model = null, effort = null, items = [], idleMinutes = null }) {
+export function handoffPrompt({ perm = 'default', account, by = account, roomId, roomName, seq, targets, file, daemonName, kind, name, dir, model = null, effort = null, items = [], idleMinutes = null }) {
   const role = name.split('@')[0]
   const open = items.map((i) => `${i.id} ${label(i.title)}${i.status === 'doing' ? ' (doing)' : ''}`).join('; ')
   const where = dir ? spawnDirArg(dir) : '<its directory>'
@@ -388,7 +392,7 @@ export function handoffPrompt({ account, by = account, roomId, roomName, seq, ta
     `2. Write the handoff to ${file}, short, facts only, under four headings (leave out the topic's description and your role card: your successor gets them anyway):\n   ## Where things stand: done, half done (how far), open tasks by id.\n   ## Next: in order; what waits on whom.\n   ## Lessons and gotchas: tricks, traps, rules people set that are not on your card (with the message that set each).\n   ## Your work: directories, branches, commits (pushed or not), uncommitted files.\n   Never put tokens, keys or passwords in a handoff: everyone who can read the topic can read it. Local paths and directory names are fine.`,
     `3. Store it: scorpio handoff topicId=${roomId} role=${role} file=${file}\n   stored "cloud": its link goes in step 4 (the file is gone from this computer; that is right). stored "local" (this account keeps handoffs on agents' computers): nothing to say about it. handoff_too_large: shorten it and run the same command again. handoff_space_full: go on, and add its line to step 5. Any other error: do what its next says, then go on and say nothing about it (the file stays; the next /spawn says where the handoff came from).`,
     `4. Tell ${account}: scorpio send topicId=${roomId} role=${role} replyTo=${seq} text='@${account} handoff written: <link>' (the link from step 3); without a link: text='@${account} handoff written.'`,
-    `5. Post the takeover command: a line that explains, then a code block holding only the command (replace the angle brackets with what to do next):\n   @${account} takeover command for ${role}; to take over, copy the line below and send it:\n   \`\`\`\n   @${daemonName} /spawn ${cli} ${role} ${where}${model ? ` model=${model}` : ''}${effort ? ` effort=${effort}` : ''} <what to do next>\n   \`\`\`\n   The same name gets your tasks, card and this handoff by itself, so the command only says what to do next, and whatever it says outranks your Next section; with nothing in its place, your successor reports what your Next section says and waits; to have it go straight on with your Next section, write that. Keep the explanation line: a message that is only a command runs at once. Only after handoff_space_full in step 3, the explanation line ends with: ${SPACE_FULL_LINE}`,
+    `5. Post the takeover command: a line that explains, then a code block holding only the command (replace the angle brackets with what to do next):\n   @${account} takeover command for ${role}; to take over, copy the line below and send it:\n   \`\`\`\n   @${daemonName} /spawn ${cli} ${role} ${where}${model ? ` model=${model}` : ''}${effort ? ` effort=${effort}` : ''}${perm === 'all' ? ' perm=all' : ''} <what to do next>\n   \`\`\`\n   The same name gets your tasks, card and this handoff by itself, so the command only says what to do next, and whatever it says outranks your Next section; with nothing in its place, your successor reports what your Next section says and waits; to have it go straight on with your Next section, write that. Keep the explanation line: a message that is only a command runs at once. Only after handoff_space_full in step 3, the explanation line ends with: ${SPACE_FULL_LINE}`,
     `6. Leave: scorpio leave topicId=${roomId} role=${role} (this terminal is closed afterwards).`,
   ].join('\n\n')
 }
