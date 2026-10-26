@@ -6,6 +6,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { spawnSync } from 'node:child_process'
 import { PassThrough } from 'node:stream'
+import tty from 'node:tty'
 import { agentCheck } from '../src/up/checks.mjs'
 import { OPEN_FRAMES, WAVE_FRAMES, LISTEN_FRAMES, LW, pobi } from '../src/up/pobi.mjs'
 import { executeSteps, UpStepError } from '../src/up/steps.mjs'
@@ -71,6 +72,55 @@ test('finished non-TTY setup prints how to open the agent pane later', async () 
     assert.match(output, /手机扫码打开主题；pobi 加入后会向你报到/)
     assert.doesNotMatch(output, /报到.*Hello|5 秒后/)
   } finally { screen.close() }
+})
+
+test('finish reopens terminal input after choosing an agent', async (t) => {
+  let opens = 0
+  let streams = 0
+  let output = ''
+  const openSync = fs.openSync
+  t.mock.method(fs, 'openSync', (file, flags, ...args) => {
+    if (file !== '/dev/tty') return openSync(file, flags, ...args)
+    assert.equal(flags, 'r+')
+    return 1000 + ++opens
+  })
+  t.mock.method(fs, 'writeSync', (fd, value) => {
+    assert.equal(fd, 1000 + opens)
+    return Buffer.byteLength(value)
+  })
+  t.mock.method(tty, 'ReadStream', function (fd) {
+    assert.equal(fd, 1000 + ++streams)
+    const input = new PassThrough()
+    input.setRawMode = () => {}
+    setImmediate(() => input.write(streams === 1 ? 'y' : 'n'))
+    return input
+  })
+  const screen = createScreen({
+    output: { isTTY: true, write: (value) => { output += value } },
+    env: { LANG: 'en', TERM: 'dumb', SCORPIO_FAST: '1' },
+  })
+  try {
+    const agent = { available: true, name: 'Codex', kind: 'codex', role: 'pobi' }
+    assert.equal(await screen.choose([agent]), agent)
+    await screen.finish({ agent, topic: { name: 'Hello', roomId: 'topic-id' },
+      workdir: '/tmp/work', herdrBin: 'herdr' })
+    assert.equal(opens, 2)
+    assert.equal(streams, 2)
+    assert.match(output, /Jump to Herdr\?/)
+    assert.match(output, /Run herdr later to open pobi's pane\./)
+  } finally { screen.close() }
+})
+
+test('agent step distinguishes a pane waiting for an answer in both languages', async () => {
+  const { agentStepResult } = await import('../src/up/flow.mjs')
+  for (const [language, started, waiting] of [
+    ['en', 'Agent started in Herdr: pobi', 'Agent started in Herdr: pobi. Its pane is waiting for an answer.'],
+    ['zh', 'agent 已在 Herdr 中启动：pobi', 'agent 已在 Herdr 中启动：pobi，它的窗格在等一个回答'],
+  ]) {
+    const context = { screen: { language }, agent: { role: 'pobi' }, pane: { waiting: true } }
+    assert.equal(agentStepResult(context), waiting)
+    for (const pane of [{}, { reused: true }]) assert.equal(agentStepResult({ ...context, pane }), started)
+  }
 })
 
 test('finished setup uses the configured server for its topic link', async (t) => {

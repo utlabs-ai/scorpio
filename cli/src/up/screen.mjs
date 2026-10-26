@@ -376,6 +376,7 @@ export function createScreen({ output = process.stdout, env = process.env, colum
       write('  ' + tr(language,
         'Jump to Herdr? y yes · n no, I will open it later (Enter = y)',
         '现在打开 Herdr？y 是 · n 否，稍后自行打开（回车 = y）') + '\n')
+      if (fd === null) fd = fs.openSync('/dev/tty', 'r+')
       const input = new tty.ReadStream(fd)
       let open
       try { open = await herdrChoice(input) } finally { fd = null }

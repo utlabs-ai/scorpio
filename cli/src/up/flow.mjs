@@ -15,6 +15,13 @@ import { tr } from './screen.mjs'
 const label = (screen, en, zh) => tr(screen.language, en, zh)
 const done = (value) => ({ done: true, value })
 
+export function agentStepResult({ screen, agent, pane }) {
+  return pane.waiting
+    ? label(screen, 'Agent started in Herdr: ' + agent.role + '. Its pane is waiting for an answer.',
+      'agent 已在 Herdr 中启动：' + agent.role + '，它的窗格在等一个回答')
+    : label(screen, 'Agent started in Herdr: ' + agent.role, 'agent 已在 Herdr 中启动：' + agent.role)
+}
+
 export async function runSetup(screen, agent) {
   const context = { screen, agent }
   await executeSteps([
@@ -106,7 +113,7 @@ export async function runSetup(screen, agent) {
       number: 6, key: 'pane', label: label(screen,
         'Opening the “' + agent.role + '” tab in Herdr and starting ' + agent.name,
         '正在 Herdr 中新开「' + agent.role + '」标签页并启动 ' + agent.name),
-      result: () => label(screen, 'Agent started in Herdr: ' + agent.role, 'agent 已在 Herdr 中启动：' + agent.role),
+      result: () => agentStepResult(context),
       next: label(screen, 'Run `herdr` to open the workspace and check what is holding up the agent pane; after handling it, run `scorpio up` again.', '运行 `herdr` 打开工作区，查看 agent 窗格停在何处；处理后再次运行 `scorpio up`。'),
       check: async () => {
         const existing = await existingAgentPane({

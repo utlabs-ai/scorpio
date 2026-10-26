@@ -101,6 +101,7 @@ export async function ensureAgentPane({ agent, account, topic, workdir, herdrBin
       break
     } catch (error) {
       const reason = herdrError(error)
+      if (reason.code === 'agent_not_ready') return { pane, name, reused: false, waiting: true }
       if (/timeout/i.test(reason.code) || /timed out waiting for agent startup/i.test(reason.text)) {
         const deadline = Date.now() + 85_000
         let detected = false

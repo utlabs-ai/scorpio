@@ -123,6 +123,23 @@ test('first agent keeps its own permissions and passes an environment API key th
     })
     assert.equal(started.reused, false)
     assert.equal(started.pane, 'w1:p2')
+    let blockedStarts = 0
+    let blockedInspections = 0
+    const blocked = new Error('Command failed: herdr agent start')
+    blocked.stderr = '{"error":{"code":"agent_not_ready","message":"agent pobi is blocked during startup"}}'
+    const waiting = await ensureAgentPane({
+      agent: { kind: 'codex', role: 'pobi' }, account: 'kai',
+      topic: { roomId: 'BlockedTopic123456789', name: 'Hello Scorpio' },
+      workdir: path.join(home, 'work'), herdrBin: 'herdr', workspaceId: 'w1',
+      terminal: { ...terminal, startAgent: async () => {
+        blockedStarts += 1
+        throw blocked
+      } },
+      inspectPane: async () => { blockedInspections += 1; return null },
+    })
+    assert.deepEqual(waiting, { pane: 'w1:p2', name: 'pobi@kai', reused: false, waiting: true })
+    assert.equal(blockedStarts, 1)
+    assert.equal(blockedInspections, 1)
     const herdrFailure = new Error('Command failed: herdr agent start ... Use the scorpio skill. Join this topic now ...')
     herdrFailure.stderr = '{"error":{"code":"invalid_agent_name","message":"agent name must be lowercase"}}'
     await assert.rejects(ensureAgentPane({
