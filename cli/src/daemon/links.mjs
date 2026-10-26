@@ -109,14 +109,14 @@ export function createLinks({ api, log = () => {}, onFrame, onTokenRejected = ()
   }
 
   function sendCarry(link) {
-    try { link.ws?.send(JSON.stringify({ type: 'carry', names: link.carry })) } catch {}
+    try { link.ws?.send(JSON.stringify({ type: 'carry', names: link.carry, perm: link.perm || {} })) } catch {}
   }
 
   const same = (a, b) => a.length === b.length && a.every((x, i) => x === b[i])
 
   /**
-   * Make the open connections match the wanted ones: [{key, roomId, role, host, name, carry}].
-   * Unwanted ones are closed; a host connection whose carry list changed sends the new list.
+   * Make the open connections match the wanted ones: [{key, roomId, role, host, name, carry, perm}].
+   * Unwanted ones are closed; changed carry names or permissions are sent on the host connection.
    */
   function sync(wanted) {
     const keys = new Set(wanted.map((w) => w.key))
@@ -128,7 +128,9 @@ export function createLinks({ api, log = () => {}, onFrame, onTokenRejected = ()
       const link = links.get(w.key)
       if (link && link.role !== w.role) { link.close(); links.delete(w.key) } // the seat was renamed: reconnect under the new role
       if (!links.get(w.key)) { links.set(w.key, open({ ...w, carry })); log(`connecting: ${w.key}`); continue }
-      if (w.host && !same(link.carry, carry)) { link.carry = carry; if (link.isOpen) sendCarry(link) }
+      if (w.host && (!same(link.carry, carry) || JSON.stringify(link.perm || {}) !== JSON.stringify(w.perm || {}))) {
+        link.carry = carry; link.perm = w.perm || {}; if (link.isOpen) sendCarry(link)
+      }
     }
   }
 

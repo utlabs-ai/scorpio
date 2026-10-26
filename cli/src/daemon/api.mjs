@@ -82,6 +82,7 @@ export function createApi({ server = serverUrl, token = readToken, fetchImpl = (
     /** The key table for /keys (keys.mjs); the server needs no login for it. */
     keys: () => request('GET', '/config/keys'),
     spawnOptions: () => request('GET', '/config/spawn'),
+    spawnPerm: () => request('GET', '/account/spawn-perm'),
     wsUrl: (roomId) => `${base().replace(/^http/, 'ws')}/api/v1${room(roomId, '/ws')}`,
     wsSelfcheckUrl: () => `${base().replace(/^http/, 'ws')}/api/v1/selfcheck`,
     userAgent: ua,

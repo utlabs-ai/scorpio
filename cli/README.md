@@ -1,6 +1,6 @@
 # Scorpio client
 
-The client of [Scorpio](https://scorpio.utlabs.ai), published as the npm package `@utlabs/scorpio`: the `scorpio` CLI, the daemon, and the Scorpio skill that coding agents read. It connects to the hosted Scorpio service with your own Scorpio account; the service itself is not part of this repository. Licensed under MIT (see `LICENSE` in this directory).
+The client of [Scorpio](https://scorpio.utlabs.ai): the `scorpio` CLI, the daemon, and the Scorpio skill that coding agents read. It connects to scorpio.utlabs.ai with your own Scorpio account. Licensed under MIT (see `LICENSE` in this directory).
 
 | Path | What it is |
 |---|---|
@@ -18,7 +18,6 @@ The client of [Scorpio](https://scorpio.utlabs.ai), published as the npm package
 ## Install (what the invitation tells an agent to run)
 
 ```bash
-npx @utlabs/scorpio                      # once published
 npx -y https://<server>/dl/scorpio-<version>-<hash>.tgz   # the copy each server hosts
 ```
 

@@ -13,7 +13,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { spawnSync } from 'node:child_process'
 import { pathToFileURL } from 'node:url'
-import { DELIVERY_FILE, HOME, PKG_DIR, idleHandoffMinutes, isDefaultHome, readJson, server, setIdleHandoffMinutes, version, writeJson } from './paths.mjs'
+import { DELIVERY_FILE, HOME, PKG_DIR, idleHandoffMinutes, isDefaultHome, readJson, server, setIdleHandoffMinutes, spawnRecordPath, version, writeJson } from './paths.mjs'
 import { takeLock } from './pid.mjs'
 import { entries, markLeft, prune, unregister } from './registry.mjs'
 import { createApi } from './api.mjs'
@@ -25,9 +25,12 @@ import { createHealth } from './health.mjs'
 import { MIN_NODE, newerNode } from './node.mjs'
 import { minutesText } from './commands.mjs'
 import { createRelay } from './relay.mjs'
+import { createKeys } from './keys.mjs'
+import { createApprovals, writeApprovalSettings } from './approvals.mjs'
 import { createSeat } from './seat.mjs'
+import { carryPermissions } from './spawn-permission.mjs'
 import { createHerdr, tail } from '../adapters/terminal/herdr.mjs'
-import { CLIS, NEVER_ANSWER } from '../adapters/cli/index.mjs'
+import { CLIS, NEVER_ANSWER, dialogBlocked } from '../adapters/cli/index.mjs'
 import { createDetector } from '../adapters/cli/detect.mjs'
 import { createBlockedReasons } from './blocked.mjs'
 import { createDaemonLog, herdrExit } from './log.mjs'
@@ -98,13 +101,16 @@ export function deliveryMessages(messages, pokedSeq, pokedTs, now, retryMs = RET
 }
 
 /** Ask Herdr about this pane now (a dialog shows as blocked), then look for the update prompt before any text is typed. */
-export async function injectWhenReady(terminal, pane, text) {
+export async function injectWhenReady(terminal, pane, text, approvalBusy = () => false) {
+  if (approvalBusy(pane)) return 'blocked'
   let status
   try { status = await terminal.paneStatus(pane) } catch { return 'unavailable' }
-  if (status === 'blocked') return 'blocked'
+  if (dialogBlocked(status)) return 'blocked'
   if (!['idle', 'done', 'working'].includes(status)) return 'unavailable'
-  const screen = tail(await terminal.read(pane, 40), 20)
-  if (NEVER_ANSWER.test(screen)) return 'dialog'
+  const screen = await terminal.read(pane, 200)
+  if (dialogBlocked(status, screen)) return 'blocked'
+  if (NEVER_ANSWER.test(tail(screen, 20))) return 'dialog'
+  if (approvalBusy(pane)) return 'blocked'
   await terminal.inject(pane, text)
   return 'sent'
 }
@@ -279,6 +285,8 @@ async function main() {
     process.exit(EXIT_LOCKED)
   }
   log(`Scorpio daemon ${version()} (pid ${process.pid}, ${PKG_DIR}, server ${server()})`)
+  log("Agents you start from a topic follow Settings → Permissions for new agents; a worker an agent starts gets that agent's permission.")
+  writeApprovalSettings()
   cleanupIfDue({ home: HOME, force: true, log: log.error })
   let nextCleanup = Date.now() + DAY_MS
   if (typeof globalThis.WebSocket !== 'function') {
@@ -336,7 +344,8 @@ async function main() {
       })
     },
   }
-  const seat = createSeat({ api, terminal, rooms, log, spawnEnv: env, idleSetting, detector: createDetector({ log }) })
+  let approvals, approvalsRunning = false
+  const seat = createSeat({ api, terminal, rooms, log, spawnEnv: env, idleSetting, detector: createDetector({ log }), approvalsRunning: () => approvalsRunning, approvalBusy: (pane) => approvals?.busy(pane) || false, approvalShown: (pane) => approvals?.shown(pane) || false })
 
   const dirty = new Set() // keys with something pushed
   const seatDirty = new Set() // rooms with something pushed to the seat
@@ -363,10 +372,17 @@ async function main() {
     log,
     onFrame(link, frame) {
       const roomId = link.roomId
-      if (debug) console.log(new Date().toTimeString().slice(0, 8), `frame ${link.key}: ${JSON.stringify(frame).slice(0, 300)}`)
+      if (debug && !frame.type?.startsWith('approval_')) console.log(new Date().toTimeString().slice(0, 8), `frame ${link.key}: ${JSON.stringify(frame).slice(0, 300)}`)
       const isSeat = (to) => link.seat || to === seat.name || (link.host && (!to || to === seat.name))
       switch (frame.type) {
+        case 'approval_answer':
+          if (link.host) approvals.answer(roomId, frame).catch(() => log.error('approval answer failed'))
+          break
+        case 'approval_refused':
+          if (link.host) approvals.refused(frame)
+          break
         case 'ready':
+          if (link.host) approvals?.resend(roomId)
           if (frame.room) rooms.update(roomId, { roomName: frame.room.name, topic: frame.room.topic, owner: frame.room.owner })
           if (link.host || link.seat) { if (frame.pending?.length) seatDirty.add(roomId) } else dirty.add(keyOf(roomId, link.name))
           break
@@ -439,11 +455,19 @@ async function main() {
   const typeNotices = async (pending, line, waitFor = new Set()) => {
     for (const pane of pending) {
       if (waitFor.has(pane)) continue
-      try { if (await injectWhenReady(terminal, pane, line) === 'sent') pending.delete(pane) }
+      try { if (await injectWhenReady(terminal, pane, line, approvals.busy) === 'sent') pending.delete(pane) }
       catch (e) { log.warn(`could not type logout status in pane ${pane}: ${herdrExit('agent prompt', e)}`) }
     }
   }
   const reconnect = () => { links.closeAll(); seat.reconnect(); kick() }
+  approvals = createApprovals({ terminal,
+    targets: async () => seat.approvalTargets(await terminal.panes()),
+    send: (roomId, frame) => links.send(`h|${roomId}`, frame),
+    log, kick, keyTable: createKeys({ fetch: () => api.keys() }),
+  })
+  try { await approvals.start(); approvalsRunning = true; process.on('exit', () => approvals.stop()) }
+  catch (error) { log.error(`Could not listen for approval hooks: ${error?.code || 'unknown'}`) }
+
   logout = createLogoutMonitor({
     onExpected: (cause, refusedToken) => {
       log(`signed out (${cause}); stopping delivery and exiting`)
@@ -552,7 +576,7 @@ async function main() {
       }
       if (act === 'keepalive') {
         try {
-          if (waitForPane(await injectWhenReady(terminal, entry.pane, renderKeepalive(namedRoom(room, reminded.get(key)))))) return
+          if (waitForPane(await injectWhenReady(terminal, entry.pane, renderKeepalive(namedRoom(room, reminded.get(key))), approvals.busy))) return
           quietSince.set(key, now); spokeFor.delete(key); keptAliveAt.set(key, now); saveState()
           log(`keep-alive to ${entry.name} in ${entry.roomId} (quiet ${Math.round((now - since) / MIN)} min)`)
         } catch { retryAt.set(key, now + FAILED_RETRY_MS); log.warn(`keep-alive to ${entry.name} failed; trying again shortly`) }
@@ -561,7 +585,7 @@ async function main() {
       const batch = deliveryMessages(messages, pokedSeq.get(key), pokedTs.get(key), now, RETRY_MS, resentSeq.get(key))
       const d = composeDelivery({ entry, room, messages: batch, reminded: reminded.get(key), pokedSeq: pokedSeq.get(key), maxBytes: terminal.maxPromptBytes })
       try {
-        if (waitForPane(await injectWhenReady(terminal, entry.pane, d.text))) return
+        if (waitForPane(await injectWhenReady(terminal, entry.pane, d.text, approvals.busy))) return
         const previousSeq = pokedSeq.get(key) ?? 0
         const resend = Number.isFinite(pokedSeq.get(key)) && batch[0].seq <= pokedSeq.get(key)
         if (resend) resentSeq.set(key, d.upTo)
@@ -669,7 +693,7 @@ async function main() {
       for (const roomId of new Set([...live.map((e) => e.roomId), ...seat.joined()])) {
         const here = live.filter((e) => e.roomId === roomId)
         const mode = seat.mode(roomId)
-        if (mode === 'host') wanted.push({ key: `h|${roomId}`, roomId, role: seat.role, host: true, carry: here.map((e) => e.name) })
+        if (mode === 'host') wanted.push({ key: `h|${roomId}`, roomId, role: seat.role, host: true, carry: here.map((e) => e.name), perm: carryPermissions(here, (e) => readJson(spawnRecordPath(e.roomId, e.name))) })
         else {
           for (const e of here) wanted.push({ key: `a|${roomId}|${e.name}`, roomId, role: e.role, name: e.name })
           if (mode === 'agent') wanted.push({ key: `a|${roomId}|${seat.name}`, roomId, role: seat.role, name: seat.name, seat: true })
@@ -682,7 +706,7 @@ async function main() {
         for (const name of w.carry) {
           const e = live.find((x) => x.roomId === w.roomId && x.name === name)
           const status = paneOf.get(e?.pane)?.agent_status
-          const work = WORK[status] ?? null
+          const work = approvals.busy(e?.pane) ? 'blocked' : WORK[status] ?? null
           const reason = await blockedReasons.of(e?.pane, status) // null unless blocked (and forgets the last one)
           const said = `${work}|${reason ?? ''}`
           if (sent.get(name) === said) continue
@@ -699,7 +723,7 @@ async function main() {
       for (const e of live) {
         const key = keyOf(e.roomId, e.name)
         const prev = idle.get(key) || null
-        const busy = Boolean(pushed.get(key)?.size) || awaiting.has(key) || (prev !== null && (pokedTs.get(key) || 0) >= prev.since)
+        const busy = approvals.busy(e.pane) || Boolean(pushed.get(key)?.size) || awaiting.has(key) || (prev !== null && (pokedTs.get(key) || 0) >= prev.since)
         const next = idleClock(prev, { status: paneOf.get(e.pane)?.agent_status, busy, now, keptAliveAt: keptAliveAt.get(key) })
         if (next) idle.set(key, next); else idle.delete(key)
         if (!next || !idleMinutes || now - next.since < idleMinutes * MIN || !handsOff(e)) continue
@@ -748,7 +772,7 @@ async function main() {
 
       if (installed && Date.now() >= nextUpdate && seat.idle()) {
         nextUpdate = Date.now() + updateInterval.every
-        await selfUpdate({ newer, whoami: () => api.whoami(), log, checked: (result) => { update = result; dashboard.paint() } })
+        await selfUpdate({ currentBuild: health.report.build, newer, whoami: () => api.whoami(), log, checked: (result) => { update = result; dashboard.paint() } })
         updateAsked = false // asked again later (a newer version may not be out yet): check again
       }
     } catch (error) {
@@ -770,6 +794,7 @@ async function main() {
       log('The code changed; exiting so the loop starts the new code.')
       links.closeAll()
       relay.stop()
+      approvals.stop()
       process.exit(0)
     }
     await pacer.nap()

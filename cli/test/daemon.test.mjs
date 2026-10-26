@@ -13,6 +13,7 @@ import { testEnv } from './env.mjs'
 
 const home = fs.mkdtempSync(path.join(os.tmpdir(), 'scorpio-test-'))
 process.env.SCORPIO_HOME = home
+process.env.CODEX_HOME = path.join(home, "codex")
 
 test('daemon tabs use the exact home-specific label for creation and idle reuse', () => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'scorpio-daemon-label-'))
@@ -116,6 +117,8 @@ const { takeLock } = await import('../src/daemon/pid.mjs')
 const { createSeat, HANDOFF_MS, OWNED_ROOMS_MS, NUDGE_MAX, SPAWN_JOIN_MS, KEY_GAP_MS, DETECT_EVERY_MS, DETECT_REPORT_MS } = await import('../src/daemon/seat.mjs')
 const { DEFAULT_KEYS, createKeys, keyTable, findKey, keysFor } = await import('../src/daemon/keys.mjs')
 const { DEFAULT_SPAWN, SPAWN_REFRESH_MS, SPAWN_RETRY_MS, createSpawnOptions } = await import('../src/daemon/spawn-config.mjs')
+const { spawnPermission, carryPermissions, permissionNotice, SETTING_UNREADABLE } = await import('../src/daemon/spawn-permission.mjs')
+const { createApi } = await import('../src/daemon/api.mjs')
 const { createLinks, OPEN_MS } = await import('../src/daemon/links.mjs')
 const { codexWindows, usageLine, formatIn } = await import('../src/adapters/cli/usage.mjs')
 const { createDetector } = await import('../src/adapters/cli/detect.mjs')
@@ -428,9 +431,9 @@ test('spawnLine is one typeable line; handoff prompt keeps the explanation line'
   assert.match(spawnPrompt({ account: 'kai', roomId: ROOM, roomName: 'x', seq: 7, name: 'api@kai', pane: 'w:p9', cli: 'scorpio' }), /join topicId=AbCdEf0123456789_-ghIJ role=api resume=true pane=w:p9/)
   const h = handoffPrompt({ account: 'kai', roomId: ROOM, roomName: 'x', seq: 7, targets: 'api', file: '/f.md', daemonName: 'daemon.box@kai', kind: 'claude', name: 'api@kai', dir: '/w' })
   assert.ok(h.includes('@kai takeover command for api; to take over, copy the line below and send it:'))
-  assert.ok(h.includes('@daemon.box@kai /spawn claude api /w <what to do next>'))
+  assert.ok(h.includes('@daemon.box@kai /spawn claude api /w perm=ask <what to do next>'))
   const h2 = handoffPrompt({ account: 'kai', roomId: ROOM, roomName: 'x', seq: 7, targets: 'api', file: '/f.md', daemonName: 'daemon.box@kai', kind: 'claude', name: 'api@kai', dir: '/w', model: 'claude-opus-5-5', effort: 'xhigh' })
-  assert.ok(h2.includes('/spawn claude api /w model=claude-opus-5-5 effort=xhigh <what to do next>'))
+  assert.ok(h2.includes('/spawn claude api /w model=claude-opus-5-5 effort=xhigh perm=ask <what to do next>'))
   for (const heading of ['## Where things stand', '## Next', '## Lessons and gotchas', '## Your work']) assert.ok(h.includes(heading))
   assert.ok(h.includes('Never push to a branch that deploys, releases or publishes on push'))
   assert.ok(!h.includes('Read /f.md'))
@@ -649,7 +652,7 @@ test('registry: register, pane-guarded unregister, prune', () => {
 test('CLI adapters: model and effort in the arguments', () => {
   assert.equal(modelText('claude', argsFor('claude', {})), 'claude-opus-5-5, effort medium')
   assert.equal(modelText('codex', argsFor('codex', {})), 'gpt-6.1-sol, reasoning medium')
-  assert.deepEqual(argsFor('claude', { spawn: { claude: ['--model', 'x'] } }), ['--model', 'x'])
+  assert.deepEqual(argsFor('claude', { spawn: { claude: ['--model', 'x'] } }), ['--model', 'x', '--settings', path.join(home, 'state', 'hooks', 'claude.json')])
   assert.deepEqual(withModel('claude', ['--model', 'a', '--effort', 'high'], { effort: 'max' }), ['--model', 'a', '--effort', 'max'])
   assert.deepEqual(withModel('codex', ['-m', 'a', '-c', 'model_reasoning_effort=high'], { model: 'b', effort: 'low' }), ['-m', 'b', '-c', 'model_reasoning_effort=low'])
   assert.deepEqual(modelOf('claude', ['--dangerously-skip-permissions', '--model', 'claude-opus-5-5', '--effort', 'xhigh', 'hi']), { model: 'claude-opus-5-5', effort: 'xhigh' })
@@ -706,7 +709,7 @@ test('delivery checks this pane again before typing; blocked or unavailable neve
   calls.length = 0
   assert.equal(await injectWhenReady(terminal, 'w:p1', 'hello'), 'dialog')
   assert.deepEqual(calls, ['status', 'read'], 'the update prompt on screen still stops typing')
-  // A trust dialog herdr does not call blocked is no longer read off the screen: herdr's status decides.
+  // Other trust wording still relies on herdr; only the known Codex dialogs supplement its status.
   screen = 'Do you trust the files in this folder?\n\n ❯ 1. Yes, proceed\n   2. No, exit'
   calls.length = 0
   assert.equal(await injectWhenReady(terminal, 'w:p1', 'hello'), 'sent')
@@ -794,6 +797,7 @@ function fakeMachine(seatOpts = {}) {
     listen: async () => ({ mentions: inbox.splice(0, 100), broadcasts: [], total: room.total, cursor: room.cursor }),
     mark: async (roomId, role, upTo) => { marks.push(upTo); room.cursor = Math.max(room.cursor, upTo); return {} },
     members: async () => ({ members: memberList }),
+    spawnPerm: async () => ({ perm: 'ask' }),
     send: async (roomId, role, text) => { said.push(text); return { seq: 100 + said.length } },
     leave: async (roomId, role) => { left.push(role); events.push(`left:${role}`); const m = memberList.find((x) => x.name === `${role}@kai`); if (m) m.status = 'left'; return {} },
     // The cloud's handoffs: name → {body, updatedAt, computer} or an error code to throw; none: handoff_not_found.
@@ -832,7 +836,7 @@ function fakeMachine(seatOpts = {}) {
     await seat.tick({ entries, panes, unregister: (e) => unregistered.push(e.name) })
     await seat.settle()
   }
-  return { seat, terminal, api, said, left, closed, typed, tabs, ask, tick, unregistered, ran, panes, events, advance: (ms) => { clock += ms }, memberList, joins, screen, marks, listed, room, inbox, pressed, fg, slept, cloud, fetched }
+  return { seat, terminal, api, said, left, closed, typed, tabs, ask, tick, unregistered, ran, panes, events, advance: (ms) => { clock += ms }, memberList, roomData, joins, screen, marks, listed, room, inbox, pressed, fg, slept, cloud, fetched }
 }
 
 test('a removed computer stops retrying its topic and resumes after explicit rejoin', async () => {
@@ -864,6 +868,7 @@ test('host join sends machine and uses the server device in its role card', asyn
   }
   await m.tick()
   assert.equal(m.joins.length, 2)
+  assert.deepEqual(m.joins[0].perms, ['ask', 'auto', 'all'])
   assert.equal(m.joins[0].machine, 'box')
   assert.match(m.joins[1].roleCard, /This computer: box-2 — Desk\./)
   assert.equal(m.seat.role, 'box-2-daemon')
@@ -1022,6 +1027,54 @@ test('seat: /spawn without a directory uses this topic workspace; another accoun
   assert.equal(readJson(spawnRecordPath(ROOM, 'qa@kai')).explicitDir, false)
 })
 
+test('seat: /spawn still-starting errors log info without the first prompt and a working pane starts normally', async () => {
+  for (const code of ['timeout', 'agent_not_ready']) {
+    const info = [], errors = []
+    const log = Object.assign((line) => info.push(line), { error: (line) => errors.push(line) })
+    const m = fakeMachine({ log })
+    const prompt = 'private-first-prompt-marker'
+    m.terminal.startAgent = async () => {
+      const error = new Error(`Command failed: herdr agent start -- ${prompt}`)
+      error.code = 1
+      error.stderr = JSON.stringify({ error: { code, message: `timed out waiting for agent startup: ${prompt}` } })
+      throw error
+    }
+    const panes = m.terminal.panes
+    m.terminal.panes = async () => {
+      await new Promise((resolve) => setImmediate(resolve))
+      m.panes.push({ pane_id: 'w:p9', tab_id: 'w:t9', agent: 'claude', agent_status: 'working', cwd: '/work' })
+      return panes()
+    }
+    m.ask(`@daemon.box@kai /spawn claude qa ${prompt}`)
+    await m.tick()
+    for (let i = 0; i < 20 && !m.said.some((s) => s.includes('Started qa')); i++) await new Promise((r) => setImmediate(r))
+    assert.ok(m.said.some((s) => s.includes('Started qa')), m.said.join('\n'))
+    assert.deepEqual(errors, [])
+    assert.ok(info.includes(`agent start qa (try 1): herdr returned ${code} while the CLI works on its first prompt`))
+    assert.equal([...info, ...errors].some((line) => line.includes(prompt)), false)
+  }
+})
+
+test('seat: /spawn an unknown start failure keeps an error with its code and no herdr message', async () => {
+  const info = [], errors = []
+  const log = Object.assign((line) => info.push(line), { error: (line) => errors.push(line) })
+  const m = fakeMachine({ log })
+  const prompt = 'private-first-prompt-marker'
+  m.terminal.startAgent = async () => {
+    const error = new Error(`Command failed: herdr agent start -- ${prompt}`)
+    error.code = 1
+    error.stderr = JSON.stringify({ error: { code: 'bad_kind', message: prompt } })
+    throw error
+  }
+  m.ask(`@daemon.box@kai /spawn claude qa ${prompt}`)
+  await m.tick()
+  for (let i = 0; i < 20 && !m.said.some((s) => s.includes('did not start; herdr says: bad_kind')); i++) await new Promise((r) => setImmediate(r))
+  assert.ok(m.said.some((s) => s.includes('did not start; herdr says: bad_kind')), m.said.join('\n'))
+  assert.equal(m.said.some((s) => s.includes('Started qa')), false)
+  assert.deepEqual(errors, ['agent start qa (try 1): herdr agent start exit 1 (bad_kind)'])
+  assert.equal([...info, ...errors].some((line) => line.includes(prompt)), false)
+})
+
 test('spawn options: configured defaults reach /spawn, and both kinds appear on the card and installed kinds have options in /help', async () => {
   const options = structuredClone(DEFAULT_SPAWN)
   options.claude.models.push({ id: 'claude-sonnet-5', about: { en: 'For routine work.' } })
@@ -1136,7 +1189,7 @@ test('seat: a dead local name leaves before takeover; live local and remote name
   await dead.tick()
   for (let i = 0; i < 20 && !dead.said.some((s) => s.includes('Started api')); i++) await new Promise((r) => setImmediate(r))
   assert.deepEqual(dead.events.slice(0, 2), ['left:api', 'tab:api'])
-  assert.equal(dead.said.at(-1), "@kai Started api (claude: claude-opus-5-5, effort medium) in /work, taking over api: its tasks and role card go with it; it left no handoff, in the cloud or on this computer. api's old process on this computer was gone, so the daemon took it out of the topic first. It is working on its first prompt; waiting for it to join.")
+  assert.equal(dead.said.at(-1), "@kai Started api (claude: claude-opus-5-5, effort medium) in /work, taking over api: its tasks and role card go with it; it left no handoff, in the cloud or on this computer. api's old process on this computer was gone, so the daemon took it out of the topic first. It is working on its first prompt; waiting for it to join. perm: ask me in Scorpio (your setting).")
   assert.ok(!fs.readFileSync(path.join(home, 'spawns', ROOM, 'api.md'), 'utf8').includes('roleCard='))
 
   const live = fakeMachine({ isDir: () => true })
@@ -1160,7 +1213,7 @@ test('seat: nameless spawn skips left names; last directory is suggested but nev
   await m.tick()
   for (let i = 0; i < 20 && !m.said.some((s) => s.includes('Started claude-2')); i++) await new Promise((r) => setImmediate(r))
   assert.match(m.said.at(-1), /Started claude-2 .* in \/work, a new name in this topic\./)
-  assert.deepEqual(readJson(spawnRecordPath(ROOM, 'claude-2@kai')), { kind: 'claude', dir: '/work', explicitDir: true, model: 'claude-opus-5-5', effort: 'medium', pane: 'w:p9', at: 1_000_000 })
+  assert.deepEqual(readJson(spawnRecordPath(ROOM, 'claude-2@kai')), { kind: 'claude', dir: '/work', explicitDir: true, model: 'claude-opus-5-5', effort: 'medium', pane: 'w:p9', perm: 'ask', permFrom: 'setting', permParent: null, at: 1_000_000 })
 
   writeJson(spawnRecordPath(ROOM, 'web@kai'), { kind: 'codex', dir: '/last', model: 'gpt-6-sol', effort: 'high', at: 1 })
   m.ask('@daemon.box@kai /spawn claude web do new work')
@@ -1222,7 +1275,7 @@ async function takeover(role, { prompt = 'go on', skip = false, cloud, setup = (
   const spawnFile = path.join(home, 'spawns', ROOM, `${role}.md`)
   return { m, line, prompt: fs.existsSync(spawnFile) ? fs.readFileSync(spawnFile, 'utf8') : null, typedLine: m.ran.at(-1)?.[1] }
 }
-const started = (role, source) => `@kai Started ${role} (claude: claude-opus-5-5, effort medium) in /work, ${source}. It is working on its first prompt; waiting for it to join.`
+const started = (role, source) => `@kai Started ${role} (claude: claude-opus-5-5, effort medium) in /work, ${source}. It is working on its first prompt; waiting for it to join. perm: ask me in Scorpio (your setting).`
 
 test('takeover sources: cloud only; written to files/handoff-<name>.md 0600, never the fallback directory', async () => {
   const updatedAt = AT.getTime()
@@ -1558,7 +1611,7 @@ test('handoff instructions (the skill\'s Handing off): write, store with scorpio
   assert.ok(!/handover/i.test(h))
   assert.equal(parseCommand(steps[5].split('\n').slice(1, 5).map((l) => l.trim()).join('\n')), null, 'the takeover example is not run as a command')
   for (const c of COMMANDS) assert.ok(!/handover/i.test(c.help), c.name)
-  assert.ok(HELP_FULL.includes('`/spawn claude|codex [name] [<dir>|cwd="…"] [model=…] [effort=…] [handoff=skip] [prompt]`'))
+  assert.ok(HELP_FULL.includes('`/spawn claude|codex [name] [<dir>|cwd="…"] [model=…] [effort=…] [handoff=skip] [perm=ask|auto|all] [prompt]`'))
 })
 
 const API = { roomId: ROOM, name: 'api@kai', role: 'api', pane: 'w:p1' }
@@ -1796,14 +1849,14 @@ const CLAUDE_FG = { foreground_processes: [{ name: 'claude', argv: ['claude', '-
 const BASH_FG = { foreground_processes: [{ name: 'bash', argv: ['/bin/bash'], pid: 6 }] }
 
 /** A /spawn qa that stopped at a dialog while starting (herdr: blocked), not joined yet. */
-async function spawnedAtDialog(seatOpts = {}, { kind = 'claude', dir = '/work', from = 'kai', fromKind = 'human' } = {}) {
+async function spawnedAtDialog(seatOpts = {}, { kind = 'claude', dir = '/work', from = 'kai', fromKind = 'human', perm = '' } = {}) {
   const m = fakeMachine({ isDir: () => true, ...seatOpts })
   const pane = { ...QA_PANE, agent: kind, agent_status: 'blocked' }
   m.panes.push(pane)
   m.screen.byPane = { 'w:p9': ' Quick safety check: Is this a project you created or one you trust?\n\n ❯ No, exit\n   Yes, I trust this folder\n\n Enter to confirm · Esc to cancel' }
-  m.ask(`@daemon.box@kai /spawn ${kind} qa ${dir} do things`, from, fromKind)
+  m.ask(`@daemon.box@kai /spawn ${kind} qa ${dir} ${perm} do things`, from, fromKind)
   await m.tick()
-  for (let i = 0; i < 20 && !m.said.some((t) => t.includes('has not joined yet')); i += 1) await new Promise((r) => setImmediate(r))
+  for (let i = 0; i < 20 && !m.said.some((t) => /has not joined yet|Started qa /.test(t)); i += 1) await new Promise((r) => setImmediate(r))
   return { m, pane }
 }
 
@@ -1825,7 +1878,7 @@ test('/spawn: joining screen is sampled every 5s, resets on change, and reports 
   assert.equal(notices().length, 0, 'raw text change restarts the clock')
   m.advance(5000); await m.tick()
   assert.equal(notices().length, 1)
-  assert.match(notices()[0], /^@api@kai qa has not joined yet\. Its command line has been waiting on this screen for 30s; the daemon does not answer it\. Screen:/)
+  assert.match(notices()[0], /^@api@kai qa has not joined yet\. Its screen has not changed for 30s; the daemon does not answer it\. Screen:/)
   assert.doesNotMatch(notices()[0], /\/(read|keys|text|bye)/)
   m.screen.text = 'Another question'
   m.advance(5000); await m.tick()
@@ -1846,20 +1899,20 @@ test('/spawn: startup trust unrecognized by Herdr reports after 30 seconds witho
   m.ask('@daemon.box@kai /spawn claude qa /work go')
   await m.tick()
   for (let i = 0; i < 20 && !m.said.some((t) => t.includes('has not joined yet')); i += 1) await new Promise((r) => setImmediate(r))
-  assert.match(m.said.at(-1), /waiting on this screen for 30s; the daemon does not answer it\. Screen:/)
+  assert.match(m.said.at(-1), /screen has not changed for 30s; the daemon does not answer it\. Screen:/)
   assert.equal(m.seat.ops[0].stage, 'joining')
   assert.deepEqual(m.pressed, [])
 })
 
 test('/spawn: update prompt and Codex blocked dialog use the same early notice', async () => {
   const { m } = await spawnedAtDialog({}, { kind: 'codex' })
-  assert.match(m.said.at(-1), /waiting on this screen for 0s; the daemon does not answer it\. Screen:/)
+  assert.match(m.said.at(-1), /screen has not changed for 0s; the daemon does not answer it\. Screen:/)
   const u = fakeMachine({ isDir: () => true })
   u.panes.push({ ...QA_PANE, agent_status: 'idle' })
   u.screen.text = 'Update available! Run: claude update\n❯ Update now\n  Skip until next version'
   u.ask('@daemon.box@kai /spawn claude qa /work go')
   await u.tick()
-  assert.match(u.said.at(-1), /waiting on this screen for 0s; the daemon does not answer it\. Screen:/)
+  assert.match(u.said.at(-1), /screen has not changed for 0s; the daemon does not answer it\. Screen:/)
 })
 
 test('/spawn: working or changing screens do not stall; join ends screen sampling', async () => {
@@ -1886,7 +1939,7 @@ test('/spawn: working or changing screens do not stall; join ends screen samplin
 test('/spawn: a dialog while starting is not answered; it reports only the fact and screen', async () => {
   const { m } = await spawnedAtDialog()
   assert.deepEqual(m.pressed, [], 'no key pressed by the daemon')
-  assert.match(m.said.at(-1), /^@kai qa has not joined yet\. Its command line has been waiting on this screen for 0s; the daemon does not answer it\. Screen:\n```\n[\s\S]*Yes, I trust this folder/)
+  assert.match(m.said.at(-1), /^@kai qa has not joined yet\. Its screen has not changed for 0s; the daemon does not answer it\. Screen:\n```\n[\s\S]*Yes, I trust this folder/)
   assert.doesNotMatch(m.said.at(-1), /\/(read|keys|text|bye)/)
   assert.equal(m.seat.ops[0].stage, 'joining')
 })
@@ -2196,8 +2249,8 @@ async function updateFixture(t) {
     state.manifest = { file: 'scorpio.tgz', version: UPDATE_VERSION, build: candidate.build, sha256: createHash('sha256').update(state.archive).digest('hex') }
     return candidate
   }
-  const run = (whoami = async () => ({ account: 'test' })) => selfUpdate({
-    home: installHome, serverUrl: url, currentVersion: '0.0.0', newer, whoami, childEnv,
+  const run = (whoami = async () => ({ account: 'test' }), options = {}) => selfUpdate({
+    home: installHome, serverUrl: url, currentVersion: '0.0.0', newer, whoami, childEnv, ...options,
   })
   return { temp, installHome, childEnv, url, state, old, publish, run }
 }
@@ -2214,6 +2267,53 @@ test('selftest loads source modules, checks the installer, calls whoami, and wri
     return true
   })
   assert.deepEqual(treeContents(f.installHome), before)
+})
+
+test('same-version update keeps the same build without downloading', async (t) => {
+  const f = await updateFixture(t)
+  f.publish()
+  f.state.manifest.build = f.old.build
+  const checks = []
+  await f.run(undefined, { currentVersion: UPDATE_VERSION, currentBuild: f.old.build, checked: (result) => checks.push(result) })
+  assert.equal(f.state.downloads, 0)
+  assert.equal(checks.at(-1).state, 'current')
+})
+
+test('same-version update installs a different build and retains the previous build', async (t) => {
+  const f = await updateFixture(t)
+  const candidate = f.publish()
+  const checks = []
+  await f.run(undefined, { currentVersion: UPDATE_VERSION, currentBuild: f.old.build, checked: (result) => checks.push(result) })
+  assert.equal(f.state.downloads, 1)
+  assert.equal(checks.at(-1).state, 'new')
+  assert.equal(fs.readFileSync(path.join(f.installHome, 'app', '.build'), 'utf8').trim(), candidate.build)
+  assert.equal(fs.readFileSync(path.join(f.installHome, 'app.prev', '.build'), 'utf8').trim(), f.old.build)
+})
+
+test('same-version update rejects builds recorded in skip.json or rollback.json', async (t) => {
+  const f = await updateFixture(t)
+  const candidate = f.publish()
+  const checks = []
+  const options = { currentVersion: UPDATE_VERSION, currentBuild: f.old.build, checked: (result) => checks.push(result) }
+  fs.mkdirSync(path.join(f.installHome, 'state'), { recursive: true })
+  fs.writeFileSync(path.join(f.installHome, 'state', 'skip.json'), JSON.stringify({ build: candidate.build }))
+  await f.run(undefined, options)
+  assert.equal(checks.at(-1).state, 'failed')
+  fs.rmSync(path.join(f.installHome, 'state', 'skip.json'))
+  fs.writeFileSync(path.join(f.installHome, 'state', 'rollback.json'), JSON.stringify({ bad: { build: candidate.build } }))
+  await f.run(undefined, options)
+  assert.equal(checks.at(-1).state, 'failed')
+  assert.equal(f.state.downloads, 0)
+  assert.equal(fs.readFileSync(path.join(f.installHome, 'app', '.build'), 'utf8').trim(), f.old.build)
+})
+
+test('update never downloads an older version even with a different build', async (t) => {
+  const f = await updateFixture(t)
+  f.publish()
+  const checks = []
+  await f.run(undefined, { currentVersion: '999.0.0', currentBuild: f.old.build, checked: (result) => checks.push(result) })
+  assert.equal(f.state.downloads, 0)
+  assert.equal(checks.at(-1).state, 'current')
 })
 
 test('update precheck rejects a module that throws on import, without replacing app', async (t) => {
@@ -2327,9 +2427,449 @@ test('spawn guidance keeps the three approved lines and the new notice reference
   ]) assert.ok(skill.includes(line), line)
   for (const file of ['daemon.md', 'troubleshooting.md']) {
     const text = fs.readFileSync(new URL(`../skill/references/${file}`, import.meta.url), 'utf8')
-    assert.ok(text.includes('has not joined yet. Its command line has been waiting on this screen for <n>s; the daemon does not answer it. Screen:'))
+    assert.ok(text.includes('has not joined yet. Its screen has not changed for <n>s; the daemon does not answer it. Screen:'))
     assert.ok(text.includes('has not joined after 10 minutes; its pane is still open'))
     assert.ok(!text.includes('has not joined after 3 minutes'))
     assert.ok(text.includes('/read') && text.includes('/keys') && text.includes('/text'))
   }
+})
+
+test('/handoff with an approval card omits the screen; a dialog without a card keeps it', async () => {
+  for (const shown of [true, false]) {
+    const m = fakeMachine({ approvalBusy: () => true, approvalShown: () => shown })
+    m.screen.text = 'Bash command: cat /work/private-approval-command.txt\n1. Yes\n2. No'
+    m.panes[0].agent_status = 'blocked'
+    m.ask('@daemon.box@kai /handoff api')
+    await m.tick()
+    const line = m.said.find((text) => text.includes('the handoff instructions were not typed in'))
+    assert.ok(line)
+    assert.deepEqual(m.typed, [])
+    if (shown) {
+      assert.equal(line, "@kai ✗ api · waiting for its owner to answer an approval card in Scorpio; the handoff instructions were not typed in, nothing done.")
+      assert.doesNotMatch(line, /Screen:|private-approval-command/)
+    } else {
+      assert.match(line, /stuck on a dialog/)
+      assert.ok(line.includes(`Screen:\n\`\`\`\n${m.screen.text}\n\`\`\``))
+    }
+  }
+})
+
+test('idle handoff with a newly opened approval card omits the screen; a dialog without a card keeps it', async () => {
+  for (const shown of [true, false]) {
+    let busy = false
+    const m = fakeMachine({ approvalBusy: () => busy, approvalShown: () => shown && busy })
+    await m.tick()
+    const send = m.api.send
+    m.api.send = async (...args) => {
+      const result = await send(...args)
+      busy = shown
+      m.panes[0].agent_status = 'blocked'
+      m.screen.text = 'Bash command: cat /work/private-approval-command.txt\n1. Yes\n2. No'
+      return result
+    }
+    assert.equal(await m.seat.idleHandoff({ entry: API, minutes: 60, panes: m.panes }), 'a dialog is open')
+    const line = m.said.find((text) => text.includes('the handoff instructions were not typed in'))
+    assert.ok(line)
+    assert.deepEqual(m.typed, [])
+    if (shown) {
+      assert.equal(line, "@kai ✗ api · waiting for its owner to answer an approval card in Scorpio; the handoff instructions were not typed in, nothing done.")
+      assert.doesNotMatch(line, /Screen:|private-approval-command/)
+    } else {
+      assert.match(line, /a dialog opened just now/)
+      assert.ok(line.includes(`Screen:\n\`\`\`\n${m.screen.text}\n\`\`\``))
+    }
+  }
+})
+
+test('approval gate pauses handoff clock and suppresses spawn stall until refused', async () => {
+  let blocked = false
+  const m = fakeMachine({ approvalBusy: () => blocked, approvalShown: () => blocked })
+  m.ask('@daemon.box@kai /handoff api'); await m.tick()
+  blocked = true
+  m.advance(HANDOFF_MS + 1000); await m.tick()
+  assert.equal(m.seat.ops.some((op) => op.type === 'handoff'), true)
+  assert.equal(m.said.some((line) => line.includes('did not leave within 2 hours')), false)
+  blocked = false; m.advance(1000); await m.tick()
+  assert.equal(m.seat.ops.some((op) => op.type === 'handoff'), true)
+  m.advance(HANDOFF_MS + 1000); await m.tick()
+  assert.match(m.said.at(-1), /did not leave within 2 hours/)
+  const n = fakeMachine({ approvalBusy: () => true, approvalShown: () => true })
+  n.panes.push({ pane_id: 'w:p9', agent: 'codex', agent_status: 'blocked' })
+  n.ask('@daemon.box@kai /spawn codex gated-helper work'); await n.tick()
+  assert.equal(n.said.some((line) => line.includes('has not joined yet')), false)
+  n.advance(SPAWN_JOIN_MS + 1000); await n.tick()
+  assert.equal(n.said.some((line) => line.includes('has not joined after')), false)
+})
+
+test('approval routing uses spawn room before join, else all registry rooms, and forgets a left agent', async () => {
+  const m = fakeMachine()
+  register({ roomId: ROOM, name: 'api@kai', role: 'api', pane: 'w:p1' })
+  register({ roomId: 'OtherTopic0123456789012', name: 'api@kai', role: 'api', pane: 'w:p1' })
+  fs.rmSync(spawnRecordPath(ROOM, 'api@kai'), { force: true })
+  assert.equal(m.seat.approvalTargets(m.panes)[0].rooms.length, 2)
+  writeJson(spawnRecordPath(ROOM, 'api@kai'), { kind: 'claude', pane: 'w:p1' })
+  assert.deepEqual(m.seat.approvalTargets(m.panes)[0].rooms, [ROOM])
+  unregister({ roomId: ROOM, name: 'api@kai' }); unregister({ roomId: 'OtherTopic0123456789012', name: 'api@kai' })
+  m.panes.push({ pane_id: 'w:p9', agent: 'codex', agent_status: 'working' })
+  m.ask('@daemon.box@kai /spawn codex before-join work'); await m.tick()
+  assert.ok(m.seat.approvalTargets(m.panes).some((t) => t.name === 'before-join@kai' && t.rooms[0] === ROOM))
+})
+
+test('handoff takes permission from the actual CLI argv, including a Node launcher', async () => {
+  for (const all of [false, true]) {
+    const m = fakeMachine()
+    m.fg['w:p1'] = { foreground_processes: [{ name: 'node', argv: ['node', '/tmp/bin/claude', '--model', 'custom', ...(all ? ['--dangerously-skip-permissions'] : [])] }] }
+    m.ask('@daemon.box@kai /handoff api'); await m.tick()
+    const text = m.typed.at(-1)[1]
+    assert.equal(text.includes('perm=all <what to do next>'), all)
+    assert.ok(text.includes('model=custom'))
+  }
+})
+
+test('spawn relay suppresses early blocked screen and a card suppresses the later notice', async () => {
+  let shown = false
+  const { m } = await spawnedAtDialog({ approvalsRunning: () => true, approvalShown: () => shown })
+  assert.equal(m.said.some((text) => text.includes('Screen:')), false)
+  assert.equal(m.said.filter((text) => text.includes('Started qa ')).length, 1)
+  assert.equal(m.seat.ops[0].stage, 'joining')
+  shown = true
+  m.advance(3000); await m.tick()
+  m.advance(30000); await m.tick()
+  assert.equal(m.said.some((text) => text.includes('Screen:')), false)
+  shown = false
+  m.advance(30000); await m.tick()
+  assert.equal(m.said.filter((text) => text.includes('has not joined yet')).length, 1)
+})
+
+test('custom spawn arguments report when requested permission was not applied', async () => {
+  const before = readJson(CONFIG_FILE)
+  try {
+    for (const perm of ['all', 'auto']) for (const kind of ['claude', 'codex']) {
+      writeJson(CONFIG_FILE, { spawn: { [kind]: ['--model', 'custom'] } })
+      const m = fakeMachine()
+      m.panes.push({ pane_id: 'w:p9', agent: kind, agent_status: 'working' })
+      m.ask(`@daemon.box@kai /spawn ${kind} custom-${kind} perm=${perm} work`)
+      await m.tick()
+      assert.equal(readJson(spawnRecordPath(ROOM, `custom-${kind}@kai`)).perm, 'ask')
+      assert.ok(m.said.find((text) => text.includes('Started '))?.endsWith(`perm=${perm} was not applied: this computer's ${CONFIG_FILE.startsWith(os.homedir() + path.sep) ? '~' + CONFIG_FILE.slice(os.homedir().length) : CONFIG_FILE} spawn.${kind} sets the arguments.`))
+    }
+  } finally {
+    if (before) writeJson(CONFIG_FILE, before)
+    else fs.rmSync(CONFIG_FILE, { force: true })
+  }
+})
+
+
+test('blocked spawn with relay sends Started and the custom permission notice without a screen', async () => {
+  const before = readJson(CONFIG_FILE)
+  try {
+    writeJson(CONFIG_FILE, { spawn: { claude: ['--model', 'custom'] } })
+    const { m } = await spawnedAtDialog({ approvalsRunning: () => true }, { perm: 'perm=all' })
+    const started = m.said.filter((text) => text.includes('Started qa '))
+    assert.equal(started.length, 1)
+    assert.ok(started[0].includes('perm=all was not applied:'))
+    assert.ok(started[0].includes(CONFIG_FILE))
+    assert.equal(m.said.some((text) => text.includes('Screen:')), false)
+    assert.equal(m.seat.ops[0].stage, 'joining')
+  } finally {
+    if (before) writeJson(CONFIG_FILE, before)
+    else fs.rmSync(CONFIG_FILE, { force: true })
+  }
+})
+
+const codexTrustScreens = [
+  "Hooks need review\n\n1 hook is new or changed.\n\n› 1. Review hooks\n  2. Trust all and continue\n  3. Continue without trusting (hooks won't run)\n\nenter confirm · esc skip",
+  'Trust this folder?\n\n› 1. Trust and continue\n  2. Quit\n\nenter continue · esc quit',
+].map((screen) => screen + '\n'.repeat(60))
+
+for (const [i, screen] of codexTrustScreens.entries()) {
+  test(`Codex trust screen ${i}: idle delivery and handoff type nothing`, async () => {
+    const m = fakeMachine()
+    m.screen.text = screen
+    m.terminal.read = async (_, lines) => screen.split('\n').slice(-lines).join('\n')
+    m.terminal.inject = async () => assert.fail('must not inject into trust dialog')
+    assert.equal(await injectWhenReady(m.terminal, 'w:p1', 'hello'), 'blocked')
+    m.ask('@daemon.box@kai /handoff api'); await m.tick()
+    assert.deepEqual(m.typed, [])
+    assert.equal(await m.seat.idleHandoff({ entry: API, minutes: 60, panes: m.panes }), 'a dialog is open')
+  })
+  for (const relay of [false, true]) test(`Codex trust screen ${i}: idle spawn with relay ${relay} reads the whole screen`, async () => {
+    const m = fakeMachine({ isDir: () => true, approvalsRunning: () => relay })
+    m.panes.push({ ...QA_PANE, agent: 'codex', agent_status: 'idle' })
+    m.terminal.read = async (_, lines) => screen.split('\n').slice(-lines).join('\n')
+    m.ask('@daemon.box@kai /spawn codex qa /work go')
+    await m.tick()
+    assert.equal(m.seat.ops[0].stage, 'joining')
+    assert.deepEqual(m.pressed, [])
+    if (relay) {
+      assert.equal(m.said.filter((text) => text.includes('Started qa ')).length, 1)
+      assert.equal(m.said.some((text) => text.includes('Screen:')), false)
+    } else {
+      assert.ok(m.said.find((text) => text.includes('Screen:'))?.includes(screen.split('\n')[0]))
+    }
+  })
+}
+
+test('Started explains added Codex asking policy and preserves an explicit never policy', async () => {
+  const dir = process.env.CODEX_HOME
+  fs.mkdirSync(dir, { recursive: true })
+  const file = path.join(dir, 'config.toml')
+  try {
+    for (const [source, expected] of [
+      ['', 'Added --ask-for-approval on-request, since your Codex settings set no approval policy: it asks you in Scorpio before it runs a command outside its sandbox; nothing is allowed by itself.'],
+      ['approval_policy = "never"', `Your Codex settings (approval_policy = "never" with a sandbox) keep it from asking to leave the sandbox, so it cannot reach the topic. Use perm=all for this session or change approval_policy in ${file}.`],
+      ['approval_policy = "never"\nsandbox_mode = "danger-full-access"', ''],
+    ]) {
+      fs.writeFileSync(file, source)
+      const m = fakeMachine({ isDir: () => true })
+      m.panes.push({ pane_id: 'w:p9', agent: 'codex', agent_status: 'working' })
+      m.ask('@daemon.box@kai /spawn codex qa /work go')
+      await m.tick()
+      await until(() => m.said.some((text) => text.includes('Started qa ')))
+      const line = m.said.find((text) => text.includes('Started qa '))
+      assert.ok(line, m.said.join('\n'))
+      if (expected) assert.ok(line.endsWith(expected), line)
+      else assert.ok(line.endsWith('perm: ask me in Scorpio (your setting).'), line)
+      assert.equal(readJson(spawnRecordPath(ROOM, 'qa@kai')).perm, 'ask')
+    }
+  } finally { fs.rmSync(file, { force: true }) }
+})
+
+
+for (const [kind, note] of [
+  ['claude', "perm=auto: Claude Code's auto mode decides what runs. What it blocks does not come to you as a card; your own ask rules still do."],
+  ['codex', "perm=auto: Codex's auto-review decides what runs, without the approval hook. What it blocks does not come to you as a card."],
+]) test(`person can spawn ${kind} auto with the recorded permission and exact Started notice`, async () => {
+  const m = fakeMachine()
+  m.panes.push({ pane_id: 'w:p9', agent: kind, agent_status: 'working' })
+  m.ask(`@daemon.box@kai /spawn ${kind} auto-${kind} perm=auto work`)
+  await m.tick()
+  assert.equal(m.tabs.length, 1)
+  assert.equal(readJson(spawnRecordPath(ROOM, `auto-${kind}@kai`)).perm, 'auto')
+  assert.equal(m.seat.ops[0].perm, 'auto')
+  const started = m.said.find((text) => text.includes('Started '))
+  assert.ok(started?.endsWith(note), m.said.join('\n'))
+  assert.doesNotMatch(started, /Added --ask-for-approval|Your Codex settings/)
+})
+
+test('handoff carries auto permission from the running CLI, including aliases and Node launchers', async () => {
+  for (const [kind, args] of [
+    ['codex', ['--approve-for-me']], ['codex', ['--not-so-yolo']],
+    ['claude', ['--permission-mode', 'auto']], ['claude', ['--permission-mode=auto']],
+  ]) {
+    const m = fakeMachine()
+    m.panes.find((p) => p.pane_id === 'w:p1').agent = kind
+    m.fg['w:p1'] = { foreground_processes: [{ name: 'node', argv: ['node', `/tmp/bin/${kind}`, ...args] }] }
+    m.ask('@daemon.box@kai /handoff api')
+    await m.tick()
+    assert.ok(m.typed.at(-1)[1].includes('perm=auto <what to do next>'))
+  }
+})
+
+test('permission selection orders levels and records the four sources', () => {
+  assert.deepEqual(spawnPermission({ setting: 'all' }), { level: 'all', from: 'setting', parent: null })
+  assert.deepEqual(spawnPermission({ requested: 'ask' }), { level: 'ask', from: 'spawn', parent: null })
+  assert.deepEqual(spawnPermission({ sender: { name: 'api@kai', level: 'all' } }), { level: 'all', from: 'parent', parent: 'api@kai' })
+  for (const requested of [null, 'auto']) assert.deepEqual(spawnPermission({ requested, previous: 'auto' }), { level: 'auto', from: 'takeover', parent: null })
+  assert.deepEqual(spawnPermission({ requested: 'ask', sender: { name: 'api@kai', level: null } }), { needsSetting: true })
+  assert.deepEqual(spawnPermission({ previous: 'all', sender: { name: 'api@kai', level: 'ask' } }), { error: '✗ perm=all: api@kai runs with perm=ask, so it cannot start an agent with more.' })
+  for (const [perm, permFrom, permParent, text] of [
+    ['all', 'setting', null, 'perm: allow everything (your setting).'],
+    ['ask', 'spawn', null, 'perm: ask me in Scorpio (chosen in this /spawn).'],
+    ['all', 'parent', 'api@kai', 'perm: allow everything (same as api@kai).'],
+    ['auto', 'takeover', null, 'perm: approve for me (takeover, kept).'],
+  ]) assert.equal(permissionNotice({ perm, permFrom, permParent }), text)
+})
+
+test('account permission reads use the token endpoint without a cache', async () => {
+  const calls = []
+  const client = createApi({ server: 'https://scorpio.example.com', token: () => 'test-token', fetchImpl: async (url, options) => {
+    calls.push({ url, options })
+    return new Response(JSON.stringify({ perm: calls.length === 1 ? 'all' : 'ask' }))
+  } })
+  assert.deepEqual(await client.spawnPerm(), { perm: 'all' })
+  assert.deepEqual(await client.spawnPerm(), { perm: 'ask' })
+  assert.equal(calls.length, 2)
+  for (const { url, options } of calls) {
+    assert.equal(url, 'https://scorpio.example.com/api/v1/account/spawn-perm')
+    assert.equal(options.method, 'GET')
+    assert.equal(options.headers.Authorization, 'Bearer test-token')
+  }
+})
+
+test('human spawns use each current setting and explicit requests skip that read', async () => {
+  const m = fakeMachine()
+  m.panes.push({ pane_id: 'w:p9', agent: 'claude', agent_status: 'working' })
+  let reads = 0
+  m.api.spawnPerm = async () => ({ perm: ['all', 'ask'][reads++] })
+  for (const level of ['all', 'ask']) {
+    m.ask(`@daemon.box@kai /spawn claude setting-${level} work`)
+    await m.tick()
+    const record = readJson(spawnRecordPath(ROOM, `setting-${level}@kai`))
+    assert.deepEqual([record.perm, record.permFrom, record.permParent], [level, 'setting', null])
+    assert.equal(m.said.at(-1), `@kai Started setting-${level} (claude: claude-opus-5-5, effort medium) in ${m.tabs.at(-1).cwd}, a new name in this topic. It is working on its first prompt; waiting for it to join. perm: ${level === 'all' ? 'allow everything' : 'ask me in Scorpio'} (your setting).`)
+  }
+  m.ask('@daemon.box@kai /spawn claude chosen-ask perm=ask work')
+  await m.tick()
+  assert.equal(reads, 2)
+  assert.equal(m.said.at(-1), `@kai Started chosen-ask (claude: claude-opus-5-5, effort medium) in ${m.tabs.at(-1).cwd}, a new name in this topic. It is working on its first prompt; waiting for it to join. perm: ask me in Scorpio (chosen in this /spawn).`)
+})
+
+test('ask setting retains the Codex hook and asking policy', async () => {
+  const m = fakeMachine()
+  let argv
+  m.terminal.startAgent = async (spec) => { argv = spec.argv }
+  m.panes.push({ pane_id: 'w:p9', agent: 'codex', agent_status: 'working' })
+  m.ask('@daemon.box@kai /spawn codex setting-codex work')
+  await m.tick()
+  assert.equal(readJson(spawnRecordPath(ROOM, 'setting-codex@kai')).perm, 'ask')
+  assert.ok(argv.some((arg) => arg.includes('hooks.PermissionRequest')))
+  assert.equal(argv[argv.indexOf('--ask-for-approval') + 1], 'on-request')
+  assert.ok(m.said.at(-1).endsWith('perm: ask me in Scorpio (your setting). Added --ask-for-approval on-request, since your Codex settings set no approval policy: it asks you in Scorpio before it runs a command outside its sandbox; nothing is allowed by itself.'))
+})
+
+test('unreadable settings start nothing; explicit human requests need no setting', async () => {
+  for (const response of [null, { perm: 'unknown' }]) {
+    const m = fakeMachine()
+    m.api.spawnPerm = async () => { if (!response) throw new Error('offline'); return response }
+    m.ask('@daemon.box@kai /spawn claude failed work')
+    await m.tick()
+    assert.equal(m.tabs.length, 0)
+    assert.equal(m.said.at(-1), '@kai ✗ Could not read your permission setting; nothing was started. Send it again, or add perm=ask / auto / all.')
+  }
+  const m = fakeMachine()
+  m.api.spawnPerm = async () => { throw new Error('offline') }
+  m.ask('@daemon.box@kai /spawn claude failed-worker perm=ask work', 'api@kai', 'agent')
+  await m.tick()
+  assert.equal(m.tabs.length, 0)
+  assert.equal(m.said.at(-1), `@api@kai ${SETTING_UNREADABLE}`)
+  m.ask('@daemon.box@kai /spawn claude explicit perm=ask work')
+  await m.tick()
+  assert.equal(m.tabs.length, 1)
+})
+
+test('remote helpers inherit Member.perm, may lower it, and cannot raise it', async () => {
+  fs.rmSync(spawnRecordPath(ROOM, 'pm@kai'), { force: true })
+  for (const [parentLevel, requested, expected] of [
+    ['all', '', 'all'], ['all', 'perm=ask', 'ask'], ['ask', 'perm=all', null],
+    ['ask', 'perm=auto', null], ['auto', '', 'auto'], ['auto', 'perm=all', null], [null, '', 'auto'],
+  ]) {
+    const m = fakeMachine()
+    m.memberList.push({ name: 'pm@kai', kind: 'agent', status: 'active', perm: parentLevel ? { level: parentLevel, from: 'spawn', parent: null } : null })
+    m.panes.push({ pane_id: 'w:p9', agent: 'claude', agent_status: 'working' })
+    let reads = 0
+    m.api.spawnPerm = async () => { reads++; return { perm: 'auto' } }
+    m.ask(`@daemon.box@kai /spawn claude remote-worker ${requested} work`, 'pm@kai', 'agent')
+    await m.tick()
+    assert.equal(reads, parentLevel ? 0 : 1)
+    assert.equal(m.tabs.length, expected ? 1 : 0)
+    if (!expected) {
+      assert.equal(m.said.at(-1), `@pm@kai ✗ perm=${requested.slice(5)}: pm@kai runs with perm=${parentLevel}, so it cannot start an agent with more.`)
+      continue
+    }
+    const record = readJson(spawnRecordPath(ROOM, 'remote-worker@kai'))
+    assert.deepEqual([record.perm, record.permFrom, record.permParent], [expected, requested ? 'spawn' : parentLevel ? 'parent' : 'setting', !requested && parentLevel ? 'pm@kai' : null])
+    if (expected === 'all') assert.equal(m.said.at(-1), `@remote-worker@kai Started remote-worker (claude: claude-opus-5-5, effort medium) in ${m.tabs.at(-1).cwd}, a new name in this topic. It is working on its first prompt; waiting for it to join. perm: allow everything (same as pm@kai).`)
+  }
+})
+
+test('helpers of an agent with null Member.perm use the setting and name it in Started', async () => {
+  const m = fakeMachine()
+  m.memberList.push({ name: 'pm@kai', kind: 'agent', status: 'active', perm: null })
+  m.panes.push({ pane_id: 'w:p9', agent: 'claude', agent_status: 'working' })
+  m.api.spawnPerm = async () => ({ perm: 'all' })
+  m.ask('@daemon.box@kai /spawn claude setting-helper work', 'pm@kai', 'agent')
+  await m.tick()
+  assert.equal(m.tabs.length, 1)
+  const record = readJson(spawnRecordPath(ROOM, 'setting-helper@kai'))
+  assert.deepEqual([record.perm, record.permFrom, record.permParent], ['all', 'setting', null])
+  assert.equal(m.said.at(-1), `@setting-helper@kai Started setting-helper (claude: claude-opus-5-5, effort medium) in ${m.tabs.at(-1).cwd}, a new name in this topic. It is working on its first prompt; waiting for it to join. perm: allow everything (your setting).`)
+})
+
+test('spawn reads current member permissions when the cached room still has null', async () => {
+  const m = fakeMachine()
+  m.memberList.push({ name: 'pm@kai', kind: 'agent', status: 'active', perm: { level: 'ask', from: 'spawn', parent: null } })
+  m.roomData.members = structuredClone(m.memberList)
+  m.roomData.members.find((member) => member.name === 'pm@kai').perm = null
+  m.panes.push({ pane_id: 'w:p9', agent: 'claude', agent_status: 'working' })
+  let settingReads = 0
+  m.api.spawnPerm = async () => { settingReads++; return { perm: 'all' } }
+  m.ask('@daemon.box@kai /spawn claude fresh-permission work', 'pm@kai', 'agent')
+  await m.tick()
+  assert.equal(m.tabs.length, 1)
+  const record = readJson(spawnRecordPath(ROOM, 'fresh-permission@kai'))
+  assert.deepEqual([record.perm, record.permFrom, record.permParent], ['ask', 'parent', 'pm@kai'])
+  assert.equal(settingReads, 0)
+})
+
+test('local missing or stale spawn panes use the setting, not a stale Member.perm', async () => {
+  for (const pane of [null, 'old-pane', 'w:p1']) {
+    const m = fakeMachine()
+    m.memberList.find((member) => member.name === 'api@kai').perm = { level: 'all', from: 'spawn', parent: null }
+    if (pane) writeJson(spawnRecordPath(ROOM, 'api@kai'), { pane, perm: 'ask' })
+    else fs.rmSync(spawnRecordPath(ROOM, 'api@kai'), { force: true })
+    m.panes.push({ pane_id: 'w:p9', agent: 'claude', agent_status: 'working' })
+    let reads = 0
+    m.api.spawnPerm = async () => { reads++; return { perm: 'ask' } }
+    m.ask('@daemon.box@kai /spawn claude local-worker work', 'api@kai', 'agent')
+    await m.tick()
+    assert.equal(m.tabs.length, 1)
+    assert.equal(reads, pane === 'w:p1' ? 0 : 1)
+    assert.equal(readJson(spawnRecordPath(ROOM, 'local-worker@kai')).perm, pane === 'w:p1' ? 'all' : 'ask')
+  }
+  fs.rmSync(spawnRecordPath(ROOM, 'api@kai'), { force: true })
+})
+
+test('takeovers keep the member level, including explicit matching requests and sender ceilings', async () => {
+  for (const [requested, agent] of [['', false], ['perm=auto', false], ['', true], ['perm=auto', true]]) {
+    const m = fakeMachine()
+    m.memberList.push({ name: 'kept@kai', kind: 'agent', status: 'left', perm: { level: 'auto', from: 'setting', parent: null } })
+    m.memberList.push({ name: 'pm@kai', kind: 'agent', status: 'active', perm: { level: 'all', from: 'setting', parent: null } })
+    m.panes.push({ pane_id: 'w:p9', agent: 'claude', agent_status: 'working' })
+    m.api.spawnPerm = async () => { throw new Error('known levels must not read settings') }
+    m.ask(`@daemon.box@kai /spawn claude kept ${requested} work`, agent ? 'pm@kai' : 'kai', agent ? 'agent' : 'human')
+    await m.tick()
+    await until(() => m.said.some((line) => line.includes('Started kept ')))
+    const record = readJson(spawnRecordPath(ROOM, 'kept@kai'))
+    assert.deepEqual([record.perm, record.permFrom], ['auto', 'takeover'])
+    assert.equal(m.said.at(-1), `@${agent ? 'kept@kai' : 'kai'} Started kept (claude: claude-opus-5-5, effort medium) in ${m.tabs.at(-1).cwd}, taking over kept: its tasks and role card go with it; it left no handoff, in the cloud or on this computer. It is working on its first prompt; waiting for it to join. perm: approve for me (takeover, kept). perm=auto: Claude Code's auto mode decides what runs. What it blocks does not come to you as a card; your own ask rules still do.`)
+  }
+  const m = fakeMachine()
+  m.memberList.push({ name: 'kept@kai', kind: 'agent', status: 'left', perm: { level: 'all', from: 'spawn', parent: null } })
+  m.memberList.push({ name: 'pm@kai', kind: 'agent', status: 'active', perm: { level: 'ask', from: 'setting', parent: null } })
+  m.ask('@daemon.box@kai /spawn claude kept work', 'pm@kai', 'agent')
+  await m.tick()
+  assert.equal(m.tabs.length, 0)
+  assert.equal(m.said.at(-1), '@pm@kai ✗ perm=all: pm@kai runs with perm=ask, so it cannot start an agent with more.')
+})
+
+test('carry only describes current spawn panes and normalizes older records', () => {
+  const carried = [{ name: 'api@kai', pane: 'p1' }, { name: 'qa@kai', pane: 'p2' }, { name: 'manual@kai', pane: 'p3' }, { name: 'old@kai', pane: 'p4' }]
+  const records = {
+    'api@kai': { pane: 'p1', perm: 'all', permFrom: 'parent', permParent: 'pm@kai' },
+    'qa@kai': { pane: 'p2', perm: 'default' }, 'old@kai': { pane: 'previous-pane', perm: 'all' },
+  }
+  assert.deepEqual(carryPermissions(carried, (e) => records[e.name]), {
+    'api@kai': { level: 'all', from: 'parent', parent: 'pm@kai' }, 'qa@kai': { level: 'ask', from: 'spawn', parent: null },
+  })
+})
+
+test('host carry sends permissions on opening and when only permissions change', () => {
+  class Socket {
+    constructor() { this.handlers = {}; this.sent = []; Socket.last = this }
+    addEventListener(name, fn) { this.handlers[name] = fn }
+    send(value) { this.sent.push(value) }
+    close() {}
+  }
+  const links = createLinks({ api: { wsUrl: () => 'ws://example.com', token: () => 'test', userAgent: 'test' }, onFrame: () => {}, WebSocketImpl: Socket })
+  try {
+    const spec = { key: 'host', roomId: 'one', role: 'daemon', host: true, carry: ['api@kai', 'manual@kai'], perm: { 'api@kai': { level: 'auto', from: 'spawn', parent: null } } }
+    links.sync([spec]); Socket.last.handlers.open()
+    const frames = () => Socket.last.sent.filter((value) => value !== 'ping').map((value) => JSON.parse(value))
+    assert.deepEqual(frames(), [{ type: 'carry', names: ['api@kai', 'manual@kai'], perm: spec.perm }])
+    links.sync([spec]); assert.equal(frames().length, 1)
+    links.sync([{ ...spec, perm: {} }])
+    assert.deepEqual(frames().at(-1), { type: 'carry', names: ['api@kai', 'manual@kai'], perm: {} })
+    assert.equal(frames().length, 2)
+  } finally { links.closeAll() }
 })

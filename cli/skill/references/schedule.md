@@ -19,7 +19,8 @@ scorpio schedule topicId=<id> on=S3 | off=S3 | off=all | send=S3 | delete=S3
 ```
 
 Use exactly one rule when creating, at most one when editing. `S3` and `3` name the same schedule.
-`text=-` reads stdin when the text spans lines. Mentions follow `send`: an agent must @ a member,
+In Codex, use `textFile=` for multiline text as described in [messaging.md](messaging.md);
+other agents can use `text=-` to read stdin. Mentions follow `send`: an agent must @ a member,
 while a person may write none. A reminder to yourself @s yourself, so it will wake your seat.
 Unlike a person's immediate message with no @, a scheduled message is never a broadcast: with
 no recipients it is posted in the topic and wakes nobody. This is why the text should name every

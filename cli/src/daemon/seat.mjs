@@ -7,6 +7,7 @@
 // pending operations that each tick moves along, so the main loop keeps delivering messages meanwhile.
 // Side effects come in through createSeat's arguments.
 
+import { codexApprovalNote } from '../adapters/cli/codex-settings.mjs'
 import fs from 'node:fs'
 import os from 'node:os'
 import { wasRemoved, markRemoved } from './removed.mjs'
@@ -15,10 +16,12 @@ import {
   COMMANDS, HELP_FULL, HELP_SHORT, daemonsNamed, judge, machineName, senderOf, parseSpawn, parseTargets, freeName, seatRole, spawnPrompt, spawnLine, handoffPrompt, takeoverText, agoText, usage,
   parseIdle, idleNotice, minutesText, nudgePrompt, spawnDirArg, parseRead, parseKeys, parseText, targetOf,
 } from './commands.mjs'
+import { approvalTargets } from './approvals.mjs'
 import { createKeys, findKey, keyList, keysFor } from './keys.mjs'
 import { createSpawnOptions, spawnHelpOptions } from './spawn-config.mjs'
-import { deviceId, handoffCopyPath, handoffPath, spawnPath, spawnRecordPath, SEAT_FILE, ROLLBACK_FILE, readJson, writeJson } from './paths.mjs'
-import { argsFor, CLIS, KINDS, modelOf, modelText, NEVER_ANSWER, runsCli, stoppedOnNetworkError, withModel } from '../adapters/cli/index.mjs'
+import { PERMS, SETTING_UNREADABLE, permissionLevel, permissionNotice, spawnPermission } from './spawn-permission.mjs'
+import { deviceId, handoffCopyPath, handoffPath, spawnPath, spawnRecordPath, CONFIG_FILE, SEAT_FILE, ROLLBACK_FILE, readJson, writeJson } from './paths.mjs'
+import { argsFor, autoPermission, fullPermission, permOf, CLIS, KINDS, modelOf, modelText, NEVER_ANSWER, dialogBlocked, runsCli, stoppedOnNetworkError, withModel } from '../adapters/cli/index.mjs'
 import { claudeWindows, codexWindows, readClaudeRateLimits, readCodexRateLimits, usageLine } from '../adapters/cli/usage.mjs'
 import { agentClisText, detectedText, installedChanged } from '../adapters/cli/detect.mjs'
 import { HOME } from './paths.mjs'
@@ -87,11 +90,14 @@ export function createSeat({
   handoffFetchMs = HANDOFF_FETCH_MS,
   // Which agent CLIs are installed here (detect.mjs createDetector); null: not detected (tests, an older main.mjs).
   detector = null,
+  approvalBusy = () => false,
+  approvalShown = approvalBusy,
+  approvalsRunning = () => false,
 } = {}) {
   const logError = log.error || log
   const keyTableNow = keyTable || createKeys({ fetch: () => api.keys(), now, log })
   const optionTable = spawnOptions || createSpawnOptions({ fetch: () => api.spawnOptions(), now, log, file: path.join(path.dirname(stateFile), 'spawn-config.json') })
-  const spawnArgs = (kind, spec) => withModel(kind, argsFor(kind), {
+  const spawnArgs = (kind, spec) => withModel(kind, argsFor(kind, undefined, spec.perm), {
     model: spec.model || optionTable.get()[kind].default.model,
     effort: spec.effort || optionTable.get()[kind].default.effort,
   })
@@ -215,7 +221,7 @@ export function createSeat({
         const rollback = readJson(ROLLBACK_FILE)
         const rollbackReport = rollback?.bad?.version && rollback?.bad?.build && Number.isFinite(rollback.at)
           ? { rollback: { bad: rollback.bad, at: rollback.at } } : {}
-        const body = { role, host: true, device_id: deviceId(), machine: host, roleCard: roleCard(knownDevice, clis), resume: true, idleHandoffMinutes: minutes, ...(clis.length ? { clis } : {}), ...rollbackReport }
+        const body = { role, host: true, perms: PERMS, device_id: deviceId(), machine: host, roleCard: roleCard(knownDevice, clis), resume: true, idleHandoffMinutes: minutes, ...(clis.length ? { clis } : {}), ...rollbackReport }
         let r = await api.join(roomId, body)
         if (r.device && roleCard(r.device, clis) !== body.roleCard) {
           state.device = r.device; save()
@@ -339,9 +345,13 @@ export function createSeat({
    * (only a shell), nothing typed (each line would run).
    */
   async function promptPane(pane, text) {
-    if (await terminal.paneStatus(pane) === 'blocked') return 'blocked'
-    if (NEVER_ANSWER.test(tail(await terminal.read(pane, 40), 20))) return 'blocked'
+    if (approvalBusy(pane)) return 'blocked'
+    const status = await terminal.paneStatus(pane)
+    if (dialogBlocked(status)) return 'blocked'
+    const screen = await terminal.read(pane, 200)
+    if (dialogBlocked(status, screen) || NEVER_ANSWER.test(tail(screen, 20))) return 'blocked'
     try {
+      if (approvalBusy(pane)) return 'blocked'
       await terminal.injectAndWatch(pane, text)
       return 'ok'
     } catch (error) {
@@ -362,9 +372,9 @@ export function createSeat({
   }
 
   async function reportStall(op, screen, seconds) {
-    if (op.stallReported || !ops.includes(op) || rosterEntries().some((e) => e.roomId === op.roomId && e.name === op.name)) return
+    if (approvalShown(op.pane) || op.stallReported || !ops.includes(op) || rosterEntries().some((e) => e.roomId === op.roomId && e.name === op.name)) return
     op.stallReported = true; save()
-    await say(op.roomId, `${shortOf(op.name)} has not joined yet. Its command line has been waiting on this screen for ${seconds}s; the daemon does not answer it. Screen:\n${fence(tail(screen))}`, op.seq, op.to)
+    await say(op.roomId, `${shortOf(op.name)} has not joined yet. Its screen has not changed for ${seconds}s; the daemon does not answer it. Screen:\n${fence(tail(screen))}`, op.seq, op.to)
   }
 
   /**
@@ -378,7 +388,11 @@ export function createSeat({
       tries += 1; started = null; failure = null
       terminal.startAgent({ name, kind, pane, argv })
         .then(() => { started = true })
-        .catch((error) => { failure = herdrError(error); started = false; failedAt = i; logError(`agent start ${name} (try ${tries}): ${herdrExit('agent start', error)}`) })
+        .catch((error) => {
+          failure = herdrError(error); started = false; failedAt = i
+          if (STILL_STARTING.has(failure.code)) log(`agent start ${name} (try ${tries}): herdr returned ${failure.code} while the CLI works on its first prompt`)
+          else logError(`agent start ${name} (try ${tries}): ${herdrExit('agent start', error)}${failure.code ? ` (${failure.code})` : ''}`)
+        })
     }
     start()
     let me = null
@@ -390,7 +404,7 @@ export function createSeat({
       if (!ops.includes(op)) return { gone: true }
       if (rosterEntries().some((e) => e.roomId === op.roomId && e.name === op.name)) return { joined: true }
       if (up && me.agent_status === 'working') {
-        observeSpawn(op, await terminal.read(pane, 40), true)
+        observeSpawn(op, await terminal.read(pane, 200), true)
         return { ok: true }
       }
       if (started === false && !STILL_STARTING.has(failure.code) && !up) {
@@ -398,13 +412,13 @@ export function createSeat({
         if (failure.code === 'agent_pane_busy' && tries < 2) { if (i - failedAt >= 4) start(); continue }
         return { ok: false, reason: failure.text }
       }
-      const screen = await terminal.read(pane, 40)
+      const screen = await terminal.read(pane, 200)
       if (!screen && panes && !me) return { ok: false, gone: true }
       const seconds = observeSpawn(op, screen, false)
-      if (NEVER_ANSWER.test(tail(screen, 20)) || (up && me.agent_status === 'blocked') || seconds * 1000 >= SPAWN_STALL_MS) return { stalled: true, screen, seconds }
+      if (NEVER_ANSWER.test(tail(screen, 20)) || (up && dialogBlocked(me.agent_status, screen)) || seconds * 1000 >= SPAWN_STALL_MS) return { stalled: true, screen, seconds }
     }
     if (me && me.agent === kind) {
-      const screen = await terminal.read(pane, 40)
+      const screen = await terminal.read(pane, 200)
       return { stalled: true, screen, seconds: observeSpawn(op, screen, false) }
     }
     return { ok: false, reason: failure ? failure.text : '' }
@@ -495,12 +509,12 @@ export function createSeat({
     if (!ops.includes(op)) { log(`${short} was /bye-d while its CLI started; not answering`); return }
     if (up.gone) { drop(op); await say(roomId, `${short}'s pane was closed before it started.`, op.seq, op.to); return }
     if (up.joined || inRoom(await members(roomId).catch(() => []), op.name)) { drop(op); return }
-    if (up.stalled) {
+    if (up.stalled && !approvalsRunning()) {
       op.stage = 'joining'; op.deadline = now() + SPAWN_JOIN_MS; save()
       await reportStall(op, up.screen, up.seconds)
       return
     }
-    if (!up.ok) {
+    if (!up.ok && !up.stalled) {
       op.stage = 'failed'; save()
       const why = up.reason ? `did not start; herdr says: ${up.reason}` : 'did not start within a minute'
       await say(roomId, `${short}'s CLI ${why}. The pane is still open; /bye ${short} closes it. ${await screenText()}`, op.seq, op.to)
@@ -509,7 +523,14 @@ export function createSeat({
     op.stage = 'joining'; op.deadline = now() + SPAWN_JOIN_MS; save()
     const seat = op.keepCard ? takeoverText(short, op.handoff) : 'a new name in this topic'
     const replaced = op.replacedGone ? ` ${short}'s old process on this computer was gone, so the daemon took it out of the topic first.` : ''
-    await say(roomId, `Started ${short} (${spec.kind}: ${modelText(spec.kind, cliArgs)}) in ${op.dir}, ${seat}.${replaced} It is working on its first prompt; waiting for it to join.`, op.seq, op.fromKind === 'agent' ? op.name : op.to)
+    const configPath = CONFIG_FILE.startsWith(os.homedir() + path.sep) ? '~' + CONFIG_FILE.slice(os.homedir().length) : CONFIG_FILE
+    const permissionNote = (spec.perm === 'all' && !fullPermission(spec.kind, cliArgs) || spec.perm === 'auto' && !autoPermission(spec.kind, cliArgs))
+      ? ` perm=${spec.perm} was not applied: this computer's ${configPath} spawn.${spec.kind} sets the arguments.` : ''
+    const autoNote = permOf(spec.kind, cliArgs) === 'auto' ? (spec.kind === 'claude'
+      ? " perm=auto: Claude Code's auto mode decides what runs. What it blocks does not come to you as a card; your own ask rules still do."
+      : " perm=auto: Codex's auto-review decides what runs, without the approval hook. What it blocks does not come to you as a card.") : ''
+    const codexNote = spec.kind === 'codex' && spec.perm === 'ask' && !Array.isArray(readJson(CONFIG_FILE)?.spawn?.codex) ? codexApprovalNote(cliArgs) : ''
+    await say(roomId, `Started ${short} (${spec.kind}: ${modelText(spec.kind, cliArgs)}) in ${op.dir}, ${seat}.${replaced} It is working on its first prompt; waiting for it to join. ${permissionNotice(op)}${permissionNote}${autoNote}${codexNote ? ` ${codexNote}` : ''}`, op.seq, op.fromKind === 'agent' ? op.name : op.to)
   }
 
   /** Started but not joined, and stopped at its prompt on a network API error: tell it to carry on. */
@@ -539,10 +560,11 @@ export function createSeat({
     fs.mkdirSync(path.dirname(file), { recursive: true })
     // The takeover command starts the same CLI with the same model and effort: taking over must not quietly downgrade.
     const kind = kindAt(panes, agent.pane)
-    const fg = ((await terminal.processInfo(agent.pane))?.foreground_processes || []).find((p) => p.name === kind || /(^|\/)(claude|codex)$/.test(String(p.argv?.[0] || '')))
+    const fg = ((await terminal.processInfo(agent.pane))?.foreground_processes || []).find((p) => runsCli({ foreground_processes: [p] }, kind))
+    const perm = kind ? permOf(kind, (fg?.argv || []).slice(1)) : 'ask'
     const { model, effort } = kind ? modelOf(kind, (fg?.argv || []).slice(1)) : {}
     const items = (rooms.get(roomId)?.items || []).filter((i) => i.assignee === agent.name && (i.status === 'doing' || i.status === 'todo'))
-    const text = handoffPrompt({ model, effort, items, idleMinutes,
+    const text = handoffPrompt({ model, effort, perm, items, idleMinutes,
       account, by, roomId, roomName: roomName(roomId), seq, file, targets, daemonName: seatName, kind, name: agent.name,
       dir: (panes || []).find((p) => p.pane_id === agent.pane)?.cwd,
     })
@@ -562,7 +584,9 @@ export function createSeat({
     if (ops.some((op) => (op.type === 'handoff' ? op.targets.some((a) => a.name === entry.name && !a.result) : op.name === entry.name))) return 'a command is already handling it'
     // A dialog on screen: stuck, not idle; and typed text would answer the dialog.
     const status = (panes || []).find((p) => p.pane_id === agent.pane)?.agent_status
-    if (status === 'blocked' || NEVER_ANSWER.test(tail(await terminal.read(agent.pane, 40), 20))) return 'a dialog is open'
+    if (approvalBusy(agent.pane) || dialogBlocked(status)) return 'a dialog is open'
+    const screen = await terminal.read(agent.pane, 200)
+    if (dialogBlocked(status, screen) || NEVER_ANSWER.test(tail(screen, 20))) return 'a dialog is open'
     const role = shortOf(entry.name)
     const said = await say(roomId, idleNotice({ minutes, role }))
     if (!Number.isInteger(said?.seq)) return 'could not say so in the topic'
@@ -572,7 +596,9 @@ export function createSeat({
       return 'started'
     }
     if (sent === 'blocked') {
-      await say(roomId, `✗ ${role} · a dialog opened just now; the handoff instructions were not typed in, nothing done. Screen:\n${fence(tail(await terminal.read(agent.pane), 8))}`, said.seq)
+      await say(roomId, approvalShown(agent.pane)
+        ? `✗ ${role} · waiting for its owner to answer an approval card in Scorpio; the handoff instructions were not typed in, nothing done.`
+        : `✗ ${role} · a dialog opened just now; the handoff instructions were not typed in, nothing done. Screen:\n${fence(tail(await terminal.read(agent.pane), 8))}`, said.seq)
       return 'a dialog is open'
     }
     ops.push({ type: 'handoff', idle: true, roomId, seq: said.seq, to: account, targets: [{ ...agent, file }], done: [], deadline: now() + HANDOFF_MS,
@@ -761,6 +787,22 @@ export function createSeat({
       const live = await terminal.agents() || []
       const short = spec.name || freeName(spec.kind, [...everyone.map((m) => m.name), ...live.map((a) => a.name), ...spawns().map((op) => op.name)])
       const name = `${short}@${account}`
+      const previous = permissionLevel(everyone.find((m) => m.name === name)?.perm?.level)
+      const parent = sender.fromKind === 'agent' ? { name: sender.from, level: everyone.find((m) => m.name === sender.from)?.perm?.level } : null
+      if (parent) {
+        const local = ctx.entries.find((e) => e.roomId === roomId && e.name === sender.from)
+        const record = local && readJson(spawnRecordPath(roomId, sender.from))
+        if (local && record?.pane !== local.pane) parent.level = null
+      }
+      let permission = spawnPermission({ requested: spec.perm, previous, sender: parent })
+      if (permission.needsSetting) {
+        let setting
+        try { setting = permissionLevel((await api.spawnPerm()).perm) } catch {}
+        if (!setting) return say(roomId, SETTING_UNREADABLE, message.seq, to)
+        permission = spawnPermission({ requested: spec.perm, previous, sender: parent, setting })
+      }
+      if (permission.error) return say(roomId, permission.error, message.seq, to)
+      spec.perm = permission.level
       let replacedGone = false
       if (inRoom(roster, name)) {
         const here = localAgents(roomId, ctx.entries, ctx.panes).get(name)
@@ -785,7 +827,7 @@ export function createSeat({
       if (spec.needDir) {
         try { ensureDir(dir) } catch (error) { return say(roomId, `Not started: could not create the topic workspace ${dir}: ${error.message}`, message.seq, to) }
       }
-      const op = { type: 'spawn', stage: 'starting', kind: spec.kind, roomId, seq: message.seq, name, to, fromKind: sender.fromKind, scheduled: message.scheduled, keepCard, skipHandoff: keepCard && !!spec.skipHandoff, dir, replacedGone }
+      const op = { type: 'spawn', stage: 'starting', kind: spec.kind, roomId, seq: message.seq, name, to, fromKind: sender.fromKind, scheduled: message.scheduled, keepCard, skipHandoff: keepCard && !!spec.skipHandoff, perm: permOf(spec.kind, spawnArgs(spec.kind, spec)), permFrom: permission.from, permParent: permission.parent, dir, replacedGone }
       ops.push(op)
       const homeBin = path.join(HOME, 'bin')
       const inheritedPath = spawnEnv.PATH || process.env.PATH || ''
@@ -796,7 +838,7 @@ export function createSeat({
       try {
         const chosen = modelOf(spec.kind, spawnArgs(spec.kind, spec))
         // pane: which pane this daemon started it in, for /read, /keys and /text once it has joined.
-        writeJson(spawnRecordPath(roomId, name), { kind: spec.kind, dir, explicitDir: !spec.needDir, model: chosen.model ?? null, effort: chosen.effort ?? null, pane: op.pane, at: now() })
+        writeJson(spawnRecordPath(roomId, name), { kind: spec.kind, dir, explicitDir: !spec.needDir, model: chosen.model ?? null, effort: chosen.effort ?? null, pane: op.pane, perm: op.perm, permFrom: op.permFrom, permParent: op.permParent, at: now() })
       } catch (error) { log(`could not remember /spawn ${short}: ${error.message}`) }
       save()
       launch(op, spec).catch(async (error) => {
@@ -821,7 +863,9 @@ export function createSeat({
         if (!agent.alive || agent.spawning) { lines.push(await byeOne(roomId, agent, ctx.panes, unregister)); continue }
         const { sent, file } = await askHandoff({ roomId, agent, panes: ctx.panes, by: senderOf(message).from, seq: message.seq, targets: t.all ? 'all' : t.names.map(shortOf).join(' ') })
         if (sent === 'gone') lines.push((await byeOne(roomId, { ...agent, alive: false }, ctx.panes, unregister)).replace('its process was already gone', 'its CLI had exited'))
-        else if (sent === 'blocked') lines.push(`✗ ${short} · stuck on a dialog; the handoff instructions were not typed in, nothing done. Screen:\n${fence(tail(await terminal.read(agent.pane), 8))}`)
+        else if (sent === 'blocked') lines.push(approvalShown(agent.pane)
+          ? `✗ ${short} · waiting for its owner to answer an approval card in Scorpio; the handoff instructions were not typed in, nothing done.`
+          : `✗ ${short} · stuck on a dialog; the handoff instructions were not typed in, nothing done. Screen:\n${fence(tail(await terminal.read(agent.pane), 8))}`)
         else waiting.push({ ...agent, file })
       }
       if (waiting.length) {
@@ -859,10 +903,11 @@ export function createSeat({
       if (op.type === 'spawn') {
         // Joined (even late), or its pane is gone (closed by hand): no longer a not-yet-joined agent of this computer.
         if (inRoom(list, op.name) || (livePanes && !livePanes.some((p) => p.pane_id === op.pane))) { drop(op); continue }
+        if (approvalShown(op.pane)) { op.deadline = now() + SPAWN_JOIN_MS; continue }
         if (op.stage === 'joining' || op.stage === 'late') {
           const before = spawnScreens.get(op)
           if (!before || now() - before.at >= SPAWN_SCREEN_MS) {
-            const screen = await terminal.read(op.pane, 40)
+            const screen = await terminal.read(op.pane, 200)
             const working = livePanes?.find((p) => p.pane_id === op.pane)?.agent_status === 'working'
             const seconds = observeSpawn(op, screen, working)
             if (!working && seconds * 1000 >= SPAWN_STALL_MS) await reportStall(op, screen, seconds)
@@ -875,6 +920,9 @@ export function createSeat({
           await say(op.roomId, `${short} has not joined after 10 minutes; its pane is still open (/bye ${short} closes it). Screen:\n${fence(tail(await terminal.read(op.pane)))}`, op.seq, op.to)
         }
       } else if (op.type === 'handoff') {
+        const elapsed = Math.max(0, now() - (op.checkedAt ?? op.deadline - HANDOFF_MS))
+        op.checkedAt = now()
+        if (op.targets.some((a) => !a.result && approvalBusy(a.pane))) { op.deadline += elapsed; continue }
         for (const agent of op.targets.filter((a) => !a.result)) {
           if (inRoom(list, agent.name)) continue
           unregister({ roomId: op.roomId, name: agent.name, pane: agent.pane })
@@ -998,6 +1046,7 @@ export function createSeat({
     /** The last detection, in kind order; null before the first one. */
     clis: () => (detector?.ready() ? detector.list() : null),
     prepare, tick, idle, busyWhy, ops, state, rejoin, forget, leftTopic, stranded, idleHandoff,
+    approvalTargets: (panes) => approvalTargets({ panes, spawns: spawns(), entries: rosterEntries(), readRecord: (e) => readJson(spawnRecordPath(e.roomId, e.name)) }),
     reconnect() { joinedThisRun.clear(); joinFailedAt.clear(); reported.clear(); ownedAt = -Infinity },
     /** A room's last listen was full: the next round reads on. */
     more: () => readAgain.size > 0,
