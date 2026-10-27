@@ -19,6 +19,10 @@ Two things follow from publishing it as is. Everything written here becomes publ
 - **No references to private material, in any form:** task or ticket numbers (`T123`), message numbers (`#1234`, `pm #1234`), team roles cited as the source of a decision ("as supervisor asked"), dates of internal events, sections of documents that are not in this directory (`protocol §6`), and paths into other repositories (`../server`, `server/src/…`). They mean nothing to a reader here. Write the reason itself instead.
 - **No dependency on anything outside this directory,** in code, tests or tools (see the first rule under Do).
 
+## Changes and commits
+
+Develop the client in this repository and open pull requests here. Add a bilingual change fragment at the public repository root, in `changes/<branch>.md`. Each entry starts with `新增`, `改进`, `修复` or `内部`, followed by a nonempty `zh:` line and a nonempty `en:` line. Use a public type for a change users can see; use `内部` for engineering work. The release consumes the fragment. Keep commit messages public: explain the change itself, with no internal task or message numbers or private citations.
+
 ## Check before you push
 
 Run both checks from this directory.
