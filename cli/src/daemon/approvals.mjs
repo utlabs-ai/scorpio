@@ -25,11 +25,13 @@ export function createApprovals({ terminal, targets, send, now = () => Date.now(
   const hasWaitingHook = (pane) => Boolean(pending.get(pane)?.some((r) => !r.used))
   const busy = (pane) => cards.has(pane) || Boolean(pending.get(pane)?.some((r) => !r.used && now() - r.ts < 2000)) || waiting.has(pane)
   const release = (request, decision = null) => {
-    if (!request) return
-    if (request.reply) { request.reply({ decision }); request.reply = null }
+    if (!request) return false
+    const delivered = Boolean(request.reply && request.reply({ decision }) !== false)
+    request.reply = null
     const queue = pending.get(request.pane) || []
     const i = queue.indexOf(request); if (i >= 0) queue.splice(i, 1)
     if (!queue.length) pending.delete(request.pane)
+    return delivered
   }
   const wire = (card) => ({ id: card.id, name: card.name, cli: card.cli, detail: card.detail, menu: card.menu, screen: card.screen, ts: card.ts })
   const emit = (card, frame) => { for (const roomId of card.rooms) send(roomId, frame) }
@@ -69,6 +71,13 @@ export function createApprovals({ terminal, targets, send, now = () => Date.now(
       if (!r.used && now() - r.ts >= 2000 && !menu) release(r)
     }
     if (card) {
+      if (card.decided) {
+        if (sameMenu(card, screen) && !pending.get(target.pane)?.some((r) => !r.used && r.ts > card.decidedAt)) return
+        const nextMenu = menu && (status === 'blocked' || pending.get(target.pane)?.some((r) => !r.used && r.ts > card.ts))
+        close(card, 'answered', 'ok', screen)
+        if (nextMenu) await open(target, screen)
+        return
+      }
       if (card.menu === null && menu === null) {
         if (status === 'blocked') {
           const latest = screenTail(screen)
@@ -146,6 +155,7 @@ export function createApprovals({ terminal, targets, send, now = () => Date.now(
     if (!card) return
     return run(card.pane, async () => {
       if (cards.get(card.pane) !== card) return
+      if (card.decided) return
       locks.add(card.pane)
       let answerDescription
       try {
@@ -168,10 +178,11 @@ export function createApprovals({ terminal, targets, send, now = () => Date.now(
         const message = typeof frame.message === 'string' && frame.message.length <= 2000 && option && option === last && /^No\b/.test(last.label) ? frame.message : ''
         if (card.menu ? !option : !keysFor(table, terminal.adapter || 'herdr').some((k) => k.name === frame.key)) return
         answerDescription = `${card.menu ? `option ${option.n}` : `key ${frame.key}`}${message ? ', with a reason' : ''}`
-        let hookDecision = false
+        let hookDecision = false, delivered = false
         if (card.cli === 'claude' && card.request?.reply && standardApproval(card.menu) && (option.n === 1 || option === last)) {
           hookDecision = true
-          release(card.request, option.n === 1 ? { behavior: 'allow' } : { behavior: 'deny', ...(message ? { message } : {}) })
+          card.decidedAt = now()
+          delivered = release(card.request, option.n === 1 ? { behavior: 'allow' } : { behavior: 'deny', ...(message ? { message } : {}) })
         } else {
           const cursor = card.menu && cursorMenu(screen)
           if (cursor) {
@@ -221,6 +232,11 @@ export function createApprovals({ terminal, targets, send, now = () => Date.now(
           after = await terminal.read(card.pane, 200)
         }
         const failed = sameMenu(card, after)
+        if (hookDecision && delivered && failed) {
+          card.decided = true
+          log(`approval ${card.id} answered: ${answerDescription}, sent to claude; waiting for the menu to close`)
+          return
+        }
         log(`approval ${card.id} answered: ${answerDescription}, ${failed ? 'failed' : 'ok'}`)
         answerDescription = undefined
         close(card, 'answered', failed ? 'failed' : 'ok')
@@ -255,7 +271,11 @@ export function createApprovals({ terminal, targets, send, now = () => Date.now(
       try { fs.unlinkSync(socket) } catch (e) { if (e.code !== 'ENOENT') throw e }
       server = net.createServer((client) => {
         let buffer = '', received = false
-        const reply = (body) => { if (!client.destroyed) client.end(JSON.stringify(body) + '\n') }
+        const reply = (body) => {
+          if (client.destroyed) return false
+          client.end(JSON.stringify(body) + '\n')
+          return true
+        }
         client.on('error', () => {})
         client.on('data', (data) => {
           if (received) return
