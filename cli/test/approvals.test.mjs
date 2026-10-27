@@ -1100,7 +1100,7 @@ test('auto spawn retains the Claude hook and omits the Codex hook and asking pol
 })
 
 test('unsafe rejection reasons never press, type, inject, or decide a hook', async () => {
-  for (const cli of ['claude', 'codex']) for (const message of ['!touch file', '  !touch file', 'a\nb', 'a\tb', 'a\x1bb', 'a\x9bb']) {
+  for (const cli of ['claude', 'codex']) for (const message of ['!touch file', '  !touch file', '--help', '  -n', 'a\nb', 'a\tb', 'a\x1bb', 'a\x9bb']) {
     const f = fixture({ cli })
     const card = await f.open()
     await f.answer(card, { n: card.menu.options.at(-1).n, message })

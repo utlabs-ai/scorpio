@@ -29,12 +29,13 @@ test('model and effort values cannot turn into permission flags', () => {
   assert.equal(parseSpawn('claude api model=claude-opus-5-5 effort=high').model, 'claude-opus-5-5')
 })
 
-test('pane text refuses control characters and shell mode prefixes', () => {
-  for (const text of ['!touch file', '  !touch file', 'a\nb', 'a\tb', 'a\x1bb', 'a\x9bb']) {
+test('pane text refuses control characters, shell mode and option prefixes', () => {
+  for (const text of ['!touch file', '  !touch file', '-', '--help', '  -n', '\u2003--wait', 'a\nb', 'a\tb', 'a\x1bb', 'a\x9bb']) {
     assert.ok(paneTextError(text))
     assert.ok(parseText('api ' + text, 'kai').error)
   }
   assert.equal(paneTextError('Please continue.'), null)
+  assert.equal(paneTextError('Please use --help.'), null)
   assert.equal(terminalText('name\x1b\x07\x9b\r\n'), 'name')
 })
 
@@ -44,14 +45,20 @@ test('hook launcher shell quoting preserves spaces, quotes and metacharacters', 
   assert.equal(actual, launcher)
 })
 
-test('terminal text operands follow an option terminator', async () => {
+test('terminal text is a positional argument and watch options follow it', async () => {
   const calls = []
   const terminal = createHerdr({ exec: async (args) => { calls.push(args); return '{}' } })
-  await terminal.sendText('w:p1', '--help')
-  await terminal.inject('w:p1', '--help')
-  await terminal.injectAndWatch('w:p1', '--help')
-  await terminal.run('w:p1', '--help')
-  for (const args of calls) assert.deepEqual(args.slice(-2), ['--', '--help'])
+  const text = 'Please keep "quotes", $(printf text); unchanged.'
+  await terminal.inject('w:p1', text)
+  await terminal.injectAndWatch('w:p1', text, 4321)
+  await terminal.sendText('w:p1', text)
+  await terminal.run('w:p1', text)
+  assert.deepEqual(calls, [
+    ['agent', 'prompt', 'w:p1', text],
+    ['agent', 'prompt', 'w:p1', text, '--wait', '--until', 'working', '--until', 'blocked', '--timeout', '4321'],
+    ['pane', 'send-text', 'w:p1', text],
+    ['pane', 'run', 'w:p1', text],
+  ])
 })
 
 test('update fetches never follow redirects or use a clear-text remote server', async (t) => {
