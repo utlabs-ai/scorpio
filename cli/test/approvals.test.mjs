@@ -232,10 +232,8 @@ test('default spawn preserves settings and adds stable hook; all uses old permis
   assert.match(handoffPrompt({ ...base, perm: 'auto' }), /perm=auto <what to do next>/)
   assert.match(handoffPrompt(base), /perm=ask <what to do next>/)
 })
-test('Codex trust definition quotes launcher paths and stays stable', () => {
-  const command = "'/tmp/home/bin/scorpio' approval-hook codex"
-  assert.equal(codexHookDefinition('/tmp/home/bin/scorpio'), `hooks.PermissionRequest=[{matcher=".*",hooks=[{type="command",command=${JSON.stringify(command)},timeout=10}]}]`)
-  assert.ok(codexHookDefinition("/tmp/a b'c/scorpio").includes('approval-hook codex'))
+test('Codex trust definition stays byte-for-byte fixed', () => {
+  assert.equal(codexHookDefinition('/tmp/home/bin/scorpio'), 'hooks.PermissionRequest=[{matcher=".*",hooks=[{type="command",command="/tmp/home/bin/scorpio approval-hook codex",timeout=10}]}]')
 })
 test('daemon writes only additive Claude hook with private mode', () => {
   writeApprovalSettings({ launcher: '/tmp/home/bin/scorpio', stateDir: home })

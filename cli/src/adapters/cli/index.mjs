@@ -2,7 +2,6 @@
 // whether it needs keep-alives. The daemon answers no dialog itself.
 // Defaults can be overridden per computer in ~/.scorpio/config.json: {"spawn": {"claude": [args…]}}.
 
-import { shellQuote } from '../../shell.mjs'
 import path from 'node:path'
 import { CONFIG_FILE, LAUNCHER, STATE_DIR, readJson } from '../../daemon/paths.mjs'
 
@@ -29,7 +28,7 @@ export const CLIS = {
 export const KINDS = Object.keys(CLIS)
 
 // Keep the whole Codex definition stable: its trust is keyed by the definition hash.
-export const codexHookDefinition = (launcher = LAUNCHER) => `hooks.PermissionRequest=[{matcher=".*",hooks=[{type="command",command=${JSON.stringify(`${shellQuote(launcher)} approval-hook codex`)},timeout=10}]}]`
+export const codexHookDefinition = (launcher = LAUNCHER) => `hooks.PermissionRequest=[{matcher=".*",hooks=[{type="command",command=${JSON.stringify(`${launcher} approval-hook codex`)},timeout=10}]}]`
 export function fullPermission(kind, args = []) {
   const is = (flags, value) => args.some((arg, i) => flags.includes(arg) && args[i + 1] === value || flags.some((flag) => arg === `${flag}=${value}`))
   return kind === 'claude'
