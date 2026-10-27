@@ -57,7 +57,7 @@ daemon started with `/spawn` (joined or not yet), on its own computer.
 
 - `/read <name> [lines]`: the last lines of its screen, 30 unless given, at most 100, whatever is in the pane.
 - `/keys <name> <key>…`: presses the keys one after another, about 200 ms apart. The keys now: `up` (↑), `down` (↓), `enter`, `esc`. The daemon's `/help` and its answer to a key it doesn't know list the current ones.
-- `/text <name> <text>`: types one line and does not press Enter (send `/keys <name> enter` for that). No line breaks, other control characters, or a leading `!`.
+- `/text <name> <text>`: types one line and does not press Enter (send `/keys <name> enter` for that). No line breaks or other control characters.
 - After `/keys` and `/text` the daemon waits about 3 seconds and posts the new screen, so you see what it did.
 - `/keys` and `/text` act only while the CLI the daemon started is in front of its pane. Exited to the shell, nothing is sent (it would run as a shell command): the answer gives the reason and the screen.
 - Answers when something is wrong, each with what to send instead: a name this daemon did not start (`✗ qa · not started by this daemon (/spawn), …`), not in the topic or not on this computer (with the agents it started here), a key not in the list (with the list), a closed pane, the CLI no longer in front.

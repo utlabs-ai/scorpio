@@ -3,7 +3,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { HOME } from './daemon/paths.mjs'
 
-import { TOPIC_ID } from './path-safety.mjs'
+const TOPIC_ID = /^[A-Za-z0-9_-]{22}$/ // the server makes topic ids of 22 random characters
 const root = path.resolve(HOME)
 
 function topicDir(topicId) {

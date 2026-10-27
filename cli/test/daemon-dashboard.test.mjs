@@ -219,8 +219,3 @@ test('an offline dashboard without agent panes shows the full approval link in b
   assert.equal(dashboardState(args).logout, null)
   assert.ok(!renderDashboard(dashboardState(args)).join('').includes('Logged out'))
 })
-
-test('dashboard strips controls from topic names and server approval links', () => {
-  const lines = renderDashboard({ ...sample, topics: [{ id: 'r', name: 'bad\x1b\x07\x9bname' }], logout: { url: 'https://example.com/\x1b\x9bcode' } })
-  assert.equal(/[\x00-\x1f\x7f-\x9f]/.test(lines.join('')), false)
-})

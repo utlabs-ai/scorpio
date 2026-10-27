@@ -1,4 +1,3 @@
-import { terminalText } from '../terminal-text.mjs'
 import { LISTEN_FRAMES, WAVE_FRAMES, pobi } from '../common/pobi.mjs'
 
 const strip = (s) => String(s).replace(/\x1b\[[0-9;]*m/g, '')
@@ -168,7 +167,7 @@ export function renderDashboard(view = {}) {
   }
   if (view.logout) {
     const label = zh(language) ? '已掉线 · 打开网页重新授权：' : 'Logged out · approve on the web: '
-    const url = terminalText(view.logout.url)
+    const url = view.logout.url || ''
     // Put a long link on its own row so its code remains visible and the terminal can recognize it.
     const rows = widthOf(label + url) <= inner - 1 ? [label + url] : [label.trimEnd(), url]
     for (const text of rows) {
@@ -185,7 +184,7 @@ export function renderDashboard(view = {}) {
   for (const topic of topics) {
     const list = topic.agents || []
     const detail = list.length ? zh(language) ? `${list.length} 个 agent · 今日 ${number(stats.today?.rooms?.[topic.id]?.total)} 条` : `${list.length} agents · ${number(stats.today?.rooms?.[topic.id]?.total)} today` : zh(language) ? '本机无 agent' : 'No agent from this computer'
-    topicLines.push(`${pad(terminalText(topic.name || topic.id), Math.max(12, inner - widthOf(detail) - 3))} ${detail}`)
+    topicLines.push(`${pad(topic.name || topic.id, Math.max(12, inner - widthOf(detail) - 3))} ${detail}`)
     for (const agent of list) {
       const count = zh(language) ? `${number(stats.today?.rooms?.[topic.id]?.agents?.[agent.name])} 条` : number(stats.today?.rooms?.[topic.id]?.agents?.[agent.name])
       const statusWidth = Math.max(20, inner - 42)

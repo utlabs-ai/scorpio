@@ -2,7 +2,6 @@
 // Pure functions only: recognise a command, judge whether to run it, parse arguments,
 // and write the texts handed to agents. Doing it (tabs, CLIs, leaving, closing panes) is seat.mjs.
 
-import { paneTextError } from '../pane-text.mjs'
 import os from 'node:os'
 import { KINDS } from '../adapters/cli/index.mjs'
 import { AGENT_NAME } from '../adapters/terminal/herdr.mjs'
@@ -31,9 +30,9 @@ export const COMMANDS = [
   { name: 'read', argsSpec: '<name> [lines]', staleAfter: null,
     help: `the last lines of the screen of an agent this daemon started (/spawn), joined or not: ${READ_LINES} lines unless given, at most ${READ_MAX}.` },
   { name: 'keys', argsSpec: '<name> <key>…', staleAfter: 2 * MIN,
-    help: 'press these keys, in order, in the pane of an agent this daemon started, then show its screen a few seconds later. Only keys from the key table (listed below); only while that CLI is in front of its pane, not a shell it exited to. The daemon answers no dialog by itself: only the owner can do this, from the web page.' },
+    help: 'press these keys, in order, in the pane of an agent this daemon started, then show its screen a few seconds later. Only keys from the key table (listed below); only while that CLI is in front of its pane, not a shell it exited to. The daemon answers no dialog by itself: this is how a person (or an agent with their yes) answers one.' },
   { name: 'text', argsSpec: '<name> <text>', staleAfter: 2 * MIN,
-    help: 'type one line of text into the pane of an agent this daemon started, without pressing Enter (/keys <name> enter does that), then show its screen a few seconds later. Only while that CLI is in front of its pane; only the owner can do this, from the web page.' },
+    help: 'type one line of text into the pane of an agent this daemon started, without pressing Enter (/keys <name> enter does that), then show its screen a few seconds later. Only while that CLI is in front of its pane.' },
   { name: 'usage', argsSpec: '', staleAfter: null,
     help: "this computer's Claude Code and Codex quota, one line each: how much of each window is used, and when it resets." },
   { name: 'help', argsSpec: '', staleAfter: null,
@@ -168,7 +167,7 @@ export function parseSpawn(rest) {
       if (o[2] !== 'skip') return { error: 'handoff= only takes skip: handoff=skip starts it without reading its handoff.' }
       skipHandoff = true; after = o[3]; continue
     }
-    if (!/^[A-Za-z0-9][A-Za-z0-9._:-]{0,63}$/.test(o[2])) return { error: `${o[1]}= needs a value like ${o[1] === 'model' ? 'claude-opus-5-5' : 'xhigh'}.` }
+    if (!/^[A-Za-z0-9._:-]{1,64}$/.test(o[2])) return { error: `${o[1]}= needs a value like ${o[1] === 'model' ? 'claude-opus-5-5' : 'xhigh'}.` }
     opts[o[1]] = o[2]; after = o[3]
   }
   const skip = skipHandoff ? { skipHandoff } : {}
@@ -262,8 +261,7 @@ export function parseText(rest, account) {
   if (n.error) return n
   const text = n.after.replace(/[\r\n]+$/, '')
   if (!text.trim()) return { error: 'Give the text to type' }
-  const error = paneTextError(text)
-  if (error) return { error }
+  if (/[\x00-\x1f\x7f]/.test(text)) return { error: 'The text must be one line, without tabs or other control characters (press keys with /keys)' }
   return { name: n.name, text }
 }
 

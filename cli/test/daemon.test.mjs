@@ -1953,11 +1953,11 @@ test('/keys: presses table keys in order 200 ms apart, then shows the screen aft
   const { m, pane } = await spawnedAtDialog()
   m.fg['w:p9'] = CLAUDE_FG
   m.events.length = 0
-  m.ask('@daemon.box@kai /keys qa down Enter')
+  m.ask('@daemon.box@kai /keys qa down Enter', 'lead@kai', 'agent')
   await m.tick()
   assert.deepEqual(m.pressed, [['w:p9', 'down'], ['w:p9', 'enter']])
   assert.deepEqual(m.events.filter((e) => /^(keys|sleep)/.test(e)).map((e) => e.replace(/@\d+$/, '')), ['keys:down', `sleep:${KEY_GAP_MS}`, 'keys:enter', 'sleep:3000'])
-  assert.match(m.said.at(-1), /^@kai qa · pressed ↓ Enter\. Screen 3 s later:\n```\n/)
+  assert.match(m.said.at(-1), /^@lead@kai qa · pressed ↓ Enter\. Screen 3 s later:\n```\n/)
   assert.equal(m.seat.ops[0].stage, 'joining')
   pane.agent_status = 'working'
   m.advance(SPAWN_JOIN_MS - 1000); await m.tick()
@@ -2504,12 +2504,12 @@ test('approval gate pauses handoff clock and suppresses spawn stall until refuse
 test('approval routing uses spawn room before join, else all registry rooms, and forgets a left agent', async () => {
   const m = fakeMachine()
   register({ roomId: ROOM, name: 'api@kai', role: 'api', pane: 'w:p1' })
-  register({ roomId: 'OtherTopic012345678901', name: 'api@kai', role: 'api', pane: 'w:p1' })
+  register({ roomId: 'OtherTopic0123456789012', name: 'api@kai', role: 'api', pane: 'w:p1' })
   fs.rmSync(spawnRecordPath(ROOM, 'api@kai'), { force: true })
   assert.equal(m.seat.approvalTargets(m.panes)[0].rooms.length, 2)
   writeJson(spawnRecordPath(ROOM, 'api@kai'), { kind: 'claude', pane: 'w:p1' })
   assert.deepEqual(m.seat.approvalTargets(m.panes)[0].rooms, [ROOM])
-  unregister({ roomId: ROOM, name: 'api@kai' }); unregister({ roomId: 'OtherTopic012345678901', name: 'api@kai' })
+  unregister({ roomId: ROOM, name: 'api@kai' }); unregister({ roomId: 'OtherTopic0123456789012', name: 'api@kai' })
   m.panes.push({ pane_id: 'w:p9', agent: 'codex', agent_status: 'working' })
   m.ask('@daemon.box@kai /spawn codex before-join work'); await m.tick()
   assert.ok(m.seat.approvalTargets(m.panes).some((t) => t.name === 'before-join@kai' && t.rooms[0] === ROOM))
@@ -2568,7 +2568,7 @@ test('blocked spawn with relay sends Started and the custom permission notice wi
     const started = m.said.filter((text) => text.includes('Started qa '))
     assert.equal(started.length, 1)
     assert.ok(started[0].includes('perm=all was not applied:'))
-    assert.ok(started[0].includes(CONFIG_FILE.startsWith(os.homedir() + path.sep) ? '~' + CONFIG_FILE.slice(os.homedir().length) : CONFIG_FILE))
+    assert.ok(started[0].includes(CONFIG_FILE))
     assert.equal(m.said.some((text) => text.includes('Screen:')), false)
     assert.equal(m.seat.ops[0].stage, 'joining')
   } finally {
@@ -2617,7 +2617,7 @@ test('Started explains added Codex asking policy and preserves an explicit never
   try {
     for (const [source, expected] of [
       ['', 'Added --ask-for-approval on-request, since your Codex settings set no approval policy: it asks you in Scorpio before it runs a command outside its sandbox; nothing is allowed by itself.'],
-      ['approval_policy = "never"', `Your Codex settings (approval_policy = "never" with a sandbox) keep it from asking to leave the sandbox, so it cannot reach the topic. Use perm=all for this session or change approval_policy in ${file.startsWith(os.homedir() + path.sep) ? '~' + file.slice(os.homedir().length) : file}.`],
+      ['approval_policy = "never"', `Your Codex settings (approval_policy = "never" with a sandbox) keep it from asking to leave the sandbox, so it cannot reach the topic. Use perm=all for this session or change approval_policy in ${file}.`],
       ['approval_policy = "never"\nsandbox_mode = "danger-full-access"', ''],
     ]) {
       fs.writeFileSync(file, source)
@@ -2872,20 +2872,4 @@ test('host carry sends permissions on opening and when only permissions change',
     assert.deepEqual(frames().at(-1), { type: 'carry', names: ['api@kai', 'manual@kai'], perm: {} })
     assert.equal(frames().length, 2)
   } finally { links.closeAll() }
-})
-
-
-test('/keys and /text accept agents and scheduled commands from the same account', async () => {
-  const { m } = await spawnedAtDialog()
-  m.fg['w:p9'] = CLAUDE_FG
-  m.pressed.length = 0
-  for (const sender of ['agent', 'scheduled-agent', 'scheduled-owner']) {
-    for (const command of ['/keys qa enter', '/text qa --help']) {
-      m.ask(`@daemon.box@kai ${command}`, sender === 'agent' ? 'lead@kai' : 'scheduled', sender === 'agent' ? 'agent' : 'scheduled')
-      if (sender !== 'agent') m.inbox.at(-1).scheduled = { by: sender === 'scheduled-agent' ? 'lead@kai' : 'kai' }
-      await m.tick()
-      assert.match(m.said.at(-1), /pressed Enter|typed the text/)
-    }
-  }
-  assert.deepEqual(m.pressed, Array.from({ length: 3 }, () => [['w:p9', 'enter'], ['w:p9', 'text:--help']]).flat())
 })

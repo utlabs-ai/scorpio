@@ -1,7 +1,5 @@
 // Where Scorpio keeps things on this computer: SCORPIO_HOME, default ~/.scorpio.
 
-import { insideHome, seatParts, TOPIC_ID } from '../path-safety.mjs'
-import { serverUrl } from '../server-url.mjs'
 import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
@@ -31,24 +29,17 @@ export const LAUNCHER = path.join(HOME, 'bin', 'scorpio')
 // The package this code runs from (cli/ in the repository, ~/.scorpio/app once installed).
 export const PKG_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..')
 
-
-function seatFile(roomId, name, folder, filename) {
-  const parts = seatParts(roomId, name)
-  return insideHome(HOME, ...folder(roomId), filename(parts))
-}
+const roleOf = (name) => String(name).split('@')[0]
 // A seat's handoff kept on this computer: written by the outgoing agent, deleted once
 // `scorpio handoff` has stored it in the cloud, so it stays only when that did not happen.
-export const handoffPath = (roomId, name) => seatFile(roomId, name, (id) => ['topics', id, 'handoffs'], ({ role }) => `${role}.md`)
+export const handoffPath = (roomId, name) => path.join(HOME, 'topics', roomId, 'handoffs', `${roleOf(name)}.md`)
 // A seat's handoff read from the cloud (by /spawn, or `scorpio handoff name=`): never the fallback directory.
-export const handoffCopyPath = (roomId, name) => seatFile(roomId, name, (id) => ['topics', id, 'files'], ({ name }) => `handoff-${name}.md`)
+export const handoffCopyPath = (roomId, name) => path.join(HOME, 'topics', roomId, 'files', `handoff-${name}.md`)
 /** The most a handoff may be: 256 KB. */
 export const HANDOFF_MAX_BYTES = 256 * 1024
-export const spawnPath = (roomId, name) => seatFile(roomId, name, (id) => ['spawns', id], ({ role }) => `${role}.md`)
-export const spawnRecordPath = (roomId, name) => seatFile(roomId, name, (id) => ['spawns', id], ({ role }) => `${role}.json`)
-export const memoryPath = (roomId) => {
-  if (typeof roomId !== 'string' || !TOPIC_ID.test(roomId)) throw new Error('Invalid topic id.')
-  return insideHome(HOME, 'memory', `${roomId}.md`)
-}
+export const spawnPath = (roomId, name) => path.join(HOME, 'spawns', roomId, `${roleOf(name)}.md`)
+export const spawnRecordPath = (roomId, name) => path.join(HOME, 'spawns', roomId, `${roleOf(name)}.json`)
+export const memoryPath = (roomId) => path.join(HOME, 'memory', `${roomId}.md`)
 
 export function readJson(file) {
   try { return JSON.parse(fs.readFileSync(file, 'utf8')) } catch { return null }
@@ -97,7 +88,7 @@ export function setIdleHandoffMinutes(minutes, file = CONFIG_FILE) {
 
 export function server() {
   const s = process.env.SCORPIO_SERVER || readJson(CONFIG_FILE)?.server || readJson(path.join(PKG_DIR, 'defaults.json'))?.server
-  return serverUrl(s || 'https://scorpio.utlabs.ai')
+  return String(s || 'https://scorpio.utlabs.ai').replace(/\/+$/, '')
 }
 
 export function version() {

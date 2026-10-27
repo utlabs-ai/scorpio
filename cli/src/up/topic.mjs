@@ -1,4 +1,3 @@
-import { terminalText } from '../terminal-text.mjs'
 import path from 'node:path'
 import { randomUUID } from 'node:crypto'
 import { api, cli, homeDir, readJson, writeJson } from './services.mjs'
@@ -18,7 +17,7 @@ function selectExisting(screen, rooms, nonce) {
   screen.pauseStep?.()
   try {
     screen.write('  ' + tr(screen.language, 'Choose a topic to join, or q to exit:', '选择要加入的主题，或输入 q 退出：') + '\n')
-    rooms.forEach((room, index) => screen.write('    [' + (index + 1) + '] ' + terminalText(room.name) + '\n'))
+    rooms.forEach((room, index) => screen.write('    [' + (index + 1) + '] ' + room.name + '\n'))
     while (true) {
       const answer = screen.askLine('  ' + tr(screen.language, 'Topic number or q: ', '主题编号或 q：'))
       if (answer.toLowerCase() === 'q') throw new Error(tr(screen.language, 'Topic selection cancelled.', '已取消选择主题。'))

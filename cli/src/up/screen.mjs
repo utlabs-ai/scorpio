@@ -1,4 +1,3 @@
-import { terminalText } from '../terminal-text.mjs'
 import fs from 'node:fs'
 import os from 'node:os'
 import tty from 'node:tty'
@@ -212,7 +211,6 @@ export function createScreen({ output = process.stdout, env = process.env, colum
     },
     error(message) { write('  ' + message + '\n') },
     startApproval(link, code, expiresAt = Date.now() + 15 * 60_000) {
-      link = terminalText(link); code = terminalText(code)
       currentStep?.pause()
       write('\n' + frameLine(tr(language, 'Approve this computer', '授权这台电脑'), columns) + '\n')
       let qr = []
@@ -355,10 +353,10 @@ export function createScreen({ output = process.stdout, env = process.env, colum
         try { qr = qrLines(url, { colors: String(env.TERM).includes('256color') ? 256 : 16 }) } catch { qr = [] }
       }
       if (qr.length && columns >= 80) {
-        for (let i = 0; i < qr.length; i += 1) write('  ' + qr[i] + (i === 0 ? '    ' + tr(language, 'Topic ', '主题 ') + terminalText(topic.name) : '') + '\n')
+        for (let i = 0; i < qr.length; i += 1) write('  ' + qr[i] + (i === 0 ? '    ' + tr(language, 'Topic ', '主题 ') + topic.name : '') + '\n')
       } else {
         for (const line of qr) write('  ' + line + '\n')
-        write('  ' + tr(language, 'Topic ', '主题 ') + terminalText(topic.name) + '\n')
+        write('  ' + tr(language, 'Topic ', '主题 ') + topic.name + '\n')
       }
       write('  ' + url + '\n')
       write('  ' + tr(language,

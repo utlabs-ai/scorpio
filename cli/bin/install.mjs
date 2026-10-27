@@ -4,7 +4,6 @@
 // records the server, and links the package's skill/ for the default home.
 // Any other first argument is handed to the CLI: `npx @utlabs/scorpio whoami`.
 
-import { serverUrl } from '../src/server-url.mjs'
 import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
@@ -50,8 +49,8 @@ function flag(name) {
 
 const pkg = readJson(path.join(PKG_DIR, 'package.json')) || {}
 // The server this package was built for (tools/pack.mjs bakes it into defaults.json): the only one shown the token.
-const packaged = serverUrl(readJson(path.join(PKG_DIR, 'defaults.json'))?.server || 'https://scorpio.utlabs.ai')
-const server = serverUrl(flag('--server') || packaged)
+const packaged = String(readJson(path.join(PKG_DIR, 'defaults.json'))?.server || 'https://scorpio.utlabs.ai').replace(/\/+$/, '')
+const server = String(flag('--server') || packaged).replace(/\/+$/, '')
 
 // 1. Copy the package to this home's app: build next to it, then swap.
 fs.mkdirSync(DIR, { recursive: true, mode: 0o700 })

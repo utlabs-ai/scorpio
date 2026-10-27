@@ -1,6 +1,4 @@
 import { setTimeout as sleep } from 'node:timers/promises'
-import { verificationUrl } from '../server-url.mjs'
-import { server } from '../daemon/paths.mjs'
 import { cli } from './services.mjs'
 import { tr } from './screen.mjs'
 
@@ -36,7 +34,7 @@ export async function authorize(screen) {
         return who
       }
       if (state.status !== 'authorization_pending') throw new Error('Unexpected Scorpio login status: ' + state.status)
-      const link = verificationUrl(state.verification_uri_complete || state.verification_uri, server())
+      const link = state.verification_uri_complete || state.verification_uri
       if (!link || !state.user_code) throw new Error('Scorpio did not provide an approval link and code.')
       if (shown !== state.user_code) {
         if (card) card.stop('', true)

@@ -1,4 +1,3 @@
-import { terminalText } from '../terminal-text.mjs'
 import fs from 'node:fs'
 import path from 'node:path'
 import { STATE_DIR } from './paths.mjs'
@@ -25,12 +24,12 @@ export function createDaemonLog({ file = LOG_FILE, maxBytes = LOG_BYTES, capacit
   }
   const ring = diskLines().slice(-capacity).map((line) => {
     const [ts, level, ...rest] = line.split('\t')
-    return { ts, level, text: terminalText(rest.join(' ')) }
+    return { ts, level, text: rest.join(' ') }
   })
   let writeOutput = output, notify = onLine
   const append = (level, ...parts) => {
     const date = now()
-    const text = terminalText(parts.map(String).join(' ').replace(/\r?\n/g, ' ⏎ ').replace(/\t/g, ' '))
+    const text = parts.map(String).join(' ').replace(/\r?\n/g, ' ⏎ ').replace(/\t/g, ' ')
     const record = { ts: localIso(date), level, text }
     ring.push(record)
     if (ring.length > capacity) ring.shift()
@@ -44,7 +43,7 @@ export function createDaemonLog({ file = LOG_FILE, maxBytes = LOG_BYTES, capacit
       }
       fs.appendFileSync(file, row, { mode: 0o600 })
     } catch (e) { writeOutput(date.toTimeString().slice(0, 8), `daemon log file: ${e.message}`) }
-    writeOutput(date.toTimeString().slice(0, 8), text)
+    writeOutput(date.toTimeString().slice(0, 8), ...parts)
     notify(record)
     return record
   }

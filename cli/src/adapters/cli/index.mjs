@@ -64,9 +64,6 @@ export function modelOf(kind, args = []) {
 
 /** The arguments with model and/or effort replaced (or added). */
 export function withModel(kind, args, { model = null, effort = null } = {}) {
-  for (const [key, value] of Object.entries({ model, effort })) {
-    if (value !== null && (typeof value !== 'string' || !/^[A-Za-z0-9][A-Za-z0-9._:-]{0,63}$/.test(value))) throw new Error(`Invalid ${key} value.`)
-  }
   const out = [...args]
   const set = (flags, value) => {
     const i = out.findIndex((a) => flags.includes(a))
