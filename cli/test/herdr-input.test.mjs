@@ -29,6 +29,12 @@ test('real Herdr delivers adapter text once and unchanged', { timeout: 90_000 },
     throw error
   }
   t.diagnostic(version)
+  // The recorder is a tiny C program named claude, so Herdr detects an agent in the pane; no compiler, no probe.
+  try { await execute('cc', ['--version']) }
+  catch (error) {
+    if (error.code === 'ENOENT') { t.skip('No C compiler (cc) to build the input recorder'); return }
+    throw error
+  }
   // Short names leave room for Herdr's Unix socket path on macOS.
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'hi-'))
   const session = 'hi-' + process.pid
