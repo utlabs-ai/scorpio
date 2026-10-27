@@ -1,3 +1,4 @@
+import { serverUrl as checkedServerUrl } from '../server-url.mjs'
 import fs from 'node:fs'
 import path from 'node:path'
 import { createHash } from 'node:crypto'
@@ -16,7 +17,8 @@ export async function selfUpdate({
 } = {}) {
   let latest
   try {
-    const res = await fetchImpl(`${serverUrl}/dl/latest.json`, { signal: AbortSignal.timeout(60_000) })
+    serverUrl = checkedServerUrl(serverUrl)
+    const res = await fetchImpl(`${serverUrl}/dl/latest.json`, { redirect: 'error', signal: AbortSignal.timeout(60_000) })
     if (!res.ok) throw new Error(`latest HTTP ${res.status}`)
     latest = await res.json()
   } catch {
@@ -45,7 +47,7 @@ export async function selfUpdate({
   const stage = path.join(home, 'update', latest.build)
   let reason = 'download'
   try {
-    const response = await fetchImpl(`${serverUrl}/dl/${latest.file}`, { signal: AbortSignal.timeout(60_000) })
+    const response = await fetchImpl(`${serverUrl}/dl/${latest.file}`, { redirect: 'error', signal: AbortSignal.timeout(60_000) })
     if (!response.ok) throw new Error(`download HTTP ${response.status}`)
     const archive = Buffer.from(await response.arrayBuffer())
     if (createHash('sha256').update(archive).digest('hex') !== latest.sha256) {

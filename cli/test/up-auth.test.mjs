@@ -17,8 +17,8 @@ test('up reuses the CLI device-code login and stops its approval card on success
   const server = http.createServer((req, res) => {
     res.setHeader('Content-Type', 'application/json')
     if (req.url === '/oauth/device/code') {
-      res.end(JSON.stringify({ device_code: 'device-code', user_code: 'WDJB-MJHT', verification_uri: 'http://localhost/device',
-        verification_uri_complete: 'http://localhost/device?code=WDJB-MJHT', interval: 1, expires_in: 60 }))
+      res.end(JSON.stringify({ device_code: 'device-code', user_code: 'WDJB-MJHT', verification_uri: `http://127.0.0.1:${server.address().port}/device`,
+        verification_uri_complete: `http://127.0.0.1:${server.address().port}/device?code=WDJB-MJHT`, interval: 1, expires_in: 60 }))
     } else if (req.url === '/oauth/token') {
       res.end(JSON.stringify({ access_token: 'test-only-token' }))
     } else if (req.url === '/api/v1/whoami' && req.headers.authorization === 'Bearer test-only-token') {
@@ -46,7 +46,7 @@ test('up reuses the CLI device-code login and stops its approval card on success
   }
   const who = await authorize(screen)
   assert.equal(who.account, 'kai')
-  assert.ok(events.some((event) => event.includes('start:http://localhost/device?code=WDJB-MJHT:WDJB-MJHT')))
+  assert.ok(events.some((event) => event.includes(`start:http://127.0.0.1:${server.address().port}/device?code=WDJB-MJHT:WDJB-MJHT`)))
   assert.ok(events.includes('stop:kai'))
   assert.equal(fs.readFileSync(path.join(root, 'token'), 'utf8').trim(), 'test-only-token')
 })

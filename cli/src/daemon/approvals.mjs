@@ -1,4 +1,6 @@
 // One transport card per pane; terminal state is re-read before any requested press.
+import { paneTextError } from '../pane-text.mjs'
+import { shellQuote } from '../shell.mjs'
 import fs from 'node:fs'
 import net from 'node:net'
 import path from 'node:path'
@@ -9,7 +11,7 @@ import { createKeys, keysFor } from './keys.mjs'
 import { cursorMenu, detailOf, hookMatches, menuIdentity, parseMenu, sameMenu, screenTail, standardApproval, visibleMenu } from './approval-menu.mjs'
 
 export function writeApprovalSettings({ launcher = LAUNCHER, stateDir = STATE_DIR } = {}) {
-  writeJson(path.join(stateDir, 'hooks', 'claude.json'), { hooks: { PermissionRequest: [{ matcher: '*', hooks: [{ type: 'command', command: `${launcher} approval-hook claude`, timeout: 3600 }] }] } })
+  writeJson(path.join(stateDir, 'hooks', 'claude.json'), { hooks: { PermissionRequest: [{ matcher: '*', hooks: [{ type: 'command', command: `${shellQuote(launcher)} approval-hook claude`, timeout: 3600 }] }] } })
 }
 export function createApprovals({ terminal, targets, send, now = () => Date.now(), sleep = (ms) => new Promise((r) => setTimeout(r, ms)),
   socket = path.join(STATE_DIR, 'approval.sock'), keyTable = createKeys({ fetch: async () => null }), log = () => {}, kick = () => {} }) {
@@ -176,6 +178,13 @@ export function createApprovals({ terminal, targets, send, now = () => Date.now(
         const option = card.menu?.options.find((o) => o.n === frame.n)
         const last = card.menu?.options.at(-1)
         const message = typeof frame.message === 'string' && frame.message.length <= 2000 && option && option === last && /^No\b/.test(last.label) ? frame.message : ''
+        if (message && paneTextError(message)) {
+          log('approval reason refused: ' + paneTextError(message))
+          close(card, 'answered', 'failed')
+          const target = (await targets())?.find((t) => t.pane === card.pane)
+          if (target) await open(target, screen)
+          return
+        }
         if (card.menu ? !option : !keysFor(table, terminal.adapter || 'herdr').some((k) => k.name === frame.key)) return
         answerDescription = `${card.menu ? `option ${option.n}` : `key ${frame.key}`}${message ? ', with a reason' : ''}`
         let hookDecision = false, delivered = false

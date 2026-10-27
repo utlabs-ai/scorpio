@@ -44,3 +44,14 @@ test('daemon log rotates to one previous file before the size limit', () => {
   assert.match(log.all().at(-1), /line 4/)
   fs.rmSync(dir, { recursive: true, force: true })
 })
+
+test('daemon log strips terminal controls from server text before printing', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'scorpio-log-'))
+  try {
+    const output = []
+    const log = createDaemonLog({ file: path.join(dir, 'log'), output: (...args) => output.push(args.join(' ')) })
+    log('topic\x1b\x07\x9bname')
+    assert.equal(log.recent().at(-1).text, 'topicname')
+    assert.equal(/[\x00-\x1f\x7f-\x9f]/.test(output.join('')), false)
+  } finally { fs.rmSync(dir, { recursive: true, force: true }) }
+})

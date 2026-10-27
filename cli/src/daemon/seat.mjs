@@ -494,7 +494,7 @@ export function createSeat({
     }
     const toRead = op.handoff?.file ? op.handoff : null
     const file = spawnPath(roomId, op.name)
-    fs.mkdirSync(path.dirname(file), { recursive: true, mode: 0o700 })
+    ensureDir(path.dirname(file))
     writeJson(file, `${spawnPrompt({ account, by: op.to, roomId, roomName: roomName(roomId), seq: op.seq, name: op.name, pane, prompt: spec.prompt, keepCard: op.keepCard, handoff: op.handoff, scheduled: op.scheduled })}\n`)
     const shell = await terminal.waitShell(pane, () => !ops.includes(op))
     if (!ops.includes(op)) { log(`${short} was /bye-d while its shell started; not answering`); return }
@@ -557,7 +557,7 @@ export function createSeat({
   /** Type the handoff instructions into one agent: promptPane's answer and the handoff file. */
   async function askHandoff({ roomId, agent, panes, by, seq, targets, idleMinutes = null }) {
     const file = handoffPath(roomId, agent.name)
-    fs.mkdirSync(path.dirname(file), { recursive: true })
+    ensureDir(path.dirname(file))
     // The takeover command starts the same CLI with the same model and effort: taking over must not quietly downgrade.
     const kind = kindAt(panes, agent.pane)
     const fg = ((await terminal.processInfo(agent.pane))?.foreground_processes || []).find((p) => runsCli({ foreground_processes: [p] }, kind))
@@ -678,6 +678,7 @@ export function createSeat({
     },
     /** /keys <name> <key>…: keys from the key table, KEY_GAP_MS apart, only while its CLI is in front. */
     keys: ({ roomId, message, command, ctx }) => inLane(`${roomId}|${targetOf(command.rest, account)}`, async () => {
+      if (senderOf(message).fromKind !== 'human') return say(roomId, 'Only the agent owner can press keys or type into its pane, from the web page.', message.seq, senderOf(message).from)
       const keys = keysFor(await keyTableNow(), adapter)
       const arg = parseKeys(command.rest, account, (word) => findKey(keys, word))
       if (arg.error) return say(roomId, `${arg.error}. Usage: ${usage('keys')}; keys: ${keyList(keys)}.`, message.seq, senderOf(message).from)
@@ -695,6 +696,7 @@ export function createSeat({
     }),
     /** /text <name> <text>: typed, Enter not pressed, only while its CLI is in front. */
     text: ({ roomId, message, command, ctx }) => inLane(`${roomId}|${targetOf(command.rest, account)}`, async () => {
+      if (senderOf(message).fromKind !== 'human') return say(roomId, 'Only the agent owner can press keys or type into its pane, from the web page.', message.seq, senderOf(message).from)
       const arg = parseText(command.rest, account)
       if (arg.error) return say(roomId, `${arg.error}. Usage: ${usage('text')}`, message.seq, senderOf(message).from)
       const aud = await audience(roomId, message)
@@ -827,7 +829,8 @@ export function createSeat({
       if (spec.needDir) {
         try { ensureDir(dir) } catch (error) { return say(roomId, `Not started: could not create the topic workspace ${dir}: ${error.message}`, message.seq, to) }
       }
-      const op = { type: 'spawn', stage: 'starting', kind: spec.kind, roomId, seq: message.seq, name, to, fromKind: sender.fromKind, scheduled: message.scheduled, keepCard, skipHandoff: keepCard && !!spec.skipHandoff, perm: permOf(spec.kind, spawnArgs(spec.kind, spec)), permFrom: permission.from, permParent: permission.parent, dir, replacedGone }
+      const effectivePerm = permOf(spec.kind, argsFor(spec.kind, undefined, spec.perm))
+      const op = { type: 'spawn', stage: 'starting', kind: spec.kind, roomId, seq: message.seq, name, to, fromKind: sender.fromKind, scheduled: message.scheduled, keepCard, skipHandoff: keepCard && !!spec.skipHandoff, perm: effectivePerm, permFrom: permission.from, permParent: permission.parent, dir, replacedGone }
       ops.push(op)
       const homeBin = path.join(HOME, 'bin')
       const inheritedPath = spawnEnv.PATH || process.env.PATH || ''
@@ -838,6 +841,7 @@ export function createSeat({
       try {
         const chosen = modelOf(spec.kind, spawnArgs(spec.kind, spec))
         // pane: which pane this daemon started it in, for /read, /keys and /text once it has joined.
+        ensureDir(path.dirname(spawnRecordPath(roomId, name)))
         writeJson(spawnRecordPath(roomId, name), { kind: spec.kind, dir, explicitDir: !spec.needDir, model: chosen.model ?? null, effort: chosen.effort ?? null, pane: op.pane, perm: op.perm, permFrom: op.permFrom, permParent: op.permParent, at: now() })
       } catch (error) { log(`could not remember /spawn ${short}: ${error.message}`) }
       save()

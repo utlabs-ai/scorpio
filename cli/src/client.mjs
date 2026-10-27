@@ -1,3 +1,4 @@
+import { serverUrl } from './server-url.mjs'
 import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
@@ -118,7 +119,7 @@ const done = (obj) => emit(JSON.stringify(agentOutput(obj)), 0)
 
 function server() {
   const s = process.env.SCORPIO_SERVER || readJson(CONFIG_FILE)?.server || readJson(path.join(PKG_DIR, 'defaults.json'))?.server
-  return String(s || 'https://scorpio.utlabs.ai').replace(/\/+$/, '')
+  return serverUrl(s || 'https://scorpio.utlabs.ai')
 }
 
 function readToken() {

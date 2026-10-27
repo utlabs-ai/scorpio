@@ -232,13 +232,15 @@ test('default spawn preserves settings and adds stable hook; all uses old permis
   assert.match(handoffPrompt({ ...base, perm: 'auto' }), /perm=auto <what to do next>/)
   assert.match(handoffPrompt(base), /perm=ask <what to do next>/)
 })
-test('Codex trust definition stays byte-for-byte fixed', () => {
-  assert.equal(codexHookDefinition('/tmp/home/bin/scorpio'), 'hooks.PermissionRequest=[{matcher=".*",hooks=[{type="command",command="/tmp/home/bin/scorpio approval-hook codex",timeout=10}]}]')
+test('Codex trust definition quotes launcher paths and stays stable', () => {
+  const command = "'/tmp/home/bin/scorpio' approval-hook codex"
+  assert.equal(codexHookDefinition('/tmp/home/bin/scorpio'), `hooks.PermissionRequest=[{matcher=".*",hooks=[{type="command",command=${JSON.stringify(command)},timeout=10}]}]`)
+  assert.ok(codexHookDefinition("/tmp/a b'c/scorpio").includes('approval-hook codex'))
 })
 test('daemon writes only additive Claude hook with private mode', () => {
   writeApprovalSettings({ launcher: '/tmp/home/bin/scorpio', stateDir: home })
   const file = path.join(home, 'hooks', 'claude.json')
-  assert.deepEqual(JSON.parse(fs.readFileSync(file)), { hooks: { PermissionRequest: [{ matcher: '*', hooks: [{ type: 'command', command: '/tmp/home/bin/scorpio approval-hook claude', timeout: 3600 }] }] } })
+  assert.deepEqual(JSON.parse(fs.readFileSync(file)), { hooks: { PermissionRequest: [{ matcher: '*', hooks: [{ type: 'command', command: "'/tmp/home/bin/scorpio' approval-hook claude", timeout: 3600 }] }] } })
   assert.equal(fs.statSync(file).mode & 0o777, 0o600)
 })
 
@@ -1096,5 +1098,20 @@ test('auto spawn retains the Claude hook and omits the Codex hook and asking pol
     const args = argsFor('claude', { spawn: { claude: custom } })
     assert.deepEqual(args.slice(0, custom.length), custom)
     assert.ok(args.includes('--settings'))
+  }
+})
+
+test('unsafe rejection reasons never press, type, inject, or decide a hook', async () => {
+  for (const cli of ['claude', 'codex']) for (const message of ['!touch file', '  !touch file', 'a\nb', 'a\tb', 'a\x1bb', 'a\x9bb']) {
+    const f = fixture({ cli })
+    const card = await f.open()
+    await f.answer(card, { n: card.menu.options.at(-1).n, message })
+    assert.deepEqual(f.keys, [])
+    assert.deepEqual(f.texts, [])
+    assert.deepEqual(f.injections, [])
+    assert.deepEqual(f.replies, [])
+    assert.ok(f.logs.some((line) => /reason refused/.test(line)))
+    assert.equal(f.frames.find((frame) => frame.type === 'approval_close').result, 'failed')
+    assert.notEqual(f.approvals.cards.get('p1').id, card.id)
   }
 })

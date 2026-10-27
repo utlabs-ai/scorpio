@@ -133,15 +133,15 @@ export function createHerdr({ bin = HERDR_BIN, exec = null, sleep = (ms) => new 
   }
   /** Type text into an agent's input and submit it. herdr refuses when no agent is detected in the pane. */
   async function inject(pane, text) {
-    await call(['agent', 'prompt', pane, text])
+    await call(['agent', 'prompt', pane, '--', text])
   }
   /** Same, then wait until the agent is seen working (or blocked). For commands, where we need to know it moved. */
   async function injectAndWatch(pane, text, timeoutMs = 30_000) {
-    await call(['agent', 'prompt', pane, text, '--wait', '--until', 'working', '--until', 'blocked', '--timeout', String(timeoutMs)])
+    await call(['agent', 'prompt', pane, '--wait', '--until', 'working', '--until', 'blocked', '--timeout', String(timeoutMs), '--', text])
   }
   const sendKeys = (pane, ...keys) => call(['pane', 'send-keys', pane, ...keys])
-  const sendText = (pane, text) => call(['pane', 'send-text', pane, text])
-  const runIn = (pane, command) => call(['pane', 'run', pane, command])
+  const sendText = (pane, text) => call(['pane', 'send-text', pane, '--', text])
+  const runIn = (pane, command) => call(['pane', 'run', pane, '--', command])
   async function newTab({ label, cwd, env = {}, workspace = process.env.HERDR_WORKSPACE_ID }) {
     const out = await call(['tab', 'create', ...(workspace ? ['--workspace', workspace] : []), '--cwd', cwd, '--label', label,
       ...Object.entries(env).flatMap(([k, v]) => ['--env', `${k}=${v}`]), '--no-focus'])

@@ -8,7 +8,7 @@
   ⎿  Successfully loaded skill
 
   Running 1 shell command…
-  ⎿  $ ~/.scorpio/bin/scorpio join topicId=example-topic role=t1 resume=true pane=wG:p1V roleCard='t1:
+  ⎿  $ ~/.scorpio/bin/scorpio join topicId=example-topic role=t1 resume=true pane=w:p1 roleCard='t1:
      started by api@kai with /spawn; takes work from api@kai'
 
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -16,7 +16,7 @@
  Tip: auto mode handles these prompts for you — choose "switch to auto mode" below
  Join the Scorpio topic as t1
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- │ ~/.scorpio/bin/scorpio join topicId=example-topic role=t1 resume=true pane=wG:p1V roleCard='t1:
+ │ ~/.scorpio/bin/scorpio join topicId=example-topic role=t1 resume=true pane=w:p1 roleCard='t1:
  │ started by api@kai with /spawn; takes work from api@kai'
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
  This command requires approval

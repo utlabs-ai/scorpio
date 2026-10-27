@@ -54,3 +54,13 @@ test('a retry uses the same recorded create nonce', async () => {
 })
 
 test.after(() => fs.rmSync(home, { recursive: true, force: true }))
+
+test('topic selection prints no server-supplied terminal controls', async () => {
+  fs.rmSync(file, { force: true })
+  const lines = []
+  await chooseTopic({ ...screen, write: (line) => lines.push(line) }, {
+    readRooms: async () => ({ rooms: [{ roomId: id, name: 'bad\x1b\x07\x9bname', status: 'active' }] }),
+  })
+  assert.ok(lines.some((line) => line.includes('badname')))
+  assert.equal(/[\x00-\x09\x0b-\x1f\x7f-\x9f]/.test(lines.join('')), false)
+})

@@ -37,28 +37,49 @@ test('pack --dir writes the starter as dl/latest, with its server in it, next to
   assert.equal(next.sha256, createHash('sha256').update(fs.readFileSync(path.join(dir, next.file))).digest('hex'))
 })
 
-test('the starter asks the server which package is current and hands its arguments to npx -y <that package>', async (t) => {
+test('starter installs only a downloaded package with the manifest hash', async (t) => {
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'scorpio-starter-'))
   t.after(() => fs.rmSync(tmp, { recursive: true, force: true }))
+  const bytes = Buffer.from('test archive')
+  const good = { file: 'scorpio-9.9.9-abc.tgz', version: '9.9.9', sha256: createHash('sha256').update(bytes).digest('hex') }
+  let manifest = good, redirect = false
+  const requests = []
   const server = http.createServer((req, res) => {
-    if (req.url === '/dl/latest.json') return res.end(JSON.stringify({ file: 'scorpio-9.9.9-abc.tgz', version: '9.9.9' }))
+    requests.push(req.url)
+    if (req.url === '/dl/latest.json') return res.end(JSON.stringify(manifest))
+    if (req.url === '/dl/' + good.file) {
+      if (redirect) return res.writeHead(302, { location: '/unexpected' }).end()
+      return res.end(bytes)
+    }
     res.writeHead(404).end()
   })
   await new Promise((r) => server.listen(0, '127.0.0.1', r))
   t.after(() => server.close())
   const base = `http://127.0.0.1:${server.address().port}`
-  // The starter as pack builds it, and an npx that only says what it was asked to run.
   fs.cpSync(path.join(CLI_DIR, 'tools', 'latest'), path.join(tmp, 'starter'), { recursive: true })
   fs.writeFileSync(path.join(tmp, 'starter', 'server.json'), JSON.stringify({ server: base }))
   fs.mkdirSync(path.join(tmp, 'bin'))
-  fs.writeFileSync(path.join(tmp, 'bin', 'npx'), '#!/bin/sh\necho "npx $*"\n', { mode: 0o755 })
-  const run = await new Promise((resolve) => {
+  fs.writeFileSync(path.join(tmp, 'bin', 'npx'), '#!/bin/sh\necho "npx $*"\nfile=${2#--package=file:}\ncat "$file"\n', { mode: 0o755 })
+  const run = () => new Promise((resolve) => {
     const child = spawn(process.execPath, [path.join(tmp, 'starter', 'bin', 'latest.mjs'), '--server', 'https://other.example'], { env: testEnv(tmp, { PATH: `${path.join(tmp, 'bin')}:${process.env.PATH}` }) })
-    let out = ''
+    let out = '', err = ''
     child.stdout.on('data', (c) => { out += c })
-    child.on('close', (code) => resolve({ code, out }))
+    child.stderr.on('data', (c) => { err += c })
+    child.on('close', (code) => resolve({ code, out, err }))
   })
-  assert.equal(run.code, 0)
-  assert.match(run.out, new RegExp(`^Scorpio 9\\.9\\.9: installing from ${base}/dl/scorpio-9\\.9\\.9-abc\\.tgz\\n`))
-  assert.match(run.out, new RegExp(`npx -y ${base}/dl/scorpio-9\\.9\\.9-abc\\.tgz --server https://other\\.example\\n$`))
+  const installed = await run()
+  assert.equal(installed.code, 0, installed.err)
+  assert.match(installed.out, /npx -y --package=file:.*scorpio-9\.9\.9-abc\.tgz scorpio --server https:\/\/other\.example/)
+  assert.ok(installed.out.endsWith('test archive'))
+  for (const bad of [{ ...good, file: '../outside.tgz' }, { ...good, sha256: undefined }, { ...good, sha256: '0'.repeat(64) }]) {
+    manifest = bad
+    const refused = await run()
+    assert.equal(refused.code, 1)
+    assert.equal(refused.out.includes('npx -y'), false)
+  }
+  manifest = good; redirect = true
+  const refused = await run()
+  assert.equal(refused.code, 1)
+  assert.equal(refused.out.includes('npx -y'), false)
+  assert.equal(requests.includes('/unexpected'), false)
 })

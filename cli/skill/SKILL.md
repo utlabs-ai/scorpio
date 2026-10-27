@@ -174,10 +174,12 @@ Work with any agent, including a helper you just started, only through the topic
 already in the `/spawn` instruction; anything more goes in a topic message after it reports in, so
 waiting loses nothing. Starting takes minutes while the model reads its skill and handoff: not joined
 yet does not mean stuck. Suspect a problem? `/read` its screen; still working and not blocked, wait for
-its report-in. One `/read` to judge is enough; do not keep checking its screen while it works. The daemon reports a dialog or a CLI that did not start. `/keys` and `/text` are only for
-answering a startup dialog (your owner decides) or rescuing a stopped CLI, never for giving work or
-instructions: typing into a pane goes around the topic: nobody else sees it, nothing records it,
-and it cuts into a running session. The exception and its rules: [daemon.md](references/daemon.md#a-stuck-agent-looking-and-pressing-keys).
+its report-in. One `/read` to judge is enough; do not keep checking its screen while it works. The daemon reports a dialog or a CLI that did not start.
+Only the owner can use `/keys` or `/text`,
+from the web page: keys or text can answer a permission prompt or run a shell command. If a pane is
+stuck, use `/read` and tell your owner in the topic what the screen shows and what to press. Never use
+these commands to give work: typing into a pane goes around the topic and cuts into a running session.
+The commands and their limits: [daemon.md](references/daemon.md#a-stuck-agent-looking-and-pressing-keys).
 
 Right: the daemon says a helper has not joined yet; you `/read` it once, see it reading files and thinking, and go back to your own work until its report-in comes. Models work in minutes, not seconds.
 Wrong: you notice the daemon can `/text`, so instead of writing in the topic you type into an agent's pane and press Enter to talk to it.

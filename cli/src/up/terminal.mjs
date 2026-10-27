@@ -1,8 +1,9 @@
 import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
+import { createHash } from 'node:crypto'
 import { setTimeout as sleep } from 'node:timers/promises'
-import { command, herdr, onPath, privateFile, startDetached, homeDir, readJson, writeJson } from './services.mjs'
+import { command, herdr, onPath, startDetached, homeDir, readJson, writeJson } from './services.mjs'
 import { ensureDir } from '../workspace.mjs'
 
 const localBin = path.join(os.homedir(), '.local', 'bin')
@@ -16,21 +17,35 @@ export function herdrBinary() {
   return null
 }
 
-async function installHerdr() {
-  const response = await fetch('https://herdr.dev/install.sh', { signal: AbortSignal.timeout(30_000) })
-  if (!response.ok) throw new Error('Herdr installer HTTP ' + response.status)
-  const script = await response.text()
-  const file = path.join(homeDir, 'tmp', 'herdr-install-' + process.pid + '.sh')
-  privateFile(file, script)
+export const HERDR_VERSION = '0.9.5'
+const HERDR_SHA256 = {
+  'linux-x86_64': '14d9e8bc8b4a9e0118d77c32266f76d461f09b40342eb23752960bd89f59929d',
+  'linux-aarch64': '17d7536f2da50859523680ef279dffcac8e4a235f4e46fe8da6c2ec44141897c',
+  'macos-x86_64': '5fb0a908ec7f6745e3e245738b06bfad56c46391c391ab3c0955fbead01f1369',
+  'macos-aarch64': 'fb77c2232a05a8035421382c894392f4174e4e38a18e48af3dd0290157c3a7e2',
+}
+
+export async function installHerdr({ platform = process.platform, arch = process.arch, fetchImpl = fetch,
+  installDir = process.env.HERDR_INSTALL_DIR || localBin, hashes = HERDR_SHA256 } = {}) {
+  const system = { darwin: 'macos', linux: 'linux' }[platform]
+  const cpu = { x64: 'x86_64', arm64: 'aarch64' }[arch]
+  const target = `${system}-${cpu}`
+  if (!system || !cpu || !hashes[target]) throw new Error('Herdr does not support this platform.')
+  const response = await fetchImpl(`https://github.com/herdrdev/herdr/releases/download/v${HERDR_VERSION}/herdr-${target}`, { signal: AbortSignal.timeout(30_000) })
+  if (!response.ok) throw new Error('Herdr download HTTP ' + response.status)
+  if (response.url && new URL(response.url).protocol !== 'https:') throw new Error('Herdr download must use https.')
+  const binary = Buffer.from(await response.arrayBuffer())
+  if (createHash('sha256').update(binary).digest('hex') !== hashes[target]) throw new Error('Herdr sha256 mismatch.')
+  fs.mkdirSync(installDir, { recursive: true })
+  const destination = path.join(installDir, 'herdr')
+  const temporary = `${destination}.${process.pid}.tmp`
   try {
-    await command('sh', [file], {
-      json: false, timeout: 180_000,
-      env: { ...process.env, HERDR_INSTALL_DIR: localBin },
-    })
-  } finally { fs.rmSync(file, { force: true }) }
-  process.env.PATH = localBin + path.delimiter + process.env.PATH
-  if (!herdrBinary()) throw new Error('Herdr installer did not create a runnable command.')
-  return installedBin
+    fs.writeFileSync(temporary, binary, { mode: 0o755 })
+    fs.chmodSync(temporary, 0o755)
+    fs.renameSync(temporary, destination)
+  } finally { fs.rmSync(temporary, { force: true }) }
+  process.env.PATH = installDir + path.delimiter + process.env.PATH
+  return destination
 }
 
 export async function herdrRunning(bin) {
