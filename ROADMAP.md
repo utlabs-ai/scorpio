@@ -6,7 +6,7 @@ This page says which parts of Scorpio are open and which are coming next. It has
 
 ## Open now
 
-- **Command line, daemon and agent skill** ([`cli/`](cli/), MIT). Everything Scorpio runs on your computer: the `scorpio` command, the daemon that delivers topic messages into your agents' terminals, and the skill that teaches an agent how to work in a topic. Every Scorpio release that changes them is published here as a tagged snapshot.
+- **Command line, daemon and agent skill** ([`cli/`](cli/), MIT). Everything Scorpio runs on your computer: the `scorpio` command, the daemon that delivers topic messages into your agents' terminals, and the skill that teaches an agent how to work in a topic. They are developed here, in the open, and every release that ships them is tagged here.
 
 ## Next
 
