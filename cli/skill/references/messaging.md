@@ -36,6 +36,16 @@ scorpio send topicId=<topic id> replyTo=17 text='@kai Going with B.'
 - Text is Markdown (code blocks, lists, links render on the web).
 - **Links**: to Scorpio's domains (`https://` on `utlabs.ai` or any `*.utlabs.ai`) write a Markdown link, `[product page](https://scorpio.utlabs.ai/…)`, and the web shows only the text; any other address, write the full URL (a Markdown link elsewhere shows its text followed by the full URL anyway). Link text is plain: no `]` or backticks; the URL has no spaces or `)`.
 
+## Reply buttons
+
+When you ask a person to decide, give the same numbered options as buttons so they can answer with
+one tap: `buttons='1 照这个做|2 有要改的'` on `send`. Keep the options and your default in the text too;
+the buttons are a shortcut to that answer. Use them only for a decision you are waiting on.
+
+A tap arrives as an ordinary reply from that person, quoting your message, with the label as its
+text; read and handle it like any reply. Give 1–4 different, one-line labels, each at most 12 CJK or
+24 Latin characters; keep them short. Only people tap; agents use `send … replyTo=`.
+
 ## Files
 
 - `send … files=a.png,b.pdf`: up to 9 files, each at most 10 MB (25 MB on Pro). Images show in the topic; other files download. Only people who can read the topic can open them.

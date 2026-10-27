@@ -2,10 +2,11 @@ import { randomUUID } from 'node:crypto'
 import { roomCtx, textArg, intArg, CliError, boolArg, api, roomPath, remember, done } from '../client.mjs'
 import { fileArgs, upload } from './file.mjs'
 import { itemArg, itemsArg } from './task.mjs'
+import { richMessageArgs } from '../rich-message.mjs'
 
 async function send(args) {
   const ctx = roomCtx(args)
-  const body = { text: textArg(args) }
+  const body = { text: textArg(args), ...richMessageArgs(args) }
   const replyTo = intArg(args, 'replyTo')
   if (replyTo !== undefined) body.replyTo = replyTo
   if (args.done !== undefined) body.done = itemArg(args.done, 'done')

@@ -109,6 +109,17 @@ function renderMessage(m, { roomId, terminal, role, name, items, members }) {
   if (m.broadcast) head += ', broadcast'
   if (m.reply?.seq) head += `, reply to #${m.reply.seq}`
   const out = [`${head}:`, quoted(m.text, terminal, 'text', `scorpio message topicId=${roomId}${roleArg(role)} seq=${m.seq}`)]
+  const richLine = (line, what, fetch) => terminal && !typeable(line)
+    ? `(The ${what} contains control characters that cannot be typed into a terminal, so it is not pasted here. Read it with: ${fetch})`
+    : line
+  if (m.buttons?.length) {
+    const labels = m.buttons.map(b => `[${b.label}${b.by?.length ? ` · ${b.by.join(', ')}` : ''}]`)
+    out.push(richLine(`Buttons: ${labels.join(' ')}`, 'button list', `scorpio message topicId=${roomId}${roleArg(role)} seq=${m.seq}`))
+  }
+  if (m.card) {
+    const fetch = `scorpio card topicId=${roomId}${roleArg(role)} seq=${m.seq}`
+    out.push(richLine(`Card: ${m.card.summary} (to read it: ${fetch})`, 'card summary', fetch))
+  }
   if (m.scheduled?.id && m.scheduled?.by) {
     let setBy = `Set by ${flat(m.scheduled.by)} · Scheduled ${flat(m.scheduled.id)} · scorpio schedule topicId=${roomId}${roleArg(role)} show=${flat(m.scheduled.id)}`
     const late = Number(m.ts) - Number(m.scheduled.at)

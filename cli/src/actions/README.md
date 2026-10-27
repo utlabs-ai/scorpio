@@ -9,6 +9,7 @@ The `scorpio` commands, grouped by what they act on. `bin/scorpio.mjs` keeps onl
 | `read.mjs` | messages, message, search, files |
 | `file.mjs` | file (download), and the upload helpers `send` uses |
 | `send.mjs` | send |
+| `card.mjs` | card (read a message's HTML fragment) |
 | `task.mjs` | task (and the `T3` argument helpers `send` uses) |
 | `wait.mjs` | wait (socket or polling, the delivery it prints) |
 | `register.mjs` | after join / leave: this computer's delivery roster (`~/.scorpio/state/registry.json`) |

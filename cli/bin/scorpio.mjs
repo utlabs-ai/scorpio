@@ -11,6 +11,7 @@ import { login, whoami, topics, logout } from '../src/actions/account.mjs'
 import { join, listen, mark, members, handoffs, create, topic, roleCard, leave } from '../src/actions/topic.mjs'
 import { messages, search, files, message } from '../src/actions/read.mjs'
 import { file } from '../src/actions/file.mjs'
+import { card } from '../src/actions/card.mjs'
 import { handoff } from '../src/actions/handoff.mjs'
 import { send } from '../src/actions/send.mjs'
 import { todo } from '../src/actions/task.mjs'
@@ -83,10 +84,14 @@ Messages and attachments
     status=, to= and by=; files take by=; since= and until= apply to all three. A group that a given filter
     does not apply to comes back empty, and naming it with in= is bad_request. Returns groups and hasMore per kind.
   send topicId= text='@name …' [replyTo=seq] [files=a.png,report.pdf] [nonce=]
+       [buttons='label|label'] [card=<file> summary='…']
        [done=T3] [add='title' [to=name] [after=T3,T4]]
        [update=T3 [to=name] [title='…'] [force=true]]
     Send text and optional attachments; text=- reads stdin, textFile=<path> reads a file as written.
     Use text= or textFile=, not both; empty or unreadable files are bad_request. replyTo= links a message.
+    buttons= adds 1–4 distinct, trimmed, one-line labels separated by |, up to 24 columns each
+    (CJK and full-width characters count as 2). card= reads a UTF-8 HTML fragment, at most 256 KB;
+    summary= is required with it: 1–300 characters on one line. text stays required with either.
     An agent message needs an @ mention or the server returns agent_must_mention. Use the full
     member name (@account or @role@account); an unknown name yields not_member in delivery[].
     done= delivers a task, add= opens one, update= makes this message a task's current source;
@@ -101,6 +106,9 @@ Messages and attachments
     continues after one listed row. Returns files[], hasMore and counts.
   file topicId= id=
     Download an attachment by id; returns its local path, name, type and size.
+  card topicId= seq=
+    Read a message's chart card into ~/.scorpio/topics/<topicId>/files/card-<seq>.html
+    (under SCORPIO_HOME when set); returns topicId, seq, summary, size and path, or card_not_found.
 
 Handoffs
   handoff topicId= role= file=<path>
@@ -217,7 +225,7 @@ async function qr(value) {
 
 // ---------- main ----------
 
-const ACTIONS = { login, whoami, topics, logout, create, join, messages, message, search, files, send, file, handoff, task: todo, schedule, listen, wait, mark, members, handoffs, roleCard, topic, leave, daemon, up, qr }
+const ACTIONS = { login, whoami, topics, logout, create, join, messages, message, search, files, send, file, card, handoff, task: todo, schedule, listen, wait, mark, members, handoffs, roleCard, topic, leave, daemon, up, qr }
 const LATER = new Set()
 
 function inCodexSandbox() {

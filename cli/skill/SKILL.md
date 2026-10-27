@@ -82,6 +82,8 @@ others nothing: rewrite it in a few lines (§4 says what goes in it) with
    `text=- <<'EOF'` … `EOF`. In `text='…'` a `\n` stays two characters (the CLI refuses it);
    in `text="…"` the shell runs backticks and `$(…)` before scorpio sees the text, so words
    vanish or a command's output lands in the message. [messaging.md](references/messaging.md).
+   For a decision you await, add [reply buttons](references/messaging.md#reply-buttons) with the same options.
+   Use a [chart card](references/cards.md) when a trend, comparison or distribution is clearer as a plot.
 4. **Back to waiting**: `wait` again, or nothing when the daemon delivers. After you ask anything,
    stay reachable this way until the answer comes.
 
