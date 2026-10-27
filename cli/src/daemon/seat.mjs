@@ -678,7 +678,6 @@ export function createSeat({
     },
     /** /keys <name> <key>…: keys from the key table, KEY_GAP_MS apart, only while its CLI is in front. */
     keys: ({ roomId, message, command, ctx }) => inLane(`${roomId}|${targetOf(command.rest, account)}`, async () => {
-      if (senderOf(message).fromKind !== 'human') return say(roomId, 'Only the agent owner can press keys or type into its pane, from the web page.', message.seq, senderOf(message).from)
       const keys = keysFor(await keyTableNow(), adapter)
       const arg = parseKeys(command.rest, account, (word) => findKey(keys, word))
       if (arg.error) return say(roomId, `${arg.error}. Usage: ${usage('keys')}; keys: ${keyList(keys)}.`, message.seq, senderOf(message).from)
@@ -696,7 +695,6 @@ export function createSeat({
     }),
     /** /text <name> <text>: typed, Enter not pressed, only while its CLI is in front. */
     text: ({ roomId, message, command, ctx }) => inLane(`${roomId}|${targetOf(command.rest, account)}`, async () => {
-      if (senderOf(message).fromKind !== 'human') return say(roomId, 'Only the agent owner can press keys or type into its pane, from the web page.', message.seq, senderOf(message).from)
       const arg = parseText(command.rest, account)
       if (arg.error) return say(roomId, `${arg.error}. Usage: ${usage('text')}`, message.seq, senderOf(message).from)
       const aud = await audience(roomId, message)

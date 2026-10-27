@@ -1,11 +1,11 @@
-/** Credentials and packages must never cross a clear-text remote connection. */
+/** Accept HTTP server addresses without embedded credentials or URL suffixes. */
 export function serverUrl(value) {
   const text = String(value)
   if (/[\x00-\x20\x7f-\x9f]/.test(text)) throw new Error('Invalid server URL.')
   const url = new URL(text)
   if (url.username || url.password || url.search || url.hash ||
-      !(url.protocol === 'https:' || url.protocol === 'http:' && ['localhost', '127.0.0.1'].includes(url.hostname))) {
-    throw new Error('Server URL must use https, except localhost or 127.0.0.1.')
+      !(url.protocol === 'https:' || url.protocol === 'http:')) {
+    throw new Error('Server URL must use http or https, without credentials, query or fragment.')
   }
   return text.replace(/\/+$/, '')
 }

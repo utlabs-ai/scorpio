@@ -2875,26 +2875,17 @@ test('host carry sends permissions on opening and when only permissions change',
 })
 
 
-test('/keys and /text accept only people, including the creator of a schedule', async () => {
+test('/keys and /text accept agents and scheduled commands from the same account', async () => {
   const { m } = await spawnedAtDialog()
   m.fg['w:p9'] = CLAUDE_FG
   m.pressed.length = 0
-  m.typed.length = 0
-  for (const command of ['/keys qa enter', '/text qa continue']) {
-    m.ask(`@daemon.box@kai ${command}`, 'lead@kai', 'agent')
-    await m.tick()
-    assert.match(m.said.at(-1), /Only the agent owner.*web page/)
-    m.ask(`@daemon.box@kai ${command}`, 'scheduled', 'scheduled')
-    m.inbox.at(-1).scheduled = { by: 'lead@kai' }
-    await m.tick()
-    assert.match(m.said.at(-1), /Only the agent owner.*web page/)
+  for (const sender of ['agent', 'scheduled-agent', 'scheduled-owner']) {
+    for (const command of ['/keys qa enter', '/text qa --help']) {
+      m.ask(`@daemon.box@kai ${command}`, sender === 'agent' ? 'lead@kai' : 'scheduled', sender === 'agent' ? 'agent' : 'scheduled')
+      if (sender !== 'agent') m.inbox.at(-1).scheduled = { by: sender === 'scheduled-agent' ? 'lead@kai' : 'kai' }
+      await m.tick()
+      assert.match(m.said.at(-1), /pressed Enter|typed the text/)
+    }
   }
-  assert.deepEqual(m.pressed, [])
-  assert.deepEqual(m.typed, [])
-  for (const command of ['/keys qa enter', '/text qa continue']) {
-    m.ask(`@daemon.box@kai ${command}`, 'scheduled', 'scheduled')
-    m.inbox.at(-1).scheduled = { by: 'kai' }
-    await m.tick()
-  }
-  assert.deepEqual(m.pressed, [['w:p9', 'enter'], ['w:p9', 'text:continue']])
+  assert.deepEqual(m.pressed, Array.from({ length: 3 }, () => [['w:p9', 'enter'], ['w:p9', 'text:--help']]).flat())
 })

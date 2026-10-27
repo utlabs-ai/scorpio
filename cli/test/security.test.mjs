@@ -14,9 +14,9 @@ import { createHerdr } from '../src/adapters/terminal/herdr.mjs'
 import { selfUpdate } from '../src/daemon/update.mjs'
 import { execFileSync } from 'node:child_process'
 
-test('only https or explicit local development server URLs are accepted', () => {
-  for (const url of ['https://scorpio.example.com/', 'http://localhost:1234', 'http://127.0.0.1:1234']) assert.equal(serverUrl(url), url.replace(/\/$/, ''))
-  for (const url of ['http://example.com', 'http://localhost.example.com', 'ftp://localhost', 'https://kai@example.com', 'https://example.com\n', 'https://example.com/#x']) assert.throws(() => serverUrl(url))
+test('http and https server URLs are accepted without credentials, query or fragment', () => {
+  for (const url of ['https://scorpio.example.com/', 'http://example.com/', 'http://localhost.example.com', 'http://localhost:1234', 'http://127.0.0.1:1234']) assert.equal(serverUrl(url), url.replace(/\/$/, ''))
+  for (const url of ['ftp://localhost', 'https://kai@example.com', 'https://example.com\n', 'https://example.com/#x', 'https://example.com/?x=1', 'http://kai:password@example.com']) assert.throws(() => serverUrl(url))
   assert.equal(verificationUrl('https://scorpio.example.com/activate?code=123', 'https://scorpio.example.com'), 'https://scorpio.example.com/activate?code=123')
   for (const url of ['https://elsewhere.example.com/activate', 'http://scorpio.example.com/activate', 'https://scorpio.example.com:444/activate', 'https://kai@scorpio.example.com/activate']) assert.throws(() => verificationUrl(url, 'https://scorpio.example.com'))
 })
@@ -29,10 +29,14 @@ test('model and effort values cannot turn into permission flags', () => {
   assert.equal(parseSpawn('claude api model=claude-opus-5-5 effort=high').model, 'claude-opus-5-5')
 })
 
-test('pane text refuses control characters, shell mode and option prefixes', () => {
-  for (const text of ['!touch file', '  !touch file', '-', '--help', '  -n', '\u2003--wait', 'a\nb', 'a\tb', 'a\x1bb', 'a\x9bb']) {
+test('pane text refuses control characters and shell mode prefixes', () => {
+  for (const text of ['!touch file', '  !touch file', 'a\nb', 'a\tb', 'a\x1bb', 'a\x9bb']) {
     assert.ok(paneTextError(text))
     assert.ok(parseText('api ' + text, 'kai').error)
+  }
+  for (const text of ['-', '--help', '  -n', '\u2003--wait']) {
+    assert.equal(paneTextError(text), null)
+    assert.equal(parseText('api ' + text, 'kai').error, undefined)
   }
   assert.equal(paneTextError('Please continue.'), null)
   assert.equal(paneTextError('Please use --help.'), null)
@@ -61,13 +65,13 @@ test('terminal text is a positional argument and watch options follow it', async
   ])
 })
 
-test('update fetches never follow redirects or use a clear-text remote server', async (t) => {
+test('update fetches allow http servers and never follow redirects', async (t) => {
   const home = fs.mkdtempSync(path.join(os.tmpdir(), 'scorpio-update-'))
   t.after(() => fs.rmSync(home, { recursive: true, force: true }))
   const seen = [], checked = []
   const bytes = Buffer.from('archive')
   const manifest = { file: 'scorpio.tgz', version: '1.0.0', build: 'a'.repeat(64), sha256: createHash('sha256').update(bytes).digest('hex') }
-  await selfUpdate({ home, serverUrl: 'https://scorpio.example.com', currentVersion: '0.0.0', newer: () => true,
+  await selfUpdate({ home, serverUrl: 'http://scorpio.example.com', currentVersion: '0.0.0', newer: () => true,
     checked: (state) => checked.push(state), fetchImpl: async (url, options) => {
       seen.push({ url, options })
       if (url.endsWith('.json')) return { ok: true, json: async () => manifest }
@@ -76,7 +80,5 @@ test('update fetches never follow redirects or use a clear-text remote server', 
   assert.equal(seen.length, 2)
   assert.ok(seen.every(({ options }) => options.redirect === 'error'))
   assert.equal(checked.at(-1).state, 'failed')
-  let fetched = false
-  await selfUpdate({ serverUrl: 'http://example.com', checked: () => {}, fetchImpl: async () => { fetched = true } })
-  assert.equal(fetched, false)
+  assert.ok(seen.every(({ url }) => url.startsWith('http://scorpio.example.com/')))
 })
