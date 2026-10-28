@@ -13,8 +13,13 @@ export const HERDR_BIN = process.env.HERDR_BIN_PATH || 'herdr'
 // Text goes to herdr as one command-line argument, and Linux caps one argument at 128 KiB
 // (MAX_ARG_STRLEN). Over that the whole injection fails, every round. Leave room for the rest.
 export const MAX_PROMPT_BYTES = 120 * 1024
-// A spawned agent's name is also its herdr agent name: herdr's rule.
+// Herdr labels are unique on a computer, independently of a seat's name in its topic.
 export const AGENT_NAME = /^[a-z][a-z0-9_-]{0,31}$/
+export function herdrAgentName(role, number = 1) {
+  if (number === 1) return role
+  const suffix = '-' + number
+  return role.slice(0, 32 - suffix.length) + suffix
+}
 // A fresh tab's shell has to finish its own startup before herdr can start an agent in it. On a busy
 // Mac that can take more than 30 seconds; keep a bound while waiting for the actual shell prompt.
 export const SHELL_READY_SECONDS = 120

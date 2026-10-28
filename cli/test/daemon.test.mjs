@@ -1205,6 +1205,153 @@ test('seat: a dead local name leaves before takeover; live local and remote name
   assert.deepEqual(remote.tabs, [])
 })
 
+test('seat: another topic can use the same seat name with a numbered Herdr label', async () => {
+  for (const count of [1, 2]) {
+    const m = fakeMachine({ isDir: () => true })
+    const live = Array.from({ length: count }, (_, i) => ({ name: i ? 'supervisor-2' : 'supervisor', pane_id: `w:p${i + 2}` }))
+    m.terminal.agents = async () => live
+    const starts = []
+    m.terminal.startAgent = async (args) => { starts.push(args) }
+    m.panes.push({ pane_id: 'w:p9', tab_id: 'w:t9', agent: 'claude', agent_status: 'working' })
+    m.ask('@daemon.box@kai /spawn claude supervisor /work do it')
+    await m.tick()
+    await until(() => m.said.some((s) => s.includes('Started supervisor')))
+    assert.equal(starts.length, 1)
+    assert.equal(starts[0].name, `supervisor-${count + 1}`)
+    assert.equal(m.tabs[0].label, starts[0].name)
+    assert.equal(m.seat.ops[0].name, 'supervisor@kai')
+    assert.equal(m.seat.ops[0].herdrName, starts[0].name)
+    const prompt = fs.readFileSync(path.join(home, 'spawns', ROOM, 'supervisor.md'), 'utf8')
+    assert.match(prompt, /role=supervisor resume=true pane=w:p9/)
+    assert.match(prompt, /You are supervisor@kai/)
+  }
+})
+
+test('seat: a left seat with an open pane is refused even under a numbered Herdr label', async (t) => {
+  register({ roomId: ROOM, name: 'supervisor@kai', pane: 'w:p2' })
+  markLeft({ roomId: ROOM, name: 'supervisor@kai' })
+  t.after(() => unregister({ roomId: ROOM, name: 'supervisor@kai' }))
+  const m = fakeMachine({ isDir: () => true })
+  m.memberList.push({ name: 'supervisor@kai', kind: 'agent', status: 'left' })
+  m.panes.push({ pane_id: 'w:p2', tab_id: 'w:t2', agent: 'claude' })
+  m.terminal.agents = async () => [{ name: 'supervisor-2', pane_id: 'w:p2' }]
+  m.ask('@daemon.box@kai /spawn claude supervisor /work do it')
+  await m.tick()
+  assert.equal(m.said.at(-1), '@kai supervisor left this topic, but its pane w:p2 is still open. /bye supervisor closes it; then /spawn again.')
+  assert.deepEqual(m.tabs, [])
+  assert.deepEqual(m.closed, [])
+})
+
+test('seat: a left seat whose pane is gone keeps its handoff and card across a Herdr collision', async (t) => {
+  register({ roomId: ROOM, name: 'supervisor@kai', pane: 'w:p2' })
+  markLeft({ roomId: ROOM, name: 'supervisor@kai' })
+  t.after(() => unregister({ roomId: ROOM, name: 'supervisor@kai' }))
+  const m = fakeMachine({ isDir: () => true })
+  m.memberList.push({ name: 'supervisor@kai', kind: 'agent', status: 'left', roleCard: 'supervisor: coordinates' })
+  m.cloud['supervisor@kai'] = { body: '## Handoff\nContinue the review.', updatedAt: 900_000, computer: 'box' }
+  m.terminal.agents = async () => [{ name: 'supervisor', pane_id: 'w:p3' }]
+  m.panes.push({ pane_id: 'w:p9', tab_id: 'w:t9', agent: 'claude', agent_status: 'working' })
+  m.ask('@daemon.box@kai /spawn claude supervisor /work go on')
+  await m.tick()
+  await until(() => m.said.some((s) => s.includes('Started supervisor')))
+  assert.equal(m.tabs[0].label, 'supervisor-2')
+  assert.match(m.said.at(-1), /taking over supervisor: its tasks, role card and handoff/)
+  const prompt = fs.readFileSync(path.join(home, 'spawns', ROOM, 'supervisor.md'), 'utf8')
+  assert.match(prompt, /role=supervisor resume=true pane=w:p9/)
+  assert.doesNotMatch(prompt, /roleCard=/)
+  assert.match(fs.readFileSync(m.seat.ops[0].handoff.file, 'utf8'), /Continue the review\./)
+  assert.equal(m.memberList.at(-1).roleCard, 'supervisor: coordinates')
+})
+
+test('seat: pending names reserve Herdr labels across topics and survive a daemon restart', async () => {
+  const other = 'OtherTopic12345678901'
+  const stateFile = path.join(home, 'seat-cross-topic.json')
+  const m = fakeMachine({ isDir: () => true, stateFile })
+  m.api.rooms = async () => [{ roomId: ROOM }, { roomId: other }]
+  const queues = new Map([ROOM, other].map((roomId) => [roomId, [{ seq: 50, from: 'kai', fromKind: 'human',
+    text: '@daemon.box@kai /spawn claude supervisor /work do it', ts: 1_000_000 }]]))
+  m.api.listen = async (roomId) => ({ mentions: queues.get(roomId).splice(0), total: 50 })
+  let release
+  const waiting = new Promise((resolve) => { release = resolve })
+  m.terminal.waitShell = async () => { await waiting; return { ok: true } }
+  m.terminal.newTab = async (options) => {
+    m.tabs.push(options)
+    const n = m.tabs.length + 8
+    m.panes.push({ pane_id: `w:p${n}`, tab_id: `w:t${n}`, agent: 'claude', agent_status: 'working' })
+    return { tab: `w:t${n}`, pane: `w:p${n}` }
+  }
+  // Owned topics are discovered in the background; the following round joins the second topic.
+  await m.tick()
+  await m.tick()
+  assert.deepEqual(m.tabs.map((tab) => tab.label), ['supervisor', 'supervisor-2'])
+  assert.deepEqual(m.seat.ops.map((op) => [op.roomId, op.name, op.herdrName]), [
+    [ROOM, 'supervisor@kai', 'supervisor'], [other, 'supervisor@kai', 'supervisor-2'],
+  ])
+  const restarted = fakeMachine({ stateFile })
+  assert.deepEqual(restarted.seat.ops.map((op) => [op.herdrName, op.stage]), [['supervisor', 'failed'], ['supervisor-2', 'failed']])
+  // A second request for the same topic remains a refusal, without opening another tab.
+  queues.get(other).push({ seq: 51, from: 'kai', fromKind: 'human', text: '@daemon.box@kai /spawn claude supervisor /work again', ts: 1_000_001 })
+  await m.tick()
+  assert.match(m.said.at(-1), /supervisor is starting on this computer\. To start over, \/bye supervisor first\./)
+  assert.equal(m.tabs.length, 2)
+  release()
+  await until(() => m.seat.ops.every((op) => op.stage === 'joining'))
+  assert.equal(m.seat.ops.every((op) => op.stage === 'joining'), true)
+})
+
+test('seat: a Herdr name claimed during startup retries with the next label', async () => {
+  for (const first of [1, 2]) {
+    const stateFile = path.join(home, 'seat-name-race.json')
+    fs.rmSync(stateFile, { force: true })
+    const m = fakeMachine({ isDir: () => true, stateFile })
+    const live = first === 1 ? [] : [{ name: 'supervisor', pane_id: 'w:p3' }]
+    const starts = [], labels = []
+    const initial = first === 1 ? 'supervisor' : 'supervisor-2'
+    const next = `supervisor-${first + 1}`
+    m.terminal.agents = async () => live
+    m.panes.push({ pane_id: 'w:p9', tab_id: 'w:t9' })
+    m.terminal.renameTab = async (tab, label) => { labels.push([tab, label]) }
+    m.terminal.startAgent = async ({ name }) => {
+      starts.push(name)
+      if (name === initial) {
+        live.splice(0)
+        live.push({ name, pane_id: 'w:p2' })
+        throw new Error('Herdr name already taken')
+      }
+      Object.assign(m.panes.at(-1), { agent: 'claude', agent_status: 'working' })
+    }
+    m.ask('@daemon.box@kai /spawn claude supervisor /work do it')
+    await m.tick()
+    await until(() => m.said.some((s) => s.includes('Started supervisor')))
+    assert.deepEqual(starts, [initial, next])
+    assert.deepEqual(labels, [['w:t9', next]])
+    assert.equal(readJson(stateFile).spawns[0].herdrName, next)
+    assert.match(m.said.at(-1), /Started supervisor /)
+  }
+})
+
+test('seat: a spawn cancelled while checking a Herdr name race never starts again', async () => {
+  const m = fakeMachine({ isDir: () => true })
+  let answer, reads = 0, starts = 0
+  m.terminal.agents = async () => {
+    if (++reads === 1) return []
+    return new Promise((resolve) => { answer = resolve })
+  }
+  m.panes.push({ pane_id: 'w:p9', tab_id: 'w:t9' })
+  m.terminal.startAgent = async () => { starts++; throw new Error('Herdr name already taken') }
+  m.ask('@daemon.box@kai /spawn claude supervisor /work do it')
+  await m.tick()
+  await until(() => answer)
+  assert.equal(typeof answer, 'function')
+  m.ask('@daemon.box@kai /bye supervisor')
+  await m.tick()
+  answer([{ name: 'supervisor', pane_id: 'w:p2' }])
+  await new Promise((resolve) => setImmediate(resolve))
+  assert.equal(starts, 1)
+  assert.deepEqual(m.closed, ['w:p9'])
+  assert.equal(m.seat.ops.length, 0)
+})
+
 test('seat: nameless spawn skips left names; last directory is suggested but never applied', async () => {
   const m = fakeMachine({ isDir: () => true })
   m.panes.push({ pane_id: 'w:p9', tab_id: 'w:t9', agent: 'claude', agent_status: 'working', cwd: '/work' })

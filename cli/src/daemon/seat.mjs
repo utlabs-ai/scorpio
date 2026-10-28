@@ -26,7 +26,7 @@ import { claudeWindows, codexWindows, readClaudeRateLimits, readCodexRateLimits,
 import { agentClisText, detectedText, installedChanged } from '../adapters/cli/detect.mjs'
 import { HOME } from './paths.mjs'
 import { herdrExit } from './log.mjs'
-import { herdrError, SHELL_READY_SECONDS, tail } from '../adapters/terminal/herdr.mjs'
+import { herdrError, herdrAgentName, SHELL_READY_SECONDS, tail } from '../adapters/terminal/herdr.mjs'
 import { consumePending, matchingPanes } from '../actions/attach.mjs'
 import { dropRoom, entries as rosterEntries, leftEntries, register as registerLocal } from './registry.mjs'
 import { workspaceFor, ensureDir, topicFilesDir } from '../workspace.mjs'
@@ -116,15 +116,25 @@ export function createSeat({
   const readAgain = new Set() // rooms whose last listen was full: read the rest next round
   let owned = [], ownedAt = -Infinity, ownedMissing = false
   const ops = []
-  // /spawn records: one per name, from taking the name until it joins, is /bye-d, its pane goes, or another
+  // /spawn records: one per topic and seat, from taking the name until it joins, is /bye-d, its pane goes, or another
   // name registers that pane. stage: starting (tab, shell, CLI, first prompt) → joining; failed when it never
   // came up, late when it came up but did not join in time (both keep their pane for a person to look at).
   // While joining or late, one that stopped at its prompt on a network API error is told to carry on (nudge).
-  // The name is also the herdr agent name, unique on this computer, so no room opens a second tab for it.
+  // herdrName reserves the computer-wide terminal label while other topics can use the same seat name.
   // Saved, so a restarted daemon still knows these panes; one that was starting has lost its launch: failed.
-  for (const op of saved.spawns || []) ops.push({ ...op, type: 'spawn', stage: op.stage === 'starting' ? 'failed' : op.stage })
+  for (const op of saved.spawns || []) ops.push({ ...op, herdrName: op.herdrName || shortOf(op.name), type: 'spawn', stage: op.stage === 'starting' ? 'failed' : op.stage })
   const spawnScreens = new Map() // raw pane text stays in memory, never in the saved spawn record
   const spawns = () => ops.filter((op) => op.type === 'spawn')
+  const availableHerdrName = (short, live, except = null) => {
+    const taken = new Set([...live.map((a) => a.name), ...spawns().filter((op) => op !== except).map((op) => op.herdrName)])
+    let pastPrevious = !except
+    for (let number = 1; ; number += 1) {
+      const name = herdrAgentName(short, number)
+      if (name.length > 32) throw new Error('No Herdr agent name is available.')
+      if (!pastPrevious) { if (name === except.herdrName) pastPrevious = true; continue }
+      if (!taken.has(name)) return name
+    }
+  }
   const save = () => {
     try { writeJson(stateFile, { ...state, spawns: spawns().map(({ type, ...op }) => op) }) } catch {}
   }
@@ -381,10 +391,11 @@ export function createSeat({
    * Start the CLI with its first prompt as an argument; never answer startup dialogs.
    * Poll its screen until it works or stops, retaining the same waiting clock into joining.
    */
-  async function startCli(op, kind, name, pane, cliArgs, first) {
+  async function startCli(op, kind, pane, cliArgs, first) {
     const argv = [...cliArgs, first]
     let started = null, failure = null, tries = 0, failedAt = 0, i = 0
     const start = () => {
+      const name = op.herdrName
       tries += 1; started = null; failure = null
       terminal.startAgent({ name, kind, pane, argv })
         .then(() => { started = true })
@@ -408,6 +419,16 @@ export function createSeat({
         return { ok: true }
       }
       if (started === false && !STILL_STARTING.has(failure.code) && !up) {
+        const live = await terminal.agents()
+        if (!ops.includes(op)) return { gone: true }
+        if (live?.some((a) => a.name === op.herdrName && a.pane_id !== pane)) {
+          op.herdrName = availableHerdrName(shortOf(op.name), live, op)
+          save()
+          await terminal.renameTab(op.tab, op.herdrName)
+          if (!ops.includes(op)) return { gone: true }
+          start()
+          continue
+        }
         // The shell was ready but something took the foreground again: one more try after two seconds.
         if (failure.code === 'agent_pane_busy' && tries < 2) { if (i - failedAt >= 4) start(); continue }
         return { ok: false, reason: failure.text }
@@ -505,7 +526,7 @@ export function createSeat({
       return
     }
     const cliArgs = spawnArgs(spec.kind, spec)
-    const up = await startCli(op, spec.kind, short, pane, cliArgs, spawnLine({ by: op.to, roomName: roomName(roomId), name: op.name, file, prompt: spec.prompt, handoff: toRead }))
+    const up = await startCli(op, spec.kind, pane, cliArgs, spawnLine({ by: op.to, roomName: roomName(roomId), name: op.name, file, prompt: spec.prompt, handoff: toRead }))
     if (!ops.includes(op)) { log(`${short} was /bye-d while its CLI started; not answering`); return }
     if (up.gone) { drop(op); await say(roomId, `${short}'s pane was closed before it started.`, op.seq, op.to); return }
     if (up.joined || inRoom(await members(roomId).catch(() => []), op.name)) { drop(op); return }
@@ -811,30 +832,30 @@ export function createSeat({
         await byeOne(roomId, here, ctx.panes, unregister)
         replacedGone = true
       }
-      const pending = spawns().find((op) => shortOf(op.name) === short)
+      const pending = spawns().find((op) => op.roomId === roomId && op.name === name)
       if (pending) {
         const where = { starting: 'is starting on this computer', joining: 'has started on this computer and is about to join',
           failed: 'did not start on this computer last time; its pane is still open',
           late: `started but has not joined for ${Math.round(SPAWN_JOIN_MS / MIN)} minutes; its pane is still open` }[pending.stage]
-        const there = pending.roomId === roomId ? '' : ` (in the topic "${roomName(pending.roomId)}"; send /bye there)`
-        return say(roomId, `${short} ${where}${there}. To start over, /bye ${short} first.`, message.seq, to)
+        return say(roomId, `${short} ${where}. To start over, /bye ${short} first.`, message.seq, to)
       }
-      const taken = live.find((a) => a.name === short)
-      if (taken) return say(roomId, `A live agent named ${short} already runs in this computer's Herdr (pane ${taken.pane_id}); herdr allows one per name. Pick another name.`, message.seq, to)
+      const here = localAgents(roomId, ctx.entries, ctx.panes).get(name)
+      if (here?.alive || live.some((a) => a.pane_id === here?.pane)) return say(roomId, `${short} left this topic, but its pane ${here.pane} is still open. /bye ${short} closes it; then /spawn again.`, message.seq, to)
+      const herdrName = availableHerdrName(short, live)
       // A takeover (the name is in the topic, left) keeps its card as the topic has it, whatever that card says; a new name
       // gets the generic one.
       const keepCard = everyone.some((m) => m.name === name)
       if (spec.needDir) {
         try { ensureDir(dir) } catch (error) { return say(roomId, `Not started: could not create the topic workspace ${dir}: ${error.message}`, message.seq, to) }
       }
-      const op = { type: 'spawn', stage: 'starting', kind: spec.kind, roomId, seq: message.seq, name, to, fromKind: sender.fromKind, scheduled: message.scheduled, keepCard, skipHandoff: keepCard && !!spec.skipHandoff, perm: permOf(spec.kind, spawnArgs(spec.kind, spec)), permFrom: permission.from, permParent: permission.parent, dir, replacedGone }
+      const op = { type: 'spawn', stage: 'starting', kind: spec.kind, roomId, seq: message.seq, name, herdrName, to, fromKind: sender.fromKind, scheduled: message.scheduled, keepCard, skipHandoff: keepCard && !!spec.skipHandoff, perm: permOf(spec.kind, spawnArgs(spec.kind, spec)), permFrom: permission.from, permParent: permission.parent, dir, replacedGone }
       ops.push(op)
       const homeBin = path.join(HOME, 'bin')
       const inheritedPath = spawnEnv.PATH || process.env.PATH || ''
       const privateNode = path.join(HOME, 'node', 'bin')
       const first = fs.existsSync(path.join(privateNode, 'node')) ? [privateNode] : []
       const agentPath = [homeBin, ...first, ...inheritedPath.split(path.delimiter).filter((part) => part && part !== homeBin && !first.includes(part))].join(path.delimiter)
-      try { Object.assign(op, await terminal.newTab({ label: short, cwd: dir, env: { ...spawnEnv, PATH: agentPath } })) } catch (error) { drop(op); throw error }
+      try { Object.assign(op, await terminal.newTab({ label: herdrName, cwd: dir, env: { ...spawnEnv, PATH: agentPath } })) } catch (error) { drop(op); throw error }
       try {
         const chosen = modelOf(spec.kind, spawnArgs(spec.kind, spec))
         // pane: which pane this daemon started it in, for /read, /keys and /text once it has joined.

@@ -66,10 +66,10 @@ test('real Herdr delivers adapter text once and unchanged', { timeout: 90_000 },
   })
   const created = JSON.parse(await call(['workspace', 'create', '--cwd', root, '--label', 'input-recorder', '--no-focus']))
   const workspace = created.result.workspace.workspace_id
-  const tab = await terminal.newTab({ label: 'input-recorder', cwd: root, workspace,
+  const tab = await terminal.newTab({ label: 'x', cwd: root, workspace,
     env: { PATH: env.PATH, HERDR_INPUT_FILE: record } })
   assert.equal((await terminal.waitShell(tab.pane)).ok, true)
-  await terminal.startAgent({ name: 'input-recorder', kind: 'claude', pane: tab.pane, argv: [], timeoutMs: 10_000 })
+  await terminal.startAgent({ name: 'x', kind: 'claude', pane: tab.pane, argv: [], timeoutMs: 10_000 })
   const lines = () => fs.readFileSync(record, 'utf8').split('\n').slice(0, -1)
   const expected = []
   const texts = ['Please continue.', 'Keep "double" and \'single\' quotes, $(printf text); unchanged.']
@@ -94,4 +94,21 @@ test('real Herdr delivers adapter text once and unchanged', { timeout: 90_000 },
   }
   assert.equal(expected.length, 8)
   assert.deepEqual(lines(), expected)
+  await t.test('numbered Herdr names deliver to their own panes exactly once', async () => {
+    const secondRecord = path.join(root, 'second.txt')
+    const second = await terminal.newTab({ label: 'x-2', cwd: root, workspace,
+      env: { PATH: env.PATH, HERDR_INPUT_FILE: secondRecord } })
+    assert.equal((await terminal.waitShell(second.pane)).ok, true)
+    await terminal.startAgent({ name: 'x-2', kind: 'claude', pane: second.pane, argv: [], timeoutMs: 10_000 })
+    const live = await terminal.agents()
+    assert.equal(live.find((agent) => agent.name === 'x').pane_id, tab.pane)
+    assert.equal(live.find((agent) => agent.name === 'x-2').pane_id, second.pane)
+    await terminal.inject(tab.pane, 'Only the first pane.')
+    await terminal.inject(second.pane, 'Only the second pane.')
+    const secondLines = () => fs.readFileSync(secondRecord, 'utf8').split('\n').slice(0, -1)
+    await until(() => lines().length >= 9 && secondLines().length >= 1)
+    assert.deepEqual(lines(), [...expected, 'Only the first pane.'])
+    assert.deepEqual(secondLines(), ['Only the second pane.'])
+    t.diagnostic('x and x-2 each recorded their own input once, with no cross-pane delivery')
+  })
 })

@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { randomUUID } from 'node:crypto'
-import { createHerdr, herdrError } from '../adapters/terminal/herdr.mjs'
+import { createHerdr, herdrError, herdrAgentName } from '../adapters/terminal/herdr.mjs'
 import { readRegistry } from '../daemon/registry.mjs'
 import { server } from '../daemon/paths.mjs'
 import { homeDir, privateFile, readJson, writeJson } from './services.mjs'
@@ -11,12 +11,6 @@ import { setTimeout as sleep } from 'node:timers/promises'
 const paneFile = path.join(homeDir, 'state', 'up-panes.json')
 const quote = (value) => "'" + String(value).replace(/'/g, "'\\''") + "'"
 const fullName = (agent, account) => agent.role + '@' + account
-
-export function herdrAgentName(role, number = 1) {
-  if (number === 1) return role
-  const suffix = '-' + number
-  return role.slice(0, 32 - suffix.length) + suffix
-}
 
 function tracked(topicId, name) {
   return readJson(paneFile)?.[topicId]?.[name]?.pane ||

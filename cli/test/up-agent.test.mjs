@@ -161,7 +161,7 @@ test('first agent keeps its own permissions and passes an environment API key th
 })
 
 test('Herdr names use the chosen Scorpio role and numeric suffixes', async () => {
-  const { herdrAgentName } = await import('../src/up/agent.mjs')
+  const { herdrAgentName } = await import('../src/adapters/terminal/herdr.mjs')
   for (const name of [herdrAgentName('pobi'), herdrAgentName('pobi', 2), herdrAgentName('alex_2', 3)]) {
     assert.match(name, /^[a-z][a-z0-9_-]{0,31}$/)
   }
