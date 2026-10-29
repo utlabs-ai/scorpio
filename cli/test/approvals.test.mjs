@@ -15,7 +15,7 @@ process.env.CODEX_HOME = path.join(home, "codex")
 const { createApprovals, writeApprovalSettings } = await import('../src/daemon/approvals.mjs')
 const { approvalHook } = await import('../src/approval-hook.mjs')
 const { parseMenu, columns, hookMatches, menuIdentity, sameMenu, standardApproval } = await import('../src/daemon/approval-menu.mjs')
-const { argsFor, codexHookDefinition, fullPermission, autoPermission, permOf, dialogBlocked, unseenDialog } = await import('../src/adapters/cli/index.mjs')
+const { argsFor, codexHookDefinition, fullPermission, autoPermission, permOf, dialogBlocked } = await import('../src/adapters/cli/index.mjs')
 const { parseSpawn, handoffPrompt } = await import('../src/daemon/commands.mjs')
 const { injectWhenReady } = await import('../src/daemon/main.mjs')
 const bash = (count = 3) => `Bash command\n  touch /tmp/work/result\n\nDo you want to proceed?\n❯ 1. Yes\n  2. Yes, and always allow access to /tmp/work from this project\n${count === 4 ? '  3. Yes, and switch to auto mode · extra\n     auto mode handles these prompts for you\n  4. No' : '  3. No'}\n\nEsc to cancel · Tab to amend`
@@ -880,29 +880,22 @@ for (const answer of [false, true]) test(`changed menu transfers its matching ho
 
 for (const [label, menu, count] of [['hooks', hookTrust, 3], ['folder', folder, 2]]) {
   const screen = menu + '\n'.repeat(60)
-  test(`idle Codex ${label} trust opens without a hook and accepts a web answer`, async () => {
+  test(`idle Codex ${label} trust text opens no approval card`, async () => {
     const f = fixture({ cli: 'codex', status: 'idle', screen })
-    await f.approvals.tick()
-    assert.equal(f.frames.length, 0)
-    f.advance(1999); await f.approvals.tick(); assert.equal(f.frames.length, 0)
-    f.advance(1); await f.approvals.tick()
-    const card = f.approvals.cards.get('p1')
+    await f.open()
+    assert.equal(f.approvals.cards.size, 0)
+    assert.equal(f.approvals.busy('p1'), false)
+    assert.deepEqual(f.frames, [])
+  })
+  test(`Herdr-blocked Codex ${label} trust still opens its screen menu`, async () => {
+    const f = fixture({ cli: 'codex', status: 'blocked', screen })
+    const card = await f.open()
     assert.equal(card.menu.options.length, count)
     assert.equal(card.detail, null)
-    assert.equal(f.frames.filter((frame) => frame.type === 'approval_open').length, 2, 'one card shared by two rooms')
-    f.terminal.sendKeys = async (_, key) => {
-      f.keys.push(key)
-      if (key === '2') f.screen(screen.replace('› 1.', '  1.').replace('  2.', '› 2.'))
-      if (key === 'enter') f.screen('› Ask anything')
-    }
-    await f.answer(card, { n: 2 })
-    assert.deepEqual(f.keys, ['2', 'enter'])
-    assert.equal(f.frames.at(-1).reason, 'answered')
-    assert.equal(f.frames.at(-1).result, 'ok')
-    assert.equal(f.approvals.cards.size, 0)
+    assert.equal(f.approvals.busy('p1'), true)
   })
-  test(`idle Codex ${label} trust closes when answered at the terminal and reopens after failed presses`, async () => {
-    const f = fixture({ cli: 'codex', status: 'idle', screen })
+  test(`Herdr-blocked Codex ${label} trust closes when answered at the terminal and reopens after failed presses`, async () => {
+    const f = fixture({ cli: 'codex', status: 'blocked', screen })
     const card = await f.open()
     f.terminal.sendKeys = async () => {}
     await f.answer(card, { n: 2 })
@@ -910,21 +903,21 @@ for (const [label, menu, count] of [['hooks', hookTrust, 3], ['folder', folder, 
     assert.ok(f.approvals.cards.get('p1'))
     f.terminal.sendKeys = async () => { throw new Error('press failed') }
     await f.answer(f.approvals.cards.get('p1'), { n: 2 })
-    assert.ok(f.approvals.cards.get('p1'), 'error path preserves an idle dialog')
+    assert.ok(f.approvals.cards.get('p1'), 'error path preserves a blocked dialog')
     f.screen('› Ask anything'); await f.approvals.tick()
     assert.equal(f.frames.at(-1).reason, 'answered_here')
     assert.equal(f.approvals.cards.size, 0)
   })
 }
-test('unseen dialog detection is narrow, recent and subordinate to working status', async () => {
-  for (const screen of ['› 1. foo', 'Hooks need review', 'Trust all and continue', 'Trust this folder?', 'Trust and continue', hookTrust + '\nordinary line'.repeat(30)]) {
-    assert.equal(unseenDialog(screen), false)
-    const f = fixture({ cli: 'codex', status: 'idle', screen })
-    await f.open(); assert.equal(f.approvals.cards.size, 0)
+test('dialog state comes only from Herdr, regardless of screen text', async () => {
+  for (const status of ['idle', 'done', 'working']) {
+    for (const screen of [hookTrust, folder, '› 1. foo']) {
+      assert.equal(dialogBlocked(status, screen), false)
+      const f = fixture({ cli: 'codex', status, screen })
+      await f.open(); assert.equal(f.approvals.cards.size, 0)
+    }
   }
-  assert.equal(dialogBlocked('working', hookTrust), false)
-  const f = fixture({ cli: 'codex', status: 'working', screen: hookTrust })
-  await f.open(); assert.equal(f.approvals.cards.size, 0)
+  assert.equal(dialogBlocked('blocked', 'ordinary text'), true)
 })
 
 // Captured menu layouts with neutral names; blank lines match terminal block spacing.
@@ -996,14 +989,14 @@ for (const [name, change] of [
   ['unchanged cursor', (screen) => screen],
   ['changed label', (screen) => screen.replace('› 1.', '  1.').replace('  2. Trust all and continue', '› 2. Trust selected hooks')],
   ['changed question', (screen) => screen.replace('› 1.', '  1.').replace('  2.', '› 2.').replace('1 hook is new or changed.', '2 hooks are new or changed.')],
-]) test(`Codex trust never confirms after ${name}`, async () => {
+]) test(`Herdr-blocked Codex numbered menu adds no text-matched confirmation after ${name}`, async () => {
   const screen = hookTrust + '\n'.repeat(60)
-  const f = fixture({ cli: 'codex', status: 'idle', screen, rooms: ['one'] })
+  const f = fixture({ cli: 'codex', status: 'blocked', screen, rooms: ['one'] })
   f.terminal.sendKeys = async (_, key) => { f.keys.push(key); f.screen(change(screen)) }
   const card = await f.open()
   await f.answer(card, { n: 2 })
   assert.deepEqual(f.keys, ['2'])
-  assert.equal(f.frames.find((frame) => frame.type === 'approval_close').result, 'failed')
+  assert.equal(f.frames.find((frame) => frame.type === 'approval_close').result, name === 'unchanged cursor' ? 'failed' : 'ok')
   if (name === 'unchanged cursor') {
     assert.notEqual(f.approvals.cards.get('p1').id, card.id)
     assert.equal(f.frames.filter((frame) => frame.type === 'approval_open').length, 2)
@@ -1097,4 +1090,15 @@ test('auto spawn retains the Claude hook and omits the Codex hook and asking pol
     assert.deepEqual(args.slice(0, custom.length), custom)
     assert.ok(args.includes('--settings'))
   }
+})
+
+test('an idle pane quoting a delivered trust dialog opens no card and does not hold delivery', async () => {
+  const screen = `A delivered /read reply:\n${folder}`
+  const f = fixture({ cli: 'codex', status: 'idle', screen })
+  await f.open()
+  assert.equal(f.approvals.cards.size, 0)
+  assert.equal(f.frames.length, 0)
+  assert.equal(f.approvals.busy('p1'), false)
+  assert.equal(await injectWhenReady(f.terminal, 'p1', 'next message', f.approvals.busy), 'sent')
+  assert.deepEqual(f.injections, [{ pane: 'p1', text: 'next message' }])
 })

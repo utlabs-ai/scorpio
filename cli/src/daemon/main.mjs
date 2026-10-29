@@ -108,7 +108,6 @@ export async function injectWhenReady(terminal, pane, text, approvalBusy = () =>
   if (dialogBlocked(status)) return 'blocked'
   if (!['idle', 'done', 'working'].includes(status)) return 'unavailable'
   const screen = await terminal.read(pane, 200)
-  if (dialogBlocked(status, screen)) return 'blocked'
   if (NEVER_ANSWER.test(tail(screen, 20))) return 'dialog'
   if (approvalBusy(pane)) return 'blocked'
   await terminal.inject(pane, text)

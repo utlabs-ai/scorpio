@@ -3,7 +3,7 @@ import fs from 'node:fs'
 import net from 'node:net'
 import path from 'node:path'
 import { randomBytes } from 'node:crypto'
-import { dialogBlocked, unseenDialog } from '../adapters/cli/index.mjs'
+import { dialogBlocked } from '../adapters/cli/index.mjs'
 import { LAUNCHER, STATE_DIR, writeJson } from './paths.mjs'
 import { createKeys, keysFor } from './keys.mjs'
 import { cursorMenu, detailOf, hookMatches, menuIdentity, parseMenu, sameMenu, screenTail, standardApproval, visibleMenu } from './approval-menu.mjs'
@@ -65,7 +65,7 @@ export function createApprovals({ terminal, targets, send, now = () => Date.now(
     if (locks.has(target.pane)) return
     const card = cards.get(target.pane)
     const screen = await terminal.read(target.pane, 200)
-    const status = dialogBlocked(paneStatus, screen) ? 'blocked' : paneStatus
+    const status = dialogBlocked(paneStatus) ? 'blocked' : paneStatus
     const menu = visibleMenu(screen, card?.width ?? await terminal.paneWidth?.(target.pane), target.cli)
     for (const r of [...(pending.get(target.pane) || [])]) {
       if (!r.used && now() - r.ts >= 2000 && !menu) release(r)
@@ -162,9 +162,9 @@ export function createApprovals({ terminal, targets, send, now = () => Date.now(
         if (!Number.isFinite(frame.ts) || now() - frame.ts > 120_000) { close(card, 'expired'); return }
         const screen = await terminal.read(card.pane, 200)
         const status = await terminal.paneStatus(card.pane)
-        if (!(dialogBlocked(status, screen) || card.request?.reply) || !sameMenu(card, screen)) {
+        if (!(dialogBlocked(status) || card.request?.reply) || !sameMenu(card, screen)) {
           const nextMenu = visibleMenu(screen, card.width, card.cli) &&
-            (dialogBlocked(status, screen) || pending.get(card.pane)?.some((r) => !r.used && r.ts > card.ts))
+            (dialogBlocked(status) || pending.get(card.pane)?.some((r) => !r.used && r.ts > card.ts))
           close(card, nextMenu ? 'changed' : 'answered_here', undefined, screen)
           if (nextMenu) {
             const target = (await targets())?.find((t) => t.pane === card.pane)
@@ -203,21 +203,6 @@ export function createApprovals({ terminal, targets, send, now = () => Date.now(
           } else {
             const key = card.menu ? String(option.n) : keysFor(table, terminal.adapter || 'herdr').find((k) => k.name === frame.key)[terminal.adapter || 'herdr']
             await terminal.sendKeys(card.pane, key)
-            // Only Codex trust menus need Enter; another menu may already be the next request.
-            if (card.cli === 'codex' && card.menu && unseenDialog(screen)) {
-              const moved = await settle(card.pane, (screen) => {
-                const selected = screenTail(screen).split('\n').findLast((line) => /^\s*[›❯]\s+\d+\.\s+/.test(line))
-                return Number(selected?.match(/^\s*[›❯]\s+(\d+)\./)?.[1]) === option.n
-              }, table.settleMs)
-              const selected = screenTail(moved).split('\n').findLast((line) => /^\s*[›❯]\s+\d+\.\s+/.test(line))
-              const n = Number(selected?.match(/^\s*[›❯]\s+(\d+)\./)?.[1])
-              if (!sameMenu(card, moved) || n !== option.n || parseMenu(moved, card.width, card.cli)?.options.find((o) => o.n === n)?.label !== option.label) {
-                throw new Error('cursor did not reach chosen option')
-              }
-              const enter = keysFor(table, terminal.adapter || 'herdr').find((key) => key.name === 'enter')?.[terminal.adapter || 'herdr']
-              if (!enter) throw new Error('cursor keys unavailable')
-              await terminal.sendKeys(card.pane, enter)
-            }
           }
           release(card.request)
         }
@@ -241,7 +226,7 @@ export function createApprovals({ terminal, targets, send, now = () => Date.now(
         answerDescription = undefined
         close(card, 'answered', failed ? 'failed' : 'ok')
         const statusAfter = await terminal.paneStatus(card.pane)
-        if ((failed || visibleMenu(after, card.width, card.cli)) && (dialogBlocked(statusAfter, after) || hasWaitingHook(card.pane))) {
+        if ((failed || visibleMenu(after, card.width, card.cli)) && (dialogBlocked(statusAfter) || hasWaitingHook(card.pane))) {
           const target = (await targets())?.find((t) => t.pane === card.pane)
           if (target) await open(target, after)
         }
@@ -251,7 +236,7 @@ export function createApprovals({ terminal, targets, send, now = () => Date.now(
         log(`approval answer failed: ${error?.code || error?.name || 'unknown'}`)
         const target = (await targets())?.find((t) => t.pane === card.pane)
         const screen = target ? await terminal.read(card.pane, 200) : ''
-        if (target && sameMenu(card, screen) && (dialogBlocked(await terminal.paneStatus(card.pane), screen) || hasWaitingHook(card.pane))) await open(target, screen)
+        if (target && sameMenu(card, screen) && (dialogBlocked(await terminal.paneStatus(card.pane)) || hasWaitingHook(card.pane))) await open(target, screen)
       }
       finally { locks.delete(card.pane) }
     })

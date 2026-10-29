@@ -94,16 +94,10 @@ export function modelText(kind, args) {
 // here is "update now". Seen on screen, the daemon types nothing.
 export const NEVER_ANSWER = /Update available|Update now|Skip until next version/i
 
-// Herdr through 0.9.5 misses Codex hook trust; older versions also miss folder trust.
-// Match only these paired phrases: an ordinary Codex input prompt also starts with ›.
-export function unseenDialog(screen) {
-  const recent = String(screen || '').split('\n').filter((line) => line.trim()).slice(-30).join('\n')
-  return recent.includes('Hooks need review') && recent.includes('Trust all and continue') ||
-    recent.includes('Trust this folder?') && recent.includes('Trust and continue')
-}
-
-export function dialogBlocked(status, screen) {
-  return status === 'blocked' || status !== 'working' && unseenDialog(screen)
+// Herdr's blocked status is the only source of dialog state. Herdr 0.9.5 does not report
+// Codex's "Hooks need review": it gets no card, and is answered on the computer or with /read and /keys.
+export function dialogBlocked(status) {
+  return status === 'blocked'
 }
 
 // Every other dialog (trust this folder, CLAUDE.md imports from outside it, the no-approval mode's warning) is

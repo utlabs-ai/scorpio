@@ -2752,30 +2752,36 @@ const codexTrustScreens = [
 ].map((screen) => screen + '\n'.repeat(60))
 
 for (const [i, screen] of codexTrustScreens.entries()) {
-  test(`Codex trust screen ${i}: idle delivery and handoff type nothing`, async () => {
+  test(`Codex trust screen ${i}: idle quoted text allows delivery and handoff`, async () => {
     const m = fakeMachine()
     m.screen.text = screen
     m.terminal.read = async (_, lines) => screen.split('\n').slice(-lines).join('\n')
-    m.terminal.inject = async () => assert.fail('must not inject into trust dialog')
-    assert.equal(await injectWhenReady(m.terminal, 'w:p1', 'hello'), 'blocked')
+    const injected = []
+    m.terminal.inject = async (pane, text) => injected.push([pane, text])
+    assert.equal(await injectWhenReady(m.terminal, 'w:p1', 'hello'), 'sent')
+    assert.deepEqual(injected, [['w:p1', 'hello']])
     m.ask('@daemon.box@kai /handoff api'); await m.tick()
-    assert.deepEqual(m.typed, [])
-    assert.equal(await m.seat.idleHandoff({ entry: API, minutes: 60, panes: m.panes }), 'a dialog is open')
+    assert.equal(m.typed.length, 1)
+    const idle = fakeMachine()
+    idle.screen.text = screen
+    await idle.tick()
+    assert.equal(await idle.seat.idleHandoff({ entry: API, minutes: 60, panes: idle.panes }), 'started')
+    assert.equal(idle.typed.length, 1)
   })
-  for (const relay of [false, true]) test(`Codex trust screen ${i}: idle spawn with relay ${relay} reads the whole screen`, async () => {
+  for (const relay of [false, true]) test(`Codex trust screen ${i}: idle spawn with relay ${relay} does not infer a dialog`, async () => {
     const m = fakeMachine({ isDir: () => true, approvalsRunning: () => relay })
     m.panes.push({ ...QA_PANE, agent: 'codex', agent_status: 'idle' })
     m.terminal.read = async (_, lines) => screen.split('\n').slice(-lines).join('\n')
     m.ask('@daemon.box@kai /spawn codex qa /work go')
     await m.tick()
+    assert.equal(m.seat.ops[0].stage, 'starting')
+    assert.equal(m.sent.some((message) => message.screen), false)
+    m.panes.find((pane) => pane.pane_id === m.seat.ops[0].pane).agent_status = 'working'
+    await until(() => m.said.some((text) => text.includes('Started qa ')))
     assert.equal(m.seat.ops[0].stage, 'joining')
     assert.deepEqual(m.pressed, [])
-    if (relay) {
-      assert.equal(m.said.filter((text) => text.includes('Started qa ')).length, 1)
-      assert.equal(m.sent.some((message) => message.screen), false)
-    } else {
-      assert.ok(m.sent.find((message) => message.screen)?.screen.text.includes(screen.split('\n')[0]))
-    }
+    assert.equal(m.said.filter((text) => text.includes('Started qa ')).length, 1)
+    assert.equal(m.sent.some((message) => message.screen), false)
   })
 }
 
