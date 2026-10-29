@@ -35,6 +35,8 @@ import { workspaceFor, ensureDir, topicFilesDir } from '../workspace.mjs'
 const MIN = 60_000
 export const SPAWN_JOIN_MS = 10 * MIN
 export const SPAWN_STALL_MS = 30_000
+// With approvals running a stalled spawn gets a card within a few seconds; the not-joined notice waits this much longer for it.
+export const STALL_CARD_MS = 15_000
 const SPAWN_SCREEN_MS = 5_000
 export const HANDOFF_MS = 2 * 60 * MIN
 // A takeover's look for its handoff in the cloud, tries included: past it, failed (timeout).
@@ -382,6 +384,15 @@ export function createSeat({
     const since = working ? null : before?.screen === screen && before.since !== null ? before.since : now()
     spawnScreens.set(op, { screen, since, at: now() })
     return since === null ? 0 : Math.floor((now() - since) / 1000)
+  }
+
+  // The screen a /spawn not joined yet stands still on: unchanged for SPAWN_STALL_MS while Herdr did not say
+  // working. The approval relay counts that pane as blocked while its screen stays the same.
+  function stallOf(op) {
+    const seen = spawnScreens.get(op)
+    if (!['joining', 'late'].includes(op.stage) || !seen || seen.since === null || now() - seen.since < SPAWN_STALL_MS) return null
+    if (rosterEntries().some((e) => e.roomId === op.roomId && e.name === op.name)) return null
+    return { screen: seen.screen }
   }
 
   async function reportStall(op, screen, seconds) {
@@ -933,7 +944,7 @@ export function createSeat({
             const screen = await terminal.read(op.pane, 200)
             const working = livePanes?.find((p) => p.pane_id === op.pane)?.agent_status === 'working'
             const seconds = observeSpawn(op, screen, working)
-            if (!working && seconds * 1000 >= SPAWN_STALL_MS) await reportStall(op, screen, seconds)
+            if (!working && seconds * 1000 >= SPAWN_STALL_MS + (approvalsRunning() ? STALL_CARD_MS : 0)) await reportStall(op, screen, seconds)
           }
           await nudge(op, livePanes)
         }
@@ -1070,7 +1081,7 @@ export function createSeat({
     /** The last detection, in kind order; null before the first one. */
     clis: () => (detector?.ready() ? detector.list() : null),
     prepare, tick, idle, busyWhy, ops, state, rejoin, forget, leftTopic, stranded, idleHandoff,
-    approvalTargets: (panes) => approvalTargets({ panes, spawns: spawns(), entries: rosterEntries(), readRecord: (e) => readJson(spawnRecordPath(e.roomId, e.name)) }),
+    approvalTargets: (panes) => approvalTargets({ panes, spawns: spawns(), entries: rosterEntries(), readRecord: (e) => readJson(spawnRecordPath(e.roomId, e.name)), stallOf }),
     reconnect() { joinedThisRun.clear(); joinFailedAt.clear(); reported.clear(); ownedAt = -Infinity },
     /** A room's last listen was full: the next round reads on. */
     more: () => readAgain.size > 0,

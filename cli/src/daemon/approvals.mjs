@@ -23,8 +23,10 @@ export function createApprovals({ terminal, targets, send, now = () => Date.now(
   const cards = new Map(), pending = new Map(), waiting = new Map(), unknown = new Map(), locks = new Set()
   let server, timer, polling = false
   const hasWaitingHook = (pane) => Boolean(pending.get(pane)?.some((r) => !r.used))
-  // Blocked for the relay: Herdr's blocked (dialogBlocked).
-  const blocked = (target, status, screen) => dialogBlocked(status, { kind: target.cli, screen, hookWaiting: hasWaitingHook(target.pane) })
+  // Blocked for the relay: Herdr's blocked (dialogBlocked), or a /spawn not joined yet whose screen has not
+  // changed since it stalled (target.stall from seat.mjs) while Herdr does not say working.
+  const blocked = (target, status, screen) => dialogBlocked(status, { kind: target.cli, screen, hookWaiting: hasWaitingHook(target.pane) }) ||
+    (Boolean(target.stall) && status !== 'working' && target.stall.screen === screen)
   const busy = (pane) => cards.has(pane) || Boolean(pending.get(pane)?.some((r) => !r.used && now() - r.ts < 2000)) || waiting.has(pane)
   const release = (request, decision = null) => {
     if (!request) return false
@@ -302,10 +304,10 @@ export function createApprovals({ terminal, targets, send, now = () => Date.now(
   }
 }
 
-export function approvalTargets({ panes, spawns, entries, readRecord }) {
+export function approvalTargets({ panes, spawns, entries, readRecord, stallOf = () => null }) {
   if (!panes) return null
   const targets = new Map()
-  const add = (e, kind) => {
+  const add = (e, kind, stall = null) => {
     const pane = panes.find((p) => p.pane_id === e.pane)
     if (!pane || !['claude', 'codex'].includes(kind || pane.agent)) return
     const record = readRecord(e)
@@ -314,8 +316,9 @@ export function approvalTargets({ panes, spawns, entries, readRecord }) {
     if (!target) { target = { pane: e.pane, name: e.name, cli: kind || pane.agent, rooms: [], status: pane.agent_status, spawned: false }; targets.set(e.pane, target) }
     if (fromSpawn && !target.spawned) { target.rooms = [e.roomId]; target.name = e.name; target.spawned = true }
     else if (!target.spawned && !target.rooms.includes(e.roomId)) target.rooms.push(e.roomId)
+    if (stall) target.stall = stall
   }
-  for (const op of spawns) if (op.pane) add(op, op.kind)
+  for (const op of spawns) if (op.pane) add(op, op.kind, stallOf(op))
   for (const entry of entries) add(entry)
   return [...targets.values()]
 }

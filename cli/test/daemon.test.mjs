@@ -115,7 +115,9 @@ const { modelText, argsFor, withModel, modelOf, stoppedOnNetworkError, runsCli }
 const { createHerdr, findOwnPane, shellIdle, herdrError, SHELL_READY_SECONDS, tail } = await import('../src/adapters/terminal/herdr.mjs')
 const { createPending } = await import('../src/actions/attach.mjs')
 const { takeLock } = await import('../src/daemon/pid.mjs')
-const { createSeat, HANDOFF_MS, OWNED_ROOMS_MS, NUDGE_MAX, SPAWN_JOIN_MS, KEY_GAP_MS, DETECT_EVERY_MS, DETECT_REPORT_MS } = await import('../src/daemon/seat.mjs')
+const { createSeat, HANDOFF_MS, OWNED_ROOMS_MS, NUDGE_MAX, SPAWN_JOIN_MS, SPAWN_STALL_MS, STALL_CARD_MS, KEY_GAP_MS, DETECT_EVERY_MS, DETECT_REPORT_MS } = await import('../src/daemon/seat.mjs')
+const { createApprovals } = await import('../src/daemon/approvals.mjs')
+const { screenTail } = await import('../src/daemon/approval-menu.mjs')
 const { DEFAULT_KEYS, createKeys, keyTable, findKey, keysFor } = await import('../src/daemon/keys.mjs')
 const { DEFAULT_SPAWN, SPAWN_REFRESH_MS, SPAWN_RETRY_MS, createSpawnOptions } = await import('../src/daemon/spawn-config.mjs')
 const { spawnPermission, carryPermissions, permissionNotice, SETTING_UNREADABLE } = await import('../src/daemon/spawn-permission.mjs')
@@ -844,7 +846,7 @@ function fakeMachine(seatOpts = {}) {
     await seat.tick({ entries, panes, unregister: (e) => unregistered.push(e.name) })
     await seat.settle()
   }
-  return { seat, terminal, api, said, sent, left, closed, typed, tabs, ask, tick, unregistered, ran, panes, events, advance: (ms) => { clock += ms }, memberList, roomData, joins, screen, marks, listed, room, inbox, pressed, fg, slept, cloud, fetched }
+  return { seat, terminal, api, said, sent, left, closed, typed, tabs, ask, tick, unregistered, ran, panes, events, advance: (ms) => { clock += ms }, now: () => clock, memberList, roomData, joins, screen, marks, listed, room, inbox, pressed, fg, slept, cloud, fetched }
 }
 
 test('a removed computer stops retrying its topic and resumes after explicit rejoin', async () => {
@@ -2708,6 +2710,88 @@ test('spawn relay suppresses early blocked screen and a card suppresses the late
   shown = false
   m.advance(30000); await m.tick()
   assert.equal(m.said.filter((text) => text.includes('has not joined yet')).length, 1)
+})
+
+/** A /spawn qa that started working and has not joined, with the approval relay watching the seat's targets. */
+async function relayedSpawn(kind = 'claude') {
+  let approvals = null
+  const m = fakeMachine({ isDir: () => true, approvalsRunning: () => true, approvalBusy: (p) => approvals.busy(p), approvalShown: (p) => approvals.shown(p) })
+  const pane = { ...QA_PANE, agent: kind }
+  m.panes.push(pane)
+  const frames = []
+  approvals = createApprovals({ terminal: m.terminal, targets: async () => m.seat.approvalTargets(m.panes), send: (_roomId, frame) => frames.push(frame), now: m.now, sleep: async () => {} })
+  m.ask(`@daemon.box@kai /spawn ${kind} qa /work go`, 'api@kai', 'agent')
+  await m.tick()
+  assert.equal(m.seat.ops[0].stage, 'joining')
+  const round = async (ms = 5000) => { m.advance(ms); await m.tick(); await approvals.tick() }
+  return { m, pane, approvals, frames, round, notices: () => m.said.filter((t) => t.includes('has not joined yet')) }
+}
+
+const stillScreens = [
+  ['no menu', 'Loading configuration\n\nOne moment', null],
+  ['a menu', "Hooks need review\n\n1 hook is new or changed.\n\n› 1. Review hooks\n  2. Trust all and continue\n  3. Continue without trusting (hooks won't run)\n\nenter confirm · esc skip",
+    ['Review hooks', 'Trust all and continue', "Continue without trusting (hooks won't run)"]],
+]
+for (const [label, screen, options] of stillScreens) {
+  test(`/spawn stopped before joining with ${label} on a still screen gets a card at 30 s and no notice; a change closes it`, async () => {
+    const { m, pane, approvals, frames, round, notices } = await relayedSpawn('codex')
+    pane.agent_status = 'idle'
+    m.screen.text = screen
+    await round() // the first idle read: the still screen's clock starts
+    for (let i = 0; i < 5; i++) await round()
+    assert.equal(approvals.cards.size, 0, 'not before 30 s')
+    await round()
+    await round(3000)
+    const card = approvals.cards.get('w:p9')
+    assert.ok(card, 'a card once the screen stood still for 30 s')
+    assert.equal(frames.filter((f) => f.type === 'approval_open').length, 1)
+    if (options) assert.deepEqual(card.menu.options.map((o) => o.label), options)
+    else { assert.equal(card.menu, null); assert.equal(card.screen, screenTail(screen)) }
+    for (let i = 0; i < 6; i++) await round()
+    assert.deepEqual(notices(), [], 'no screen in the room while the card is shown')
+    assert.equal(m.sent.some((message) => message.screen), false)
+    m.screen.text = 'Working on it'
+    await round(1000)
+    assert.equal(approvals.cards.size, 0)
+    assert.equal(frames.at(-1).type, 'approval_close')
+    assert.deepEqual(m.pressed, [])
+  })
+}
+
+test('/spawn stopped before joining: a refused card leaves the notice, which waits for the card first', async () => {
+  const { m, pane, approvals, round, notices } = await relayedSpawn()
+  pane.agent_status = 'idle'
+  m.screen.text = 'Loading configuration'
+  for (let i = 0; i < 7; i++) await round()
+  await round(3000)
+  const card = approvals.cards.get('w:p9')
+  assert.ok(card)
+  assert.deepEqual(notices(), [])
+  approvals.refused({ id: card.id, error: 'not_allowed' })
+  await round()
+  assert.deepEqual(notices(), [], 'the notice waits STALL_CARD_MS for a card')
+  for (let i = 0; i < 2; i++) await round()
+  assert.equal(notices().length, 1)
+  assert.ok(STALL_CARD_MS > 0 && SPAWN_STALL_MS === 30_000)
+})
+
+test('/spawn that works before 30 s or joins gets no stall card', async () => {
+  const { m, pane, approvals, frames, round } = await relayedSpawn()
+  pane.agent_status = 'idle'
+  m.screen.text = 'Thinking'
+  await round(0)
+  for (let i = 0; i < 5; i++) await round()
+  pane.agent_status = 'working'
+  for (let i = 0; i < 6; i++) await round()
+  assert.equal(frames.length, 0)
+  pane.agent_status = 'idle'
+  for (let i = 0; i < 5; i++) await round()
+  register({ roomId: ROOM, name: 'qa@kai', role: 'qa', pane: 'w:p9' })
+  try {
+    for (let i = 0; i < 4; i++) await round()
+    assert.equal(approvals.cards.size, 0, 'joined: the stall no longer counts')
+    assert.equal(frames.length, 0)
+  } finally { unregister({ roomId: ROOM, name: 'qa@kai' }) }
 })
 
 test('custom spawn arguments report when requested permission was not applied', async () => {
