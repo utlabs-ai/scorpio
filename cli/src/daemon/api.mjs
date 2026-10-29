@@ -74,7 +74,7 @@ export function createApi({ server = serverUrl, token = readToken, fetchImpl = (
       return request('GET', room(roomId, `/messages?${q}`), { role })
     },
     members: (roomId, role) => request('GET', room(roomId, '/members'), { role }),
-    send: (roomId, role, text, replyTo) => request('POST', room(roomId, '/send'), { role, body: { text, nonce: randomUUID(), ...(replyTo ? { replyTo } : {}) } }),
+    send: (roomId, role, text, replyTo, screen) => request('POST', room(roomId, '/send'), { role, body: { text, nonce: randomUUID(), ...(replyTo ? { replyTo } : {}), ...(screen ? { screen } : {}) } }),
     mark: (roomId, role, upTo) => request('POST', room(roomId, '/mark'), { role, body: { upTo } }),
     leave: (roomId, role) => request('POST', room(roomId, '/leave'), { role, body: {} }),
     /** A seat's handoff in the cloud, read as this computer's seat for a takeover; budgetMs bounds the tries. */

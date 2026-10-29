@@ -4,14 +4,13 @@ import { personName } from './person-name.mjs'
 // the agent's terminal and `scorpio wait` prints it, so it is one renderer.
 // It is a stable interface that agents rely on: the skill teaches agents to read exactly this shape.
 //
-// What people wrote (message text, description, role cards) is passed on byte for byte between two frame
-// lines, so the agent can tell quoted words from the words around them. The frame is not a security
-// boundary; anybody can type one.
+// Every line of what people wrote is prefixed with │, between two frame lines. A quoted frame or
+// header stays part of the member's text.
 
 export const FRAME = '+' + '-'.repeat(38) + '+'
 export const REMIND_EVERY = 20
 
-const boxed = (text) => [FRAME, String(text ?? '').replace(/\n$/, ''), FRAME].join('\n')
+const boxed = (text) => [FRAME, ...String(text ?? '').replace(/\n$/, '').split('\n').map((line) => line ? `│ ${line}` : '│'), FRAME].join('\n')
 
 /** Can this go into a terminal as typed text? Newline and tab only; every other control character is a key press. */
 export function typeable(text) {
@@ -109,6 +108,10 @@ function renderMessage(m, { roomId, terminal, role, name, items, members }) {
   if (m.broadcast) head += ', broadcast'
   if (m.reply?.seq) head += `, reply to #${m.reply.seq}`
   const out = [`${head}:`, quoted(m.text, terminal, 'text', `scorpio message topicId=${roomId}${roleArg(role)} seq=${m.seq}`)]
+  if (m.screen) {
+    out.push('Screen (only your account sees it):', quoted(m.screen.text, terminal, 'screen', `scorpio message topicId=${roomId}${roleArg(role)} seq=${m.seq}`))
+    if (m.screen.hidden > 0) out.push("Strings that look like keys (sk-, ghp_, AKIA, Bearer …) are replaced with [hidden]. The full screen is in the agent's pane on its computer.")
+  }
   const richLine = (line, what, fetch) => terminal && !typeable(line)
     ? `(The ${what} contains control characters that cannot be typed into a terminal, so it is not pasted here. Read it with: ${fetch})`
     : line

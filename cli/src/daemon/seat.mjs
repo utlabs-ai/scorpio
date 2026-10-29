@@ -17,6 +17,7 @@ import {
   parseIdle, idleNotice, minutesText, nudgePrompt, spawnDirArg, parseRead, parseKeys, parseText, targetOf,
 } from './commands.mjs'
 import { approvalTargets } from './approvals.mjs'
+import { hideKeys, fence, screenLine } from './screens.mjs'
 import { createKeys, findKey, keyList, keysFor } from './keys.mjs'
 import { createSpawnOptions, spawnHelpOptions } from './spawn-config.mjs'
 import { PERMS, SETTING_UNREADABLE, permissionLevel, permissionNotice, spawnPermission } from './spawn-permission.mjs'
@@ -63,7 +64,6 @@ const STILL_STARTING = new Set(['timeout', 'agent_not_ready'])
 export const KEY_GAP_MS = 200
 
 const shortOf = (name) => String(name).split('@')[0]
-const fence = (text) => `\`\`\`\n${text}\n\`\`\``
 
 /**
  * This account's person left the topic (status left) and nobody of the account is still in it but daemon seats.
@@ -187,9 +187,9 @@ export function createSeat({
   const members = async (roomId) => (await api.members(roomId, role)).members || []
   const inRoom = (list, name) => list.some((m) => m.name === name && m.status !== 'left')
   /** One line back to the room, @ the one who sent the command. The send's answer ({seq}), or null. */
-  async function say(roomId, text, replyTo, to = account) {
+  async function say(roomId, text, replyTo, to = account, screen) {
     try {
-      const sent = await api.send(roomId, role, `@${to || account} ${text}`, replyTo)
+      const sent = await api.send(roomId, role, `@${to || account} ${text}`, replyTo, screen)
       if (replyTo) log(`command answer to ${to || account} in ${roomId} for #${replyTo}: #${sent?.seq || 'unknown'}`)
       return sent
     } catch (e) {
@@ -197,7 +197,9 @@ export function createSeat({
       return null
     }
   }
-  const sayIf = (roomId, text, replyTo, to) => (text ? say(roomId, text, replyTo, to) : null)
+  const sayIf = (roomId, text, replyTo, to, screen) => (text ? say(roomId, text, replyTo, to, screen) : null)
+  const sayScreen = (roomId, text, short, screen, replyTo, to, waiting = true) =>
+    say(roomId, `${text ? text + '\n' : ''}${screenLine(short, waiting)}`, replyTo, to, hideKeys(screen))
   /** Leave for an agent: whether it is out. */
   async function leaveFor(roomId, name) {
     try {
@@ -384,7 +386,7 @@ export function createSeat({
   async function reportStall(op, screen, seconds) {
     if (approvalShown(op.pane) || op.stallReported || !ops.includes(op) || rosterEntries().some((e) => e.roomId === op.roomId && e.name === op.name)) return
     op.stallReported = true; save()
-    await say(op.roomId, `${shortOf(op.name)} has not joined yet. Its screen has not changed for ${seconds}s; the daemon does not answer it. Screen:\n${fence(tail(screen))}`, op.seq, op.to)
+    await sayScreen(op.roomId, `${shortOf(op.name)} has not joined yet. Its screen has not changed for ${seconds}s; the daemon does not answer it.`, shortOf(op.name), tail(screen), op.seq, op.to)
   }
 
   /**
@@ -504,7 +506,6 @@ export function createSeat({
   // Each await is followed by a look at ops: when /bye took it meanwhile, nothing more is said.
   async function launch(op, spec) {
     const short = shortOf(op.name), { roomId, pane } = op
-    const screenText = async () => `Screen:\n${fence(tail(await terminal.read(pane)))}`
     // A takeover first finds its handoff: the operation is recorded already, so a second /spawn of the name
     // is answered "is starting", and the main loop goes on delivering meanwhile.
     if (op.keepCard) {
@@ -522,7 +523,7 @@ export function createSeat({
     if (shell.gone) { drop(op); await say(roomId, `${short}'s pane was closed before it started.`, op.seq, op.to); return }
     if (!shell.ok) {
       op.stage = 'failed'; save()
-      await say(roomId, `Opened a tab for ${short} (pane ${pane}), but its shell was not ready within ${SHELL_READY_SECONDS} seconds, so no CLI was started. Usually a slow shell startup on this computer (nvm, oh-my-zsh, git in the prompt). The pane is still open; /bye ${short} closes it. ${await screenText()}`, op.seq, op.to)
+      await sayScreen(roomId, `Opened a tab for ${short} (pane ${pane}), but its shell was not ready within ${SHELL_READY_SECONDS} seconds, so no CLI was started. Usually a slow shell startup on this computer (nvm, oh-my-zsh, git in the prompt). The pane is still open; /bye ${short} closes it.`, short, tail(await terminal.read(pane)), op.seq, op.to)
       return
     }
     const cliArgs = spawnArgs(spec.kind, spec)
@@ -538,7 +539,7 @@ export function createSeat({
     if (!up.ok && !up.stalled) {
       op.stage = 'failed'; save()
       const why = up.reason ? `did not start; herdr says: ${up.reason}` : 'did not start within a minute'
-      await say(roomId, `${short}'s CLI ${why}. The pane is still open; /bye ${short} closes it. ${await screenText()}`, op.seq, op.to)
+      await sayScreen(roomId, `${short}'s CLI ${why}. The pane is still open; /bye ${short} closes it.`, short, tail(await terminal.read(pane)), op.seq, op.to)
       return
     }
     op.stage = 'joining'; op.deadline = now() + SPAWN_JOIN_MS; save()
@@ -565,7 +566,7 @@ export function createSeat({
     const short = shortOf(op.name), nudges = op.nudges || 0
     if (nudges >= NUDGE_MAX) {
       op.nudgeEnded = true; save()
-      await say(op.roomId, `${short} stopped on an API connection error again after ${NUDGE_MAX} nudges to carry on; not nudging it any more. Its pane is still open (/bye ${short} closes it). Screen:\n${fence(tail(screen))}`, op.seq, op.to)
+      await sayScreen(op.roomId, `${short} stopped on an API connection error again after ${NUDGE_MAX} nudges to carry on; not nudging it any more. Its pane is still open (/bye ${short} closes it).`, short, tail(screen), op.seq, op.to)
       return
     }
     const sent = await promptPane(op.pane, nudgePrompt({ file: spawnPath(op.roomId, op.name) }))
@@ -617,9 +618,8 @@ export function createSeat({
       return 'started'
     }
     if (sent === 'blocked') {
-      await say(roomId, approvalShown(agent.pane)
-        ? `✗ ${role} · waiting for its owner to answer an approval card in Scorpio; the handoff instructions were not typed in, nothing done.`
-        : `✗ ${role} · a dialog opened just now; the handoff instructions were not typed in, nothing done. Screen:\n${fence(tail(await terminal.read(agent.pane), 8))}`, said.seq)
+      if (approvalShown(agent.pane)) await say(roomId, `✗ ${role} · waiting for its owner to answer an approval card in Scorpio; the handoff instructions were not typed in, nothing done.`, said.seq)
+      else await sayScreen(roomId, `✗ ${role} · a dialog opened just now; the handoff instructions were not typed in, nothing done.`, role, tail(await terminal.read(agent.pane), 8), said.seq)
       return 'a dialog is open'
     }
     ops.push({ type: 'handoff', idle: true, roomId, seq: said.seq, to: account, targets: [{ ...agent, file }], done: [], deadline: now() + HANDOFF_MS,
@@ -660,7 +660,7 @@ export function createSeat({
     if (runsCli(info, kind)) return null
     const fg = info?.foreground_processes?.[0]
     const what = fg ? `${fg.name || String(fg.argv?.[0] || '').split('/').pop()} is` : 'herdr cannot say what is'
-    return `✗ ${shortOf(agent.name)} · ${CLIS[kind].label} is no longer in front of its pane (${what}), so nothing was ${done}. Screen:\n${fence(tail(await terminal.read(agent.pane)))}`
+    return { text: `✗ ${shortOf(agent.name)} · ${CLIS[kind].label} is no longer in front of its pane (${what}), so nothing was ${done}.`, screen: tail(await terminal.read(agent.pane)) }
   }
   // /keys and /text to one agent run one after another, in the order they came: each queues before its first await.
   const lanes = new Map()
@@ -677,12 +677,11 @@ export function createSeat({
     if (!op || op.stage === 'starting') return
     op.stage = 'joining'; op.deadline = now() + SPAWN_JOIN_MS; op.touched = true; save()
   }
-  const seconds = (ms) => `${Number((ms / 1000).toFixed(1))} s`
   /** After /keys or /text: settleMs, then the screen, so whoever sent it sees what it did. */
   async function settled(roomId, message, aud, agent, did) {
     const { settleMs } = await keyTableNow()
     await sleep(settleMs)
-    await sayIf(roomId, aud.text(`${shortOf(agent.name)} · ${did}. Screen ${seconds(settleMs)} later:\n${fence(tail(await terminal.read(agent.pane), 20))}`), message.seq, senderOf(message).from)
+    await sayScreen(roomId, aud.text(`${shortOf(agent.name)} · ${did}.`), shortOf(agent.name), tail(await terminal.read(agent.pane), 20), message.seq, senderOf(message).from, false)
   }
 
   // ---------------------------------------------------------------- commands
@@ -695,7 +694,8 @@ export function createSeat({
       const t = await startedPane(roomId, arg.name, 'read', ctx, aud)
       if (!t.agent) return sayIf(roomId, aud.text(t.reply), message.seq, senderOf(message).from)
       const screen = tail(await terminal.read(t.agent.pane, Math.max(200, arg.lines * 3)), arg.lines)
-      await sayIf(roomId, aud.text(screen ? `${shortOf(arg.name)} · last ${arg.lines} lines:\n${fence(screen)}` : `${shortOf(arg.name)} · its screen is empty`), message.seq, senderOf(message).from)
+      if (screen) await sayScreen(roomId, aud.text(`${shortOf(arg.name)} · last ${arg.lines} lines:`), shortOf(arg.name), screen, message.seq, senderOf(message).from, false)
+      else await sayIf(roomId, aud.text(`${shortOf(arg.name)} · its screen is empty`), message.seq, senderOf(message).from)
     },
     /** /keys <name> <key>…: keys from the key table, KEY_GAP_MS apart, only while its CLI is in front. */
     keys: ({ roomId, message, command, ctx }) => inLane(`${roomId}|${targetOf(command.rest, account)}`, async () => {
@@ -706,7 +706,7 @@ export function createSeat({
       const t = await startedPane(roomId, arg.name, 'keys', ctx, aud)
       if (!t.agent) return sayIf(roomId, aud.text(t.reply), message.seq, senderOf(message).from)
       const refused = await notInFront(t, 'pressed')
-      if (refused) return sayIf(roomId, aud.text(refused), message.seq, senderOf(message).from)
+      if (refused) return sayScreen(roomId, aud.text(refused.text), shortOf(t.agent.name), refused.screen, message.seq, senderOf(message).from, false)
       for (const [i, key] of arg.keys.entries()) {
         if (i) await sleep(KEY_GAP_MS)
         await terminal.sendKeys(t.agent.pane, key[adapter])
@@ -722,7 +722,7 @@ export function createSeat({
       const t = await startedPane(roomId, arg.name, 'text', ctx, aud)
       if (!t.agent) return sayIf(roomId, aud.text(t.reply), message.seq, senderOf(message).from)
       const refused = await notInFront(t, 'typed')
-      if (refused) return sayIf(roomId, aud.text(refused), message.seq, senderOf(message).from)
+      if (refused) return sayScreen(roomId, aud.text(refused.text), shortOf(t.agent.name), refused.screen, message.seq, senderOf(message).from, false)
       await terminal.sendText(t.agent.pane, arg.text)
       touched(roomId, arg.name)
       await settled(roomId, message, aud, t.agent, 'typed the text, Enter not pressed')
@@ -884,9 +884,10 @@ export function createSeat({
         if (!agent.alive || agent.spawning) { lines.push(await byeOne(roomId, agent, ctx.panes, unregister)); continue }
         const { sent, file } = await askHandoff({ roomId, agent, panes: ctx.panes, by: senderOf(message).from, seq: message.seq, targets: t.all ? 'all' : t.names.map(shortOf).join(' ') })
         if (sent === 'gone') lines.push((await byeOne(roomId, { ...agent, alive: false }, ctx.panes, unregister)).replace('its process was already gone', 'its CLI had exited'))
-        else if (sent === 'blocked') lines.push(approvalShown(agent.pane)
-          ? `✗ ${short} · waiting for its owner to answer an approval card in Scorpio; the handoff instructions were not typed in, nothing done.`
-          : `✗ ${short} · stuck on a dialog; the handoff instructions were not typed in, nothing done. Screen:\n${fence(tail(await terminal.read(agent.pane), 8))}`)
+        else if (sent === 'blocked') {
+          if (approvalShown(agent.pane)) lines.push(`✗ ${short} · waiting for its owner to answer an approval card in Scorpio; the handoff instructions were not typed in, nothing done.`)
+          else await sayScreen(roomId, aud.text(`✗ ${short} · stuck on a dialog; the handoff instructions were not typed in, nothing done.`), short, tail(await terminal.read(agent.pane), 8), message.seq, senderOf(message).from)
+        }
         else waiting.push({ ...agent, file })
       }
       if (waiting.length) {
@@ -938,7 +939,7 @@ export function createSeat({
         if (op.stage === 'joining' && now() >= op.deadline) {
           op.stage = 'late'; save()
           const short = shortOf(op.name)
-          await say(op.roomId, `${short} has not joined after 10 minutes; its pane is still open (/bye ${short} closes it). Screen:\n${fence(tail(await terminal.read(op.pane)))}`, op.seq, op.to)
+          await sayScreen(op.roomId, `${short} has not joined after 10 minutes; its pane is still open (/bye ${short} closes it).`, short, tail(await terminal.read(op.pane)), op.seq, op.to)
         }
       } else if (op.type === 'handoff') {
         const elapsed = Math.max(0, now() - (op.checkedAt ?? op.deadline - HANDOFF_MS))
@@ -953,11 +954,12 @@ export function createSeat({
         const open = op.targets.filter((a) => !a.result)
         if (open.length && now() <= op.deadline) continue
         for (const agent of open) {
-          agent.result = `⏳ ${shortOf(agent.name)} · did not leave within 2 hours; pane left open. Screen:\n${fence(tail(await terminal.read(agent.pane), 8))}`
+          await sayScreen(op.roomId, `⏳ ${shortOf(agent.name)} · did not leave within 2 hours; pane left open.`, shortOf(agent.name), tail(await terminal.read(agent.pane), 8), op.seq, op.to)
+          agent.result = null
         }
         ops.splice(ops.indexOf(op), 1)
         if (op.idle && !open.length) continue // it left: its own handoff messages said the rest
-        await say(op.roomId, op.aud.text([...op.done, ...op.targets.map((a) => a.result)]), op.seq, op.to)
+        await sayIf(op.roomId, op.aud.text([...op.done, ...op.targets.map((a) => a.result)]), op.seq, op.to)
       }
     }
   }

@@ -151,7 +151,7 @@ test('forwarding golden puts buttons and card after the body with optional role 
     const text = renderDelivery({ room: { roomId: topicId }, messages: [message], name: 'api@kai', role })
     assert.equal(text, [
       `Scorpio topic "${topicId}" (${topicId}): 1 new message for you.`, '',
-      '#7 from api@kai (agent):', FRAME, '@kai Messages rose.', FRAME,
+      '#7 from api@kai (agent):', FRAME, '│ @kai Messages rose.', FRAME,
       'Buttons: [1 照这个做 · kai, mei] [2 有要改的]',
       `Card: Messages: 120 to 610. (to read it: scorpio card topicId=${topicId}${roleArg} seq=7)`, '',
       `Mark them read first: scorpio mark topicId=${topicId}${roleArg} upTo=7`,

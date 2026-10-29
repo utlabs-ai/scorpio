@@ -10,6 +10,7 @@ import { execFile, execFileSync, spawnSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
 import { promisify } from 'node:util'
 import { testEnv } from './env.mjs'
+import { hideKeys } from '../src/daemon/screens.mjs'
 
 const home = fs.mkdtempSync(path.join(os.tmpdir(), 'scorpio-test-'))
 process.env.SCORPIO_HOME = home
@@ -111,7 +112,7 @@ const { createHealth } = await import('../src/daemon/health.mjs')
 const { clearRemoved, wasRemoved } = await import('../src/daemon/removed.mjs')
 const { register, unregister, markLeft, entries, leftEntries, prune } = await import('../src/daemon/registry.mjs')
 const { modelText, argsFor, withModel, modelOf, stoppedOnNetworkError, runsCli } = await import('../src/adapters/cli/index.mjs')
-const { createHerdr, findOwnPane, shellIdle, herdrError, SHELL_READY_SECONDS } = await import('../src/adapters/terminal/herdr.mjs')
+const { createHerdr, findOwnPane, shellIdle, herdrError, SHELL_READY_SECONDS, tail } = await import('../src/adapters/terminal/herdr.mjs')
 const { createPending } = await import('../src/actions/attach.mjs')
 const { takeLock } = await import('../src/daemon/pid.mjs')
 const { createSeat, HANDOFF_MS, OWNED_ROOMS_MS, NUDGE_MAX, SPAWN_JOIN_MS, KEY_GAP_MS, DETECT_EVERY_MS, DETECT_REPORT_MS } = await import('../src/daemon/seat.mjs')
@@ -161,7 +162,7 @@ test('human nicknames appear consistently without changing addresses or agent na
 test('wait shape: header, frames, mark line, again', () => {
   const text = renderDelivery({ room, messages: [msg(701, { broadcast: true }), msg(702, { from: 'lead@kai', fromKind: 'agent', reply: { seq: 699 } })], name: 'api@kai', again: `scorpio wait topicId=${ROOM}` })
   assert.match(text, /^Scorpio topic "Login rework" \(AbCdEf0123456789_-ghIJ\): 2 new messages for you\.\n\n#701 from kai \(human\), broadcast:\n/)
-  assert.ok(text.includes(`${FRAME}\nhello 701\n${FRAME}\nThis is a broadcast`))
+  assert.ok(text.includes(`${FRAME}\n│ hello 701\n${FRAME}\nThis is a broadcast`))
   assert.ok(text.includes('#702 from lead@kai (agent), reply to #699:'))
   assert.ok(text.endsWith(`Mark them read first: scorpio mark topicId=${ROOM} upTo=702\nThen do the work (if any), and run wait again: scorpio wait topicId=${ROOM}`))
 })
@@ -279,7 +280,7 @@ test('attachments: one line per file under the frame, with its name and size; a 
   ]
   const text = renderDelivery({ room, messages: [msg(7, { files })], name: 'api@kai' })
   assert.ok(text.includes([
-    `hello 7`, FRAME,
+    `│ hello 7`, FRAME,
     `Attached: a.png (167 KB) · scorpio file topicId=${ROOM} id=f1`,
     `Attached: Q3 report.pdf (2.3 MB) · scorpio file topicId=${ROOM} id=f2`,
     `Attached: notes.txt (12 B), deleted`,
@@ -785,7 +786,7 @@ test('one daemon per computer', () => {
 // ------------------------------------------------------------------ the seat, with a fake server and terminal
 
 function fakeMachine(seatOpts = {}) {
-  const said = [], left = [], closed = [], typed = [], joins = [], marks = [], listed = [], events = [], fetched = [], cloud = {}
+  const said = [], sent = [], left = [], closed = [], typed = [], joins = [], marks = [], listed = [], events = [], fetched = [], cloud = {}
   const room = { total: 0, cursor: 0 }
   const memberList = [{ name: 'kai', kind: 'human', status: 'active' }, { name: 'daemon.box@kai', kind: 'host', status: 'active' }, { name: 'api@kai', kind: 'agent', status: 'active' }]
   const inbox = []
@@ -798,7 +799,14 @@ function fakeMachine(seatOpts = {}) {
     mark: async (roomId, role, upTo) => { marks.push(upTo); room.cursor = Math.max(room.cursor, upTo); return {} },
     members: async () => ({ members: memberList }),
     spawnPerm: async () => ({ perm: 'ask' }),
-    send: async (roomId, role, text) => { said.push(text); return { seq: 100 + said.length } },
+    send: async (roomId, role, text, replyTo, screen) => {
+      if (screen) {
+        assert.doesNotMatch(text, /Screen:|```/)
+        assert.deepEqual(hideKeys(screen.text), { text: screen.text, hidden: 0 })
+        assert.match(text, /\n\w[\w-]* · its screen is with its owner, as a card only they can see(?:; waiting for them)?\.$/)
+      }
+      said.push(text); sent.push({ roomId, role, text, replyTo, ...(screen ? { screen } : {}) }); return { seq: 100 + said.length }
+    },
     leave: async (roomId, role) => { left.push(role); events.push(`left:${role}`); const m = memberList.find((x) => x.name === `${role}@kai`); if (m) m.status = 'left'; return {} },
     // The cloud's handoffs: name → {body, updatedAt, computer} or an error code to throw; none: handoff_not_found.
     handoff: async (roomId, role, name, opts) => {
@@ -836,7 +844,7 @@ function fakeMachine(seatOpts = {}) {
     await seat.tick({ entries, panes, unregister: (e) => unregistered.push(e.name) })
     await seat.settle()
   }
-  return { seat, terminal, api, said, left, closed, typed, tabs, ask, tick, unregistered, ran, panes, events, advance: (ms) => { clock += ms }, memberList, roomData, joins, screen, marks, listed, room, inbox, pressed, fg, slept, cloud, fetched }
+  return { seat, terminal, api, said, sent, left, closed, typed, tabs, ask, tick, unregistered, ran, panes, events, advance: (ms) => { clock += ms }, memberList, roomData, joins, screen, marks, listed, room, inbox, pressed, fg, slept, cloud, fetched }
 }
 
 test('a removed computer stops retrying its topic and resumes after explicit rejoin', async () => {
@@ -978,6 +986,7 @@ test('seat: /handoff keeps watching past ten minutes, closes on leave, or report
   await m.tick()
   assert.deepEqual(m.closed, [])
   assert.match(m.said.at(-1), /did not leave within 2 hours/)
+  assert.deepEqual(m.sent.at(-1).screen, hideKeys(tail(m.screen.text, 8)))
 })
 
 test('seat: /bye closes a pane left behind after its agent left the room', async () => {
@@ -1071,6 +1080,7 @@ test('seat: /spawn an unknown start failure keeps an error with its code and no 
   for (let i = 0; i < 20 && !m.said.some((s) => s.includes('did not start; herdr says: bad_kind')); i++) await new Promise((r) => setImmediate(r))
   assert.ok(m.said.some((s) => s.includes('did not start; herdr says: bad_kind')), m.said.join('\n'))
   assert.equal(m.said.some((s) => s.includes('Started qa')), false)
+  assert.deepEqual(m.sent.at(-1).screen, hideKeys(tail(m.screen.text)))
   assert.deepEqual(errors, ['agent start qa (try 1): herdr agent start exit 1 (bad_kind)'])
   assert.equal([...info, ...errors].some((line) => line.includes(prompt)), false)
 })
@@ -1616,7 +1626,8 @@ test('seat: a /spawn-ed agent stopped on a network API error before joining is t
   m.advance(60_000); await m.tick()
   assert.equal(nudges().length, NUDGE_MAX)
   assert.equal(m.said.filter((t) => t.includes('not nudging it any more')).length, 1)
-  assert.match(m.said.find((t) => t.includes('not nudging it any more')), /^@kai qa stopped on an API connection error again after 5 nudges to carry on; not nudging it any more\. Its pane is still open \(\/bye qa closes it\)\. Screen:\n```\n/)
+  assert.match(m.said.find((t) => t.includes('not nudging it any more')), /^@kai qa stopped on an API connection error again after 5 nudges to carry on; not nudging it any more\. Its pane is still open \(\/bye qa closes it\)\.\nqa · its screen is with its owner, as a card only they can see; waiting for them\.$/)
+  assert.deepEqual(m.sent.find((message) => message.text.includes('not nudging it any more')).screen, hideKeys(tail(m.screen.text)))
   // Joined after all: no longer watched.
   m.memberList.push({ name: 'qa@kai', kind: 'agent', status: 'active' })
   await m.tick()
@@ -2025,14 +2036,16 @@ test('/spawn: joining screen is sampled every 5s, resets on change, and reports 
   assert.equal(notices().length, 0, 'raw text change restarts the clock')
   m.advance(5000); await m.tick()
   assert.equal(notices().length, 1)
-  assert.match(notices()[0], /^@api@kai qa has not joined yet\. Its screen has not changed for 30s; the daemon does not answer it\. Screen:/)
+  assert.deepEqual(m.sent.at(-1).screen, hideKeys(tail(m.screen.text)))
+  assert.match(notices()[0], /^@api@kai qa has not joined yet\. Its screen has not changed for 30s; the daemon does not answer it\.\nqa · its screen is with its owner, as a card only they can see; waiting for them\.$/)
   assert.doesNotMatch(notices()[0], /\/(read|keys|text|bye)/)
   m.screen.text = 'Another question'
   m.advance(5000); await m.tick()
   m.advance(30000); await m.tick()
   assert.equal(notices().length, 1, 'only once per spawn, even after screen changes')
   m.advance(SPAWN_JOIN_MS); await m.tick()
-  assert.match(m.said.at(-1), /^@api@kai qa has not joined after 10 minutes; its pane is still open \(\/bye qa closes it\)\. Screen:/)
+  assert.match(m.said.at(-1), /^@api@kai qa has not joined after 10 minutes; its pane is still open \(\/bye qa closes it\)\.\nqa · its screen is with its owner, as a card only they can see; waiting for them\.$/)
+  assert.deepEqual(m.sent.at(-1).screen, hideKeys(tail(m.screen.text)))
   m.memberList.push({ name: 'qa@kai', kind: 'agent', status: 'active' })
   await m.tick()
   assert.equal(m.seat.ops.length, 0)
@@ -2046,20 +2059,20 @@ test('/spawn: startup trust unrecognized by Herdr reports after 30 seconds witho
   m.ask('@daemon.box@kai /spawn claude qa /work go')
   await m.tick()
   for (let i = 0; i < 20 && !m.said.some((t) => t.includes('has not joined yet')); i += 1) await new Promise((r) => setImmediate(r))
-  assert.match(m.said.at(-1), /screen has not changed for 30s; the daemon does not answer it\. Screen:/)
+  assert.match(m.said.at(-1), /screen has not changed for 30s; the daemon does not answer it\.\nqa · its screen is with its owner, as a card only they can see; waiting for them\.$/)
   assert.equal(m.seat.ops[0].stage, 'joining')
   assert.deepEqual(m.pressed, [])
 })
 
 test('/spawn: update prompt and Codex blocked dialog use the same early notice', async () => {
   const { m } = await spawnedAtDialog({}, { kind: 'codex' })
-  assert.match(m.said.at(-1), /screen has not changed for 0s; the daemon does not answer it\. Screen:/)
+  assert.match(m.said.at(-1), /screen has not changed for 0s; the daemon does not answer it\.\nqa · its screen is with its owner, as a card only they can see; waiting for them\.$/)
   const u = fakeMachine({ isDir: () => true })
   u.panes.push({ ...QA_PANE, agent_status: 'idle' })
   u.screen.text = 'Update available! Run: claude update\n❯ Update now\n  Skip until next version'
   u.ask('@daemon.box@kai /spawn claude qa /work go')
   await u.tick()
-  assert.match(u.said.at(-1), /screen has not changed for 0s; the daemon does not answer it\. Screen:/)
+  assert.match(u.said.at(-1), /screen has not changed for 0s; the daemon does not answer it\.\nqa · its screen is with its owner, as a card only they can see; waiting for them\.$/)
 })
 
 test('/spawn: working or changing screens do not stall; join ends screen sampling', async () => {
@@ -2085,8 +2098,9 @@ test('/spawn: working or changing screens do not stall; join ends screen samplin
 
 test('/spawn: a dialog while starting is not answered; it reports only the fact and screen', async () => {
   const { m } = await spawnedAtDialog()
+  assert.deepEqual(m.sent.at(-1).screen, hideKeys(tail(await m.terminal.read('w:p9'))))
   assert.deepEqual(m.pressed, [], 'no key pressed by the daemon')
-  assert.match(m.said.at(-1), /^@kai qa has not joined yet\. Its screen has not changed for 0s; the daemon does not answer it\. Screen:\n```\n[\s\S]*Yes, I trust this folder/)
+  assert.match(m.said.at(-1), /^@kai qa has not joined yet\. Its screen has not changed for 0s; the daemon does not answer it\.\nqa · its screen is with its owner, as a card only they can see; waiting for them\.$/)
   assert.doesNotMatch(m.said.at(-1), /\/(read|keys|text|bye)/)
   assert.equal(m.seat.ops[0].stage, 'joining')
 })
@@ -2104,13 +2118,14 @@ test('/keys: presses table keys in order 200 ms apart, then shows the screen aft
   await m.tick()
   assert.deepEqual(m.pressed, [['w:p9', 'down'], ['w:p9', 'enter']])
   assert.deepEqual(m.events.filter((e) => /^(keys|sleep)/.test(e)).map((e) => e.replace(/@\d+$/, '')), ['keys:down', `sleep:${KEY_GAP_MS}`, 'keys:enter', 'sleep:3000'])
-  assert.match(m.said.at(-1), /^@lead@kai qa · pressed ↓ Enter\. Screen 3 s later:\n```\n/)
+  assert.match(m.said.at(-1), /^@lead@kai qa · pressed ↓ Enter\.\nqa · its screen is with its owner, as a card only they can see\.$/)
+  assert.deepEqual(m.sent.at(-1).screen, hideKeys(tail(await m.terminal.read('w:p9'), 20)))
   assert.equal(m.seat.ops[0].stage, 'joining')
   pane.agent_status = 'working'
   m.advance(SPAWN_JOIN_MS - 1000); await m.tick()
   assert.ok(!m.said.at(-1).includes('has not joined'))
   m.advance(2000); await m.tick()
-  assert.match(m.said.at(-1), /^@kai qa has not joined after 10 minutes; its pane is still open \(\/bye qa closes it\)\. Screen:\n```/)
+  assert.match(m.said.at(-1), /^@kai qa has not joined after 10 minutes; its pane is still open \(\/bye qa closes it\)\.\nqa · its screen is with its owner, as a card only they can see; waiting for them\.$/)
   // It joins: no longer a /spawn record.
   m.memberList.push({ name: 'qa@kai', kind: 'agent', status: 'active' })
   await m.tick()
@@ -2124,8 +2139,10 @@ test('/keys and /text send nothing when the CLI is no longer in front (back at t
   m.ask('@daemon.box@kai /text qa yes')
   await m.tick()
   assert.deepEqual(m.pressed, [])
-  assert.match(m.said.at(-2), /^@kai ✗ qa · Claude Code is no longer in front of its pane \(bash is\), so nothing was pressed\. Screen:\n```/)
-  assert.match(m.said.at(-1), /^@kai ✗ qa · Claude Code is no longer in front of its pane \(bash is\), so nothing was typed\. Screen:\n```/)
+  assert.match(m.said.at(-2), /^@kai ✗ qa · Claude Code is no longer in front of its pane \(bash is\), so nothing was pressed\.\nqa · its screen is with its owner, as a card only they can see\.$/)
+  assert.match(m.said.at(-1), /^@kai ✗ qa · Claude Code is no longer in front of its pane \(bash is\), so nothing was typed\.\nqa · its screen is with its owner, as a card only they can see\.$/)
+  assert.deepEqual(m.sent.at(-2).screen, hideKeys(tail(await m.terminal.read('w:p9'))))
+  assert.deepEqual(m.sent.at(-1).screen, hideKeys(tail(await m.terminal.read('w:p9'))))
   m.fg['w:p9'] = null
   m.ask('@daemon.box@kai /keys qa enter')
   await m.tick()
@@ -2139,7 +2156,8 @@ test('/text types one line without Enter, then shows the screen; /keys to one pa
   m.ask('@daemon.box@kai /text qa go on')
   await m.tick()
   assert.deepEqual(m.pressed, [['w:p9', 'text:go on']])
-  assert.match(m.said.at(-1), /^@kai qa · typed the text, Enter not pressed\. Screen 3 s later:\n```/)
+  assert.match(m.said.at(-1), /^@kai qa · typed the text, Enter not pressed\.\nqa · its screen is with its owner, as a card only they can see\.$/)
+  assert.deepEqual(m.sent.at(-1).screen, hideKeys(tail(await m.terminal.read('w:p9'), 20)))
   m.ask('@daemon.box@kai /text qa line one\nline two')
   await m.tick()
   assert.match(m.said.at(-1), /^@kai The text must be one line.*Usage: \/text <name> <text>$/)
@@ -2159,7 +2177,7 @@ test('/keys: an unknown key lists the keys; the server\'s table decides, in its 
   m.ask('@daemon.box@kai /keys qa tab')
   await m.tick()
   assert.deepEqual(m.pressed, [['w:p9', 'tab']])
-  assert.match(m.said.at(-1), /^@kai qa · pressed Tab\. Screen 1\.5 s later:/)
+  assert.match(m.said.at(-1), /^@kai qa · pressed Tab\.\nqa · its screen is with its owner, as a card only they can see\.$/)
 })
 
 test('/read: a joined agent this daemon started, found in the registry; others are refused with the reason', async () => {
@@ -2172,10 +2190,13 @@ test('/read: a joined agent this daemon started, found in the registry; others a
   const entries = [{ roomId: ROOM, name: 'api@kai', role: 'api', pane: 'w:p1' }, { roomId: ROOM, name: 'qa@kai', role: 'qa', pane: 'w:p9' }, { roomId: ROOM, name: 'web@kai', role: 'web', pane: 'w:p7' }]
   m.ask('@daemon.box@kai /read qa')
   await m.tick(entries)
-  assert.match(m.said.at(-1), /^@kai qa · last 30 lines:\n```\nline 111\n[\s\S]*line 140\n```$/)
+  assert.match(m.said.at(-1), /^@kai qa · last 30 lines:\nqa · its screen is with its owner, as a card only they can see\.$/)
+  assert.equal(m.sent.at(-1).screen.text, Array.from({ length: 30 }, (_, i) => `line ${i + 111}`).join('\n'))
   m.ask('@daemon.box@kai /read qa 500')
   await m.tick(entries)
-  assert.match(m.said.at(-1), /^@kai qa · last 100 lines:\n```\nline 41\n/)
+  assert.match(m.said.at(-1), /^@kai qa · last 100 lines:/)
+  assert.equal(m.sent.at(-1).screen.text.split('\n').length, 100)
+  assert.ok(m.sent.at(-1).screen.text.startsWith('line 41\n'))
   m.ask('@daemon.box@kai /read api')
   await m.tick(entries)
   assert.equal(m.said.at(-1), '@kai ✗ api · not started by this daemon (/spawn), so /read does not reach its pane')
@@ -2574,7 +2595,7 @@ test('spawn guidance keeps the three approved lines and the new notice reference
   ]) assert.ok(skill.includes(line), line)
   for (const file of ['daemon.md', 'troubleshooting.md']) {
     const text = fs.readFileSync(new URL(`../skill/references/${file}`, import.meta.url), 'utf8')
-    assert.ok(text.includes('has not joined yet. Its screen has not changed for <n>s; the daemon does not answer it. Screen:'))
+    assert.ok(text.includes('has not joined yet. Its screen has not changed for <n>s; the daemon does not answer it.'))
     assert.ok(text.includes('has not joined after 10 minutes; its pane is still open'))
     assert.ok(!text.includes('has not joined after 3 minutes'))
     assert.ok(text.includes('/read') && text.includes('/keys') && text.includes('/text'))
@@ -2596,7 +2617,7 @@ test('/handoff with an approval card omits the screen; a dialog without a card k
       assert.doesNotMatch(line, /Screen:|private-approval-command/)
     } else {
       assert.match(line, /stuck on a dialog/)
-      assert.ok(line.includes(`Screen:\n\`\`\`\n${m.screen.text}\n\`\`\``))
+      assert.deepEqual(m.sent.find((message) => message.text === line).screen, hideKeys(tail(m.screen.text, 8)))
     }
   }
 })
@@ -2623,7 +2644,7 @@ test('idle handoff with a newly opened approval card omits the screen; a dialog 
       assert.doesNotMatch(line, /Screen:|private-approval-command/)
     } else {
       assert.match(line, /a dialog opened just now/)
-      assert.ok(line.includes(`Screen:\n\`\`\`\n${m.screen.text}\n\`\`\``))
+      assert.deepEqual(m.sent.find((message) => message.text === line).screen, hideKeys(tail(m.screen.text, 8)))
     }
   }
 })
@@ -2640,6 +2661,7 @@ test('approval gate pauses handoff clock and suppresses spawn stall until refuse
   assert.equal(m.seat.ops.some((op) => op.type === 'handoff'), true)
   m.advance(HANDOFF_MS + 1000); await m.tick()
   assert.match(m.said.at(-1), /did not leave within 2 hours/)
+  assert.deepEqual(m.sent.at(-1).screen, hideKeys(tail(m.screen.text, 8)))
   const n = fakeMachine({ approvalBusy: () => true, approvalShown: () => true })
   n.panes.push({ pane_id: 'w:p9', agent: 'codex', agent_status: 'blocked' })
   n.ask('@daemon.box@kai /spawn codex gated-helper work'); await n.tick()
@@ -2676,13 +2698,13 @@ test('handoff takes permission from the actual CLI argv, including a Node launch
 test('spawn relay suppresses early blocked screen and a card suppresses the later notice', async () => {
   let shown = false
   const { m } = await spawnedAtDialog({ approvalsRunning: () => true, approvalShown: () => shown })
-  assert.equal(m.said.some((text) => text.includes('Screen:')), false)
+  assert.equal(m.sent.some((message) => message.screen), false)
   assert.equal(m.said.filter((text) => text.includes('Started qa ')).length, 1)
   assert.equal(m.seat.ops[0].stage, 'joining')
   shown = true
   m.advance(3000); await m.tick()
   m.advance(30000); await m.tick()
-  assert.equal(m.said.some((text) => text.includes('Screen:')), false)
+  assert.equal(m.sent.some((message) => message.screen), false)
   shown = false
   m.advance(30000); await m.tick()
   assert.equal(m.said.filter((text) => text.includes('has not joined yet')).length, 1)
@@ -2716,7 +2738,7 @@ test('blocked spawn with relay sends Started and the custom permission notice wi
     assert.equal(started.length, 1)
     assert.ok(started[0].includes('perm=all was not applied:'))
     assert.ok(started[0].includes(CONFIG_FILE))
-    assert.equal(m.said.some((text) => text.includes('Screen:')), false)
+    assert.equal(m.sent.some((message) => message.screen), false)
     assert.equal(m.seat.ops[0].stage, 'joining')
   } finally {
     if (before) writeJson(CONFIG_FILE, before)
@@ -2750,9 +2772,9 @@ for (const [i, screen] of codexTrustScreens.entries()) {
     assert.deepEqual(m.pressed, [])
     if (relay) {
       assert.equal(m.said.filter((text) => text.includes('Started qa ')).length, 1)
-      assert.equal(m.said.some((text) => text.includes('Screen:')), false)
+      assert.equal(m.sent.some((message) => message.screen), false)
     } else {
-      assert.ok(m.said.find((text) => text.includes('Screen:'))?.includes(screen.split('\n')[0]))
+      assert.ok(m.sent.find((message) => message.screen)?.screen.text.includes(screen.split('\n')[0]))
     }
   })
 }
@@ -3019,4 +3041,63 @@ test('host carry sends permissions on opening and when only permissions change',
     assert.deepEqual(frames().at(-1), { type: 'carry', names: ['api@kai', 'manual@kai'], perm: {} })
     assert.equal(frames().length, 2)
   } finally { links.closeAll() }
+})
+
+
+test('/spawn shell not ready sends a masked screen without starting a CLI', async () => {
+  const m = fakeMachine({ isDir: () => true })
+  m.panes.push({ ...QA_PANE })
+  m.screen.text = Array.from({ length: 25 }, (_, i) => `line ${i}`).join('\n') + '\nsk-' + 'a'.repeat(16)
+  m.terminal.waitShell = async () => ({ ok: false })
+  m.terminal.startAgent = async () => assert.fail('shell not ready')
+  m.ask('@daemon.box@kai /spawn claude qa /work work')
+  await m.tick()
+  for (let i = 0; i < 20 && !m.sent.some((message) => message.screen); i++) await new Promise((r) => setImmediate(r))
+  const report = m.sent.find((message) => message.screen)
+  assert.ok(report, m.said.join('\n'))
+  assert.match(report.text, /shell was not ready/)
+  assert.deepEqual(report.screen, hideKeys(tail(m.screen.text)))
+  assert.equal(report.screen.hidden, 1)
+  assert.match(report.text, /; waiting for them\.$/)
+})
+
+test('/read empty stays unchanged, while read, keys and text mask every screen', async () => {
+  const { m } = await spawnedAtDialog()
+  m.screen.byPane = {}
+  m.fg['w:p9'] = CLAUDE_FG
+  m.screen.text = ''
+  m.ask('@daemon.box@kai /read qa')
+  await m.tick()
+  assert.equal(m.said.at(-1), '@kai qa · its screen is empty')
+  assert.equal(m.sent.at(-1).screen, undefined)
+  m.screen.text = 'screen marker\nsk-' + 'a'.repeat(16) + '\n' + 'b'.repeat(20) + '\n next prompt'
+  for (const command of ['/read qa', '/keys qa enter', '/text qa yes']) {
+    m.ask('@daemon.box@kai ' + command)
+    await m.tick()
+    assert.deepEqual(m.sent.at(-1).screen, hideKeys(m.screen.text))
+    assert.equal(m.sent.at(-1).screen.hidden, 1)
+    assert.doesNotMatch(m.said.at(-1), /screen marker|sk-|waiting for them/)
+  }
+})
+
+test('multi-agent dialogs and handoff timeouts keep each screen with its report', async () => {
+  for (const blocked of [true, false]) {
+    const m = fakeMachine()
+    m.panes.push({ ...QA_PANE, agent_status: blocked ? 'blocked' : 'idle' })
+    m.panes[0].agent_status = blocked ? 'blocked' : 'idle'
+    m.memberList.push({ name: 'qa@kai', kind: 'agent', status: 'active' })
+    const screens = { 'w:p1': 'API screen\n' + 'a\n'.repeat(20) + 'sk-' + 'a'.repeat(16), 'w:p9': 'QA screen\n' + 'b\n'.repeat(20) + 'ghp_' + 'b'.repeat(20) }
+    m.screen.byPane = screens
+    const entries = [API, { roomId: ROOM, name: 'qa@kai', role: 'qa', pane: 'w:p9' }]
+    m.ask('@daemon.box@kai /handoff api qa')
+    await m.tick(entries)
+    if (!blocked) { m.advance(HANDOFF_MS + 1000); await m.tick(entries) }
+    const reports = m.sent.filter((message) => message.screen)
+    assert.equal(reports.length, 2)
+    for (const [i, pane] of ['w:p1', 'w:p9'].entries()) {
+      assert.deepEqual(reports[i].screen, hideKeys(tail(screens[pane], 8)))
+      assert.match(reports[i].text, new RegExp(`\\n${i ? 'qa' : 'api'} · its screen`))
+      assert.match(reports[i].text, /; waiting for them\.$/)
+    }
+  }
 })
