@@ -920,6 +920,55 @@ test('dialog state comes only from Herdr, regardless of screen text', async () =
   assert.equal(dialogBlocked('blocked', 'ordinary text'), true)
 })
 
+// An idle Codex that received a message quoting the folder-trust dialog: 68 rows, the quoted lines in the
+// middle (one wrapped without its │), Codex's own input at the bottom.
+const quotedTrust = (() => {
+  const quoted = ['  │   Folder access', '  │   /tmp/work', '  │   Trust this folder? Codex can read, edit, and run files here, subject to your permission',
+    '  │   settings. Folder settings can run code automatically, even without a model request.', '  Continue', '  │   only if you trust these files.',
+    '  │ › 1. Trust and continue', '  │   2. Quit', '  │   enter continue · esc quit']
+  const top = ['• Ran scorpio mark topicId=T0 role=worker', '', '  #141 from daemon@kai (command seat), reply to #140:', '  +----------+', '  │ @worker@kai helper · last 30 lines:', '  +----------+', '  Screen (only your account sees it):', '  +----------+']
+  const rows = [...top, ...new Array(14 - top.length).fill(''), ...quoted, '  +----------+', '', '• Ran scorpio send topicId=T0 role=worker text=ok', '', '• ok', '']
+  const bottom = ['› Ask Codex to do anything', '', '  model low · 52K used', '  ? for shortcuts']
+  return [...rows, ...new Array(68 - rows.length - bottom.length).fill(''), ...bottom].join('\n')
+})()
+test('quoted fixture has qa shape', () => { assert.equal(quotedTrust.split('\n').length, 68) })
+
+test('a Herdr-blocked Codex that only quotes the dialog is not blocked; any condition missing keeps it blocked', () => {
+  const lifted = { kind: 'codex', screen: quotedTrust }
+  assert.equal(dialogBlocked('blocked', lifted), false)
+  assert.equal(dialogBlocked('blocked', { ...lifted, screen: quotedTrust.replace('Trust this folder?', 'Hooks need review') }), false)
+  assert.equal(dialogBlocked('blocked', { ...lifted, kind: 'claude' }), true, 'Claude pane: Herdr as now')
+  assert.equal(dialogBlocked('blocked', { kind: 'codex' }), true, 'no screen read')
+  assert.equal(dialogBlocked('blocked', { ...lifted, hookWaiting: true }), true, 'an approval hook waits')
+  assert.equal(dialogBlocked('blocked', { kind: 'codex', screen: '› Ask Codex to do anything' }), true, 'no dialog wording')
+  for (const line of ['Trust this folder?', '  Trust and continue', 'Hooks need review', '  2. Trust all and continue', 'x │ Trust this folder?']) {
+    assert.equal(dialogBlocked('blocked', { kind: 'codex', screen: quotedTrust.replace('• ok', line) }), true, `unquoted: ${line}`)
+  }
+  const bottom = quotedTrust.split('\n').slice(0, -4).join('\n')
+  for (const menu of [folder, hookTrust, codex, '• Previous question?\n\nHooks need review\n\n› Review hooks\n  Trust all and continue\n\nEnter to confirm · Esc to cancel']) {
+    assert.equal(dialogBlocked('blocked', { kind: 'codex', screen: `${bottom}\n${menu}` }), true, 'a menu on screen')
+  }
+  assert.equal(dialogBlocked('blocked', { kind: 'codex', screen: `${bottom}\n${codex.replace(/Would you like.*\?/, 'Run it?')}` }), true, 'a command approval below quoted text')
+  for (const status of ['idle', 'done', 'working', null]) assert.equal(dialogBlocked(status, lifted), false)
+})
+
+test('approvals: a lifted Codex pane gets no card, and an open screen card for it closes', async () => {
+  const f = fixture({ cli: 'codex', status: 'blocked', screen: quotedTrust })
+  await f.open(); f.advance(3000); await f.approvals.tick()
+  assert.equal(f.approvals.cards.size, 0)
+  assert.equal(f.frames.length, 0)
+  assert.equal(f.approvals.busy('p1'), false)
+  const g = fixture({ cli: 'codex', status: 'blocked', screen: 'Loading\n\nOne moment' })
+  const card = await g.open()
+  assert.equal(card.menu, null)
+  g.screen(quotedTrust); await g.approvals.tick()
+  assert.equal(g.approvals.cards.size, 0)
+  assert.equal(g.frames.at(-1).type, 'approval_close')
+  assert.equal(g.frames.at(-1).reason, 'answered_here')
+  const h = fixture({ cli: 'claude', status: 'blocked', screen: quotedTrust })
+  assert.ok(await h.open(), 'Claude pane: card as now')
+})
+
 // Captured menu layouts with neutral names; blank lines match terminal block spacing.
 const capturedCodex = [
   "• Previous output with several words\n  and a result\n• Another result\n  continued output\n• Running scorpio roleCard topicId=T0 role=worker\n    + Show details\n\n\nWould you like to run the following command?\n\nEnvironment: local\nReason: 允许在沙箱外更新 worker 的 Scorpio 职责卡吗？\n\n$ scorpio roleCard topicId=T0 role=worker roleCard='worker 是 api@kai\n的冒烟测试 Agent；仅按其逐步指令执行文件或无害命令操作，每步一个动作并用一行报告结果。所有 Scorpio\n命令使用提权执行，报到后等待 daemon 消息。'\n\n\n› 1. Yes, proceed (y)\n  2. Yes, and don't ask again for commands that start with `scorpio roleCard\n     'topicId=T0' 'role=worker' 'roleCard=worker 是 api@kai 的冒烟测试 Agent；\n     仅按其逐步指令执行文件或无害命令操作，每步一个动作并用一行报告结果。所有 Scorpio 命令使用提权执行，报\n     到后等待 daemon 消息。'` (p)\n  3. No, and tell Codex what to do differently (esc)\n\nPress enter to confirm or esc to cancel",

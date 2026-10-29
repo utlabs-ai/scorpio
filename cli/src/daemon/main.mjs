@@ -356,7 +356,7 @@ async function main() {
     },
   }
   let approvals, approvalsRunning = false
-  const seat = createSeat({ api, terminal, rooms, log, spawnEnv: env, idleSetting, detector: createDetector({ log }), approvalsRunning: () => approvalsRunning, approvalBusy: (pane) => approvals?.busy(pane) || false, approvalShown: (pane) => approvals?.shown(pane) || false })
+  const seat = createSeat({ api, terminal, rooms, log, spawnEnv: env, idleSetting, detector: createDetector({ log }), approvalsRunning: () => approvalsRunning, approvalBusy: (pane) => approvals?.busy(pane) || false, approvalShown: (pane) => approvals?.shown(pane) || false, approvalHookWaiting: (pane) => approvals?.hookWaiting(pane) || false })
 
   const dirty = new Set() // keys with something pushed
   const seatDirty = new Set() // rooms with something pushed to the seat
@@ -713,12 +713,20 @@ async function main() {
         }
       }
       links.sync(wanted)
+      // A Codex pane whose Herdr blocked is lifted (dialogBlocked) counts as idle for its work status and idle clock.
+      const lifted = new Set()
+      for (const e of live) {
+        const p = paneOf.get(e.pane)
+        if (p?.agent !== 'codex' || p.agent_status !== 'blocked' || lifted.has(e.pane)) continue
+        if (!dialogBlocked('blocked', { kind: 'codex', screen: await terminal.read(e.pane, 200), hookWaiting: approvals.hookWaiting(e.pane) })) lifted.add(e.pane)
+      }
+      const statusOf = (pane) => (lifted.has(pane) ? 'idle' : paneOf.get(pane)?.agent_status)
       // Work status of the agents each host connection carries, sent when it changes; for blocked, at what.
       for (const w of wanted.filter((x) => x.host)) {
         const sent = workSent.get(w.key) || new Map()
         for (const name of w.carry) {
           const e = live.find((x) => x.roomId === w.roomId && x.name === name)
-          const status = paneOf.get(e?.pane)?.agent_status
+          const status = statusOf(e?.pane)
           const work = approvals.busy(e?.pane) ? 'blocked' : WORK[status] ?? null
           const reason = await blockedReasons.of(e?.pane, status) // null unless blocked (and forgets the last one)
           const said = `${work}|${reason ?? ''}`
@@ -737,7 +745,7 @@ async function main() {
         const key = keyOf(e.roomId, e.name)
         const prev = idle.get(key) || null
         const busy = approvals.busy(e.pane) || Boolean(pushed.get(key)?.size) || awaiting.has(key) || (prev !== null && (pokedTs.get(key) || 0) >= prev.since)
-        const next = idleClock(prev, { status: paneOf.get(e.pane)?.agent_status, busy, now, keptAliveAt: keptAliveAt.get(key) })
+        const next = idleClock(prev, { status: statusOf(e.pane), busy, now, keptAliveAt: keptAliveAt.get(key) })
         if (next) idle.set(key, next); else idle.delete(key)
         if (!next || !idleMinutes || now - next.since < idleMinutes * MIN || !handsOff(e)) continue
         if (idleJobs.has(key) || now < (idleRetryAt.get(key) || 0)) continue

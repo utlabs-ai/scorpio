@@ -23,6 +23,8 @@ export function createApprovals({ terminal, targets, send, now = () => Date.now(
   const cards = new Map(), pending = new Map(), waiting = new Map(), unknown = new Map(), locks = new Set()
   let server, timer, polling = false
   const hasWaitingHook = (pane) => Boolean(pending.get(pane)?.some((r) => !r.used))
+  // Blocked for the relay: Herdr's blocked (dialogBlocked).
+  const blocked = (target, status, screen) => dialogBlocked(status, { kind: target.cli, screen, hookWaiting: hasWaitingHook(target.pane) })
   const busy = (pane) => cards.has(pane) || Boolean(pending.get(pane)?.some((r) => !r.used && now() - r.ts < 2000)) || waiting.has(pane)
   const release = (request, decision = null) => {
     if (!request) return false
@@ -65,7 +67,8 @@ export function createApprovals({ terminal, targets, send, now = () => Date.now(
     if (locks.has(target.pane)) return
     const card = cards.get(target.pane)
     const screen = await terminal.read(target.pane, 200)
-    const status = dialogBlocked(paneStatus) ? 'blocked' : paneStatus
+    // A pane whose blocked is lifted behaves as idle.
+    const status = blocked(target, paneStatus, screen) ? 'blocked' : paneStatus === 'blocked' ? 'idle' : paneStatus
     const menu = visibleMenu(screen, card?.width ?? await terminal.paneWidth?.(target.pane), target.cli)
     for (const r of [...(pending.get(target.pane) || [])]) {
       if (!r.used && now() - r.ts >= 2000 && !menu) release(r)
@@ -162,9 +165,9 @@ export function createApprovals({ terminal, targets, send, now = () => Date.now(
         if (!Number.isFinite(frame.ts) || now() - frame.ts > 120_000) { close(card, 'expired'); return }
         const screen = await terminal.read(card.pane, 200)
         const status = await terminal.paneStatus(card.pane)
-        if (!(dialogBlocked(status) || card.request?.reply) || !sameMenu(card, screen)) {
+        if (!(blocked(card, status, screen) || card.request?.reply) || !sameMenu(card, screen)) {
           const nextMenu = visibleMenu(screen, card.width, card.cli) &&
-            (dialogBlocked(status) || pending.get(card.pane)?.some((r) => !r.used && r.ts > card.ts))
+            (blocked(card, status, screen) || pending.get(card.pane)?.some((r) => !r.used && r.ts > card.ts))
           close(card, nextMenu ? 'changed' : 'answered_here', undefined, screen)
           if (nextMenu) {
             const target = (await targets())?.find((t) => t.pane === card.pane)
@@ -241,7 +244,7 @@ export function createApprovals({ terminal, targets, send, now = () => Date.now(
         answerDescription = undefined
         close(card, 'answered', failed ? 'failed' : 'ok')
         const statusAfter = await terminal.paneStatus(card.pane)
-        if ((failed || visibleMenu(after, card.width, card.cli)) && (dialogBlocked(statusAfter) || hasWaitingHook(card.pane))) {
+        if ((failed || visibleMenu(after, card.width, card.cli)) && (blocked(card, statusAfter, after) || hasWaitingHook(card.pane))) {
           const target = (await targets())?.find((t) => t.pane === card.pane)
           if (target) await open(target, after)
         }
@@ -251,13 +254,13 @@ export function createApprovals({ terminal, targets, send, now = () => Date.now(
         log(`approval answer failed: ${error?.code || error?.name || 'unknown'}`)
         const target = (await targets())?.find((t) => t.pane === card.pane)
         const screen = target ? await terminal.read(card.pane, 200) : ''
-        if (target && sameMenu(card, screen) && (dialogBlocked(await terminal.paneStatus(card.pane)) || hasWaitingHook(card.pane))) await open(target, screen)
+        if (target && sameMenu(card, screen) && (blocked(card, await terminal.paneStatus(card.pane), screen) || hasWaitingHook(card.pane))) await open(target, screen)
       }
       finally { locks.delete(card.pane) }
     })
   }
   return {
-    busy, cards, request, tick, answer,
+    busy, cards, request, tick, answer, hookWaiting: hasWaitingHook,
     shown: (pane) => busy(pane) && !cards.get(pane)?.refused,
     refused(frame) {
       const card = [...cards.values()].find((c) => c.id === frame.id)

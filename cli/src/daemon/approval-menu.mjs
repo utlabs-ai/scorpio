@@ -6,11 +6,13 @@ const HINT = /(?:esc|enter|tab|ctrl[+\-])/i
 export function screenTail(screen) {
   return String(screen || '').replace(/\x1b\[[0-?]*[ -/]*[@-~]/g, '').trimEnd().split('\n').slice(-30).join('\n')
 }
-// This classifies an already-open card's answer path only. It never feeds dialogBlocked.
+// The wording of Codex's hook-review and folder-trust dialogs.
+export const CODEX_DIALOG_WORDS = ['Hooks need review', 'Trust all and continue', 'Trust this folder?', 'Trust and continue']
+// This classifies an already-open card's answer path only.
 export function codexTrustMenu(screen) {
   const recent = String(screen || '').split('\n').filter(line => line.trim()).slice(-30).join('\n')
-  return recent.includes('Hooks need review') && recent.includes('Trust all and continue') ||
-    recent.includes('Trust this folder?') && recent.includes('Trust and continue')
+  const [hooks, trustAll, folder, trust] = CODEX_DIALOG_WORDS
+  return recent.includes(hooks) && recent.includes(trustAll) || recent.includes(folder) && recent.includes(trust)
 }
 
 export function columns(text) {

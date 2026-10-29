@@ -6,6 +6,7 @@ import path from 'node:path'
 import { CONFIG_FILE, LAUNCHER, STATE_DIR, readJson } from '../../daemon/paths.mjs'
 
 import { approvalSettings } from './codex-settings.mjs'
+import { CODEX_DIALOG_WORDS, cursorMenu, visibleMenu } from '../../daemon/approval-menu.mjs'
 
 export const CLIS = {
   claude: {
@@ -94,10 +95,17 @@ export function modelText(kind, args) {
 // here is "update now". Seen on screen, the daemon types nothing.
 export const NEVER_ANSWER = /Update available|Update now|Skip until next version/i
 
-// Herdr's blocked status is the only source of dialog state. Herdr 0.9.5 does not report
-// Codex's "Hooks need review": it gets no card, and is answered on the computer or with /read and /keys.
-export function dialogBlocked(status) {
-  return status === 'blocked'
+// Herdr's blocked status is the only source of dialog state: no screen text makes a pane blocked. One case
+// lifts it: Herdr 0.9.5 also says blocked for an idle Codex whose screen only quotes Codex's folder-trust or
+// hook-review dialog (a message's lines start with │). Such a pane is not blocked when every line with that
+// wording is quoted, no menu is on screen (Codex's own input is at the bottom) and no approval hook waits for it.
+// Without the screen a Herdr-blocked pane stays blocked. Herdr does not report Codex's "Hooks need review" at all;
+// a /spawn stopped there gets its card from the stall (seat.mjs).
+export function dialogBlocked(status, { kind = null, screen = null, hookWaiting = false } = {}) {
+  if (status !== 'blocked') return false
+  if (kind !== 'codex' || screen == null || hookWaiting) return true
+  const worded = String(screen).split('\n').filter((line) => CODEX_DIALOG_WORDS.some((words) => line.includes(words)))
+  return !worded.length || worded.some((line) => !line.trimStart().startsWith('│')) || Boolean(cursorMenu(screen, 'codex') || visibleMenu(screen, null, 'codex'))
 }
 
 // Every other dialog (trust this folder, CLAUDE.md imports from outside it, the no-approval mode's warning) is

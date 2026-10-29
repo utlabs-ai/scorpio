@@ -92,6 +92,7 @@ export function createSeat({
   detector = null,
   approvalBusy = () => false,
   approvalShown = approvalBusy,
+  approvalHookWaiting = () => false,
   approvalsRunning = () => false,
 } = {}) {
   const logError = log.error || log
@@ -438,7 +439,7 @@ export function createSeat({
       const screen = await terminal.read(pane, 200)
       if (!screen && panes && !me) return { ok: false, gone: true }
       const seconds = observeSpawn(op, screen, false)
-      if (NEVER_ANSWER.test(tail(screen, 20)) || (up && dialogBlocked(me.agent_status, screen)) || seconds * 1000 >= SPAWN_STALL_MS) return { stalled: true, screen, seconds }
+      if (NEVER_ANSWER.test(tail(screen, 20)) || (up && dialogBlocked(me.agent_status, { kind, screen, hookWaiting: approvalHookWaiting(pane) })) || seconds * 1000 >= SPAWN_STALL_MS) return { stalled: true, screen, seconds }
     }
     if (me && me.agent === kind) {
       const screen = await terminal.read(pane, 200)
