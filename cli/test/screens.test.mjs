@@ -23,6 +23,22 @@ test('ordinary text and short prefix-like words stay intact', () => {
   assert.deepEqual(hideKeys(text), { text, hidden: 0 })
 })
 
+test('hideKeys leaves ordinary words and embedded key-like strings intact', () => {
+  for (const text of ['disk-usage-monitor-daemon running', 'see risk-assessment-checklist-v2', 'xghp_' + 'a'.repeat(20), 'MyAKIA' + 'A'.repeat(16)]) assert.deepEqual(hideKeys(text), { text, hidden: 0 })
+  const keys = ['sk-' + 'a'.repeat(16), ...'pousr'.split('').map((p) => `gh${p}_` + 'a'.repeat(20)), 'github_pat_' + 'a'.repeat(20), 'AKIA' + 'A'.repeat(16), 'Bearer ' + 'a'.repeat(12)]
+  for (const before of ['a', 'Z', '1', '_', '-']) for (const key of keys) {
+    const text = before + key
+    assert.deepEqual(hideKeys(text), { text, hidden: 0 })
+  }
+})
+
+test('hideKeys still masks keys after equals, quotes and an Authorization header', () => {
+  const key = 'sk-' + 'a'.repeat(16)
+  assert.deepEqual(hideKeys(`KEY=${key}`), { text: 'KEY=[hidden]', hidden: 1 })
+  assert.deepEqual(hideKeys(`"${key}"`), { text: '"[hidden]"', hidden: 1 })
+  assert.deepEqual(hideKeys('Authorization: Bearer ' + 'a'.repeat(12)), { text: 'Authorization: Bearer [hidden]', hidden: 1 })
+})
+
 test('fence is longer than any backtick run in its contents', () => {
   for (const [text, edge] of [['plain', '```'], ['a ``` b', '````'], ['```\n````', '`````']]) assert.equal(fence(text), `${edge}\n${text}\n${edge}`)
 })

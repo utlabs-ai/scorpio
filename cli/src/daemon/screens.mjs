@@ -1,7 +1,7 @@
 /** Hide key-like strings, including their continuation on wrapped pane lines. */
 export function hideKeys(text) {
   let hidden = 0
-  const pattern = /sk-[A-Za-z0-9_-]{16,}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|AKIA[0-9A-Z]{16}|Bearer[ \t]+[A-Za-z0-9._~+/-]{12,}=*/g
+  const pattern = /(?<![A-Za-z0-9_-])(?:sk-[A-Za-z0-9_-]{16,}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|AKIA[0-9A-Z]{16}|Bearer[ \t]+[A-Za-z0-9._~+/-]{12,}=*)/g
   const source = String(text)
   let out = '', end = 0
   for (let match; (match = pattern.exec(source));) {
