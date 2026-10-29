@@ -36,7 +36,7 @@ test('wait renders listen.memo and keeps its cursor by session, topic and name a
  const server=http.createServer((req,res)=>{res.setHeader('content-type','application/json');res.end(JSON.stringify({roomId:topicId,me:name,room:{name:'Notes',topic:'A topic',owner:'kai'},members:metadata.members,items:[],mentions:[message(round+1)],broadcasts:[],memo:round?changed():empty()}))})
  await new Promise(r=>server.listen(0,'127.0.0.1',r));t.after(async()=>{await new Promise(r=>server.close(r));fs.rmSync(home,{recursive:true,force:true})})
  const bin=new URL('../bin/scorpio.mjs',import.meta.url).pathname
- const env=testEnv(home,{SCORPIO_HOME:home,SCORPIO_SERVER:`http://127.0.0.1:${server.address().port}`,CODEX_THREAD_ID:'memo-session'})
+ const env=testEnv(home,{SCORPIO_HOME:home,SCORPIO_SERVER:`http://127.0.0.1:${server.address().port}`,CODEX_THREAD_ID:'memo-session',CLAUDE_CODE_SESSION_ID:''})
  const run=()=>new Promise(resolve=>execFile(process.execPath,[bin,'wait',`topicId=${topicId}`,'role=api','timeout=1'],{env,timeout:10000},(e,stdout,stderr)=>resolve({code:e?.code??0,text:stdout,stderr})))
  const first=await run();assert.equal(first.code,0,first.stderr);assert.match(first.text,/Memo: none yet/)
  round=1;const second=await run();assert.equal(second.code,0,second.stderr);assert.match(second.text,/Memo changes:/);assert.match(second.text,/│ shared rule/)

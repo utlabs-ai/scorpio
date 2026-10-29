@@ -37,7 +37,7 @@ test('every server hint that names a command comes out in the new syntax, and no
     for (const re of OLD) assert.ok(!re.test(now), `${file}: still old after the rewrite: ${now}`)
     // Only command shapes changed: undo them and the text is the server's again.
     const back = now.replace(/\btopicId=/g, 'roomId=').replace(/\bscorpio task\b/g, 'scorpio todo').replace(/(^|[\s(`'"，、；：（])task(?= +(?:roomId|add|take|done|edit|delete|show)=)/g, '$1todo')
-      .replace(/\bin=task\b/g, 'in=todo').replace(/\bin= is messages, task or files\b/g, 'in= is messages, todo or files').replace(/(^|[\s(`'"，（])desc=(?=['"<])/g, '$1topic=')
+      .replace(/\bin=task\b/g, 'in=todo').replace(/\bin= is messages, task or files\b/g, 'in= is messages, todo or files').replace(/\bin= is messages, task, files or memo\b/g, 'in= is messages, todo, files or memo').replace(/(^|[\s(`'"，（])desc=(?=['"<])/g, '$1topic=')
     assert.equal(back, text, `${file}: the rewrite touched more than commands`)
     assert.equal(newSyntax(now), now, 'already new: unchanged')
   }
@@ -49,6 +49,7 @@ test('newSyntax: the concrete hints, and what it must leave alone', () => {
   assert.equal(newSyntax('轮次已经没有了；找已交付的任务用 search in=todo，或 todo show=T…。'), '轮次已经没有了；找已交付的任务用 search in=task，或 task show=T…。')
   assert.equal(newSyntax("topic='<new description>' is required (topic='' clears it)."), "desc='<new description>' is required (desc='' clears it).")
   assert.equal(newSyntax('in= is messages, todo or files.'), 'in= is messages, task or files.')
+  assert.equal(newSyntax('in= is messages, todo, files or memo.'), 'in= is messages, task, files or memo.')
   assert.equal(newSyntax('Take something that can start (scorpio todo), or force=true.'), 'Take something that can start (scorpio task), or force=true.')
   for (const keep of ['status= is todo, doing or done.', 'edit=T3 status=todo', 'This topic has a passcode.', 'the todo list of todos', 'roomIds and topics', 'a topic named x']) assert.equal(newSyntax(keep), keep)
   assert.equal(newSyntax(undefined), undefined)
