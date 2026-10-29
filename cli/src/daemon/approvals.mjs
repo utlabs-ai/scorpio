@@ -6,7 +6,7 @@ import { randomBytes } from 'node:crypto'
 import { dialogBlocked } from '../adapters/cli/index.mjs'
 import { LAUNCHER, STATE_DIR, writeJson } from './paths.mjs'
 import { createKeys, keysFor } from './keys.mjs'
-import { cursorMenu, detailOf, hookMatches, menuIdentity, parseMenu, sameMenu, screenTail, standardApproval, visibleMenu } from './approval-menu.mjs'
+import { codexTrustMenu, cursorMenu, detailOf, hookMatches, menuIdentity, parseMenu, sameMenu, screenTail, standardApproval, visibleMenu } from './approval-menu.mjs'
 
 export function writeApprovalSettings({ launcher = LAUNCHER, stateDir = STATE_DIR } = {}) {
   writeJson(path.join(stateDir, 'hooks', 'claude.json'), { hooks: { PermissionRequest: [{ matcher: '*', hooks: [{ type: 'command', command: `${launcher} approval-hook claude`, timeout: 3600 }] }] } })
@@ -203,6 +203,21 @@ export function createApprovals({ terminal, targets, send, now = () => Date.now(
           } else {
             const key = card.menu ? String(option.n) : keysFor(table, terminal.adapter || 'herdr').find((k) => k.name === frame.key)[terminal.adapter || 'herdr']
             await terminal.sendKeys(card.pane, key)
+            // Only Codex trust menus need Enter; another menu may already be the next request.
+            if (card.cli === 'codex' && card.menu && codexTrustMenu(screen)) {
+              const moved = await settle(card.pane, (screen) => {
+                const selected = screenTail(screen).split('\n').findLast((line) => /^\s*[›❯]\s+\d+\.\s+/.test(line))
+                return Number(selected?.match(/^\s*[›❯]\s+(\d+)\./)?.[1]) === option.n
+              }, table.settleMs)
+              const selected = screenTail(moved).split('\n').findLast((line) => /^\s*[›❯]\s+\d+\.\s+/.test(line))
+              const n = Number(selected?.match(/^\s*[›❯]\s+(\d+)\./)?.[1])
+              if (!sameMenu(card, moved) || n !== option.n || parseMenu(moved, card.width, card.cli)?.options.find((o) => o.n === n)?.label !== option.label) {
+                throw new Error('cursor did not reach chosen option')
+              }
+              const enter = keysFor(table, terminal.adapter || 'herdr').find((key) => key.name === 'enter')?.[terminal.adapter || 'herdr']
+              if (!enter) throw new Error('cursor keys unavailable')
+              await terminal.sendKeys(card.pane, enter)
+            }
           }
           release(card.request)
         }

@@ -989,14 +989,14 @@ for (const [name, change] of [
   ['unchanged cursor', (screen) => screen],
   ['changed label', (screen) => screen.replace('› 1.', '  1.').replace('  2. Trust all and continue', '› 2. Trust selected hooks')],
   ['changed question', (screen) => screen.replace('› 1.', '  1.').replace('  2.', '› 2.').replace('1 hook is new or changed.', '2 hooks are new or changed.')],
-]) test(`Herdr-blocked Codex numbered menu adds no text-matched confirmation after ${name}`, async () => {
+]) test(`Herdr-blocked Codex trust never confirms after ${name}`, async () => {
   const screen = hookTrust + '\n'.repeat(60)
   const f = fixture({ cli: 'codex', status: 'blocked', screen, rooms: ['one'] })
   f.terminal.sendKeys = async (_, key) => { f.keys.push(key); f.screen(change(screen)) }
   const card = await f.open()
   await f.answer(card, { n: 2 })
   assert.deepEqual(f.keys, ['2'])
-  assert.equal(f.frames.find((frame) => frame.type === 'approval_close').result, name === 'unchanged cursor' ? 'failed' : 'ok')
+  assert.equal(f.frames.find((frame) => frame.type === 'approval_close').result, 'failed')
   if (name === 'unchanged cursor') {
     assert.notEqual(f.approvals.cards.get('p1').id, card.id)
     assert.equal(f.frames.filter((frame) => frame.type === 'approval_open').length, 2)
@@ -1101,4 +1101,19 @@ test('an idle pane quoting a delivered trust dialog opens no card and does not h
   assert.equal(f.approvals.busy('p1'), false)
   assert.equal(await injectWhenReady(f.terminal, 'p1', 'next message', f.approvals.busy), 'sent')
   assert.deepEqual(f.injections, [{ pane: 'p1', text: 'next message' }])
+})
+
+for (const n of [1, 2]) test(`Herdr-blocked Codex folder trust sends option ${n}, settles the cursor, then Enter`, async () => {
+  const screen = folder + '\n'.repeat(60)
+  const f = fixture({ cli: 'codex', status: 'blocked', screen, rooms: ['one'] })
+  f.terminal.sendKeys = async (_, key) => {
+    f.keys.push(key)
+    if (key === '2') f.screen(screen.replace('› 1.', '  1.').replace('  2.', '› 2.'))
+    if (key === 'enter') { f.screen('› Ask anything'); f.status('idle') }
+  }
+  const card = await f.open()
+  await f.answer(card, { n })
+  assert.deepEqual(f.keys, [String(n), 'enter'])
+  assert.equal(f.frames.find(frame => frame.type === 'approval_close').result, 'ok')
+  assert.equal(f.approvals.cards.size, 0)
 })
