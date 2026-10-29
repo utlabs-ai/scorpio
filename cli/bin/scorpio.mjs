@@ -14,6 +14,7 @@ import { file } from '../src/actions/file.mjs'
 import { card } from '../src/actions/card.mjs'
 import { handoff } from '../src/actions/handoff.mjs'
 import { send } from '../src/actions/send.mjs'
+import { memo } from '../src/actions/memo.mjs'
 import { todo } from '../src/actions/task.mjs'
 import { schedule } from '../src/actions/schedule.mjs'
 import { wait } from '../src/actions/wait.mjs'
@@ -76,15 +77,15 @@ Messages and attachments
     and until= exclusive; a YYYY-MM-DD date uses this computer's time zone, and until=<date> includes that day.
   message topicId= seq=
     Fetch one message by seq; returns message.
-  search topicId= [q='words'] [in=messages|task|files] [by=] [kind=] [at=] [replyTo=seq]
+  search topicId= [q='words'] [in=messages|task|files|memo] [by=] [kind=] [at=] [replyTo=seq]
          [has=files] [task=T3] [status=todo,doing,done] [to=] [since=] [until=]
          [order=desc|asc] [before=seq] [from=seq] [limit=20]
-    Return snippets of matching messages, tasks and files, newest first (order=asc: oldest first).
+    Return snippets of matching messages, tasks, files and memos, newest first (order=asc: oldest first).
     q= can be left out when a filter or in= is given. Messages take the same filters as messages; tasks take
-    status=, to= and by=; files take by=; since= and until= apply to all three. A group that a given filter
+    status=, to= and by=; files take by=; memo takes by=, since=, until= and order=. A group that a given filter
     does not apply to comes back empty, and naming it with in= is bad_request. Returns groups and hasMore per kind.
   send topicId= text='@name …' [replyTo=seq] [files=a.png,report.pdf] [nonce=]
-       [buttons='label|label'] [card=<file> summary='…']
+       [buttons='label|label'] [card=<file> summary='…'] [cite=M3,M5] [misled=M4]
        [done=T3] [add='title' [to=name] [after=T3,T4]]
        [update=T3 [to=name] [title='…'] [force=true]]
     Send text and optional attachments; text=- reads stdin, textFile=<path> reads a file as written.
@@ -99,6 +100,8 @@ Messages and attachments
     online means your agent was woken, human means visible to the person, queued awaits delivery,
     to_owner reminds another agent's owner, left was not woken, and not_member received nothing.
     Task options add item; sent files add files[].
+    cite= says this message reread M3's source and used it (+1; not your own memo, once a day per name);
+    misled= says M4 led this message astray (−2; this message is the evidence).
   files topicId= [kind=files|pics] [q='name'] [by=name|me] [since=] [until=]
         [before=seq] [beforeId=id] [limit=20]
     List attachments newest first; filter by kind, name, uploader or date. from= is the old spelling of by=.
@@ -137,6 +140,13 @@ Tasks
     title= on a person's task is refused; send update=T3 title= changes it with a message.
   task topicId= delete=T3,T4 [force=true]
     Delete tasks; returns deleted ids and unblocked tasks.
+
+Memo
+  memo topicId= [add='…' from=#seq|T3 [replaces=M3]] [retire=M3] [show=M3] [retired=true [limit=] [before=M3]]
+       [restore=M12 | restore=L1 version=5] [long=L1 text='…'|- version=7 [merged=M2,M5]] [versions=L1 [limit=] [before=]]
+    The topic's memo: 8 short memos (M numbers, ≤500 characters, a source each) and 2 long ones (L1, L2, ≤3500,
+    the latest 10 versions kept). No argument lists them all. A write takes effect at once; a full short list evicts the
+    lowest-scored memo into the retired list, from which restore= brings it back. One of the write forms at a time.
 
 Scheduled messages
   schedule topicId= text='@name …' at='YYYY-MM-DD HH:MM' [tz=] [revive=true|false] [nonce=]
@@ -225,7 +235,7 @@ async function qr(value) {
 
 // ---------- main ----------
 
-const ACTIONS = { login, whoami, topics, logout, create, join, messages, message, search, files, send, file, card, handoff, task: todo, schedule, listen, wait, mark, members, handoffs, roleCard, topic, leave, daemon, up, qr }
+const ACTIONS = { login, whoami, topics, logout, create, join, messages, message, search, files, send, file, card, handoff, task: todo, memo, schedule, listen, wait, mark, members, handoffs, roleCard, topic, leave, daemon, up, qr }
 const LATER = new Set()
 
 function inCodexSandbox() {
@@ -276,6 +286,6 @@ async function main() {
 }
 
 main().catch((e) => {
-  if (e instanceof CliError) return emit(JSON.stringify({ error: e.error, ...(e.reason ? { reason: e.reason } : {}), next: newSyntax(e.next) }), 1)
+  if (e instanceof CliError) return emit(JSON.stringify({ error: e.error, ...(e.reason ? { reason: e.reason } : {}), ...(e.current !== undefined ? { current: e.current } : {}), next: newSyntax(e.next) }), 1)
   return emit(JSON.stringify({ error: 'server_error', next: `The CLI hit an unexpected error (${e?.message || e}). Rerun; if it repeats, tell your person.` }), 1)
 })

@@ -15,7 +15,7 @@ test('offline CLI arguments keep their exact output and exit status', (t) => {
   t.after(() => fs.rmSync(home, { recursive: true, force: true }))
   const env = testEnv(home, { SCORPIO_HOME: home, SCORPIO_SERVER: 'http://127.0.0.1:9', CODEX_THREAD_ID: '', CODEX_SESSION_ID: '' })
   const cases = [
-    { args: ['unknown'], status: 1, out: { error: 'bad_request', next: 'Unknown action "unknown". Actions: login, whoami, topics, logout, create, join, messages, message, search, files, send, file, card, handoff, task, schedule, listen, wait, mark, members, handoffs, roleCard, topic, leave, daemon, up, qr. See `scorpio help`.' } },
+    { args: ['unknown'], status: 1, out: { error: 'bad_request', next: 'Unknown action "unknown". Actions: login, whoami, topics, logout, create, join, messages, message, search, files, send, file, card, handoff, task, memo, schedule, listen, wait, mark, members, handoffs, roleCard, topic, leave, daemon, up, qr. See `scorpio help`.' } },
     { args: ['plan'], status: 1, out: { error: 'bad_request', next: 'The plan is now the task list, and its items are T3 (P3 still works): scorpio task topicId=<topic id> (add= take= done= edit= delete= show=). See the scorpio skill.' } },
     { args: ['messages'], status: 1, out: { error: 'bad_request', next: 'Missing topicId=. Use the topic id from your invitation.' } },
     { args: ['send', 'topicId=x', 'role=bad name'], status: 1, out: { error: 'invalid_role', next: 'Use a role of 1–62 characters from A-Z a-z 0-9 _ . -' } },
@@ -33,6 +33,10 @@ test('offline CLI arguments keep their exact output and exit status', (t) => {
   assert.match(help.stdout, /Scheduled messages\n[\s\S]*on=S3 \| off=S3 \| off=all/)
   assert.match(help.stdout, /\[buttons='label\|label'\] \[card=<file> summary='…'\]/)
   assert.match(help.stdout, /^  card topicId= seq=$/m)
+  assert.match(help.stdout, /^  memo topicId= \[add=/m)
+  assert.match(help.stdout, /the latest 10 versions kept/)
+  assert.match(help.stdout, /\[cite=M3,M5\] \[misled=M4\]/)
+  assert.match(help.stdout, /in=messages\|task\|files\|memo/)
   assert.match(help.stdout, /returns topicId, seq, summary, size and path, or card_not_found/)
   for (const { args, status, out } of cases) {
     const run = spawnSync(process.execPath, [bin, ...args], { env, encoding: 'utf8' })

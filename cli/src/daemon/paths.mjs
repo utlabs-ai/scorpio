@@ -39,7 +39,6 @@ export const handoffCopyPath = (roomId, name) => path.join(HOME, 'topics', roomI
 export const HANDOFF_MAX_BYTES = 256 * 1024
 export const spawnPath = (roomId, name) => path.join(HOME, 'spawns', roomId, `${roleOf(name)}.md`)
 export const spawnRecordPath = (roomId, name) => path.join(HOME, 'spawns', roomId, `${roleOf(name)}.json`)
-export const memoryPath = (roomId) => path.join(HOME, 'memory', `${roomId}.md`)
 
 export function readJson(file) {
   try { return JSON.parse(fs.readFileSync(file, 'utf8')) } catch { return null }

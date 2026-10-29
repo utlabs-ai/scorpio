@@ -27,22 +27,24 @@ async function printWake(ctx, st, list, listened = null) {
     members: l?.members || [],
     items: l?.items || [],
     deleted: l?.deleted || [],
+    ...(l?.memo ? { memo: l.memo } : {}),
   }
   let remind = null
   let changes = []
   let tasks = []
+  let memo = null
   const messages = [...list].sort((a, c) => a.seq - c.seq)
   if (l?.members) {
     try {
       const all = readJson(REMINDERS_FILE) || {}
       const key = `${sessionKey()}|${ctx.roomId}|${name}`
       const due = deliveryDue(all[key], { session: b.joinedAt ?? null, room, name, shown: messages.map((m) => m.seq) })
-      ;({ remind, changes, tasks } = due)
+      ;({ remind, changes, tasks, memo } = due)
       all[key] = due.next
       writePrivate(REMINDERS_FILE, JSON.stringify(all))
     } catch {}
   }
-  return emit(renderDelivery({ room, messages, name, remind, changes, tasks, again: `scorpio wait topicId=${ctx.roomId}` }), 0)
+  return emit(renderDelivery({ room, messages, name, remind, changes, tasks, memo, again: `scorpio wait topicId=${ctx.roomId}` }), 0)
 }
 
 function printIdle(roomName, roomId) {

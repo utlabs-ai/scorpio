@@ -12,6 +12,7 @@ async function messages(args) {
 }
 
 async function search(args) {
+  if (args.in !== undefined && !['messages', 'todo', 'files', 'memo'].includes(args.in)) throw new CliError('bad_request', 'in= is messages, task, files or memo.')
   const keys = ['q', 'in', 'limit', 'before', ...messageFilterKeys.filter(k => !['q', 'limit', 'before'].includes(k)), 'status', 'to']
   readArgs(args, keys)
   if (!args.q?.trim() && !keys.some(k => !['q', 'limit'].includes(k) && args[k] !== undefined)) throw new CliError('bad_request', 'Give q= search text, or give a filter or in=.')

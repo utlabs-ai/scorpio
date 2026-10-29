@@ -162,7 +162,7 @@ export function composeDelivery({ entry, room: read, messages, reminded, pokedSe
     : deliveryDue(reminded, { session: entry.ts ?? null, room, name: entry.name, shown: batch.map((m) => m.seq) }))
   let d = due()
   const render = () => {
-    if (!resend) return renderDelivery({ room, messages: batch, name: entry.name, remind: d.remind, changes: d.changes, tasks: d.tasks, terminal: true, role: entry.role, now })
+    if (!resend) return renderDelivery({ room, messages: batch, name: entry.name, remind: d.remind, changes: d.changes, tasks: d.tasks, memo: d.memo, terminal: true, role: entry.role, now })
     const old = batch.filter((m) => m.seq <= pokedSeq)
     const fresh = batch.filter((m) => m.seq > pokedSeq)
     const seqs = old.map((m) => `#${m.seq}`).join(', ')
@@ -170,8 +170,16 @@ export function composeDelivery({ entry, room: read, messages, reminded, pokedSe
     const line = `Still unmarked: ${seqs}. After reading, ${mark}`
     return fresh.length ? `${line}\n\n${renderDelivery({ room, messages: fresh, name: entry.name, terminal: true, role: entry.role, now })}` : line
   }
-  let text = render()
-  while (batch.length > 1 && Buffer.byteLength(text) > maxBytes) { batch = batch.slice(0, -1); d = due(); text = render() }
+  const fitMemo = () => {
+    let text = render()
+    while (!resend && d.memo?.entries.length > 1 && Buffer.byteLength(text) > maxBytes) {
+      d.memo = { ...d.memo, entries: d.memo.entries.slice(1), gap: d.memo.gap + 1 }
+      text = render()
+    }
+    return text
+  }
+  let text = fitMemo()
+  while (batch.length > 1 && Buffer.byteLength(text) > maxBytes) { batch = batch.slice(0, -1); d = due(); text = fitMemo() }
   return { text, next: d.next, upTo: batch.at(-1).seq, remind: d.remind, changes: d.changes, tasks: d.tasks, count: batch.length }
 }
 
@@ -262,10 +270,14 @@ export function agentEnv(env = process.env) {
 }
 
 /** What the daemon knows about each room: name, topic, owner, members, when a person last spoke. */
-function createRooms() {
+export function createRooms() {
   const map = new Map()
   return {
     get: (roomId) => map.get(roomId) || null,
+    frame(roomId, frame) {
+      return this.update(roomId, frame.type === 'memo' ? { memo: frame }
+        : { items: frame.items, ...(Array.isArray(frame.deleted) ? { deleted: frame.deleted } : {}) })
+    },
     update(roomId, patch) {
       const cur = map.get(roomId) || { roomId }
       for (const [k, v] of Object.entries(patch)) if (v !== undefined) cur[k] = v
@@ -410,9 +422,10 @@ async function main() {
         case 'rooms_changed': // a room of this account was created, archived or restored
           seat.roomsChanged()
           break
+        case 'memo':
         case 'todo': // the visible TODO items; legacy round fields are ignored
         case 'items': // the plan, from a server before v0.8
-          rooms.update(roomId, { items: frame.items, ...(Array.isArray(frame.deleted) ? { deleted: frame.deleted } : {}) })
+          rooms.frame(roomId, frame)
           break
         case 'removed':
           topicLeft(roomId, frame, { leftTopic: seat.leftTopic, log })
@@ -538,6 +551,7 @@ async function main() {
         }
         room = rooms.update(entry.roomId, {
           members: listen.members,
+          ...(listen.memo ? { memo: listen.memo } : {}),
           ...(Array.isArray(listen.items) ? { items: listen.items } : {}),
           ...(Array.isArray(listen.deleted) ? { deleted: listen.deleted } : {}),
           ...(listen.room ? { roomName: listen.room.name, topic: listen.room.topic, owner: listen.room.owner } : {}),

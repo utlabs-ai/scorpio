@@ -7,25 +7,10 @@ import { personName } from './person-name.mjs'
 // Every line of what people wrote is prefixed with │, between two frame lines. A quoted frame or
 // header stays part of the member's text.
 
-export const FRAME = '+' + '-'.repeat(38) + '+'
+import { quoted, boxed, flat, typeable } from './quote.mjs'
+import { memoChanges, memoSnapshot, renderMemo, renderMemoChanges, memoMessageLine } from './memo.mjs'
+export { FRAME, typeable } from './quote.mjs'
 export const REMIND_EVERY = 20
-
-const boxed = (text) => [FRAME, ...String(text ?? '').replace(/\n$/, '').split('\n').map((line) => line ? `│ ${line}` : '│'), FRAME].join('\n')
-
-/** Can this go into a terminal as typed text? Newline and tab only; every other control character is a key press. */
-export function typeable(text) {
-  return !/[\x00-\x08\x0b-\x1f\x7f-\x9f]/.test(String(text ?? ''))
-}
-
-// Typed into a terminal, a control character is a key press (Ctrl-C interrupts the agent, a carriage
-// return submits half a message). We never alter what people wrote, so such a text is not typed at
-// all: the agent gets a line telling it how to fetch the original. `wait` prints, it does not type,
-// so it passes everything through.
-const quoted = (text, terminal, what, fetch) => (terminal && !typeable(text)
-  ? `(The ${what} contains control characters that cannot be typed into a terminal, so it is not pasted here. Read it with: ${fetch})`
-  : boxed(text))
-
-const flat = (s) => String(s ?? '').replace(/[\x00-\x1f\x7f-\x9f]+/g, ' ').trim()
 
 const memberName = (name, members) => {
   const member = (members || []).find((m) => m.name === name)
@@ -123,6 +108,8 @@ function renderMessage(m, { roomId, terminal, role, name, items, members }) {
     const fetch = `scorpio card topicId=${roomId}${roleArg(role)} seq=${m.seq}`
     out.push(richLine(`Card: ${m.card.summary} (to read it: ${fetch})`, 'card summary', fetch))
   }
+  const memoLine = memoMessageLine(m.memo)
+  if (memoLine) out.push(memoLine)
   if (m.scheduled?.id && m.scheduled?.by) {
     let setBy = `Set by ${flat(m.scheduled.by)} · Scheduled ${flat(m.scheduled.id)} · scorpio schedule topicId=${roomId}${roleArg(role)} show=${flat(m.scheduled.id)}`
     const late = Number(m.ts) - Number(m.scheduled.at)
@@ -180,6 +167,7 @@ export function renderReminder({ room, name, reason, terminal = false, role = nu
     ...(below.length ? ['', ...below] : []),
     ...taskLines({ items: room?.items, members: room?.members, name, roomId, role, now }),
     '',
+    ...(room?.memo ? [renderMemo(room.memo, { roomId, members: room.members, terminal, role }), ''] : []),
     'How topics work and the rules: the scorpio skill.',
   ].join('\n')
 }
@@ -298,7 +286,9 @@ export function deliveryDue(prev, { session = null, room, name, shown = [], ever
   const known = Array.isArray(room?.items)
   const tasks = known ? taskChanges(prev?.tasks, { items: room.items, deleted: room.deleted, name, shown }) : []
   const snapshot = known ? taskSnapshot(room.items, name) : prev?.tasks
-  return { ...due, tasks, next: { ...due.next, ...(snapshot ? { tasks: snapshot } : {}) } }
+  const memo = !due.remind ? memoChanges(prev?.memo, room?.memo, name) : null
+  const keptMemo = room?.memo ? memoSnapshot(room.memo) : prev?.memo
+  return { ...due, tasks, memo, next: { ...due.next, ...(snapshot ? { tasks: snapshot } : {}), ...(keptMemo ? { memo: keptMemo } : {}) } }
 }
 
 /**
@@ -398,7 +388,7 @@ export function reminderDue(prev, { session = null, roster, every = REMIND_EVERY
  * role: put role= into the commands it shows (the daemon does; a renewed session may have lost its binding).
  * again: the wait command to run next (wait only).
  */
-export function renderDelivery({ room, messages, name, remind = null, changes = [], tasks = [], terminal = false, role = null, again = null, now = Date.now() }) {
+export function renderDelivery({ room, messages, name, remind = null, changes = [], tasks = [], memo = null, terminal = false, role = null, again = null, now = Date.now() }) {
   const roomId = room.roomId
   const n = messages.length
   const label = flat(room.roomName) || roomId
@@ -406,6 +396,10 @@ export function renderDelivery({ room, messages, name, remind = null, changes = 
   if (remind) parts.push(renderReminder({ room, name, reason: remind, terminal, role, now }))
   else if (changes.length) parts.push(renderChanges(changes, { roomId, name, members: room.members, terminal, role }))
   if (tasks.length) parts.push(['Your tasks changed:', ...tasks.map((t) => `- ${t}`)].join('\n'))
+  if (!remind && memo) {
+    const text = renderMemoChanges(memo, room?.memo, { roomId, members: room.members, terminal, role })
+    if (text) parts.push(text)
+  }
   for (const m of messages) parts.push(renderMessage(m, { roomId, terminal, role, name, items: room.items, members: room.members }))
   const markLine = `Mark them read first: scorpio mark topicId=${roomId}${roleArg(role)} upTo=${messages[n - 1].seq}`
   parts.push(again ? `${markLine}\nThen do the work (if any), and run wait again: ${again}` : `${markLine}\nThen do the work (if any).`)

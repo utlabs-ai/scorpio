@@ -2,11 +2,14 @@ import { randomUUID } from 'node:crypto'
 import { roomCtx, textArg, intArg, CliError, boolArg, api, roomPath, remember, done } from '../client.mjs'
 import { fileArgs, upload } from './file.mjs'
 import { itemArg, itemsArg } from './task.mjs'
+import { memoIds } from './memo.mjs'
 import { richMessageArgs } from '../rich-message.mjs'
 
 async function send(args) {
   const ctx = roomCtx(args)
   const body = { text: textArg(args), ...richMessageArgs(args) }
+  for (const key of ['cite', 'misled']) if (args[key] !== undefined) body[key] = memoIds(args[key], key)
+  if (body.cite?.some(id => body.misled?.includes(id))) throw new CliError('bad_request', 'A memo cannot be both cited and misled in one message.')
   const replyTo = intArg(args, 'replyTo')
   if (replyTo !== undefined) body.replyTo = replyTo
   if (args.done !== undefined) body.done = itemArg(args.done, 'done')

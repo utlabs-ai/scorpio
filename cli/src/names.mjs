@@ -63,5 +63,6 @@ export function newSyntax(text) {
     .replace(/(^|[\s(`'"，、；：（])todo(?= +(?:topicId|add|take|done|edit|delete|show|mine|open)=)/g, '$1task')
     .replace(/\bin=todo\b/g, 'in=task')
     .replace(/\bin= is messages, todo or files\b/g, 'in= is messages, task or files')
+    .replace(/\bin= is messages, todo, files or memo\b/g, 'in= is messages, task, files or memo')
     .replace(/(^|[\s(`'"，（])topic=(?=['"<])/g, '$1desc=')
 }

@@ -76,11 +76,12 @@ const FALLBACK_NEXT = {
 }
 
 class CliError extends Error {
-  constructor(error, next, reason) {
+  constructor(error, next, reason, current) {
     super(error)
     this.error = error
     this.next = next
     if (reason) this.reason = reason
+    if (current !== undefined) this.current = current
   }
 }
 
@@ -353,7 +354,7 @@ async function request(method, urlPath, { body, role, auth = true, raw = false, 
     if (headers.Authorization) forgetRejectedToken(headers.Authorization.slice(7))
     throw new CliError('unauthorized', data?.next || NEXT.relogin, data?.reason)
   }
-  if (data?.error) throw new CliError(data.error, data.next || FALLBACK_NEXT[data.error] || FALLBACK_NEXT.server_error)
+  if (data?.error) throw new CliError(data.error, data.next || FALLBACK_NEXT[data.error] || FALLBACK_NEXT.server_error, undefined, data.current)
   if (res.status === 429) throw new CliError('rate_limited', FALLBACK_NEXT.rate_limited)
   throw new CliError('server_error', `The server answered HTTP ${res.status}${res.ok ? ' with something that is not JSON' : ''}. Rerun in a minute; if it keeps failing, tell your person.`)
 }
