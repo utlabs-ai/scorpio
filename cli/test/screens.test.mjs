@@ -39,6 +39,38 @@ test('hideKeys still masks keys after equals, quotes and an Authorization header
   assert.deepEqual(hideKeys('Authorization: Bearer ' + 'a'.repeat(12)), { text: 'Authorization: Bearer [hidden]', hidden: 1 })
 })
 
+test('hideKeys hides a Bearer token the pane wrapped right after Bearer', () => {
+  assert.deepEqual(hideKeys('curl -H Authorization: Bearer\nabcdefghijklmnop0123456789\n'), { text: 'curl -H Authorization: Bearer\n[hidden]\n', hidden: 1 })
+  assert.deepEqual(hideKeys('Bearer   \nabcdefghijklmnop0123456789 done'), { text: 'Bearer   \n[hidden] done', hidden: 1 })
+})
+
+test('hideKeys hides a key the pane wrapped right after its prefix or a few characters in', () => {
+  const keys = ['sk-' + 'abcdefghijklmnopqrstu', 'ghp_' + 'a1'.repeat(10), 'gho_' + 'b2'.repeat(10), 'ghu_' + 'c3'.repeat(10), 'ghs_' + 'd4'.repeat(10), 'ghr_' + 'e5'.repeat(10), 'github_pat_' + 'f_6'.repeat(8), 'AKIA' + 'IOSFODNN7EXAMPLE']
+  for (const key of keys) {
+    const prefix = /^(?:sk-|gh._|github_pat_|AKIA)/.exec(key)[0].length
+    for (const at of [prefix, prefix + 1, prefix + 2, prefix + 6, key.length - 1]) {
+      const text = `run ${key.slice(0, at)}\n${key.slice(at)} after\nnext row`
+      assert.deepEqual(hideKeys(text), { text: 'run [hidden]\n[hidden] after\nnext row', hidden: 1 }, text)
+    }
+  }
+  assert.deepEqual(hideKeys('sk-ab\ncdefghijklmnopqrstu'), { text: '[hidden]\n[hidden]', hidden: 1 })
+  assert.deepEqual(hideKeys('AKIAIOSFOD\nNN7EXAMPLE'), { text: '[hidden]\n[hidden]', hidden: 1 })
+})
+
+test('hideKeys hides a split key over three rows and counts each key once', () => {
+  assert.deepEqual(hideKeys('key sk-a\nbcdefghij\nklmnopqrs tail'), { text: 'key [hidden]\n[hidden]\n[hidden] tail', hidden: 1 })
+  assert.deepEqual(hideKeys('Bearer\nabcdefghij\nklmnopqrs tail'), { text: 'Bearer\n[hidden]\n[hidden] tail', hidden: 1 })
+  assert.deepEqual(hideKeys('a sk-ab\ncdefghijklmnopqrstu and AKIAIOSFOD\nNN7EXAMPLE b'), { text: 'a [hidden]\n[hidden] and [hidden]\n[hidden] b', hidden: 2 })
+  const one = 'sk-' + 'a'.repeat(16)
+  assert.deepEqual(hideKeys(`${one} and Bearer\nabcdefghijklmnop`), { text: '[hidden] and Bearer\n[hidden]', hidden: 2 })
+})
+
+test('hideKeys leaves Bearer at a row end with ordinary words after it, and short splits, intact', () => {
+  for (const text of ['Bearer\nthe next line', 'Bearer\n  indented abcdefghijklmnop', 'sk-ab\ncdef', 'ghp_\nshort', 'AKIAIOSFOD\nnn7example', 'xsk-ab\ncdefghijklmnopqrstu', 'sk-ab\n cdefghijklmnopqrstu']) {
+    assert.deepEqual(hideKeys(text), { text, hidden: 0 }, text)
+  }
+})
+
 test('fence is longer than any backtick run in its contents', () => {
   for (const [text, edge] of [['plain', '```'], ['a ``` b', '````'], ['```\n````', '`````']]) assert.equal(fence(text), `${edge}\n${text}\n${edge}`)
 })
