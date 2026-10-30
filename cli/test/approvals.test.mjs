@@ -17,7 +17,7 @@ const { approvalHook } = await import('../src/approval-hook.mjs')
 const { parseMenu, columns, hookMatches, menuIdentity, sameMenu, standardApproval } = await import('../src/daemon/approval-menu.mjs')
 const { argsFor, codexHookDefinition, fullPermission, autoPermission, permOf, dialogBlocked } = await import('../src/adapters/cli/index.mjs')
 const { parseSpawn, handoffPrompt } = await import('../src/daemon/commands.mjs')
-const { injectWhenReady } = await import('../src/daemon/main.mjs')
+const { injectWhenReady, paneReady } = await import('../src/daemon/main.mjs')
 const bash = (count = 3) => `Bash command\n  touch /tmp/work/result\n\nDo you want to proceed?\n❯ 1. Yes\n  2. Yes, and always allow access to /tmp/work from this project\n${count === 4 ? '  3. Yes, and switch to auto mode · extra\n     auto mode handles these prompts for you\n  4. No' : '  3. No'}\n\nEsc to cancel · Tab to amend`
 const event = { tool_name: 'Bash', tool_input: { command: 'touch /tmp/work/result' }, cwd: '/tmp/work' }
 const codex = `Would you like to run the following command?\n\n $ touch /tmp/work/result\n\n› 1. Yes, proceed (y)\n  2. Yes, and don't ask again for commands that start with touch (p)\n  3. No, and tell Codex what to do differently (esc)\n\nPress enter to confirm or esc to cancel`
@@ -959,6 +959,26 @@ const quotedTrust = (() => {
   return [...rows, ...new Array(68 - rows.length - bottom.length).fill(''), ...bottom].join('\n')
 })()
 test('quoted fixture has qa shape', () => { assert.equal(quotedTrust.split('\n').length, 68) })
+
+test('paneReady decides exactly as injectWhenReady does, Codex lifted panes and approvals included', async () => {
+  const lifted = quotedTrust
+  const cases = []
+  for (const kind of ['claude', 'codex']) for (const status of ['idle', 'done', 'working', 'blocked', null, 'unknown', 'error']) {
+    for (const screen of ['> ', lifted]) for (const busy of [false, true]) for (const hook of [false, true]) cases.push({ kind, status, screen, busy, hook })
+  }
+  for (const c of cases) {
+    const terminal = {
+      paneAgent: async () => { if (c.status === 'error') throw new Error('Herdr unavailable'); return { kind: c.kind, status: c.status } },
+      read: async () => c.screen,
+      inject: async () => {},
+      injectLifted: async () => {},
+    }
+    const ready = await paneReady(terminal, 'w:p1', () => c.busy, () => c.hook)
+    const sent = await injectWhenReady(terminal, 'w:p1', 'hello', () => c.busy, () => c.hook)
+    assert.equal(ready.ready, sent === 'sent', JSON.stringify({ ...c, screen: c.screen.length }))
+    if (!ready.ready) assert.equal(ready.reason, sent)
+  }
+})
 
 test('a Herdr-blocked Codex that only quotes the dialog is not blocked; any condition missing keeps it blocked', () => {
   const lifted = { kind: 'codex', screen: quotedTrust }

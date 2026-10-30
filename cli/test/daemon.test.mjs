@@ -106,7 +106,7 @@ test('the daemon tab carries the staging update interval', () => {
 
 const { namedRoom, renderDelivery, renderKeepalive, reminderDue, rosterChanges, rosterOf, wakeMessages, typeable, FRAME } = await import('../src/render/forward.mjs')
 const { parseCommand, daemonsNamed, judge, senderOf, machineName, parseSpawn, spawnDirArg, parseTargets, freeName, seatRole, spawnLine, spawnPrompt, spawnCard, handoffPrompt, takeoverText, agoText, SPACE_FULL_LINE, COMMANDS, parseIdle, idleNotice, HELP_SHORT, HELP_FULL, parseRead, parseKeys, parseText } = await import('../src/daemon/commands.mjs')
-const { agentEnv, plan, deliveryMessages, composeDelivery, injectWhenReady, humanSpokeWithin, restartDue, restartNote, RESTART_NOTE_MS, notMember, newer, idleClock, keepaliveFor, createPacer, topicLeft, updateIntervals, KEEPALIVE_MS, IDLE_GAP_MS, TICK_MS, MIN_ROUND_MS } = await import('../src/daemon/main.mjs')
+const { agentEnv, plan, deliveryMessages, composeDelivery, injectWhenReady, paneReady, paneGate, dueNow, humanSpokeWithin, restartDue, restartNote, RESTART_NOTE_MS, notMember, newer, idleClock, keepaliveFor, createPacer, topicLeft, updateIntervals, KEEPALIVE_MS, IDLE_GAP_MS, TICK_MS, MIN_ROUND_MS } = await import('../src/daemon/main.mjs')
 const { idleHandoffMinutes, setIdleHandoffMinutes, spawnRecordPath, readJson, writeJson, CONFIG_FILE, REMOVED_FILE, ROLLBACK_FILE } = await import('../src/daemon/paths.mjs')
 const { createHealth } = await import('../src/daemon/health.mjs')
 const { clearRemoved, wasRemoved } = await import('../src/daemon/removed.mjs')
@@ -692,6 +692,60 @@ test('herdr helpers', () => {
 
 // Claude Code's update prompt as it shows on screen, split into words so its phrases never appear whole in an agent's
 // own output when this file is read: the running daemon may still stop delivering to a pane that shows them.
+test('no keep-alives: an agent with nothing to read is read once, then only when something is pushed', () => {
+  const key = 'r1|api@kai'
+  const state = { dirty: new Set(), retryAt: new Map(), quietSince: new Map(), awaiting: new Set(), pokedTs: new Map(), keepaliveMs: 0, sweep: false, linkOpen: () => true }
+  let reads = 0
+  const round = (now, messages = []) => {
+    if (!dueNow(key, now, state)) return
+    reads += 1
+    const { act, quiet } = plan({ messages, quietSince: state.quietSince.get(key), now, keepaliveMs: 0 })
+    if (quiet) state.quietSince.set(key, now)
+    return act
+  }
+  for (let i = 0; i < 24; i += 1) round(1_000_000 + i * TICK_MS)
+  assert.equal(reads, 1, 'two minutes of rounds read the room once (first sight), not every round')
+  state.dirty.add(key)
+  assert.equal(round(1_200_000, [msg(7)]), 'message', 'a push is still read and delivered')
+  assert.equal(reads, 2)
+  for (let i = 1; i <= 12; i += 1) round(1_200_000 + i * TICK_MS)
+  assert.equal(reads, 2)
+  assert.deepEqual(plan({ messages: [], now: 5, keepaliveMs: 0 }), { act: 'none', quiet: true })
+  assert.deepEqual(plan({ messages: [], quietSince: 1, now: 5, keepaliveMs: 0 }), { act: 'none', quiet: false })
+})
+
+test('a pane that could not take a delivery is asked again before the room is read; delivery follows once it frees', async () => {
+  const calls = []
+  let status = 'blocked'
+  const terminal = {
+    paneAgent: async () => { calls.push('status'); return { kind: 'claude', status } },
+    read: async () => '> ',
+    inject: async (pane, text) => { calls.push(`inject ${text}`) },
+  }
+  const waits = new Set(), key = 'r1|api@kai'
+  let listens = 0
+  // One delivery check as the daemon runs it: the gate, then listen, then typing.
+  const check = async () => {
+    const gate = await paneGate(waits, key, () => paneReady(terminal, 'w:p1'))
+    if (gate === 'wait') return gate
+    listens += 1
+    const r = await injectWhenReady(terminal, 'w:p1', 'message 7')
+    if (r !== 'sent') waits.add(key)
+    return r
+  }
+  assert.equal(await check(), 'blocked', 'the first try reads the room and finds the pane blocked')
+  assert.equal(listens, 1)
+  for (let i = 0; i < 30; i += 1) assert.equal(await check(), 'wait')
+  assert.equal(listens, 1, 'no read while the pane stays blocked')
+  assert.ok(!calls.some((c) => c.startsWith('inject')))
+  status = 'idle'
+  assert.equal(await check(), 'sent', 'once it frees, the room is read and the message typed in')
+  assert.equal(listens, 2)
+  assert.equal(calls.at(-1), 'inject message 7')
+  assert.equal(waits.size, 0)
+  assert.equal(await paneGate(waits, key, () => { throw new Error('not asked') }), 'go', 'an agent not waiting is not asked')
+})
+
 const UPDATE_PROMPT = [
   ['Update', 'available!', 'Run:', 'claude', 'update'].join(' '),
   ['❯', 'Update', 'now'].join(' '),

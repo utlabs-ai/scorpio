@@ -80,7 +80,9 @@ export function plan({ messages, kind, status, quietSince, pokedSeq, pokedTs, re
     const due = deliveryMessages(messages, pokedSeq, pokedTs, now, retryMs, resentSeq)
     return { act: due.length ? 'message' : 'none', quiet: true }
   }
-  if (!keepaliveMs) return { act: 'none', quiet: false }
+  // No keep-alives: an agent with nothing to read is quiet from the first look on, so it is read again
+  // only when something is pushed for it, a retry is due, or its link is down; not on every round.
+  if (!keepaliveMs) return { act: 'none', quiet: quietSince === undefined }
   if (quietSince === undefined) return { act: 'none', quiet: true }
   if (now - quietSince < keepaliveMs) return { act: 'none', quiet: false }
   if (!kind || !CLIS[kind]) return { act: 'skip', why: 'cannot tell which CLI it is', quiet: true }
@@ -101,21 +103,31 @@ export function deliveryMessages(messages, pokedSeq, pokedTs, now, retryMs = RET
 }
 
 /**
- * Ask Herdr about this pane now before any text is typed: its status (a dialog shows as blocked) is the only
- * source of dialog state.
- * A Codex pane's blocked is checked against its screen (dialogBlocked); when that lifts it, the text goes in as
- * injectLifted types it. Herdr still refusing that prompt is 'blocked', as for any blocked pane.
+ * Can this pane take text now? Asks Herdr each time: its status (a dialog shows as blocked) is the only
+ * source of dialog state. A Codex pane's blocked is checked against its screen (dialogBlocked) and counts
+ * as ready when that lifts it. {ready: true, kind, status} or {ready: false, reason: 'blocked' | 'unavailable'}.
+ */
+export async function paneReady(terminal, pane, approvalBusy = () => false, hookWaiting = () => false) {
+  if (approvalBusy(pane)) return { ready: false, reason: 'blocked' }
+  let agent
+  try { agent = await terminal.paneAgent(pane) } catch { return { ready: false, reason: 'unavailable' } }
+  const { kind = null, status = null } = agent || {}
+  if (status === 'blocked' && kind !== 'codex') return { ready: false, reason: 'blocked' }
+  if (!['idle', 'done', 'working', 'blocked'].includes(status)) return { ready: false, reason: 'unavailable' }
+  const screen = await terminal.read(pane, 200)
+  if (dialogBlocked(status, { kind, screen, hookWaiting: hookWaiting(pane) })) return { ready: false, reason: 'blocked' }
+  if (approvalBusy(pane)) return { ready: false, reason: 'blocked' }
+  return { ready: true, kind, status }
+}
+
+/**
+ * Types text into the pane when paneReady says it can take it: 'sent', or why not ('blocked', 'unavailable').
+ * A lifted Codex pane gets the text as injectLifted types it; Herdr still refusing that prompt is 'blocked'.
  */
 export async function injectWhenReady(terminal, pane, text, approvalBusy = () => false, hookWaiting = () => false) {
-  if (approvalBusy(pane)) return 'blocked'
-  let agent
-  try { agent = await terminal.paneAgent(pane) } catch { return 'unavailable' }
-  const { kind = null, status = null } = agent || {}
-  if (status === 'blocked' && kind !== 'codex') return 'blocked'
-  if (!['idle', 'done', 'working', 'blocked'].includes(status)) return 'unavailable'
-  const screen = await terminal.read(pane, 200)
-  if (dialogBlocked(status, { kind, screen, hookWaiting: hookWaiting(pane) })) return 'blocked'
-  if (approvalBusy(pane)) return 'blocked'
+  const p = await paneReady(terminal, pane, approvalBusy, hookWaiting)
+  if (!p.ready) return p.reason
+  const { kind, status } = p
   if (status !== 'blocked') {
     await terminal.inject(pane, text)
     return 'sent'
@@ -125,6 +137,32 @@ export async function injectWhenReady(terminal, pane, text, approvalBusy = () =>
     throw e
   }
   return 'sent'
+}
+
+/**
+ * Before reading the room for an agent whose pane could not take the last delivery (key in waits): 'wait'
+ * while the pane is still not ready (ready() as paneReady), 'released' once it is (the key leaves waits),
+ * 'go' for an agent that was not waiting.
+ */
+export async function paneGate(waits, key, ready) {
+  if (!waits.has(key)) return 'go'
+  if (!(await ready()).ready) return 'wait'
+  waits.delete(key)
+  return 'released'
+}
+
+/**
+ * Is this agent's room read this round? Something pushed for it, a retry due, first sight, a delivery not
+ * marked within RETRY_MS, a keep-alive due, or the minute sweep while its link is down. Takes the dirty mark
+ * and a due retry as it answers.
+ */
+export function dueNow(key, now, { dirty, retryAt, quietSince, awaiting, pokedTs, keepaliveMs, sweep, linkOpen }) {
+  if (dirty.delete(key)) return true
+  if (retryAt.has(key) && now >= retryAt.get(key)) { retryAt.delete(key); return true }
+  if (!quietSince.has(key)) return true // first sight
+  if (awaiting.has(key) && now - (pokedTs.get(key) || 0) >= RETRY_MS) return true
+  if (keepaliveMs && now - quietSince.get(key) >= keepaliveMs) return true
+  return sweep && !linkOpen()
 }
 
 /**
@@ -537,14 +575,21 @@ async function main() {
 
   /** Read one agent's unmarked messages and act on them. */
   const inflight = new Set()
+  const paneWaits = new Set() // keys whose pane could not take a delivery: asked again before the room is read
   async function check(entry, paneOf) {
     const key = keyOf(entry.roomId, entry.name)
     if (inflight.has(key)) { dirty.add(key); return }
     inflight.add(key)
     try {
+      // A pane that was not ready is asked again first, and the room is read only once it is: a dialog can
+      // stay open for hours, and a read every retry costs the server for nothing. Once it frees, listen
+      // (not the pushed copy) says everything still unmarked, including what waited.
+      const gate = await paneGate(paneWaits, key, () => paneReady(terminal, entry.pane, approvals.busy, approvals.hookWaiting))
+      if (gate === 'wait') { retryAt.set(key, Date.now() + FAILED_RETRY_MS); return }
+      const released = gate === 'released'
       // Fast path: what the server just pushed, typed in without another round trip, when the room's
       // members are known (host connections send them). Everything else reads listen, the authority.
-      const fresh = pushed.get(key)
+      const fresh = released ? null : pushed.get(key)
       pushed.delete(key)
       let room = rooms.get(entry.roomId)
       let messages
@@ -595,6 +640,7 @@ async function main() {
       const waitForPane = (reason) => {
         if (reason === 'sent') return false
         retryAt.set(key, now + FAILED_RETRY_MS)
+        paneWaits.add(key)
         if (reason === 'blocked') log.warn(`${entry.name}'s pane ${entry.pane} is blocked (a dialog may be open); delivery waits`)
         else log.warn(`${entry.name}'s pane ${entry.pane} status is unavailable; delivery waits`)
         return true
@@ -775,16 +821,9 @@ async function main() {
       const sweep = now - lastSweep >= SWEEP_MS
       if (sweep) lastSweep = now
       const linkOpen = (e) => (seat.mode(e.roomId) === 'host' ? links.get(`h|${e.roomId}`) : links.get(`a|${e.roomId}|${e.name}`))?.isOpen
-      const due = live.filter((e) => {
-        const key = keyOf(e.roomId, e.name)
-        if (dirty.delete(key)) return true
-        if (retryAt.has(key) && now >= retryAt.get(key)) { retryAt.delete(key); return true }
-        if (!quietSince.has(key)) return true // first sight
-        if (awaiting.has(key) && now - (pokedTs.get(key) || 0) >= RETRY_MS) return true
-        const keepaliveMs = keepaliveMsOf(e)
-        if (keepaliveMs && now - quietSince.get(key) >= keepaliveMs) return true
-        return sweep && !linkOpen(e)
-      })
+      const due = live.filter((e) => dueNow(keyOf(e.roomId, e.name), now, {
+        dirty, retryAt, quietSince, awaiting, pokedTs, keepaliveMs: keepaliveMsOf(e), sweep, linkOpen: () => linkOpen(e),
+      }))
       // Deliveries and room commands run on their own: a slow request on one side (a few seconds each
       // on a bad network, more with retries) never holds up the other or the next round.
       for (const e of due) check(e, paneOf).catch((err) => log.error(`delivery check failed: ${err?.code || err?.name || 'unknown'}`))
