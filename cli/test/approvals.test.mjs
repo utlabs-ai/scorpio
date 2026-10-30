@@ -136,6 +136,19 @@ test('screen-only card answers only a configured key', async () => {
   await f.answer(card, { key: 'esc' }); assert.deepEqual(f.keys, ['esc'])
   assert.ok(f.logs.includes(`approval ${card.id} answered: key esc, ok`))
 })
+test('screen-only card drops blank rows: a fresh Claude pane shows its welcome text and input box', async () => {
+  const welcome = ['╭─── Claude Code ───╮', '│  Welcome back!    │', '│  /work            │', '╰───────────────────╯', '', '  Tips for getting started', '  1. Run /init to create a CLAUDE.md file']
+  const input = ['╭───────────────────╮', '│ > Try "fix lint"  │', '╰───────────────────╯', '  ? for shortcuts']
+  const screen = [...welcome, ...Array.from({ length: 78 - welcome.length - input.length }, (_, i) => i % 2 ? '   ' : ''), ...input].join('\n')
+  assert.equal(screen.split('\n').length, 78)
+  const f = fixture({ screen, status: 'blocked' }); const card = await f.open()
+  assert.equal(card.menu, null)
+  assert.deepEqual(card.screen.split('\n'), [...welcome.filter((line) => line), ...input])
+  const opens = () => f.frames.filter((x) => x.type === 'approval_open').length
+  const before = opens()
+  f.screen(screen.replace('\n\n', '\n   \n')); await f.approvals.tick()
+  assert.equal(opens(), before, 'a change in blank rows alone sends no update')
+})
 test('Claude typed rejection reason keeps sendText and Enter', async () => {
   const f = fixture(); const card = await f.open()
   await f.answer(card, { n: 3, message: 'Please stop' })

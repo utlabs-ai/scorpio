@@ -3,8 +3,13 @@ const OPTION = /^\s*[❯›>]?\s*(\d+)\.\s+(.+)$/
 // Keep parser provenance local so cards retain their wire shape.
 const codexMenus = new WeakSet()
 const HINT = /(?:esc|enter|tab|ctrl[+\-])/i
+// Menu parsing reads the raw rows: blank rows separate a question from what is above it.
+function recentRows(screen) {
+  return String(screen || '').replace(/\x1b\[[0-?]*[ -/]*[@-~]/g, '').trimEnd().split('\n').slice(-30)
+}
+// A card shows text rows only: a fresh Claude pane is mostly blank rows above its input box.
 export function screenTail(screen) {
-  return String(screen || '').replace(/\x1b\[[0-?]*[ -/]*[@-~]/g, '').trimEnd().split('\n').slice(-30).join('\n')
+  return String(screen || '').replace(/\x1b\[[0-?]*[ -/]*[@-~]/g, '').split('\n').filter((line) => line.trim()).slice(-30).join('\n')
 }
 // The wording of Codex's hook-review and folder-trust dialogs.
 export const CODEX_DIALOG_WORDS = ['Hooks need review', 'Trust all and continue', 'Trust this folder?', 'Trust and continue']
@@ -38,7 +43,7 @@ function parsedMenu(menu, cli) {
 }
 // Cursor menus require aligned options and a confirmation hint, so an input prompt is not a menu.
 export function cursorMenu(screen, cli = 'claude') {
-  const lines = screenTail(screen).split('\n')
+  const lines = recentRows(screen)
   for (let marked = lines.length - 1; marked >= 0; marked--) {
     const marker = lines[marked].match(/^(\s*)[❯›] (\S.*)$/)
     if (!marker || OPTION.test(lines[marked])) continue
@@ -67,7 +72,7 @@ export function cursorMenu(screen, cli = 'claude') {
   return null
 }
 export function parseMenu(screen, width = null, cli = 'claude') {
-  const lines = screenTail(screen).split('\n')
+  const lines = recentRows(screen)
   const starts = lines.flatMap((l, i) => OPTION.test(l) ? [i] : [])
   if (!starts.length) return cursorMenu(screen, cli)?.menu || null
   // Ignore older numbered lists above the last contiguous menu.
@@ -109,7 +114,7 @@ export function visibleMenu(screen, width, cli) {
 const normalize = (text) => String(text).replace(/[\s\u2500-\u257f\u2022\u00b7\u25a0-\u25ff\u2800-\u28ff✻✶✳✢✽]+/g, '')
 export function menuIdentity(screen, menu) {
   if (!menu) return null
-  const lines = screenTail(screen).split('\n')
+  const lines = recentRows(screen)
   const questionAt = lines.findLastIndex((line) => line.trim() === menu.question[0])
   const context = []
   for (let i = questionAt - 1; !codexMenus.has(menu) && i >= 0 && context.length < 8; i--) {
