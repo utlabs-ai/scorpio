@@ -923,6 +923,19 @@ test('dialog state comes only from Herdr, regardless of screen text', async () =
 
 // An idle Codex that received a message quoting the folder-trust dialog: 68 rows, the quoted lines in the
 // middle (one wrapped without its │), Codex's own input at the bottom.
+// Codex's update menu as it opens at startup, split into words so its phrases never appear whole in an agent's own
+// output when this file is read: the running daemon may still stop delivering to a pane that shows them.
+const CODEX_UPDATE_MENU = [
+  ['', '', '✨', 'Update', 'available!', '0.46.0', '->', '0.47.0'].join(' '),
+  [''].join(' '),
+  ['', '', 'Release', 'notes:', 'https://github.com/openai/codex/releases/latest'].join(' '),
+  [''].join(' '),
+  ['›', '1.', 'Update', 'now', '(runs', '`npm', 'install', '-g', '@openai/codex`)'].join(' '),
+  ['', '', '2.', 'Skip'].join(' '),
+  ['', '', '3.', 'Skip', 'until', 'next', 'version'].join(' '),
+  [''].join(' '),
+  ['', '', 'Press', 'enter', 'to', 'continue'].join(' '),
+].join('\n')
 const quotedTrust = (() => {
   const quoted = ['  │   Folder access', '  │   /tmp/work', '  │   Trust this folder? Codex can read, edit, and run files here, subject to your permission',
     '  │   settings. Folder settings can run code automatically, even without a model request.', '  Continue', '  │   only if you trust these files.',
@@ -992,6 +1005,11 @@ test('delivery to a lifted Codex pane: reported idle, prompted, released; no rep
   assert.deepEqual(calls, ['pane get', 'pane read'])
   screen = quotedTrust.replace('• ok', 'Trust this folder?')
   assert.equal(await run(), 'blocked', 'unquoted dialog wording')
+  assert.deepEqual(calls, ['pane get', 'pane read'])
+  // Codex's update menu open below the quoted dialog (Herdr blocked): Enter there would update Codex, so the
+  // lift must not apply. Nothing is reported to Herdr, nothing typed.
+  screen = quotedTrust.replace(/› Ask Codex[\s\S]*$/, CODEX_UPDATE_MENU)
+  assert.equal(await run(), 'blocked', 'the update menu is a menu on screen')
   assert.deepEqual(calls, ['pane get', 'pane read'])
   screen = quotedTrust
   let releases = 0

@@ -690,6 +690,14 @@ test('herdr helpers', () => {
   assert.equal(herdrError({ message: 'Command failed: herdr agent start\n{"error":{"code":"agent_pane_busy","message":"busy"}}' }).code, 'agent_pane_busy')
 })
 
+// Claude Code's update prompt as it shows on screen, split into words so its phrases never appear whole in an agent's
+// own output when this file is read: the running daemon may still stop delivering to a pane that shows them.
+const UPDATE_PROMPT = [
+  ['Update', 'available!', 'Run:', 'claude', 'update'].join(' '),
+  ['❯', 'Update', 'now'].join(' '),
+  ['', '', 'Skip', 'until', 'next', 'version'].join(' '),
+].join('\n')
+
 test('delivery checks this pane again before typing; blocked or unavailable never injects', async () => {
   const calls = []
   let status = 'blocked', screen = '> '
@@ -708,10 +716,10 @@ test('delivery checks this pane again before typing; blocked or unavailable neve
     assert.equal(await injectWhenReady(terminal, 'w:p1', 'hello'), 'sent')
     assert.deepEqual(calls, ['status', 'read', 'inject'])
   }
-  screen = 'Update available! Run: claude update\n❯ Update now\n  Skip until next version'
+  status = 'idle'; screen = UPDATE_PROMPT
   calls.length = 0
-  assert.equal(await injectWhenReady(terminal, 'w:p1', 'hello'), 'dialog')
-  assert.deepEqual(calls, ['status', 'read'], 'the update prompt on screen still stops typing')
+  assert.equal(await injectWhenReady(terminal, 'w:p1', 'hello'), 'sent')
+  assert.deepEqual(calls, ['status', 'read', 'inject'], 'Herdr says idle: the update prompt\'s words on screen do not stop typing')
   // Other trust wording still relies on herdr; only the known Codex dialogs supplement its status.
   screen = 'Do you trust the files in this folder?\n\n ❯ 1. Yes, proceed\n   2. No, exit'
   calls.length = 0
@@ -1837,12 +1845,14 @@ test('idle handoff: said in the room first, handed over like /handoff, nothing m
   assert.equal(m.said.length, 1, 'its own handover messages say the rest')
 })
 
-test('idle handoff: one that does not leave is reported; a dialog on screen stops it before anything is said', async () => {
+test('idle handoff: one that does not leave is reported; a Herdr-blocked pane stops it before anything is said', async () => {
   const m = fakeMachine()
   await m.tick()
-  m.screen.text = 'Update available! Run: claude update\n❯ Update now\n  Skip until next version'
+  m.screen.text = UPDATE_PROMPT
+  m.panes[0].agent_status = 'blocked'
   assert.equal(await m.seat.idleHandoff({ entry: API, minutes: 60, panes: m.panes }), 'a dialog is open')
   assert.deepEqual([m.said, m.typed], [[], []])
+  m.panes[0].agent_status = 'idle'
   m.screen.text = '> '
   assert.equal(await m.seat.idleHandoff({ entry: API, minutes: 60, panes: m.panes }), 'started')
   m.advance(HANDOFF_MS + 1000)
@@ -2109,15 +2119,17 @@ test('/spawn: startup trust unrecognized by Herdr reports after 30 seconds witho
   assert.deepEqual(m.pressed, [])
 })
 
-test('/spawn: update prompt and Codex blocked dialog use the same early notice', async () => {
+test('/spawn: a Codex blocked dialog gets the early notice; the update prompt\'s words with Herdr not blocked wait for the 30s still screen', async () => {
   const { m } = await spawnedAtDialog({}, { kind: 'codex' })
   assert.match(m.said.at(-1), /screen has not changed for 0s; the daemon does not answer it\.\nqa · its screen is with its owner, as a card only they can see; waiting for them\.$/)
-  const u = fakeMachine({ isDir: () => true })
+  let u
+  u = fakeMachine({ isDir: () => true, sleep: async (ms) => { u.advance(ms) } })
   u.panes.push({ ...QA_PANE, agent_status: 'idle' })
-  u.screen.text = 'Update available! Run: claude update\n❯ Update now\n  Skip until next version'
+  u.screen.text = UPDATE_PROMPT
   u.ask('@daemon.box@kai /spawn claude qa /work go')
   await u.tick()
-  assert.match(u.said.at(-1), /screen has not changed for 0s; the daemon does not answer it\.\nqa · its screen is with its owner, as a card only they can see; waiting for them\.$/)
+  for (let i = 0; i < 20 && !u.said.some((t) => t.includes('has not joined yet')); i += 1) await new Promise((r) => setImmediate(r))
+  assert.match(u.said.at(-1), /screen has not changed for 30s; the daemon does not answer it\.\nqa · its screen is with its owner, as a card only they can see; waiting for them\.$/)
 })
 
 test('/spawn: working or changing screens do not stall; join ends screen sampling', async () => {

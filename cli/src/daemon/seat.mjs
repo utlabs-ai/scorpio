@@ -22,7 +22,7 @@ import { createKeys, findKey, keyList, keysFor } from './keys.mjs'
 import { createSpawnOptions, spawnHelpOptions } from './spawn-config.mjs'
 import { PERMS, SETTING_UNREADABLE, permissionLevel, permissionNotice, spawnPermission } from './spawn-permission.mjs'
 import { deviceId, handoffCopyPath, handoffPath, spawnPath, spawnRecordPath, CONFIG_FILE, SEAT_FILE, ROLLBACK_FILE, readJson, writeJson } from './paths.mjs'
-import { argsFor, autoPermission, fullPermission, permOf, CLIS, KINDS, modelOf, modelText, NEVER_ANSWER, dialogBlocked, runsCli, stoppedOnNetworkError, withModel } from '../adapters/cli/index.mjs'
+import { argsFor, autoPermission, fullPermission, permOf, CLIS, KINDS, modelOf, modelText, dialogBlocked, runsCli, stoppedOnNetworkError, withModel } from '../adapters/cli/index.mjs'
 import { claudeWindows, codexWindows, readClaudeRateLimits, readCodexRateLimits, usageLine } from '../adapters/cli/usage.mjs'
 import { agentClisText, detectedText, installedChanged } from '../adapters/cli/detect.mjs'
 import { HOME } from './paths.mjs'
@@ -356,7 +356,7 @@ export function createSeat({
    * Type a command's text into an agent and watch it start working. 'ok' it moved; 'unknown' typed but
    * not seen moving in time (Codex often; the text did arrive): never typed again, Codex would run it
    * twice, and the later timeouts catch it; 'blocked' a dialog is open (herdr says blocked and dialogBlocked
-   * does not lift it, or the update prompt is on screen), nothing typed (keys would answer it); 'gone' no
+   * does not lift it), nothing typed (keys would answer it); 'gone' no
    * agent in that pane any more (only a shell), nothing typed (each line would run). A lifted pane is typed
    * into with injectLifted and is 'unknown': Herdr holds it as blocked, so it is never seen working.
    */
@@ -365,7 +365,7 @@ export function createSeat({
     const { kind = null, status = null } = await terminal.paneAgent(pane) || {}
     if (status === 'blocked' && kind !== 'codex') return 'blocked'
     const screen = await terminal.read(pane, 200)
-    if (dialogBlocked(status, { kind, screen, hookWaiting: approvalHookWaiting(pane) }) || NEVER_ANSWER.test(tail(screen, 20))) return 'blocked'
+    if (dialogBlocked(status, { kind, screen, hookWaiting: approvalHookWaiting(pane) })) return 'blocked'
     try {
       if (approvalBusy(pane)) return 'blocked'
       if (status === 'blocked') {
@@ -455,7 +455,7 @@ export function createSeat({
       const screen = await terminal.read(pane, 200)
       if (!screen && panes && !me) return { ok: false, gone: true }
       const seconds = observeSpawn(op, screen, false)
-      if (NEVER_ANSWER.test(tail(screen, 20)) || (up && dialogBlocked(me.agent_status, { kind, screen, hookWaiting: approvalHookWaiting(pane) })) || seconds * 1000 >= SPAWN_STALL_MS) return { stalled: true, screen, seconds }
+      if ((up && dialogBlocked(me.agent_status, { kind, screen, hookWaiting: approvalHookWaiting(pane) })) || seconds * 1000 >= SPAWN_STALL_MS) return { stalled: true, screen, seconds }
     }
     if (me && me.agent === kind) {
       const screen = await terminal.read(pane, 200)
@@ -626,7 +626,7 @@ export function createSeat({
     const kind = kindAt(panes, agent.pane)
     if (approvalBusy(agent.pane) || (status === 'blocked' && kind !== 'codex')) return 'a dialog is open'
     const screen = await terminal.read(agent.pane, 200)
-    if (dialogBlocked(status, { kind, screen, hookWaiting: approvalHookWaiting(agent.pane) }) || NEVER_ANSWER.test(tail(screen, 20))) return 'a dialog is open'
+    if (dialogBlocked(status, { kind, screen, hookWaiting: approvalHookWaiting(agent.pane) })) return 'a dialog is open'
     const role = shortOf(entry.name)
     const said = await say(roomId, idleNotice({ minutes, role }))
     if (!Number.isInteger(said?.seq)) return 'could not say so in the topic'

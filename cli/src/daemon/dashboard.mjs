@@ -120,10 +120,6 @@ export function dashboardLog(record, language = 'en') {
     const who = shortName(match[1])
     return { ...record, text: zh(language) ? `${who} 等待确认 · 查看 /read ${who} · 按键 /keys ${who} …` : `${who} needs confirmation · /read ${who} to view · /keys ${who} to answer` }
   }
-  if ((match = raw.match(/^(\S+)'s pane .* shows a dialog/))) {
-    const who = shortName(match[1])
-    return { ...record, text: zh(language) ? `${who} 启动被对话框阻塞 · 查看 /read ${who}` : `${who} blocked by a startup dialog · /read ${who} to view` }
-  }
   if ((match = raw.match(/^update to (\S+) failed: (.+)/))) return { ...record, text: zh(language) ? `更新失败：${match[2]}` : `Update failed: ${match[2]}` }
   if ((match = raw.match(/^updated to (\S+)$/))) return { ...record, text: zh(language) ? `已更新至 ${match[1]} · 下次启动生效` : `Updated to ${match[1]} · takes effect on next start` }
   if ((match = raw.match(/^\/([^ ]+) failed: (.+)/))) return { ...record, text: zh(language) ? `命令执行失败：/${match[1]} · ${match[2]}` : `Command failed: /${match[1]} · ${match[2]}` }

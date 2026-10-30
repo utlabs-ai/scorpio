@@ -91,10 +91,6 @@ export function modelText(kind, args) {
   return [model, effort && (kind === 'claude' ? `effort ${effort}` : `reasoning ${effort}`)].filter(Boolean).join(', ') || 'default model'
 }
 
-// Dialogs a CLI opens by itself that must never be answered: Enter selects the first option, which
-// here is "update now". Seen on screen, the daemon types nothing.
-export const NEVER_ANSWER = /Update available|Update now|Skip until next version/i
-
 // Herdr's blocked status is the only source of dialog state: no screen text makes a pane blocked. One case
 // lifts it: Herdr 0.9.5 also says blocked for an idle Codex whose screen only quotes Codex's folder-trust or
 // hook-review dialog (a message's lines start with │). Such a pane is not blocked when every line with that

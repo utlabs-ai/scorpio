@@ -29,8 +29,8 @@ import { createKeys } from './keys.mjs'
 import { createApprovals, writeApprovalSettings } from './approvals.mjs'
 import { createSeat } from './seat.mjs'
 import { carryPermissions } from './spawn-permission.mjs'
-import { createHerdr, herdrError, tail } from '../adapters/terminal/herdr.mjs'
-import { CLIS, NEVER_ANSWER, dialogBlocked } from '../adapters/cli/index.mjs'
+import { createHerdr, herdrError } from '../adapters/terminal/herdr.mjs'
+import { CLIS, dialogBlocked } from '../adapters/cli/index.mjs'
 import { createDetector } from '../adapters/cli/detect.mjs'
 import { createBlockedReasons } from './blocked.mjs'
 import { createDaemonLog, herdrExit } from './log.mjs'
@@ -101,7 +101,8 @@ export function deliveryMessages(messages, pokedSeq, pokedTs, now, retryMs = RET
 }
 
 /**
- * Ask Herdr about this pane now (a dialog shows as blocked), then look for the update prompt before any text is typed.
+ * Ask Herdr about this pane now before any text is typed: its status (a dialog shows as blocked) is the only
+ * source of dialog state.
  * A Codex pane's blocked is checked against its screen (dialogBlocked); when that lifts it, the text goes in as
  * injectLifted types it. Herdr still refusing that prompt is 'blocked', as for any blocked pane.
  */
@@ -114,7 +115,6 @@ export async function injectWhenReady(terminal, pane, text, approvalBusy = () =>
   if (!['idle', 'done', 'working', 'blocked'].includes(status)) return 'unavailable'
   const screen = await terminal.read(pane, 200)
   if (dialogBlocked(status, { kind, screen, hookWaiting: hookWaiting(pane) })) return 'blocked'
-  if (NEVER_ANSWER.test(tail(screen, 20))) return 'dialog'
   if (approvalBusy(pane)) return 'blocked'
   if (status !== 'blocked') {
     await terminal.inject(pane, text)
@@ -596,7 +596,6 @@ async function main() {
         if (reason === 'sent') return false
         retryAt.set(key, now + FAILED_RETRY_MS)
         if (reason === 'blocked') log.warn(`${entry.name}'s pane ${entry.pane} is blocked (a dialog may be open); delivery waits`)
-        else if (reason === 'dialog') log.warn(`${entry.name}'s pane ${entry.pane} shows a dialog; delivery waits`)
         else log.warn(`${entry.name}'s pane ${entry.pane} status is unavailable; delivery waits`)
         return true
       }
