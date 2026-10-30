@@ -48,9 +48,13 @@ test('memo forms send their methods, bodies and fresh nonces; reads page the rig
   assert.equal((await run('memo',['long=L2','version=1','text=-'],'from stdin\n')).code,0);assert.equal(seen.at(-1).body.text,'from stdin')
   const conflict=await run('memo',['long=L1','version=2','text=conflict']);assert.equal(conflict.code,1);assert.equal(conflict.out.error,'version_conflict');assert.deepEqual(conflict.out.current,current)
   const count=seen.length
-  for(const args of [['add=a','retire=M1','from=#1'],['from=#1'],['add=a'],['add=a','from=12'],['show=M0'],['restore=L3','version=1'],['long=L1','text=a'],['long=L1','version=-1','text=a'],['long=L1','version=0'],['long=L1','version=0','text=a',`textFile=${file}`],['long=L1','version=0','text=a','merged=M1,'],['retired=false'],['retired=true','limit=51'],['versions=L1','limit=21'],['show=M1','before=M2'],['typo=x']]){
+  for(const args of [['add=a','retire=M1','from=#1'],['from=#1'],['add=a','from=12'],['show=M0'],['restore=L3','version=1'],['long=L1','text=a'],['long=L1','version=-1','text=a'],['long=L1','version=0'],['long=L1','version=0','text=a',`textFile=${file}`],['long=L1','version=0','text=a','merged=M1,'],['retired=false'],['retired=true','limit=51'],['versions=L1','limit=21'],['show=M1','before=M2'],['typo=x']]){
     const r=await run('memo',args);assert.equal(r.code,1,JSON.stringify(args));assert.equal(r.out.error,'bad_request')
   }
+  for(const args of [['add=a'],['add=a','from=']]){
+    const r=await run('memo',args);assert.equal(r.code,1,JSON.stringify(args));assert.equal(r.out.error,'source_required');assert.equal(r.out.next,"from= is the memo's source: a message (#123) or a task (T45).")
+  }
+  const bad=await run('memo',['add=a','from=12']);assert.equal(bad.out.next,"from= is the memo's source: a message (#123) or a task (T45).")
   assert.equal(seen.length,count)
   const sent=await run('send',['text=@kai used the source','cite=M3,M5','misled=M4']);assert.equal(sent.code,0);assert.deepEqual(seen.at(-1).body.cite,['M3','M5']);assert.deepEqual(seen.at(-1).body.misled,['M4']);assert.deepEqual(sent.out.memo,{cite:[{id:'M3',counted:true,score:4}],misled:[]})
   const sentCount=seen.length

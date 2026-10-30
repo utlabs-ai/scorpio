@@ -39,7 +39,9 @@ export async function memo(args) {
   } else if (op) {
     body = { op: op === 'long' ? 'long' : op }
     if (op === 'add') {
-      if (!/^(?:#[1-9]\d*|T[1-9]\d*)$/.test(args.from || '')) throw new CliError('bad_request', "from= is the memo's source: a message (#123) or a task (T45).")
+      const sourceHint = "from= is the memo's source: a message (#123) or a task (T45)."
+      if (args.from === undefined || args.from === '') throw new CliError('source_required', sourceHint)
+      if (!/^(?:#[1-9]\d*|T[1-9]\d*)$/.test(args.from)) throw new CliError('bad_request', sourceHint)
       body.text = textArg({ text: args.add })
       body.from = args.from
       if (args.replaces !== undefined) body.replaces = memoId(args.replaces, 'replaces')
