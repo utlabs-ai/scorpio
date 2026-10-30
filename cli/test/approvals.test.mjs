@@ -63,10 +63,11 @@ function fixture({ cli = 'claude', screen = bash(), status = 'blocked', rooms = 
   let clock = 1000, content = screen, state = status, live = true
   const frames = [], keys = [], texts = [], injections = [], replies = [], logs = []
   const target = { pane: 'p1', name: 'api@kai', cli, rooms }
-  const terminal = { adapter: 'herdr', paneWidth: async () => width, paneStatus: async () => state, read: async () => content,
+  const terminal = { adapter: 'herdr', paneWidth: async () => width, paneStatus: async () => state, paneAgent: async () => ({ kind: cli, status: state }), read: async () => content,
     sendKeys: async (_, key) => { keys.push(key); content = 'working'; state = 'working' },
     sendText: async (_, text) => { texts.push(text) },
-    inject: async (pane, text) => { injections.push({ pane, text }) } }
+    inject: async (pane, text) => { injections.push({ pane, text }) },
+    injectLifted: async (pane, kind, text) => { injections.push({ pane, text, lifted: kind }) } }
   const approvals = createApprovals({ terminal, targets: async () => live ? [target] : [],
     send: (roomId, frame) => frames.push({ roomId, ...frame }), now: () => clock, sleep: async (ms) => { clock += ms },
     keyTable: async () => ({ settleMs, keys: ['esc', 'up', 'down', 'enter'].map((name) => ({ name, label: name, herdr: name })) }), log: (line) => logs.push(line) })
@@ -967,6 +968,34 @@ test('approvals: a lifted Codex pane gets no card, and an open screen card for i
   assert.equal(g.frames.at(-1).reason, 'answered_here')
   const h = fixture({ cli: 'claude', status: 'blocked', screen: quotedTrust })
   assert.ok(await h.open(), 'Claude pane: card as now')
+})
+
+test('delivery to a lifted Codex pane: reported idle, prompted, released; no report while it stays blocked', async () => {
+  const { createHerdr } = await import('../src/adapters/terminal/herdr.mjs')
+  let kind = 'codex', screen = quotedTrust, refuse = false
+  const calls = []
+  const terminal = createHerdr({ exec: async (args) => {
+    calls.push(args.slice(0, 2).join(' '))
+    if (args[1] === 'get') return JSON.stringify({ result: { pane: { pane_id: 'p1', agent: kind, agent_status: 'blocked' } } })
+    if (args[1] === 'read') return screen
+    if (args[1] === 'prompt' && refuse) throw new Error('Command failed\n{"error":{"code":"agent_blocked","message":"blocked"}}')
+    return '{}'
+  } })
+  const run = async (hookWaiting = false) => { calls.length = 0; return injectWhenReady(terminal, 'p1', 'next message', () => false, () => hookWaiting) }
+  assert.equal(await run(), 'sent')
+  assert.deepEqual(calls, ['pane get', 'pane read', 'pane report-agent', 'agent prompt', 'pane release-agent'])
+  refuse = true
+  assert.equal(await run(), 'blocked', 'Herdr still refusing: delivery waits as for any blocked pane')
+  assert.equal(calls.at(-1), 'pane release-agent')
+  refuse = false
+  assert.equal(await run(true), 'blocked', 'an approval hook waits')
+  assert.deepEqual(calls, ['pane get', 'pane read'])
+  screen = quotedTrust.replace('• ok', 'Trust this folder?')
+  assert.equal(await run(), 'blocked', 'unquoted dialog wording')
+  assert.deepEqual(calls, ['pane get', 'pane read'])
+  kind = 'claude'; screen = quotedTrust
+  assert.equal(await run(), 'blocked', 'Claude pane: Herdr as now, screen not read')
+  assert.deepEqual(calls, ['pane get'])
 })
 
 // Captured menu layouts with neutral names; blank lines match terminal block spacing.

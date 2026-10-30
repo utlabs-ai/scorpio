@@ -355,18 +355,23 @@ export function createSeat({
   /**
    * Type a command's text into an agent and watch it start working. 'ok' it moved; 'unknown' typed but
    * not seen moving in time (Codex often; the text did arrive): never typed again, Codex would run it
-   * twice, and the later timeouts catch it; 'blocked' a dialog is open (herdr says blocked, or the update
-   * prompt is on screen), nothing typed (keys would answer it); 'gone' no agent in that pane any more
-   * (only a shell), nothing typed (each line would run).
+   * twice, and the later timeouts catch it; 'blocked' a dialog is open (herdr says blocked and dialogBlocked
+   * does not lift it, or the update prompt is on screen), nothing typed (keys would answer it); 'gone' no
+   * agent in that pane any more (only a shell), nothing typed (each line would run). A lifted pane is typed
+   * into with injectLifted and is 'unknown': Herdr holds it as blocked, so it is never seen working.
    */
   async function promptPane(pane, text) {
     if (approvalBusy(pane)) return 'blocked'
-    const status = await terminal.paneStatus(pane)
-    if (dialogBlocked(status)) return 'blocked'
+    const { kind = null, status = null } = await terminal.paneAgent(pane) || {}
+    if (status === 'blocked' && kind !== 'codex') return 'blocked'
     const screen = await terminal.read(pane, 200)
-    if (dialogBlocked(status, screen) || NEVER_ANSWER.test(tail(screen, 20))) return 'blocked'
+    if (dialogBlocked(status, { kind, screen, hookWaiting: approvalHookWaiting(pane) }) || NEVER_ANSWER.test(tail(screen, 20))) return 'blocked'
     try {
       if (approvalBusy(pane)) return 'blocked'
+      if (status === 'blocked') {
+        await terminal.injectLifted(pane, kind, text)
+        return 'unknown'
+      }
       await terminal.injectAndWatch(pane, text)
       return 'ok'
     } catch (error) {
@@ -618,9 +623,10 @@ export function createSeat({
     if (ops.some((op) => (op.type === 'handoff' ? op.targets.some((a) => a.name === entry.name && !a.result) : op.name === entry.name))) return 'a command is already handling it'
     // A dialog on screen: stuck, not idle; and typed text would answer the dialog.
     const status = (panes || []).find((p) => p.pane_id === agent.pane)?.agent_status
-    if (approvalBusy(agent.pane) || dialogBlocked(status)) return 'a dialog is open'
+    const kind = kindAt(panes, agent.pane)
+    if (approvalBusy(agent.pane) || (status === 'blocked' && kind !== 'codex')) return 'a dialog is open'
     const screen = await terminal.read(agent.pane, 200)
-    if (dialogBlocked(status, screen) || NEVER_ANSWER.test(tail(screen, 20))) return 'a dialog is open'
+    if (dialogBlocked(status, { kind, screen, hookWaiting: approvalHookWaiting(agent.pane) }) || NEVER_ANSWER.test(tail(screen, 20))) return 'a dialog is open'
     const role = shortOf(entry.name)
     const said = await say(roomId, idleNotice({ minutes, role }))
     if (!Number.isInteger(said?.seq)) return 'could not say so in the topic'

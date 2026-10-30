@@ -24,6 +24,8 @@ export function herdrAgentName(role, number = 1) {
 // Mac that can take more than 30 seconds; keep a bound while waiting for the actual shell prompt.
 export const SHELL_READY_SECONDS = 120
 export const LABEL = 'Scorpio daemon'
+// The name the daemon reports agent states to Herdr under.
+export const REPORT_SOURCE = 'scorpio'
 
 /** The reason herdr gave: it prints {"error":{"code","message"}} on stderr (sometimes stdout), maybe among other lines. */
 export function herdrError(error) {
@@ -111,12 +113,16 @@ export function createHerdr({ bin = HERDR_BIN, exec = null, sleep = (ms) => new 
       return ((await call(['pane', 'list']))?.result?.panes || []).filter((p) => p.pane_id)
     } catch { return null }
   }
-  /** Fresh status of this pane, immediately before typing; null when Herdr cannot confirm an agent. */
-  async function paneStatus(pane) {
+  /** Fresh agent of this pane, immediately before typing: {kind, status}; null when Herdr cannot confirm an agent. */
+  async function paneAgent(pane) {
     try {
       const p = (await call(['pane', 'get', pane]))?.result?.pane
-      return p?.pane_id === pane && p.agent ? p.agent_status ?? null : null
+      return p?.pane_id === pane && p.agent ? { kind: p.agent, status: p.agent_status ?? null } : null
     } catch { return null }
+  }
+  /** Fresh status of this pane; null when Herdr cannot confirm an agent. */
+  async function paneStatus(pane) {
+    return (await paneAgent(pane))?.status ?? null
   }
   /** Live herdr agents and their names (pane list has no names). */
   async function agents() {
@@ -143,6 +149,20 @@ export function createHerdr({ bin = HERDR_BIN, exec = null, sleep = (ms) => new 
   /** Same, then wait until the agent is seen working (or blocked). For commands, where we need to know it moved. */
   async function injectAndWatch(pane, text, timeoutMs = 30_000) {
     await call(['agent', 'prompt', pane, text, '--wait', '--until', 'working', '--until', 'blocked', '--timeout', String(timeoutMs)])
+  }
+  /**
+   * Type into a pane Herdr says is blocked although the daemon found no dialog there (dialogBlocked lifted it).
+   * Herdr refuses to prompt a blocked pane, so report the agent idle for this one prompt, then hand its state
+   * back to Herdr's own detection whatever happened: a dialog that opens later is still Herdr's to see.
+   */
+  async function injectLifted(pane, kind, text) {
+    try {
+      await call(['pane', 'report-agent', '--source', REPORT_SOURCE, '--agent', kind, '--state', 'idle', pane])
+      await inject(pane, text)
+    } finally {
+      // Herdr takes the pane before the options here.
+      await call(['pane', 'release-agent', pane, '--source', REPORT_SOURCE, '--agent', kind])
+    }
   }
   const sendKeys = (pane, ...keys) => call(['pane', 'send-keys', pane, ...keys])
   const sendText = (pane, text) => call(['pane', 'send-text', pane, text])
@@ -204,7 +224,7 @@ export function createHerdr({ bin = HERDR_BIN, exec = null, sleep = (ms) => new 
   return {
     // Its column in the key table (keys.mjs): how /keys names a key to this terminal.
     adapter: 'herdr',
-    bin, panes, paneStatus, paneWidth, agents, read, processInfo, inject, injectAndWatch, sendKeys, sendText, run: runIn, explain,
+    bin, panes, paneAgent, paneStatus, paneWidth, agents, read, processInfo, inject, injectAndWatch, injectLifted, sendKeys, sendText, run: runIn, explain,
     newTab, renameTab, closeTab, closePane, waitShell, startAgent, tabs, workspaces, sleep,
     maxPromptBytes: MAX_PROMPT_BYTES, nameOk: (n) => AGENT_NAME.test(n),
   }

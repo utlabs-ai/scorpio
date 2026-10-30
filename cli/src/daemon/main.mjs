@@ -29,7 +29,7 @@ import { createKeys } from './keys.mjs'
 import { createApprovals, writeApprovalSettings } from './approvals.mjs'
 import { createSeat } from './seat.mjs'
 import { carryPermissions } from './spawn-permission.mjs'
-import { createHerdr, tail } from '../adapters/terminal/herdr.mjs'
+import { createHerdr, herdrError, tail } from '../adapters/terminal/herdr.mjs'
 import { CLIS, NEVER_ANSWER, dialogBlocked } from '../adapters/cli/index.mjs'
 import { createDetector } from '../adapters/cli/detect.mjs'
 import { createBlockedReasons } from './blocked.mjs'
@@ -100,17 +100,30 @@ export function deliveryMessages(messages, pokedSeq, pokedTs, now, retryMs = RET
   return Number.isFinite(resentSeq) ? messages.filter((m) => m.seq > resentSeq) : messages
 }
 
-/** Ask Herdr about this pane now (a dialog shows as blocked), then look for the update prompt before any text is typed. */
-export async function injectWhenReady(terminal, pane, text, approvalBusy = () => false) {
+/**
+ * Ask Herdr about this pane now (a dialog shows as blocked), then look for the update prompt before any text is typed.
+ * A Codex pane's blocked is checked against its screen (dialogBlocked); when that lifts it, the text goes in as
+ * injectLifted types it. Herdr still refusing that prompt is 'blocked', as for any blocked pane.
+ */
+export async function injectWhenReady(terminal, pane, text, approvalBusy = () => false, hookWaiting = () => false) {
   if (approvalBusy(pane)) return 'blocked'
-  let status
-  try { status = await terminal.paneStatus(pane) } catch { return 'unavailable' }
-  if (dialogBlocked(status)) return 'blocked'
-  if (!['idle', 'done', 'working'].includes(status)) return 'unavailable'
+  let agent
+  try { agent = await terminal.paneAgent(pane) } catch { return 'unavailable' }
+  const { kind = null, status = null } = agent || {}
+  if (status === 'blocked' && kind !== 'codex') return 'blocked'
+  if (!['idle', 'done', 'working', 'blocked'].includes(status)) return 'unavailable'
   const screen = await terminal.read(pane, 200)
+  if (dialogBlocked(status, { kind, screen, hookWaiting: hookWaiting(pane) })) return 'blocked'
   if (NEVER_ANSWER.test(tail(screen, 20))) return 'dialog'
   if (approvalBusy(pane)) return 'blocked'
-  await terminal.inject(pane, text)
+  if (status !== 'blocked') {
+    await terminal.inject(pane, text)
+    return 'sent'
+  }
+  try { await terminal.injectLifted(pane, kind, text) } catch (e) {
+    if (herdrError(e).code === 'agent_blocked') return 'blocked'
+    throw e
+  }
   return 'sent'
 }
 
@@ -467,7 +480,7 @@ async function main() {
   const typeNotices = async (pending, line, waitFor = new Set()) => {
     for (const pane of pending) {
       if (waitFor.has(pane)) continue
-      try { if (await injectWhenReady(terminal, pane, line, approvals.busy) === 'sent') pending.delete(pane) }
+      try { if (await injectWhenReady(terminal, pane, line, approvals.busy, approvals.hookWaiting) === 'sent') pending.delete(pane) }
       catch (e) { log.warn(`could not type logout status in pane ${pane}: ${herdrExit('agent prompt', e)}`) }
     }
   }
@@ -589,7 +602,7 @@ async function main() {
       }
       if (act === 'keepalive') {
         try {
-          if (waitForPane(await injectWhenReady(terminal, entry.pane, renderKeepalive(namedRoom(room, reminded.get(key))), approvals.busy))) return
+          if (waitForPane(await injectWhenReady(terminal, entry.pane, renderKeepalive(namedRoom(room, reminded.get(key))), approvals.busy, approvals.hookWaiting))) return
           quietSince.set(key, now); spokeFor.delete(key); keptAliveAt.set(key, now); saveState()
           log(`keep-alive to ${entry.name} in ${entry.roomId} (quiet ${Math.round((now - since) / MIN)} min)`)
         } catch { retryAt.set(key, now + FAILED_RETRY_MS); log.warn(`keep-alive to ${entry.name} failed; trying again shortly`) }
@@ -598,7 +611,7 @@ async function main() {
       const batch = deliveryMessages(messages, pokedSeq.get(key), pokedTs.get(key), now, RETRY_MS, resentSeq.get(key))
       const d = composeDelivery({ entry, room, messages: batch, reminded: reminded.get(key), pokedSeq: pokedSeq.get(key), maxBytes: terminal.maxPromptBytes })
       try {
-        if (waitForPane(await injectWhenReady(terminal, entry.pane, d.text, approvals.busy))) return
+        if (waitForPane(await injectWhenReady(terminal, entry.pane, d.text, approvals.busy, approvals.hookWaiting))) return
         const previousSeq = pokedSeq.get(key) ?? 0
         const resend = Number.isFinite(pokedSeq.get(key)) && batch[0].seq <= pokedSeq.get(key)
         if (resend) resentSeq.set(key, d.upTo)

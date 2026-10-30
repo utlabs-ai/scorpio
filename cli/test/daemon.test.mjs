@@ -694,7 +694,7 @@ test('delivery checks this pane again before typing; blocked or unavailable neve
   const calls = []
   let status = 'blocked', screen = '> '
   const terminal = {
-    paneStatus: async () => { calls.push('status'); if (status === 'error') throw new Error('Herdr unavailable'); return status },
+    paneAgent: async () => { calls.push('status'); if (status === 'error') throw new Error('Herdr unavailable'); return { kind: 'claude', status } },
     read: async () => { calls.push('read'); return screen },
     inject: async () => { calls.push('inject') },
   }
@@ -716,6 +716,31 @@ test('delivery checks this pane again before typing; blocked or unavailable neve
   screen = 'Do you trust the files in this folder?\n\n ❯ 1. Yes, proceed\n   2. No, exit'
   calls.length = 0
   assert.equal(await injectWhenReady(terminal, 'w:p1', 'hello'), 'sent')
+})
+
+test('a lifted pane is reported idle, prompted, then always released back to Herdr', async () => {
+  const calls = []
+  let fail = null
+  const terminal = createHerdr({ exec: async (args) => {
+    calls.push(args.slice(0, 2).join(' '))
+    if (args[1] === fail) throw new Error(`Command failed\n{"error":{"code":"agent_blocked","message":"blocked"}}`)
+    return '{}'
+  } })
+  await terminal.injectLifted('w:p1', 'codex', 'hello')
+  assert.deepEqual(calls, ['pane report-agent', 'agent prompt', 'pane release-agent'])
+  for (const step of ['prompt', 'report-agent']) {
+    fail = step; calls.length = 0
+    await assert.rejects(terminal.injectLifted('w:p1', 'codex', 'hello'), /agent_blocked/)
+    assert.equal(calls.at(-1), 'pane release-agent', `released after a failed ${step}`)
+  }
+  const argv = []
+  const exact = createHerdr({ exec: async (args) => { argv.push(args); return '{}' } })
+  await exact.injectLifted('w:p1', 'codex', 'hello')
+  assert.deepEqual(argv, [
+    ['pane', 'report-agent', '--source', 'scorpio', '--agent', 'codex', '--state', 'idle', 'w:p1'],
+    ['agent', 'prompt', 'w:p1', 'hello'],
+    ['pane', 'release-agent', 'w:p1', '--source', 'scorpio', '--agent', 'codex'],
+  ])
 })
 
 test('Herdr pane status is fetched for this pane each time; errors and missing agents are unavailable', async () => {
@@ -827,7 +852,9 @@ function fakeMachine(seatOpts = {}) {
   const terminal = {
     panes: async () => panes, agents: async () => [], read: async (pane) => screen.byPane?.[pane] ?? screen.text,
     processInfo: async (pane) => fg[pane] ?? null, paneStatus: async (pane) => panes.find((p) => p.pane_id === pane)?.agent_status ?? null,
+    paneAgent: async (pane) => { const p = panes.find((x) => x.pane_id === pane); return p ? { kind: p.agent ?? null, status: p.agent_status ?? null } : null },
     injectAndWatch: async (pane, text) => { typed.push([pane, text]) },
+    injectLifted: async (pane, kind, text) => { typed.push([pane, text, 'lifted']) },
     closePane: async (pane) => { closed.push(pane); return true },
     sendKeys: async (pane, ...keys) => { pressed.push([pane, ...keys]); events.push(`keys:${keys.join(' ')}@${clock}`) },
     sendText: async (pane, text) => { pressed.push([pane, `text:${text}`]); events.push(`text@${clock}`) },
@@ -2240,6 +2267,36 @@ test('a pane herdr reports blocked gets no typed text: /handoff says it is stuck
   assert.ok(m.said.at(-1).includes('- `/keys <name> <key>…`: press these keys'))
   assert.ok(m.said.at(-1).endsWith('\nKeys for /keys: up (↑), down (↓), enter (Enter), esc (Esc).'))
   assert.match(m.joins[0].roleCard, /\(\/attach \/spawn \/handoff \/bye \/idle \/read \/keys \/text \/usage \/help\)/)
+})
+
+test('a Herdr-blocked Codex pane that only quotes a dialog gets /handoff and the idle handoff through injectLifted', async () => {
+  const quoted = '• A message quoting a dialog:\n  │ Trust this folder?\n  │ › 1. Trust and continue\n  │   2. Quit\n\n› Ask Codex to do anything'
+  const m = fakeMachine()
+  Object.assign(m.panes[0], { agent: 'codex', agent_status: 'blocked' })
+  m.screen.text = quoted
+  m.ask('@daemon.box@kai /handoff api')
+  await m.tick()
+  assert.equal(m.typed.length, 1)
+  assert.equal(m.typed[0][2], 'lifted')
+  const idle = fakeMachine()
+  Object.assign(idle.panes[0], { agent: 'codex', agent_status: 'blocked' })
+  idle.screen.text = quoted
+  await idle.tick()
+  assert.equal(await idle.seat.idleHandoff({ entry: API, minutes: 60, panes: idle.panes }), 'started')
+  assert.deepEqual(idle.typed.map((t) => t[2]), ['lifted'])
+  // Not lifted: an approval hook waits, or the wording is not quoted. Nothing is typed.
+  const hook = fakeMachine({ approvalHookWaiting: () => true })
+  Object.assign(hook.panes[0], { agent: 'codex', agent_status: 'blocked' })
+  hook.screen.text = quoted
+  hook.ask('@daemon.box@kai /handoff api')
+  await hook.tick()
+  assert.deepEqual(hook.typed, [])
+  const real = fakeMachine()
+  Object.assign(real.panes[0], { agent: 'codex', agent_status: 'blocked' })
+  real.screen.text = quoted.replace('  │ Trust this folder?', 'Trust this folder?')
+  await real.tick()
+  assert.equal(await real.seat.idleHandoff({ entry: API, minutes: 60, panes: real.panes }), 'a dialog is open')
+  assert.deepEqual(real.typed, [])
 })
 
 // ------------------------------------------------------------------ detecting the agent CLIs
