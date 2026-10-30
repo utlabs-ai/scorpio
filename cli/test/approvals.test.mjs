@@ -993,7 +993,20 @@ test('delivery to a lifted Codex pane: reported idle, prompted, released; no rep
   screen = quotedTrust.replace('• ok', 'Trust this folder?')
   assert.equal(await run(), 'blocked', 'unquoted dialog wording')
   assert.deepEqual(calls, ['pane get', 'pane read'])
-  kind = 'claude'; screen = quotedTrust
+  screen = quotedTrust
+  let releases = 0
+  const flaky = createHerdr({ exec: async (args) => {
+    calls.push(args.slice(0, 2).join(' '))
+    if (args[1] === 'get') return JSON.stringify({ result: { pane: { pane_id: 'p1', agent: kind, agent_status: 'blocked' } } })
+    if (args[1] === 'read') return screen
+    if (args[1] === 'release-agent') { releases++; throw new Error('Command failed\n{"error":{"code":"pane_not_found","message":"gone"}}') }
+    return '{}'
+  } })
+  calls.length = 0
+  assert.equal(await injectWhenReady(flaky, 'p1', 'next message', () => false, () => false), 'sent', 'a failed release does not undo the prompt')
+  assert.equal(calls.filter((c) => c === 'agent prompt').length, 1)
+  assert.equal(releases, 2)
+  kind = 'claude'
   assert.equal(await run(), 'blocked', 'Claude pane: Herdr as now, screen not read')
   assert.deepEqual(calls, ['pane get'])
 })

@@ -99,7 +99,7 @@ export function findOwnPane({ pid = process.pid, exec = syncExec, bin = HERDR_BI
   return { reason: 'detached' }
 }
 
-export function createHerdr({ bin = HERDR_BIN, exec = null, sleep = (ms) => new Promise((r) => setTimeout(r, ms)), clock = () => Date.now() } = {}) {
+export function createHerdr({ bin = HERDR_BIN, exec = null, sleep = (ms) => new Promise((r) => setTimeout(r, ms)), clock = () => Date.now(), warn = () => {} } = {}) {
   const run = exec || (async (argv) => (await execFileP(bin, argv, { maxBuffer: 16 * 1024 * 1024 })).stdout)
   const call = async (argv, { text = false } = {}) => {
     const out = await run(argv)
@@ -160,8 +160,21 @@ export function createHerdr({ bin = HERDR_BIN, exec = null, sleep = (ms) => new 
       await call(['pane', 'report-agent', '--source', REPORT_SOURCE, '--agent', kind, '--state', 'idle', pane])
       await inject(pane, text)
     } finally {
+      await releaseAgent(pane, kind)
+    }
+  }
+  /**
+   * Hand a reported pane back to Herdr, trying twice. Still failing, it is only logged: thrown, it would turn a
+   * prompt that went in into a failure and the text would be typed again.
+   */
+  async function releaseAgent(pane, kind) {
+    for (let attempt = 1; ; attempt++) {
       // Herdr takes the pane before the options here.
-      await call(['pane', 'release-agent', pane, '--source', REPORT_SOURCE, '--agent', kind])
+      try { return await call(['pane', 'release-agent', pane, '--source', REPORT_SOURCE, '--agent', kind]) } catch (error) {
+        if (attempt < 2) continue
+        warn(`could not hand pane ${pane} back to Herdr after reporting it idle: ${herdrError(error).text}`)
+        return
+      }
     }
   }
   const sendKeys = (pane, ...keys) => call(['pane', 'send-keys', pane, ...keys])

@@ -733,6 +733,22 @@ test('a lifted pane is reported idle, prompted, then always released back to Her
     await assert.rejects(terminal.injectLifted('w:p1', 'codex', 'hello'), /agent_blocked/)
     assert.equal(calls.at(-1), 'pane release-agent', `released after a failed ${step}`)
   }
+  // A failed release is tried once more, then only logged: the prompt's own result stands.
+  const warned = []
+  let failing = []
+  const flaky = createHerdr({ warn: (line) => warned.push(line), exec: async (args) => {
+    calls.push(args.slice(0, 2).join(' '))
+    if (failing.includes(args[1])) throw new Error(`Command failed\n{"error":{"code":"${args[1]}_failed","message":"no"}}`)
+    return '{}'
+  } })
+  failing = ['release-agent']; calls.length = 0
+  await flaky.injectLifted('w:p1', 'codex', 'hello')
+  assert.deepEqual(calls, ['pane report-agent', 'agent prompt', 'pane release-agent', 'pane release-agent'])
+  assert.deepEqual(warned, ['could not hand pane w:p1 back to Herdr after reporting it idle: release-agent_failed: no'])
+  failing = ['prompt', 'release-agent']; calls.length = 0
+  await assert.rejects(flaky.injectLifted('w:p1', 'codex', 'hello'), /prompt_failed/)
+  assert.deepEqual(calls, ['pane report-agent', 'agent prompt', 'pane release-agent', 'pane release-agent'])
+  assert.equal(warned.length, 2)
   const argv = []
   const exact = createHerdr({ exec: async (args) => { argv.push(args); return '{}' } })
   await exact.injectLifted('w:p1', 'codex', 'hello')

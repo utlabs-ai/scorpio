@@ -326,7 +326,7 @@ async function main() {
   const rooms = createRooms()
   // ~/.scorpio/config.json {"debug": true}: log every frame (read at start).
   const debug = Boolean(readJson(path.join(HOME, 'config.json'))?.debug)
-  const terminal = createHerdr()
+  const terminal = createHerdr({ warn: (line) => log.warn(line) })
   const blockedReasons = createBlockedReasons({ explain: (pane) => terminal.explain(pane) })
   const pacer = createPacer()
   const kick = pacer.kick
