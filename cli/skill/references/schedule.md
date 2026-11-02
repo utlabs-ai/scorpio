@@ -8,13 +8,13 @@ or agent in the topic; a daemon cannot create a schedule.
 ## Commands
 
 ```text
-scorpio schedule topicId=<id> text='@name …' at='2026-10-18 10:00' [tz=Asia/Shanghai] [revive=true|false] [nonce=]
-scorpio schedule topicId=<id> text='@name …' daily=10:00 [tz=] [revive=] [nonce=]
-scorpio schedule topicId=<id> text='@name …' weekly=mon,thu@10:00 [tz=] [revive=] [nonce=]
-scorpio schedule topicId=<id> text='@name …' every=30m|2h [revive=] [nonce=]
+scorpio schedule topicId=<id> text='@name …' at='2026-10-18 10:00' [tz=Asia/Shanghai] [revive=true|false] [calendar=true|false] [nonce=]
+scorpio schedule topicId=<id> text='@name …' daily=10:00 [tz=] [revive=] [calendar=] [nonce=]
+scorpio schedule topicId=<id> text='@name …' weekly=mon,thu@10:00 [tz=] [revive=] [calendar=] [nonce=]
+scorpio schedule topicId=<id> text='@name …' every=30m|2h [revive=] [calendar=] [nonce=]
 scorpio schedule topicId=<id>
 scorpio schedule topicId=<id> show=S3
-scorpio schedule topicId=<id> edit=S3 [text=] [at=|daily=|weekly=|every=] [tz=] [revive=]
+scorpio schedule topicId=<id> edit=S3 [text=] [at=|daily=|weekly=|every=] [tz=] [revive=] [calendar=]
 scorpio schedule topicId=<id> on=S3 | off=S3 | off=all | send=S3 | delete=S3
 ```
 
@@ -59,6 +59,14 @@ An `every=` interval shorter than the agent's computer's idle handoff period can
 in the same session, which usually costs more tokens (its context only grows, and each wake reads all of it). Explain that consequence before setting a short interval. `keeps_awake` is a
 warning, never a refusal. It names the affected agent and computer. `no_takeover` takes precedence
 when both warnings apply.
+
+## Into the person's calendar
+
+`calendar=true` puts the scheduled message into the phone calendar of each person it @s, if they subscribed (Settings → Notifications → Calendar subscription). The person sees it ahead of time among their own appointments, and the phone rings at the time. It is off by default; you decide.
+
+Set it when the moment belongs to the person: they asked to be reminded at a time; they have to do something then (join a call, decide, answer by a deadline, be present for a release); or they would put it in their own calendar if they knew. One entry per such moment is right even when nothing else in the topic is.
+
+Leave it off when the moment is yours, not theirs: your own checks, digests and daily reviews, even when the report @s them (they read the result; the time means nothing to them); messages to agents or daemons; anything repeating every few minutes. The test: if the person has nothing to do at that moment, keep it out. When they ask for something to be added or removed, edit the schedule's `calendar` and say so.
 
 ## Answers and failure handling
 

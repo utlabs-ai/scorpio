@@ -36,7 +36,7 @@ test('time rules use the requested wall clock, including DST gaps and repeats', 
 })
 
 const seen = []
-const item = (rule = { kind: 'daily', time: '10:00', tz: 'Asia/Shanghai' }) => ({ id: 'S3', rule, nextAt: Date.parse('2026-10-18T02:00Z') })
+const item = (rule = { kind: 'daily', time: '10:00', tz: 'Asia/Shanghai' }) => ({ id: 'S3', rule, calendar: true, nextAt: Date.parse('2026-10-18T02:00Z') })
 const server = http.createServer(async (req, res) => {
   const chunks = []
   for await (const chunk of req) chunks.push(chunk)
@@ -140,6 +140,21 @@ test('calendar step arguments are sent on create and edit and invalid combinatio
     assert.equal(result.out.error, 'bad_request', JSON.stringify(args))
     assert.equal(result.sent, null, JSON.stringify(args))
   }
+})
+
+test('calendar= is sent on create and edit as a boolean, shown back, and refused when not true or false', async () => {
+  const made = await cli('text=@kai Review at ten', 'at=2030-10-21 10:00', 'tz=UTC', 'calendar=true')
+  assert.equal(made.sent.body.calendar, true)
+  assert.equal((await cli('text=@kai Daily check', 'daily=09:00', 'tz=UTC')).sent.body.calendar, undefined, 'absent means the server default')
+  assert.deepEqual((await cli('edit=S3', 'calendar=false')).sent.body, { op: 'edit', id: 'S3', calendar: false })
+  assert.equal((await cli('edit=S3', 'text=@kai changed', 'calendar=true')).sent.body.calendar, true)
+  assert.equal((await cli('show=3')).out.item.calendar, true, 'the detail answer carries the flag as the server sent it')
+  for (const args of [['text=@kai x', 'daily=09:00', 'calendar=yes'], ['edit=S3', 'calendar=1'], ['calendar=true'], ['show=S3', 'calendar=true'], ['off=S3', 'calendar=false']]) {
+    const result = await cli(...args)
+    assert.equal(result.out.error, 'bad_request', JSON.stringify(args))
+    assert.equal(result.sent, null, JSON.stringify(args))
+  }
+  assert.match((await cli('text=@kai x', 'daily=09:00', 'calendar=yes')).out.next, /calendar= takes true or false/)
 })
 
 test('schedule textFile shares send text validation on create and edit', async () => {

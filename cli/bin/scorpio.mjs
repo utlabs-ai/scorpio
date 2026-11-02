@@ -149,10 +149,10 @@ Memo
     lowest-scored memo into the retired list, from which restore= brings it back. One of the write forms at a time.
 
 Scheduled messages
-  schedule topicId= text='@name …' at='YYYY-MM-DD HH:MM' [tz=] [revive=true|false] [nonce=]
-  schedule topicId= text='@name …' daily=HH:MM [step=] [from=] [tz=] [revive=] [nonce=]
-  schedule topicId= text='@name …' weekly=mon,thu@HH:MM [step=] [from=] [tz=] [revive=] [nonce=]
-  schedule topicId= text='@name …' every=30m|2h [revive=] [nonce=]
+  schedule topicId= text='@name …' at='YYYY-MM-DD HH:MM' [tz=] [revive=true|false] [calendar=true|false] [nonce=]
+  schedule topicId= text='@name …' daily=HH:MM [step=] [from=] [tz=] [revive=] [calendar=] [nonce=]
+  schedule topicId= text='@name …' weekly=mon,thu@HH:MM [step=] [from=] [tz=] [revive=] [calendar=] [nonce=]
+  schedule topicId= text='@name …' every=30m|2h [revive=] [calendar=] [nonce=]
     Create one schedule; text=- reads stdin, textFile=<path> reads a file (also on edit=).
     Use text= or textFile=, not both; empty or unreadable files are bad_request. at= also accepts MM-DD HH:MM, HH:MM and ISO 8601.
     tz= is an IANA time zone (defaults to this computer); every= is at least 10 minutes.
@@ -161,7 +161,7 @@ Scheduled messages
     A schedule has text only: send a file into the topic first, then cite its #seq.
   schedule topicId=
     List schedules (items, count of active schedules, proRequired).
-  schedule topicId= show=S3 | edit=S3 [text=] [at=|daily=|weekly=|every=] [step=] [from=] [tz=] [revive=]
+  schedule topicId= show=S3 | edit=S3 [text=] [at=|daily=|weekly=|every=] [step=] [from=] [tz=] [revive=] [calendar=]
   schedule topicId= on=S3 | off=S3 | off=all | send=S3 [nonce=] | delete=S3
     Show, edit, turn on, stop, stop all allowed, send now, or delete. S3 and 3 both work.
     Answers include an ISO next on every item, warnings when relevant, and server error codes and next hints.

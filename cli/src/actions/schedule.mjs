@@ -168,6 +168,13 @@ function reviveArg(value) {
   return value === 'true'
 }
 
+// calendar=true puts the schedule into the phone calendars of the people it @s (schedule.md, Into the person's calendar).
+function calendarArg(value) {
+  if (value === undefined) return undefined
+  if (value !== 'true' && value !== 'false') throw new CliError('bad_request', 'calendar= takes true or false.')
+  return value === 'true'
+}
+
 async function schedule(args) {
   const ctx = roomCtx(args)
   if (args.files !== undefined) throw new CliError('schedule_no_files', fileHint)
@@ -178,7 +185,7 @@ async function schedule(args) {
   const hasText = args.text !== undefined || args.textFile !== undefined
   let res, tz = null
   if (!op && !hasText && !RULE_KEYS.some((k) => args[k] !== undefined)) {
-    if (args.step !== undefined || args.from !== undefined || args.tz !== undefined || args.revive !== undefined || args.nonce !== undefined) throw new CliError('bad_request', 'A schedule needs text= and one time rule; leave them all out to list.')
+    if (args.step !== undefined || args.from !== undefined || args.tz !== undefined || args.revive !== undefined || args.calendar !== undefined || args.nonce !== undefined) throw new CliError('bad_request', 'A schedule needs text= and one time rule; leave them all out to list.')
     res = await api('GET', base, { role: ctx.role })
   } else if (!op) {
     const parsed = ruleArg(args, { required: true })
@@ -186,9 +193,11 @@ async function schedule(args) {
     const body = { op: 'add', text: textArg(args), rule: parsed.rule, nonce: args.nonce || randomUUID() }
     const revive = reviveArg(args.revive)
     if (revive !== undefined) body.revive = revive
+    const calendar = calendarArg(args.calendar)
+    if (calendar !== undefined) body.calendar = calendar
     res = await api('POST', base, { role: ctx.role, body })
   } else if (op === 'show') {
-    if (hasText || RULE_KEYS.some((k) => args[k] !== undefined) || args.step !== undefined || args.from !== undefined || args.tz !== undefined || args.revive !== undefined || args.nonce !== undefined) throw new CliError('bad_request', 'show= takes only a schedule id.')
+    if (hasText || RULE_KEYS.some((k) => args[k] !== undefined) || args.step !== undefined || args.from !== undefined || args.tz !== undefined || args.revive !== undefined || args.calendar !== undefined || args.nonce !== undefined) throw new CliError('bad_request', 'show= takes only a schedule id.')
     res = await api('GET', `${base}/${scheduleId(args.show, 'show')}`, { role: ctx.role })
   } else {
     const body = { op: op === 'off' && args.off === 'all' ? 'stop_all' : op }
@@ -199,8 +208,10 @@ async function schedule(args) {
       if (parsed) { body.rule = parsed.rule; tz = parsed.tz }
       const revive = reviveArg(args.revive)
       if (revive !== undefined) body.revive = revive
-      if (!Object.hasOwn(body, 'text') && !parsed && revive === undefined) throw new CliError('bad_request', 'edit= needs text=, one time rule or revive=.')
-    } else if (hasText || RULE_KEYS.some((k) => args[k] !== undefined) || args.step !== undefined || args.from !== undefined || args.tz !== undefined || args.revive !== undefined) throw new CliError('bad_request', `${op}= takes only a schedule id.`)
+      const calendar = calendarArg(args.calendar)
+      if (calendar !== undefined) body.calendar = calendar
+      if (!Object.hasOwn(body, 'text') && !parsed && revive === undefined && calendar === undefined) throw new CliError('bad_request', 'edit= needs text=, one time rule, revive= or calendar=.')
+    } else if (hasText || RULE_KEYS.some((k) => args[k] !== undefined) || args.step !== undefined || args.from !== undefined || args.tz !== undefined || args.revive !== undefined || args.calendar !== undefined) throw new CliError('bad_request', `${op}= takes only a schedule id.`)
     if (args.nonce !== undefined && !['send'].includes(op)) throw new CliError('bad_request', 'nonce= goes with create or send= only.')
     if (op === 'send') body.nonce = args.nonce || randomUUID()
     res = await api('POST', base, { role: ctx.role, body })
