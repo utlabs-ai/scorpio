@@ -10,12 +10,16 @@ import { execFile } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
 import { randomUUID } from 'node:crypto'
 import { testEnv } from './env.mjs'
-import { download, endsWithEndRecord, nameOf } from '../src/actions/export.mjs'
 
 const CLI = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'bin', 'scorpio.mjs')
 const ROOM = 'AbCdEf0123456789_-ghIJ'
 const home = fs.mkdtempSync(path.join(os.tmpdir(), 'scorpio-export-'))
 fs.writeFileSync(path.join(home, 'token'), 'tok')
+// The client fixes its home when it loads, so the module under test is loaded only after this process points at the
+// test's home: download() must read the token written above, never one of whoever runs the tests.
+process.env.SCORPIO_HOME = home
+delete process.env.SCORPIO_SERVER
+const { download, endsWithEndRecord, nameOf } = await import('../src/actions/export.mjs')
 
 // A small zip as the server streams one: the local header and bytes of one stored entry, then its central directory
 // and the end record (the last 22 bytes). Enough for the end-record check; the bytes are not read back as a zip.
@@ -123,9 +127,6 @@ test('nameOf keeps a plain file name; endsWithEndRecord tells a whole zip from a
 })
 
 test('download limits only the wait for the headers: a body that streams past that limit still lands whole', async () => {
-  const h = fs.mkdtempSync(path.join(os.tmpdir(), 'scorpio-dl-'))
-  fs.writeFileSync(path.join(h, 'token'), 'tok')
-  process.env.SCORPIO_HOME = h
   process.env.SCORPIO_SERVER = url
   const res = await download(`/api/v1/rooms/${ROOM}/export?tz=UTC`, 'slow', { headerTimeoutMs: 300 })
   assert.equal(res.status, 200)
