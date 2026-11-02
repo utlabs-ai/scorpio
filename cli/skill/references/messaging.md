@@ -55,7 +55,7 @@ text; read and handle it like any reply. Give 1–4 different, one-line labels, 
 - **Receiving**: under a message, `Attached: report.pdf (2.3 MB) · scorpio file topicId=… id=…`. Run that line, never the file's `url`: it saves the file to `~/.scorpio/topics/<topicId>/files/` and prints the path. `…, deleted`: cleared for space, or gone with its topic; ask for it again if you need it.
 - Downloads older than 30 days are cleared automatically; download again with `scorpio file`.
 - **A file's page**: `send` answers each file's `link`, messages carry it, and the `Attached:` line shows it as `page: …`: the file's own page in Scorpio (Markdown, text, SVG and HTML are shown there, the rest downloads). Give a person that link when they should look at a file; only people who can read the topic can open it, so it is not an outside link.
-- **Keeping a topic's records outside Scorpio**: `scorpio export topicId=…` writes one zip into the topic's files folder: the record as Markdown and JSON, attachments, handoffs, scheduled messages and memos (`include=` picks parts; times in this computer's time zone unless `tz=`). It reads the whole topic, so to look something up, search and read messages instead.
+- **Keeping a topic's records outside Scorpio**: `scorpio export topicId=…` writes one zip into the topic's files folder: the record as Markdown and JSON, attachments, handoffs, scheduled messages and memos (`include=` picks parts; times in this computer's time zone unless `tz=`). It reads the whole topic, so to look something up, search and read messages instead. An export with attachments can take minutes: give the command a longer timeout than your shell tool's default (2 minutes kills it).
 
 ## What `send` tells you
 

@@ -2,9 +2,9 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { Readable } from 'node:stream'
 import { pipeline } from 'node:stream/promises'
-import { CliError, done, remember, roomCtx, roomPath } from '../client.mjs'
+import { CliError, FALLBACK_NEXT, NEXT, VERSION, done, forgetRejectedToken, readToken, remember, roomCtx, roomPath, server } from '../client.mjs'
+import { REQUEST_TIMEOUT_MS } from '../net.mjs'
 import { ensureDir, topicFilesDir } from '../workspace.mjs'
-import { binary } from './file.mjs'
 
 // ---------- export ----------
 // A topic's records as one zip, written into the topic's files folder: the record as Markdown and JSON, the
@@ -49,12 +49,43 @@ export function endsWithEndRecord(file) {
   return tail.subarray(0, 4).equals(END_RECORD)
 }
 
+/**
+ * The download request, straight to the server and not through the daemon's relay: the usual request path limits a
+ * whole request to about 90 seconds, body included, and a zip with attachments can take minutes to stream. Here only
+ * the wait for the response headers is limited; reading the body is not. Answers the Response, or throws a CliError
+ * as every other call does (a refusal comes as JSON before any byte of the zip).
+ */
+export async function download(urlPath, role, { headerTimeoutMs = REQUEST_TIMEOUT_MS } = {}) {
+  const t = readToken()
+  if (!t) throw new CliError('not_logged_in', NEXT.login)
+  const headers = { 'User-Agent': `scorpio-cli/${VERSION}`, 'X-Scorpio-Cli': VERSION, Authorization: `Bearer ${t}`, 'X-Scorpio-Role': role, Accept: 'application/zip, application/json' }
+  const control = new AbortController()
+  const timer = setTimeout(() => control.abort(), headerTimeoutMs)
+  let res
+  try {
+    res = await fetch(server() + urlPath, { headers, signal: control.signal })
+  } catch (e) {
+    throw new CliError('network', control.signal.aborted ? `The server did not start answering within ${Math.round(headerTimeoutMs / 1000)} s. Check the network, then run the same command again.` : `Could not reach ${server()} (${e?.cause?.code || e?.message || e}). Check the network, then run the same command again.`)
+  } finally {
+    clearTimeout(timer)
+  }
+  if (res.ok) return res
+  let data = null
+  try { data = await res.json() } catch {}
+  if (res.status === 401) {
+    forgetRejectedToken(t)
+    throw new CliError('unauthorized', data?.next || NEXT.relogin, data?.reason)
+  }
+  if (data?.error) throw new CliError(data.error, data.next || FALLBACK_NEXT[data.error] || FALLBACK_NEXT.server_error)
+  throw new CliError(res.status === 429 ? 'rate_limited' : 'server_error', res.status === 429 ? FALLBACK_NEXT.rate_limited : `The server answered HTTP ${res.status}. Rerun in a minute.`)
+}
+
 async function exportTopic(args) {
   const ctx = roomCtx(args)
   const include = partsOf(args)
   const query = new URLSearchParams({ tz: zoneOf(args) })
   if (include.length !== PARTS.length) query.set('include', include.join(','))
-  const res = await binary('GET', roomPath(ctx.roomId, `/export?${query}`), { role: ctx.role })
+  const res = await download('/api/v1' + roomPath(ctx.roomId, `/export?${query}`), ctx.role)
   remember(ctx)
   const dir = ensureDir(topicFilesDir(ctx.roomId))
   const name = nameOf(res.headers.get('content-disposition'), `${ctx.roomId}.zip`)

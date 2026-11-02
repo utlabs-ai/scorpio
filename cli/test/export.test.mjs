@@ -10,7 +10,7 @@ import { execFile } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
 import { randomUUID } from 'node:crypto'
 import { testEnv } from './env.mjs'
-import { endsWithEndRecord, nameOf } from '../src/actions/export.mjs'
+import { download, endsWithEndRecord, nameOf } from '../src/actions/export.mjs'
 
 const CLI = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'bin', 'scorpio.mjs')
 const ROOM = 'AbCdEf0123456789_-ghIJ'
@@ -35,6 +35,13 @@ const server = http.createServer((req, res) => {
   res.setHeader('content-disposition', `attachment; filename="_-2026-11-02.zip"; filename*=UTF-8''${encodeURIComponent('主题 one-2026-11-02.zip')}`)
   if (role === 'cut') { res.write(ZIP.subarray(0, 60)); return res.end() } // the connection ends before the end record
   if (role === 'plain') { res.removeHeader('content-disposition'); return res.end(ZIP) }
+  if (role === 'slow') { // the headers at once, the body over 1.2 s: longer than the header limit the test gives
+    res.flushHeaders()
+    let at = 0
+    const tick = setInterval(() => { res.write(ZIP.subarray(at, at + 20)); at += 20; if (at >= ZIP.length) { clearInterval(tick); res.end() } }, 200)
+    return
+  }
+  if (role === 'silent') return // never answers: the header limit ends the wait
   res.end(ZIP)
 })
 await new Promise((r) => server.listen(0, '127.0.0.1', r))
@@ -114,3 +121,21 @@ test('nameOf keeps a plain file name; endsWithEndRecord tells a whole zip from a
   assert.equal(endsWithEndRecord(path.join(dir, 'cut.zip')), false)
   assert.equal(endsWithEndRecord(path.join(dir, 'tiny.zip')), false)
 })
+
+test('download limits only the wait for the headers: a body that streams past that limit still lands whole', async () => {
+  const h = fs.mkdtempSync(path.join(os.tmpdir(), 'scorpio-dl-'))
+  fs.writeFileSync(path.join(h, 'token'), 'tok')
+  process.env.SCORPIO_HOME = h
+  process.env.SCORPIO_SERVER = url
+  const res = await download(`/api/v1/rooms/${ROOM}/export?tz=UTC`, 'slow', { headerTimeoutMs: 300 })
+  assert.equal(res.status, 200)
+  const started = Date.now()
+  const bytes = Buffer.from(await res.arrayBuffer())
+  assert.ok(Date.now() - started > 600, 'the body took longer than the header limit')
+  assert.ok(bytes.equals(ZIP))
+  const before = Date.now()
+  await assert.rejects(download(`/api/v1/rooms/${ROOM}/export?tz=UTC`, 'silent', { headerTimeoutMs: 300 }), (e) => e.error === 'network' && /did not start answering/.test(e.next))
+  assert.ok(Date.now() - before < 3000)
+  await assert.rejects(download(`/api/v1/rooms/${ROOM}/export?tz=UTC`, 'busy'), (e) => e.error === 'export_busy')
+})
+
