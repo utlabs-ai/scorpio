@@ -222,7 +222,7 @@ test('delivery gate blocks an open card or pending hook even if Herdr says done'
   assert.equal(injected, 0)
 })
 
-test('default spawn preserves settings and adds stable hook; all uses old permission flags without hook', () => {
+test('default spawn preserves settings and adds stable hook; all keeps the Claude hook and drops the Codex one', () => {
   for (const kind of ['claude', 'codex']) {
     const args = argsFor(kind, {})
     assert.equal(fullPermission(kind, args), false)
@@ -230,11 +230,12 @@ test('default spawn preserves settings and adds stable hook; all uses old permis
     assert.equal(args.includes('--setting-sources'), false)
     assert.equal(args.includes('--dangerously-bypass-hook-trust'), false)
     const all = argsFor(kind, {}, 'all'); assert.equal(fullPermission(kind, all), true)
-    assert.equal(all.some((a) => /approval-hook|claude.json/.test(a)), false)
+    assert.equal(all.some((a) => /approval-hook|claude.json/.test(a)), kind === 'claude')
   }
   const custom = ['--permission-mode', 'default', '--model', 'custom']
   assert.deepEqual(argsFor('claude', { spawn: { claude: custom } }).slice(0, custom.length), custom)
-  assert.deepEqual(argsFor('claude', { spawn: { claude: ['--dangerously-skip-permissions'] } }), ['--dangerously-skip-permissions'])
+  assert.deepEqual(argsFor('claude', { spawn: { claude: ['--dangerously-skip-permissions'] } }), ['--dangerously-skip-permissions', '--settings', path.join(home, 'state', 'hooks', 'claude.json')])
+  assert.deepEqual(argsFor('codex', { spawn: { codex: ['--yolo'] } }), ['--yolo'])
   assert.equal(parseSpawn('codex api /tmp/work perm=all do work').perm, 'all')
   assert.equal(parseSpawn('codex api perm=foo').error, 'perm= only takes ask, auto or all.')
   assert.equal(parseSpawn('codex api perm=auto work').perm, 'auto')

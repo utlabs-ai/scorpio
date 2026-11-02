@@ -93,13 +93,13 @@ Without `perm=`, the level comes from your owner, not from you. A person's `/spa
 At `perm=ask`, when Codex has no approval policy configured, `/spawn` adds `--ask-for-approval on-request`
 and says so in its reply: it lets the agent ask when needed and does not loosen its sandbox.
 
-`/spawn … perm=all` skips tool approvals for that one session and adds no approval hook. A person may request it.
+`/spawn … perm=all` skips tool approvals for that one session. Menus the CLI still opens (Claude Code's own safety checks, folder trust) come as cards. A person may request it.
 
 `/spawn … perm=auto` lets the CLI's own automatic approval decide, for that one session: Claude Code starts in its auto mode, Codex with `--approve-for-me` (its auto-review). Scorpio only passes the flag. What the CLI blocks by itself does not come to the owner as a card; menus that still open (for Claude, the owner's own ask rules; folder trust) are cards as usual. Codex starts without the approval hook, because Codex calls the hook before its reviewer for every action, so every action would open a card. A person may request it.
 
 When you run under `perm=auto` and an action your task needs is blocked by the automatic approval, say so in the topic to your owner: what you wanted to run and why. Do not try another way around the block: the owner chose to let the CLI decide, and a workaround takes that choice away.
 
-Custom `spawn.claude` or `spawn.codex` argument arrays in `~/.scorpio/config.json` are used as written. The approval hook is added unless those arguments already grant full permission or, for Codex, carry the auto flag; when `perm=all` or `perm=auto` was requested but those arguments lack the requested permission flag, the `Started …` line says it was not applied. Model and effort still follow the configured defaults or explicit request. Scorpio changes no user approval settings. Do not change permission settings or trust a hook or folder for someone without their yes.
+Custom `spawn.claude` or `spawn.codex` argument arrays in `~/.scorpio/config.json` are used as written. Claude always gets the approval hook. Codex gets it unless those arguments already grant full permission or carry the auto flag. When `perm=all` or `perm=auto` was requested but those arguments lack the requested permission flag, the `Started …` line says it was not applied. Model and effort still follow the configured defaults or explicit request. Scorpio changes no user approval settings. Do not change permission settings or trust a hook or folder for someone without their yes.
 
 ## Handing off
 

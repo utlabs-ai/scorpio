@@ -51,7 +51,9 @@ export function argsFor(kind, config = readJson(CONFIG_FILE), perm = 'ask') {
   if (!own && perm === 'all') args.push(...(kind === 'claude' ? ['--dangerously-skip-permissions'] : ['--ask-for-approval', 'never', '--sandbox', 'danger-full-access']))
   if (!own && perm === 'auto') args.push(...(kind === 'claude' ? ['--permission-mode', 'auto'] : ['--approve-for-me']))
   if (kind === 'codex' && !own && perm === 'ask' && approvalSettings().policy === undefined) args.push('--ask-for-approval', 'on-request')
-  if (!fullPermission(kind, args) && !(kind === 'codex' && autoPermission(kind, args))) args.push(...(kind === 'claude' ? ['--settings', path.join(STATE_DIR, 'hooks', 'claude.json')] : ['-c', codexHookDefinition()]))
+  // Claude calls the hook even in bypass mode, for its own safety-check menus. Codex at full or auto asks nothing the hook would help with.
+  if (kind === 'claude') args.push('--settings', path.join(STATE_DIR, 'hooks', 'claude.json'))
+  else if (!fullPermission(kind, args) && !autoPermission(kind, args)) args.push('-c', codexHookDefinition())
   return args
 }
 
