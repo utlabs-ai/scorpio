@@ -11,6 +11,7 @@ import { login, whoami, topics, logout } from '../src/actions/account.mjs'
 import { join, listen, mark, members, handoffs, create, topic, roleCard, leave } from '../src/actions/topic.mjs'
 import { messages, search, files, message } from '../src/actions/read.mjs'
 import { file } from '../src/actions/file.mjs'
+import { exportTopic } from '../src/actions/export.mjs'
 import { card } from '../src/actions/card.mjs'
 import { handoff } from '../src/actions/handoff.mjs'
 import { send } from '../src/actions/send.mjs'
@@ -109,6 +110,14 @@ Messages and attachments
     continues after one listed row. Returns files[], hasMore and counts.
   file topicId= id=
     Download an attachment by id; returns its local path, name, type and size.
+  export topicId= [include=messages,tasks,files,handoffs,memo] [tz=Asia/Shanghai]
+    Download the topic's records as one zip into ~/.scorpio/topics/<topicId>/files/<topic name>-<date>.zip
+    (under SCORPIO_HOME when set): topic.md (the readable record), data.json (the same records as the API
+    answers them), files/ (the attachments), handoffs/ (each seat's current handoff). include= picks parts;
+    without it, all five. Times in topic.md and the date in the name use this computer's time zone, or tz=.
+    Returns topicId, path, size and include. Exported again the same day, the zip is replaced. A download
+    that breaks off keeps nothing and says to run it again. Errors: not_member, export_busy (another export
+    of this account is still downloading), export_too_large (over the server's limits; export without files).
   card topicId= seq=
     Read a message's chart card into ~/.scorpio/topics/<topicId>/files/card-<seq>.html
     (under SCORPIO_HOME when set); returns topicId, seq, summary, size and path, or card_not_found.
@@ -235,7 +244,7 @@ async function qr(value) {
 
 // ---------- main ----------
 
-const ACTIONS = { login, whoami, topics, logout, create, join, messages, message, search, files, send, file, card, handoff, task: todo, memo, schedule, listen, wait, mark, members, handoffs, roleCard, topic, leave, daemon, up, qr }
+const ACTIONS = { login, whoami, topics, logout, create, join, messages, message, search, files, send, file, export: exportTopic, card, handoff, task: todo, memo, schedule, listen, wait, mark, members, handoffs, roleCard, topic, leave, daemon, up, qr }
 const LATER = new Set()
 
 function inCodexSandbox() {

@@ -8,6 +8,7 @@ The `scorpio` commands, grouped by what they act on. `bin/scorpio.mjs` keeps onl
 | `topic.mjs` | join, leave, create, topic, roleCard, members, mark, listen |
 | `read.mjs` | messages, message, search, files |
 | `file.mjs` | file (download), and the upload helpers `send` uses |
+| `export.mjs` | export (a topic's records as one zip) |
 | `send.mjs` | send |
 | `card.mjs` | card (read a message's HTML fragment) |
 | `memo.mjs` | memo and the M-number list helpers send uses |
