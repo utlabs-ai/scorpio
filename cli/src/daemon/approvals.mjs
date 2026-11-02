@@ -93,7 +93,18 @@ export function createApprovals({ terminal, targets, send, now = () => Date.now(
         } else if (status != null) close(card, 'answered_here')
         return
       }
-      if (sameMenu(card, screen)) return
+      if (sameMenu(card, screen)) {
+        // A hook process that starts slowly (a busy computer) can arrive after its menu already has a card:
+        // that card takes the hook, so it shows the details and its answer goes back through the hook.
+        const late = !card.request && card.menu && pending.get(target.pane)?.find((r) => !r.used && hookMatches(r.event, screen))
+        if (late) {
+          late.used = true
+          Object.assign(card, { request: late, event: late.event, detail: detailOf(late.event), screen: null })
+          log(`approval ${card.id} took its hook`)
+          if (!card.refused) emit(card, { type: 'approval_open', approval: wire(card) })
+        }
+        return
+      }
       const nextMenu = menu && (status === 'blocked' || pending.get(target.pane)?.some((r) => !r.used && r.ts > card.ts))
       close(card, nextMenu ? 'changed' : 'answered_here', undefined, screen)
       if (nextMenu) await open(target, screen)
