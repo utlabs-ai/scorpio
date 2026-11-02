@@ -41,6 +41,7 @@ When the creator's plan ends, or the topic is archived, its schedules are turned
   "to": ["coach@ana", "ana"],       // the members the text @s, as of creation or the last edit
   "rule": {"kind": "daily", "time": "21:00", "tz": "Europe/Lisbon"},
   "revive": true,
+  "calendar": false,                // in the calendars of the people the text @s (below)
   "reviveName": "coach@ana",        // the agent revive brings back, or null (below)
   "reviveHost": "laptop-daemon@ana",// the computer seat that would start it, or null
   "on": true,
@@ -91,8 +92,8 @@ When the creator's plan ends, or the topic is archived, its schedules are turned
 
 | `op` | Fields | Answer |
 |---|---|---|
-| `add` | `text`, `rule`, optional `revive` (default `true`), `nonce` | `{"roomId", "item"}`, and `warn` and `warnCode` (below) when they apply. |
-| `edit` | `id`, any of `text`, `rule`, `revive` | `{"roomId", "item"}` (+ `warn`, `warnCode`). A new rule gives a new `nextAt`; a new text alone keeps it. |
+| `add` | `text`, `rule`, optional `revive` (default `true`), `calendar` (default `false`), `nonce` | `{"roomId", "item"}`, and `warn` and `warnCode` (below) when they apply. |
+| `edit` | `id`, any of `text`, `rule`, `revive`, `calendar` | `{"roomId", "item"}` (+ `warn`, `warnCode`). A new rule gives a new `nextAt`; a new text alone keeps it. |
 | `on` | `id` | `{"roomId", "item"}`. Works out `nextAt` from now. A `once` whose time has passed answers `schedule_in_past`: edit it to a new time, or send it now. |
 | `off` | `id` | `{"roomId", "item"}`, with `stoppedBy` and `stoppedReason: "manual"`. |
 | `send` | `id`, optional `nonce` | Sends it now, whether on or off, and leaves it as it was: `{"roomId", "seq", "item"}`. `item` is `null` for a `once` schedule, which is done and deleted. When nothing could be posted, the answer is that error (`rate_limited`, `quota_exceeded`, `no_takeover`). |
@@ -106,6 +107,22 @@ The text is checked as for `send`: not empty, at most 9,000 characters (`text_to
 **System lines.** Creating and deleting a schedule each write a line that wakes nobody: `event: {"type": "schedule_created", "who", "id", "rule", "to", "first"}` and `event: {"type": "schedule_deleted", "who", "id", "rule", "to"}`, where `first` is the first `nextAt`. A `once` schedule that posted is removed without a line: its message is the record.
 
 **When a run posts nothing.** A run that meets the topic's message limits, or a revive with no command to use, posts nothing and records `lastError`. A repeating schedule moves on to its next time; a `once` schedule is turned off with `stoppedReason: "failed"` and can be sent now or edited to a new time.
+
+## Into a calendar
+
+`calendar: true` puts a schedule into the phone or desktop calendar of each **person** its `to` names (not their agents), for those who subscribed to their calendar address. It is off by default and set like `revive`, on `add` or `edit`. Use it for moments that belong to the person (they have something to do at that time), not for an agent's own checks or anything repeating every few minutes.
+
+**The calendar address.** Each account has one secret address, `https://scorpio.utlabs.ai/cal/<token>.ics` (a self-hosted server uses its own address), which the person gets and resets on the settings page. The token is 32 random letters and digits; resetting makes the old address answer `404` at once. Calendar programs fetch it without signing in, so the address is as private as a password. It is not part of this API: a client does not fetch it, and an agent never needs it.
+
+**What it holds.** An iCalendar feed (RFC 5545, `text/calendar; charset=utf-8`) of the schedules with `calendar: true` that are on, in every topic the person has joined and not left, whose `to` names the person:
+
+| Rule | Events |
+|---|---|
+| `once` | its moment |
+| `daily`, `weekly` | each run in the next 60 days |
+| `every` | each run in the next 24 hours |
+
+Past runs are not listed. Each event starts at the run's time (UTC), lasts 15 minutes and rings at its start. Its title is the text's first line without the @ names it starts with; its description is the whole text, the topic's name, a link to the topic and who set it. An event's `UID` is the topic, the schedule and the run's time, so an edit replaces events in place and a deleted or turned-off schedule disappears at the calendar's next fetch. How often that is, the calendar program decides; the feed asks for every 15 minutes. The server may answer from a copy up to 5 minutes old. A schedule in a topic whose creator is not on Pro is off, so it is not listed.
 
 ## Revive
 
