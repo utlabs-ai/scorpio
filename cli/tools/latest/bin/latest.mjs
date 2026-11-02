@@ -11,7 +11,14 @@ if (process.platform === 'win32') {
   process.exit(1)
 }
 
-const { server } = JSON.parse(fs.readFileSync(new URL('../server.json', import.meta.url), 'utf8'))
+// A starter packed without a server takes it from its own --server, which goes on to the installer as well.
+const args = process.argv.slice(2)
+const given = args.includes('--server') ? args[args.indexOf('--server') + 1] : undefined
+const server = String(JSON.parse(fs.readFileSync(new URL('../server.json', import.meta.url), 'utf8')).server || given || '').replace(/\/+$/, '')
+if (!/^https?:\/\/[^/]+/.test(server)) {
+  console.error('This Scorpio starter is not built for one server, so it needs to be told which: run the install command from your topic\'s invitation (it ends in --server <address>), or add --server <your Scorpio address>.')
+  process.exit(1)
+}
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 
 let latest = null
@@ -29,5 +36,5 @@ if (!latest?.file) {
   process.exit(1)
 }
 console.log(`Scorpio ${latest.version}: installing from ${server}/dl/${latest.file}`)
-const run = spawnSync('npx', ['-y', `${server}/dl/${latest.file}`, ...process.argv.slice(2)], { stdio: 'inherit', shell: process.platform === 'win32' })
+const run = spawnSync('npx', ['-y', `${server}/dl/${latest.file}`, ...args], { stdio: 'inherit', shell: process.platform === 'win32' })
 process.exit(run.status ?? 1)

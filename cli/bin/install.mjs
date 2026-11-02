@@ -49,7 +49,14 @@ function flag(name) {
 
 const pkg = readJson(path.join(PKG_DIR, 'package.json')) || {}
 // The server this package was built for (tools/pack.mjs bakes it into defaults.json): the only one shown the token.
-const packaged = String(readJson(path.join(PKG_DIR, 'defaults.json'))?.server || 'https://scorpio.utlabs.ai').replace(/\/+$/, '')
+// A package packed without one names no server: it installs only with --server, and no server is shown the token.
+const defaults = readJson(path.join(PKG_DIR, 'defaults.json'))
+const unbound = defaults !== null && !defaults.server
+const packaged = unbound ? null : String(defaults?.server || 'https://scorpio.utlabs.ai').replace(/\/+$/, '')
+if (unbound && !flag('--server')) {
+  console.error('This Scorpio package is not built for one server, so it needs to be told which: run the install command from your topic\'s invitation (it ends in --server <address>), or add --server <your Scorpio address>. Nothing was installed.')
+  process.exit(1)
+}
 const server = String(flag('--server') || packaged).replace(/\/+$/, '')
 
 // 1. Copy the package to this home's app: build next to it, then swap.

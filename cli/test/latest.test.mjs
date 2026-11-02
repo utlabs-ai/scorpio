@@ -7,7 +7,7 @@ import os from 'node:os'
 import path from 'node:path'
 import http from 'node:http'
 import { createHash } from 'node:crypto'
-import { execFileSync, spawn } from 'node:child_process'
+import { execFileSync, spawn, spawnSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
 import { testEnv } from './env.mjs'
 
@@ -61,4 +61,69 @@ test('the starter asks the server which package is current and hands its argumen
   assert.equal(run.code, 0)
   assert.match(run.out, new RegExp(`^Scorpio 9\\.9\\.9: installing from ${base}/dl/scorpio-9\\.9\\.9-abc\\.tgz\\n`))
   assert.match(run.out, new RegExp(`npx -y ${base}/dl/scorpio-9\\.9\\.9-abc\\.tgz --server https://other\\.example\\n$`))
+})
+
+// What a deployment that knows its address serves must stay exactly what it was: installed computers and
+// the install commands already handed out depend on these bytes.
+test('pack with --server writes defaults.json, the starter and latest.json byte for byte as before', (t) => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'scorpio-pack-'))
+  t.after(() => fs.rmSync(dir, { recursive: true, force: true }))
+  execFileSync(process.execPath, [path.join(CLI_DIR, 'tools', 'pack.mjs'), '--server', 'https://scorpio.example/', '--dir', dir], { stdio: 'ignore' })
+  const raw = fs.readFileSync(path.join(dir, 'latest.json'), 'utf8')
+  const latest = JSON.parse(raw)
+  assert.deepEqual(Object.keys(latest), ['file', 'version', 'sha256', 'build'])
+  assert.equal(raw, JSON.stringify({ file: latest.file, version: latest.version, sha256: latest.sha256, build: latest.build }) + '\n')
+  const out = path.join(dir, 'x')
+  fs.mkdirSync(path.join(out, 'starter'), { recursive: true })
+  execFileSync('tar', ['-xzf', path.join(dir, latest.file), '-C', out])
+  execFileSync('tar', ['-xzf', path.join(dir, 'latest'), '-C', path.join(out, 'starter')])
+  assert.equal(fs.readFileSync(path.join(out, 'package', 'defaults.json'), 'utf8'), '{\n  "server": "https://scorpio.example"\n}\n')
+  assert.equal(fs.readFileSync(path.join(out, 'starter', 'package', 'server.json'), 'utf8'), '{"server":"https://scorpio.example"}\n')
+})
+
+test('pack without --server names no server and says so in latest.json', (t) => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'scorpio-pack-'))
+  t.after(() => fs.rmSync(dir, { recursive: true, force: true }))
+  execFileSync(process.execPath, [path.join(CLI_DIR, 'tools', 'pack.mjs'), '--dir', dir], { stdio: 'ignore' })
+  const latest = JSON.parse(fs.readFileSync(path.join(dir, 'latest.json'), 'utf8'))
+  assert.equal(latest.unbound, true)
+  const out = path.join(dir, 'x')
+  fs.mkdirSync(path.join(out, 'starter'), { recursive: true })
+  execFileSync('tar', ['-xzf', path.join(dir, latest.file), '-C', out])
+  execFileSync('tar', ['-xzf', path.join(dir, 'latest'), '-C', path.join(out, 'starter')])
+  assert.deepEqual(JSON.parse(fs.readFileSync(path.join(out, 'package', 'defaults.json'), 'utf8')), {})
+  assert.deepEqual(JSON.parse(fs.readFileSync(path.join(out, 'starter', 'package', 'server.json'), 'utf8')), {})
+  const bad = spawnSync(process.execPath, [path.join(CLI_DIR, 'tools', 'pack.mjs'), '--server', 'scorpio.example', '--dir', dir], { encoding: 'utf8' })
+  assert.equal(bad.status, 1)
+})
+
+test('a starter packed without a server installs from the one its --server names, and stops without one', async (t) => {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'scorpio-starter-'))
+  t.after(() => fs.rmSync(tmp, { recursive: true, force: true }))
+  const server = http.createServer((req, res) => {
+    if (req.url === '/dl/latest.json') return res.end(JSON.stringify({ file: 'scorpio-9.9.9-abc.tgz', version: '9.9.9', unbound: true }))
+    res.writeHead(404).end()
+  })
+  await new Promise((r) => server.listen(0, '127.0.0.1', r))
+  t.after(() => server.close())
+  const base = `http://127.0.0.1:${server.address().port}`
+  fs.cpSync(path.join(CLI_DIR, 'tools', 'latest'), path.join(tmp, 'starter'), { recursive: true })
+  fs.writeFileSync(path.join(tmp, 'starter', 'server.json'), '{}\n')
+  fs.mkdirSync(path.join(tmp, 'bin'))
+  fs.writeFileSync(path.join(tmp, 'bin', 'npx'), '#!/bin/sh\necho "npx $*"\n', { mode: 0o755 })
+  const env = testEnv(tmp, { PATH: `${path.join(tmp, 'bin')}:${process.env.PATH}` })
+  const starter = (args) => new Promise((resolve) => {
+    const child = spawn(process.execPath, [path.join(tmp, 'starter', 'bin', 'latest.mjs'), ...args], { env })
+    let out = '', err = ''
+    child.stdout.on('data', (c) => { out += c })
+    child.stderr.on('data', (c) => { err += c })
+    child.on('close', (code) => resolve({ code, out, err }))
+  })
+  const run = await starter(['--server', `${base}/`])
+  assert.equal(run.code, 0, run.err)
+  assert.match(run.out, new RegExp(`npx -y ${base}/dl/scorpio-9\\.9\\.9-abc\\.tgz --server ${base}/\\n$`))
+  const none = await starter([])
+  assert.equal(none.code, 1)
+  assert.equal(none.out, '')
+  assert.match(none.err, /not built for one server/)
 })

@@ -3,6 +3,7 @@
 // was built for, it is asked whether it still takes the token (the same server under another name, its
 // workers.dev address say, does), and the token goes only if it refuses. Any other address never sees
 // the token: an invitation or a message could name a server of someone else's, so there it goes as before.
+// A package built for no server (installed with --server only) asks none: on any change the token is removed.
 
 import fs from 'node:fs'
 import path from 'node:path'
@@ -44,6 +45,10 @@ export async function onServerChange({ dir, from, to, trusted, version, check = 
   try { token = fs.readFileSync(tokenFile, 'utf8').trim() || null } catch { /* none yet */ }
   const head = `Server changed from ${from} to ${to}`
   if (!token) return `${head}.`
+  if (!trusted) {
+    fs.rmSync(tokenFile, { force: true })
+    return `${head}: removed this computer's token without sending it there (this package is not built for one server, so no server is asked whether it still takes it), so the next join asks your person to approve this computer again.`
+  }
   if (to !== trusted) {
     fs.rmSync(tokenFile, { force: true })
     return `${head}: removed this computer's token without sending it there (only ${trusted}, the server this package is built for, is asked whether it still takes it), so the next join asks your person to approve this computer again.`

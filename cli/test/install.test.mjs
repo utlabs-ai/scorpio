@@ -245,8 +245,9 @@ const runInstall = (installer, env, args) => new Promise((resolve) => {
   child.on('close', (status) => resolve({ status, stdout, stderr }))
 })
 
-// fake: 200 or 401 (a server that answers), or 'unreachable'. packagedIsFake: whether the package was built for it.
-async function serverChange(t, fake, { packagedIsFake = true } = {}) {
+// fake: 200 or 401 (a server that answers), or 'unreachable'. packagedIsFake: whether the package was built for it;
+// unbound: built for no server.
+async function serverChange(t, fake, { packagedIsFake = true, unbound = false } = {}) {
   const home = fs.mkdtempSync(path.join(os.tmpdir(), 'scorpio-install-'))
   t.after(() => fs.rmSync(home, { recursive: true, force: true }))
   const dir = path.join(home, '.scorpio')
@@ -274,7 +275,7 @@ async function serverChange(t, fake, { packagedIsFake = true } = {}) {
   const pkgDir = path.join(home, 'pkg')
   for (const f of ['bin', 'src', 'package.json']) fs.cpSync(path.join(CLI_DIR, f), path.join(pkgDir, f), { recursive: true })
   const packaged = packagedIsFake ? to : 'https://scorpio.example'
-  fs.writeFileSync(path.join(pkgDir, 'defaults.json'), JSON.stringify({ server: packaged }))
+  fs.writeFileSync(path.join(pkgDir, 'defaults.json'), JSON.stringify(unbound ? {} : { server: packaged }))
   const env = testEnv(home, { PATH: '/usr/bin:/bin', SHELL: '/bin/sh', CLAUDE_CONFIG_DIR: path.join(home, '.claude'), CODEX_HOME: path.join(home, '.codex') })
   const run = await runInstall(path.join(pkgDir, 'bin', 'install.mjs'), env, ['--server', to])
   assert.equal(run.status, 0, run.stderr)
@@ -336,4 +337,41 @@ test('onServerChange: no token yet changes only the address; another server than
   assert.match(await onServerChange({ dir, from: 'https://a', to: 'https://evil', trusted: 'https://b', version: '1', check }), /removed this computer's token without sending it there/)
   assert.equal(asked, 0)
   assert.equal(fs.existsSync(path.join(dir, 'token')), false)
+})
+
+// A package packed without a server (pack.mjs with no --server) names none: it never falls back to another
+// deployment's address, and no server is shown this computer's token.
+function unboundPackage(home) {
+  const pkgDir = path.join(home, 'pkg')
+  for (const f of ['bin', 'src', 'package.json']) fs.cpSync(path.join(CLI_DIR, f), path.join(pkgDir, f), { recursive: true })
+  fs.writeFileSync(path.join(pkgDir, 'defaults.json'), '{}\n')
+  return path.join(pkgDir, 'bin', 'install.mjs')
+}
+
+test('a package built for no server stops without --server and writes nothing', async (t) => {
+  const home = fs.mkdtempSync(path.join(os.tmpdir(), 'scorpio-install-'))
+  t.after(() => fs.rmSync(home, { recursive: true, force: true }))
+  const env = testEnv(home, { PATH: '/usr/bin:/bin', SHELL: '/bin/sh', CLAUDE_CONFIG_DIR: path.join(home, '.claude'), CODEX_HOME: path.join(home, '.codex') })
+  const run = await runInstall(unboundPackage(home), env, [])
+  assert.equal(run.status, 1)
+  assert.match(run.stderr, /not built for one server.*--server <address>.*Nothing was installed\./)
+  assert.equal(fs.existsSync(path.join(home, '.scorpio')), false)
+  assert.equal(fs.existsSync(path.join(home, '.claude')), false)
+})
+
+test('a package built for no server installs for the server --server names', async (t) => {
+  const home = fs.mkdtempSync(path.join(os.tmpdir(), 'scorpio-install-'))
+  t.after(() => fs.rmSync(home, { recursive: true, force: true }))
+  const env = testEnv(home, { PATH: '/usr/bin:/bin', SHELL: '/bin/sh', CLAUDE_CONFIG_DIR: path.join(home, '.claude'), CODEX_HOME: path.join(home, '.codex') })
+  const run = await runInstall(unboundPackage(home), env, ['--server', 'https://scorpio.example/'])
+  assert.equal(run.status, 0, run.stderr)
+  assert.equal(JSON.parse(fs.readFileSync(path.join(home, '.scorpio', 'config.json'), 'utf8')).server, 'https://scorpio.example')
+  assert.ok(run.stdout.includes('(server: https://scorpio.example)'), run.stdout)
+})
+
+test('a package built for no server never sends the token when the server changes', async (t) => {
+  const { run, token, asked, to } = await serverChange(t, 200, { unbound: true })
+  assert.equal(asked.length, 0)
+  assert.equal(token, null)
+  assert.ok(run.stdout.includes(`Server changed from https://old.example to ${to}: removed this computer's token without sending it there (this package is not built for one server`), run.stdout)
 })

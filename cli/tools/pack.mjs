@@ -3,6 +3,10 @@
 // before (or instead of) the npm release. Not shipped in the package.
 //   node tools/pack.mjs --server https://scorpio.example.workers.dev --out dist/scorpio.tgz
 //   node tools/pack.mjs --server https://scorpio.example.workers.dev --dir dist
+//   node tools/pack.mjs --dir dist
+// Without --server the package names no server: a deployment that does not know its own address when it
+// builds (a deploy button picks it later) serves it, and its install command passes --server instead.
+// latest.json then says "unbound": true so the server knows to add it. With --server the output is as it always was.
 // --dir writes scorpio-<version>-<hash>.tgz plus latest.json naming it: npx caches a tarball by
 // its URL, so every different package needs a different URL. It also writes latest, a small starter
 // that installs whatever latest.json names (tools/latest/): npx -y <server>/dl/latest.
@@ -25,8 +29,8 @@ const flag = (name) => {
 const server = flag('--server')
 const out = flag('--out')
 const dir = flag('--dir')
-if (!server || !/^https?:\/\/[^/]+/.test(server) || (!out && !dir)) {
-  console.error('usage: node tools/pack.mjs --server <https://host> (--out <file.tgz> | --dir <dir>)')
+if ((argv.includes('--server') && !/^https?:\/\/[^/]+/.test(server || '')) || (!out && !dir)) {
+  console.error('usage: node tools/pack.mjs [--server <https://host>] (--out <file.tgz> | --dir <dir>)')
   process.exit(1)
 }
 
@@ -39,7 +43,8 @@ try {
     const src = path.join(PKG_DIR, f)
     if (fs.existsSync(src)) fs.cpSync(src, path.join(stage, f), { recursive: true })
   }
-  fs.writeFileSync(path.join(stage, 'defaults.json'), JSON.stringify({ server: server.replace(/\/+$/, '') }, null, 2) + '\n')
+  const bound = server ? { server: server.replace(/\/+$/, '') } : {}
+  fs.writeFileSync(path.join(stage, 'defaults.json'), JSON.stringify(bound, null, 2) + '\n')
   const build = buildId(stage)
   const res = JSON.parse(execFileSync('npm', ['pack', '--json', '--pack-destination', work], { cwd: stage, encoding: 'utf8' }))
   const packed = path.join(work, res[0].filename)
@@ -58,7 +63,7 @@ try {
     // starter reads latest.json each time it runs and installs the package it names.
     const starter = path.join(work, 'latest')
     fs.cpSync(path.join(PKG_DIR, 'tools', 'latest'), starter, { recursive: true })
-    fs.writeFileSync(path.join(starter, 'server.json'), JSON.stringify({ server: server.replace(/\/+$/, '') }) + '\n')
+    fs.writeFileSync(path.join(starter, 'server.json'), JSON.stringify(bound) + '\n')
     const st = JSON.parse(execFileSync('npm', ['pack', '--json', '--pack-destination', work], { cwd: starter, encoding: 'utf8' }))
     const starterTmp = path.join(d, `.latest.${process.pid}.tmp`)
     fs.copyFileSync(path.join(work, st[0].filename), starterTmp)
@@ -66,14 +71,14 @@ try {
     // The manifest is the last switch: every file it names is already complete and old packages remain.
     const manifest = path.join(d, 'latest.json')
     const manifestTmp = path.join(d, `.latest.json.${process.pid}.tmp`)
-    fs.writeFileSync(manifestTmp, JSON.stringify({ file, version: res[0].version, sha256, build }) + '\n')
+    fs.writeFileSync(manifestTmp, JSON.stringify({ file, version: res[0].version, sha256, build, ...(server ? {} : { unbound: true }) }) + '\n')
     fs.renameSync(manifestTmp, manifest)
   } else {
     target = path.resolve(out)
     fs.mkdirSync(path.dirname(target), { recursive: true })
     fs.copyFileSync(packed, target)
   }
-  console.log(`${target} (${res[0].name}@${res[0].version}, ${res[0].entryCount} files, server ${server})`)
+  console.log(`${target} (${res[0].name}@${res[0].version}, ${res[0].entryCount} files, ${server ? `server ${server}` : 'no server: install with --server'})`)
 } finally {
   fs.rmSync(work, { recursive: true, force: true })
 }
