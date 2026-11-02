@@ -859,6 +859,42 @@ test('menu identity ignores the first request counter but retains later counters
   assert.notEqual(identity(readCounterScreen('1 of 2')), identity(readCounterScreen('2 of 2')))
   assert.notEqual(identity(readCounterScreen('1 of 3')), identity(readCounterScreen('3 of 3')))
 })
+// Captured from Claude Code 2.1.316 in bypass mode: it still asks for a shell -c script that runs rm,
+// and the ⚠ line counts down every second while the same menu waits.
+const countdownScreen = (left, remove = 'rm -rf $D') => `● Clone the branch, build it, and log the result
+  ⎿  $ D=/tmp/work/build; LOG=/tmp/work/build.log; mv $LOG /tmp/work/build-run1.log; ${remove}; : > $LOG
+     run() { echo "### $(date -u +%H:%M:%S) $ $*" | tee -a $LOG; s=$(date +%s); bash -c "$*" >> $LOG 2>&1; e=$?; echo "### exit $e, $(( $(date…
+──────────────────────────────────────────────────────────────────────────────────────────
+ Bash command
+ Clone the branch, build it, and log the result
+╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ │ D=/tmp/work/build; LOG=/tmp/work/build.log; mv $LOG /tmp/work/build-run1.log; ${remove}; : > $LOG
+ │ run() { echo "### $(date -u +%H:%M:%S) $ $*" | tee -a $LOG; s=$(date +%s); bash -c "$*" >> $LOG 2>&1; e=$?; echo "### exit $e, $(( $(date +%s)-s ))s" | tee -a $LOG; return $e; }
+ │ cd /tmp/work && run "git clone -q /tmp/work/repo $D && git -C $D log --oneline -1" && cd $D && run "npm run build"; tail -15 $LOG
+╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ This shell -c script runs rm and could not be checked
+ ⚠ Claude Code will automatically block this request in ${left}, to avoid holding up an unattended session
+ Do you want to proceed?
+ ❯ 1. Yes
+   2. No
+ Esc to cancel · Tab to amend`
+test('menu identity ignores the auto-block countdown but retains the command', () => {
+  const identity = (screen) => menuIdentity(screen, parseMenu(screen, 186))
+  const card = { cli: 'claude', width: 186, identity: identity(countdownScreen('1:25')) }
+  for (const left of ['1:24', '0:59']) assert.equal(sameMenu(card, countdownScreen(left)), true)
+  assert.notEqual(identity(countdownScreen('1:25')), identity(countdownScreen('1:25', 'rm -rf /tmp/work/other')))
+})
+test('a counting-down menu keeps one card and answers it; a different command gets a new card', async () => {
+  const f = fixture({ screen: countdownScreen('1:25'), rooms: ['one'], width: 186 }); const card = await f.open()
+  for (const left of ['1:23', '1:21', '1:19']) { f.screen(countdownScreen(left)); f.advance(); await f.approvals.tick() }
+  assert.equal(f.frames.some((x) => x.type === 'approval_close'), false)
+  assert.equal(f.approvals.cards.get('p1').id, card.id)
+  await f.answer(card, { n: 1 }); assert.deepEqual(f.keys, ['1'])
+  const g = fixture({ screen: countdownScreen('1:25'), rooms: ['one'], width: 186 }); const old = await g.open()
+  g.screen(countdownScreen('1:23', 'rm -rf /tmp/work/other')); g.advance(); await g.approvals.tick()
+  assert.equal(g.frames.filter((x) => x.type === 'approval_close').at(-1).reason, 'changed')
+  assert.notEqual(g.approvals.cards.get('p1').id, old.id)
+})
 test('adding a first request counter and another hook keeps the Read card and detail', async () => {
   const f = fixture({ screen: readCounterScreen(), rooms: ['one'] })
   const read = { tool_name: 'Read', tool_input: { file_path: '/tmp/work/outside/f.txt' }, cwd: '/tmp/work' }

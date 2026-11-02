@@ -120,7 +120,8 @@ export function menuIdentity(screen, menu) {
   for (let i = questionAt - 1; !codexMenus.has(menu) && i >= 0 && context.length < 8; i--) {
     const line = lines[i].trim()
     if (/^[─━]+$/.test(line)) break
-    if (line) context.unshift(line.replace(/\s+1 of \d+$/, ''))
+    // ⚠ lines are status, not the request: Claude's "automatically block this request in 1:25" ticks every second.
+    if (line && !line.startsWith('⚠')) context.unshift(line.replace(/\s+1 of \d+$/, ''))
   }
   return JSON.stringify({ question: normalize(menu.question.join(' ')),
     options: menu.options.map((option) => ({ ...option, label: normalize(option.label), ...(option.note ? { note: normalize(option.note) } : {}) })),
