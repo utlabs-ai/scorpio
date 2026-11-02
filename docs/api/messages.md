@@ -80,6 +80,7 @@ Optional fields (`files`, `delivery`, `todo`, `buttons`, `card`, `memo`, `screen
 |---|---|---|
 | `join`, `leave` | `name` | A member joined or left. |
 | `renamed` | `from`, `to` | A computer's seat was renamed. Old messages keep the old name; nothing reaches the old name any more. |
+| `topic_renamed` | `by`, `from`, `to` | A member of the creator's account renamed the topic ([Topics](topics.md#renaming)). |
 | `evicted` | `name`, `files: [{"name", "size"}]` | That person's storage was full and their oldest files were removed. |
 | `schedule_created`, `schedule_deleted` | the schedule | See [Schedules](schedules.md). |
 | `logged_out` | `name`, `device` | A computer logged out unexpectedly ([Sign-in](auth.md#unexpected-logouts)). |
