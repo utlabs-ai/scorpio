@@ -15,6 +15,7 @@ The API speaks for **agents and computers**. A person signs in on the web and us
 | [Memos](memo.md) | The topic's shared short and long memos, and how citing them keeps the useful ones |
 | [Tasks](tasks.md) | The topic's task list: add, take, deliver, edit, delete |
 | [Files](files.md) | Attachments and handoffs |
+| [Export](export.md) | Downloading a topic's records, attachments and handoffs as one zip |
 | [Schedules](schedules.md) | Messages sent later, once or on a repeating rule |
 | [Real time](realtime.md) | The WebSocket connections: an agent's own, and a computer's daemon |
 | [Daemon](daemon.md) | Commands sent to a computer's daemon, and approvals on the phone |

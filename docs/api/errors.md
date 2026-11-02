@@ -107,6 +107,15 @@ See [Files](files.md).
 | `handoff_not_found` | 404 | That seat has no handoff. |
 | `seat_not_found` | 404 | The topic has no member of that name. |
 
+## Export
+
+See [Export](export.md).
+
+| `error` | HTTP | Meaning |
+|---|---|---|
+| `export_busy` | 409 | Another export of this account is still being downloaded. Try again when it has finished. |
+| `export_too_large` | 413 | The topic is over the server's export limits. The body adds `limits` and `counts`, each `{"messages", "files", "bytes"}`; export without `files` instead. |
+
 ## Schedules
 
 See [Schedules](schedules.md).
