@@ -307,18 +307,19 @@ export function createApprovals({ terminal, targets, send, now = () => Date.now(
 export function approvalTargets({ panes, spawns, entries, readRecord, stallOf = () => null }) {
   if (!panes) return null
   const targets = new Map()
-  const add = (e, kind, stall = null) => {
+  // Only a pane where Herdr sees Claude or Codex: a /spawn whose CLI never came up leaves a shell, which has no menu.
+  const add = (e, stall = null) => {
     const pane = panes.find((p) => p.pane_id === e.pane)
-    if (!pane || !['claude', 'codex'].includes(kind || pane.agent)) return
+    if (!pane || !['claude', 'codex'].includes(pane.agent)) return
     const record = readRecord(e)
     const fromSpawn = record?.pane === e.pane
     let target = targets.get(e.pane)
-    if (!target) { target = { pane: e.pane, name: e.name, cli: kind || pane.agent, rooms: [], status: pane.agent_status, spawned: false }; targets.set(e.pane, target) }
+    if (!target) { target = { pane: e.pane, name: e.name, cli: pane.agent, rooms: [], status: pane.agent_status, spawned: false }; targets.set(e.pane, target) }
     if (fromSpawn && !target.spawned) { target.rooms = [e.roomId]; target.name = e.name; target.spawned = true }
     else if (!target.spawned && !target.rooms.includes(e.roomId)) target.rooms.push(e.roomId)
     if (stall) target.stall = stall
   }
-  for (const op of spawns) if (op.pane) add(op, op.kind, stallOf(op))
+  for (const op of spawns) if (op.pane) add(op, stallOf(op))
   for (const entry of entries) add(entry)
   return [...targets.values()]
 }

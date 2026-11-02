@@ -455,13 +455,15 @@ export function createSeat({
       const screen = await terminal.read(pane, 200)
       if (!screen && panes && !me) return { ok: false, gone: true }
       const seconds = observeSpawn(op, screen, false)
-      if ((up && dialogBlocked(me.agent_status, { kind, screen, hookWaiting: approvalHookWaiting(pane) })) || seconds * 1000 >= SPAWN_STALL_MS) return { stalled: true, screen, seconds }
+      // Stalled only with the CLI in the foreground: a still shell (the CLI missing, or exited at once) did not start.
+      if (up && (dialogBlocked(me.agent_status, { kind, screen, hookWaiting: approvalHookWaiting(pane) }) || seconds * 1000 >= SPAWN_STALL_MS)) return { stalled: true, screen, seconds }
     }
     if (me && me.agent === kind) {
       const screen = await terminal.read(pane, 200)
       return { stalled: true, screen, seconds: observeSpawn(op, screen, false) }
     }
-    return { ok: false, reason: failure ? failure.text : '' }
+    // Herdr's timeout only says it gave up waiting; the screen shows why.
+    return { ok: false, reason: failure && !STILL_STARTING.has(failure.code) ? failure.text : '' }
   }
 
   // ---------------------------------------------------------------- /usage

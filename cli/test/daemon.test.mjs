@@ -2933,6 +2933,41 @@ test('/spawn that works before 30 s or joins gets no stall card', async () => {
   } finally { unregister({ roomId: ROOM, name: 'qa@kai' }) }
 })
 
+const MISSING_CLI = '$ claude --model custom go\nbash: claude: command not found\n$ '
+
+test('/spawn whose CLI is not found: herdr times out, the shell stays still; did not start, no card, and a second /spawn says so', async () => {
+  let approvals = null, m = null
+  m = fakeMachine({ isDir: () => true, sleep: async (ms) => m.advance(ms), approvalsRunning: () => true,
+    approvalBusy: (p) => approvals.busy(p), approvalShown: (p) => approvals.shown(p) })
+  m.panes.push({ pane_id: 'w:p9', tab_id: 'w:t9', cwd: '/work' })
+  m.screen.byPane = { 'w:p9': MISSING_CLI }
+  m.terminal.startAgent = async () => {
+    throw Object.assign(new Error('Command failed: herdr agent start'), { stderr: JSON.stringify({ error: { code: 'timeout', message: 'timed out waiting for agent startup' } }) })
+  }
+  approvals = createApprovals({ terminal: m.terminal, targets: async () => m.seat.approvalTargets(m.panes), send: () => {}, now: m.now, sleep: async () => {} })
+  m.ask('@daemon.box@kai /spawn claude qa /work go')
+  await m.tick()
+  for (let i = 0; i < 400 && !m.said.some((t) => /qa's CLI|Started qa /.test(t)); i += 1) await new Promise((r) => setImmediate(r))
+  assert.equal(m.said.some((t) => t.includes('Started qa ')), false, m.said.join('\n'))
+  assert.ok(m.said.some((t) => t.startsWith("@kai qa's CLI did not start within a minute. The pane is still open; /bye qa closes it.\n")), m.said.join('\n'))
+  assert.deepEqual(m.sent.at(-1).screen, hideKeys(tail(MISSING_CLI)))
+  assert.equal(m.seat.ops[0].stage, 'failed')
+  for (let i = 0; i < 12; i += 1) { m.advance(5000); await m.tick(); await approvals.tick() }
+  assert.equal(approvals.cards.size, 0, 'a shell gets no card')
+  m.ask('@daemon.box@kai /spawn claude qa /work go')
+  await m.tick()
+  assert.match(m.said.at(-1), /qa did not start on this computer last time; its pane is still open/)
+})
+
+test('/spawn whose CLI exited before joining: the shell left behind gets no card', async () => {
+  const { m, pane, approvals, round } = await relayedSpawn()
+  delete pane.agent; delete pane.agent_status
+  m.screen.text = MISSING_CLI
+  for (let i = 0; i < 12; i++) await round()
+  assert.equal(approvals.cards.size, 0)
+  assert.equal(m.seat.approvalTargets(m.panes).some((t) => t.pane === 'w:p9'), false)
+})
+
 test('custom spawn arguments report when requested permission was not applied', async () => {
   const before = readJson(CONFIG_FILE)
   try {
