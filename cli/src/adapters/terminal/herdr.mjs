@@ -21,8 +21,8 @@ export function herdrAgentName(role, number = 1) {
   return role.slice(0, 32 - suffix.length) + suffix
 }
 // A fresh tab's shell has to finish its own startup before herdr can start an agent in it. On a busy
-// Mac that can take more than 30 seconds; keep a bound while waiting for the actual shell prompt.
-export const SHELL_READY_SECONDS = 120
+// Mac that can take minutes; keep a bound while waiting for the actual shell prompt.
+export const SHELL_READY_SECONDS = 600
 export const LABEL = 'Scorpio daemon'
 // The name the daemon reports agent states to Herdr under.
 export const REPORT_SOURCE = 'scorpio'

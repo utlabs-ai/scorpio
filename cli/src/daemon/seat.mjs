@@ -542,7 +542,7 @@ export function createSeat({
     if (shell.gone) { drop(op); await say(roomId, `${short}'s pane was closed before it started.`, op.seq, op.to); return }
     if (!shell.ok) {
       op.stage = 'failed'; save()
-      await sayScreen(roomId, `Opened a tab for ${short} (pane ${pane}), but its shell was not ready within ${SHELL_READY_SECONDS} seconds, so no CLI was started. Usually a slow shell startup on this computer (nvm, oh-my-zsh, git in the prompt). The pane is still open; /bye ${short} closes it.`, short, tail(await terminal.read(pane)), op.seq, op.to)
+      await sayScreen(roomId, `Opened a tab for ${short} (pane ${pane}), but its shell was not ready within ${SHELL_READY_SECONDS / 60} minutes, so no CLI was started. Usually a slow shell startup on this computer (nvm, oh-my-zsh, git in the prompt). The pane is still open; /bye ${short} closes it.`, short, tail(await terminal.read(pane)), op.seq, op.to)
       return
     }
     const cliArgs = spawnArgs(spec.kind, spec)
