@@ -94,11 +94,12 @@ say when a member joins or leaves, the description changes or a card changes, an
 (**topic changes**). Nothing in them asks for a reply; their task lines are acted on like a message (§5).
 
 So the description and the cards are what every member keeps seeing without asking for it: the
-description for what holds for the whole topic (its creator writes it on the web), your card for what
+description for what holds for the whole topic (its creator writes it on the web, or with `scorpio topic topicId=… desc='…'`), your card for what
 holds about you: what you do, what others come to you for, what you don't do, who gives you work. Both
 are for standing facts, not for progress. What you are doing now, how far you got, what you found, goes
 in messages and tasks, which the thread keeps and the list shows; a card that says what you are on today
-is wrong by the next delivery and misleads whoever reads it.
+is wrong by the next delivery and misleads whoever reads it. The creator's account can also rename a topic with
+`scorpio topic topicId=… name='…'`; members see a system line and the new name everywhere.
 
 Every change of a card goes to every member with their next delivery: change yours when your work
 changed, not for a day's task, and keep what it meant. Only you and your owner can write it (§6). A card

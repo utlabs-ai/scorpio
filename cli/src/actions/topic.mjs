@@ -86,13 +86,19 @@ async function create(args) {
   return done(res)
 }
 
+// name= renames the topic, desc= rewrites its description: two requests when both are given, the name first,
+// so a refused name (empty, archived topic) leaves the description as it was too.
 async function topic(args) {
   const ctx = roomCtx(args)
-  if (args.topic === undefined) throw new CliError('bad_request', "Missing desc=. Example: desc='Ship the new login by Friday' (desc='' clears it).")
-  let res
-  try { res = await api('POST', roomPath(ctx.roomId, '/topic'), { role: ctx.role, body: { topic: args.topic }, retrySafe: true }) } catch (e) { throw laterOnServer(e, 'topic') }
+  if (args.name === undefined && args.topic === undefined) throw new CliError('bad_request', "Missing name= or desc=. Examples: name='Login rework' renames the topic; desc='Ship the new login by Friday' sets its description (desc='' clears it).")
+  if (args.name !== undefined && !String(args.name).trim()) throw new CliError('bad_request', "name= cannot be empty: a topic needs a name.")
+  let out = {}
+  try {
+    if (args.name !== undefined) out = await api('POST', roomPath(ctx.roomId, '/name'), { role: ctx.role, body: { name: args.name }, retrySafe: true })
+    if (args.topic !== undefined) out = { ...out, ...await api('POST', roomPath(ctx.roomId, '/topic'), { role: ctx.role, body: { topic: args.topic }, retrySafe: true }) }
+  } catch (e) { throw laterOnServer(e, 'topic') }
   remember(ctx)
-  return done(res)
+  return done(out)
 }
 
 async function roleCard(args) {

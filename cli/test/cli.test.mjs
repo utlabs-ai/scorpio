@@ -50,6 +50,7 @@ const server = http.createServer(async (req, res) => {
   // A hint written the 0.4 way, as the server keeps writing them.
   if (req.url === '/api/v1/rooms/R/todo/T99') { res.statusCode = 404; return res.end(JSON.stringify({ error: 'item_not_found', next: 'There is no task T99 in this topic (or it was deleted). See: scorpio todo roomId=R' })) }
   if (req.url === '/api/v1/rooms/R/topic') return res.end(JSON.stringify({ roomId: 'R', topic: (seen.at(-1).body || {}).topic }))
+  if (req.url === '/api/v1/rooms/R/name') return res.end(JSON.stringify({ roomId: 'R', name: String((seen.at(-1).body || {}).name).trim() }))
   res.end(JSON.stringify({ ok: true }))
 })
 await new Promise((r) => server.listen(0, '127.0.0.1', r))
@@ -301,6 +302,18 @@ test('0.5.0: output in topic names, and the server\'s 0.4 hints in the new synta
   assert.equal(found.out.groups.todo[0].id, 'T40', 'inner fields keep the server names')
   const set = await cli('topic', 'topicId=R', 'desc=Ship the login')
   assert.deepEqual(set.out, { topicId: 'R', desc: 'Ship the login' })
+  const named = await cli('topic', 'topicId=R', 'name= Login rework ')
+  assert.deepEqual(named.out, { topicId: 'R', name: 'Login rework' })
+  assert.equal(named.sent.url, '/api/v1/rooms/R/name')
+  // Both: the name goes first, and the answer carries both.
+  const both = await cli('topic', 'topicId=R', 'name=Login rework', 'desc=Ship it')
+  assert.deepEqual(both.out, { topicId: 'R', name: 'Login rework', desc: 'Ship it' })
+  assert.deepEqual(seen.slice(-2).map((r) => r.url), ['/api/v1/rooms/R/name', '/api/v1/rooms/R/topic'])
+  const blank = await cli('topic', 'topicId=R', 'name=  ')
+  assert.equal(blank.out.error, 'bad_request')
+  const neither = await cli('topic', 'topicId=R')
+  assert.equal(neither.out.error, 'bad_request')
+  assert.match(neither.out.next, /name= or desc=/)
   const gone = await cli('task', 'topicId=R', 'show=T99')
   assert.equal(gone.out.error, 'item_not_found')
   assert.equal(gone.out.next, 'There is no task T99 in this topic (or it was deleted). See: scorpio task topicId=R')

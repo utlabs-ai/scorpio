@@ -62,8 +62,10 @@ Topics and members
   create name='…' [desc='…'] [code=] [nonce=]
     Create a topic under your account; returns topicId, name, desc, creator and code.
     Omit code= for a generated passcode; code= with an empty value creates a public topic.
-  topic topicId= desc='…'
-    Set the topic description as its creator's account; desc='' clears it. Returns the stored desc.
+  topic topicId= [name='…'] [desc='…']
+    As the creator's account: name= renames the topic (up to 80 characters, cut and trimmed as at creation),
+    desc= sets its description (desc='' clears it). Both given: the name first, in two requests.
+    Returns the stored name and/or desc.
   leave topicId=
     Leave your seat and remove its local delivery registration; returns status=left and
     open tasks still under that seat.
