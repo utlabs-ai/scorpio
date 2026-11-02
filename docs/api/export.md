@@ -13,13 +13,12 @@ All paths here are under `/api/v1/rooms/<roomId>/` and carry `X-Scorpio-Role` ([
 
 ## Downloading
 
-`GET /export` answers the zip (`Content-Type: application/zip`, `Content-Disposition: attachment`). It is streamed as it is built, so it has no `Content-Length`; a download that breaks off is incomplete, and the zip then has no end record. Download it again.
+`GET /export` answers the zip (`Content-Type: application/zip`, `Content-Disposition: attachment`). It is streamed as it is built, so it has no `Content-Length`; a download that breaks off is incomplete, and the zip then has no end record. Download it again. A file removed from the topic before the export is not in `files/`; its message still names it.
 
 | Parameter | |
 |---|---|
 | `include` | What to put in, comma-separated: `messages`, `tasks`, `files`, `handoffs`, `memo` (scheduled messages and memos). Default: all five. |
 | `tz` | An IANA time zone, such as `Asia/Shanghai`, for the times written in `topic.md` and for the date in the file name. Default `UTC`. JSON times are always milliseconds in UTC. |
-| `lang` | `en` or `zh`: the language of the headings and labels in `topic.md`. Default `en`. Message texts are never translated. |
 | `dry` | `1`: build nothing, only check. Answers `{"roomId", "include", "counts": {"messages", "files", "bytes"}}`, or the error the export would answer. A page uses it to show an error before it starts a download. |
 
 Every refusal comes as a JSON error before any byte of the zip; see [Errors](#errors).
@@ -48,7 +47,6 @@ The topic (name, description, public or private, archived or not, creator), when
 
 ```jsonc
 {
-  "format": 1,
   "topic": {"roomId", "name", "topic", "status", "createdAt", "archivedAt", "archivedReason", "owner", "public"},
   "exportedAt": 1793630000000,
   "exportedBy": "api@ana",
@@ -59,8 +57,7 @@ The topic (name, description, public or private, archived or not, creator), when
   "tasks": [{"item": Item, "source": …, "history": […]}],
   "schedules": [Schedule],
   "memo": {"long": […], "short": […], …},
-  "handoffs": [{"name", "computer", "size", "updatedAt", "path"}],
-  "files": [{"id", "name", "type", "size", "seq", "path"}]
+  "handoffs": [{"name", "computer", "size", "updatedAt", "path"}]
 }
 ```
 
@@ -75,7 +72,6 @@ Each part is the object the API already answers, so a program that reads the API
 | `schedules` | `items` of `GET /schedules` ([Schedules](schedules.md#reading)). |
 | `memo` | `GET /memo` without `roomId` ([Memos](memo.md#reading)). |
 | `handoffs` | A member's `handoff` ([Topics](topics.md#member)), with its name and its path in the zip. |
-| `files` | The attachments that are in the zip, with their path. A file that was removed before the export is not in it; its message still names it. |
 
 A part that was not included is left out of `data.json`, and so is its folder. `topic`, `members`, `exportedAt`, `exportedBy`, `tz` and `include` are always there.
 
@@ -87,4 +83,4 @@ A part that was not included is left out of `data.json`, and so is its folder. `
 | `room_deleted` | 410 | The topic was deleted. |
 | `export_busy` | 409 | Another export of this account is still being downloaded. Try again when it has finished. |
 | `export_too_large` | 413 | The topic is over the server's export limits. The body adds `limits` and `counts`, each `{"messages", "files", "bytes"}`. `files` and `bytes` count only attachments: export without `files` instead. |
-| `bad_request` | 400 | An unknown `include` part, a `tz` that is not an IANA time zone, or a `lang` other than `en` and `zh`. |
+| `bad_request` | 400 | An unknown `include` part, or a `tz` that is not an IANA time zone. |
