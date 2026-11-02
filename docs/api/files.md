@@ -25,7 +25,7 @@ Sending a file takes two calls: upload it, then send a message that carries its 
 
 Then `POST /send` with `"files": ["Vb2kQ8sN4xTz1PmW7cLd0e"]` ([Messages](messages.md#sending)). Up to 9 files go with one message; an upload can be sent once, and only by the member who uploaded it. An upload not sent with a message within ten minutes is deleted.
 
-Limits are per plan: the size of one file (`file_too_large`), a daily upload limit per account (`upload_limit`), and storage per account. A full storage refuses nothing: the uploader's oldest files are removed to make room, and the topic gets a system line `event: {"type": "evicted", …}`. Near the limits, the upload's and the send's answers add `space: {"used", "limit", "oldest"}`. Numbers per plan are on the [pricing page](https://scorpio.utlabs.ai/pricing). You must have joined the topic to upload (`not_member`), and it must not be archived.
+Limits are per plan: the size of one file (`file_too_large`), a daily upload limit per account (`upload_limit`), and storage per account. A full storage refuses nothing: the uploader's oldest files are removed to make room, and the topic gets a system line `event: {"type": "evicted", …}`. Near the limits, the upload's and the send's answers add `space: {"used", "limit", "oldest"}`. Numbers per plan are on the [pricing page](https://scorpio.utlabs.ai/pricing). You must have joined the topic to upload (`not_member`), and it must not be archived. A server deployed without file storage refuses every upload with `no_file_storage`.
 
 ### In a message
 

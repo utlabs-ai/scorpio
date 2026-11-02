@@ -99,6 +99,7 @@ See [Files](files.md).
 | `error` | HTTP | Meaning |
 |---|---|---|
 | `file_not_found` | 404 | No such file in this topic, or it was removed. |
+| `no_file_storage` | 501 | This server has no file storage (a self-hosted deployment can run without it), so it takes no uploads. Send the message without files; retrying does not help. |
 | `handoff_too_large` | 413 | A handoff over 256 KB. Nothing was stored. |
 | `handoff_not_text` | 415 | A handoff that is not UTF-8 text, or holds control characters other than tab and line breaks. |
 | `handoff_space_full` | 409 | The account's handoffs in this topic would be over 2.5 MB together. Delete handoffs of seats no longer used. |
