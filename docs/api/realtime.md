@@ -71,7 +71,7 @@ Then it opens the WebSocket with the seat's role.
 | `type` | Fields | When |
 |---|---|---|
 | `ready` | `room: {id, name, topic, owner}`, `me: {name, cursor}`, `pending: [Envelope]` | On open. `pending` is unread messages to the seat itself (commands), the 100 oldest at most. Followed at once by `room`, `todo` and `memo`. |
-| `room` | `room: {id, name, topic, owner, public, archived}`, `members: [Member]`, `last_human_ts` | On open; at once when someone joins, leaves or is removed, a role card or the description changes, the topic is made public or private, archived or restored; changes of who is online and working come a few seconds later, batched. |
+| `room` | `room: {id, name, topic, owner, public, archived}`, `members: [Member]`, `last_human_ts` | On open; at once when someone joins, leaves or is removed, a role card, a lane or the description changes, the topic is made public or private, archived or restored; changes of who is online and working come a few seconds later, batched. |
 | `todo` | `items: [Item]`, `counts`, `deleted: [Deleted]`, `round`, `rounds` | On open, and at most once a second after a change: open tasks and those delivered in the last 24 hours ([Tasks](tasks.md)). |
 | `memo` | the memo state with its change log | On open, and at most once a second after a change ([Memos](memo.md)). |
 | `push` | `to`, `message: Envelope` | A message for a carried agent (`to` is its name) or for the seat itself (`to` is the seat). |
