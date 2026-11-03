@@ -107,7 +107,7 @@ test('the daemon tab carries the staging update interval', () => {
 const { namedRoom, renderDelivery, renderKeepalive, reminderDue, rosterChanges, rosterOf, wakeMessages, typeable, FRAME } = await import('../src/render/forward.mjs')
 const { parseCommand, daemonsNamed, judge, senderOf, machineName, parseSpawn, spawnDirArg, parseTargets, freeName, seatRole, spawnLine, spawnPrompt, spawnCard, handoffPrompt, takeoverText, agoText, SPACE_FULL_LINE, COMMANDS, parseIdle, idleNotice, HELP_SHORT, HELP_FULL, parseRead, parseKeys, parseText } = await import('../src/daemon/commands.mjs')
 const { agentEnv, plan, deliveryMessages, composeDelivery, injectWhenReady, paneReady, paneGate, dueNow, humanSpokeWithin, restartDue, restartNote, RESTART_NOTE_MS, notMember, newer, idleClock, keepaliveFor, createPacer, topicLeft, updateIntervals, KEEPALIVE_MS, IDLE_GAP_MS, TICK_MS, MIN_ROUND_MS } = await import('../src/daemon/main.mjs')
-const { idleHandoffMinutes, setIdleHandoffMinutes, spawnRecordPath, readJson, writeJson, CONFIG_FILE, REMOVED_FILE, ROLLBACK_FILE } = await import('../src/daemon/paths.mjs')
+const { idleHandoffMinutes, setIdleHandoffMinutes, spawnPath, spawnRecordPath, readJson, writeJson, CONFIG_FILE, REMOVED_FILE, ROLLBACK_FILE } = await import('../src/daemon/paths.mjs')
 const { createHealth } = await import('../src/daemon/health.mjs')
 const { clearRemoved, wasRemoved } = await import('../src/daemon/removed.mjs')
 const { register, unregister, markLeft, entries, leftEntries, prune } = await import('../src/daemon/registry.mjs')
@@ -3227,6 +3227,30 @@ test('remote helpers inherit Member.perm, may lower it, and cannot raise it', as
     const record = readJson(spawnRecordPath(ROOM, 'remote-worker@kai'))
     assert.deepEqual([record.perm, record.permFrom, record.permParent], [expected, requested ? 'spawn' : parentLevel ? 'parent' : 'setting', !requested && parentLevel ? 'pm@kai' : null])
     if (expected === 'all') assert.equal(m.said.at(-1), `@remote-worker@kai Started remote-worker (claude: claude-opus-5-5, effort medium) in ${m.tabs.at(-1).cwd}, a new name in this topic. It is working on its first prompt; waiting for it to join. perm: allow everything (same as pm@kai).`)
+  }
+})
+
+test('a helper inherits the sending agent\'s lane on its join line; a person\'s helper and a takeover carry none; lane= overrides', async () => {
+  for (const [sender, kind, name, arg, expected] of [
+    ['pm@kai', 'agent', 'lane-helper', '', "lane='billing'"],
+    ['kai', 'human', 'lane-person', '', null],
+    ['pm@kai', 'agent', 'lane-old', '', null],
+    ['pm@kai', 'agent', 'lane-given', 'lane=release ', "lane='release'"],
+  ]) {
+    const m = fakeMachine()
+    m.memberList.push({ name: 'pm@kai', kind: 'agent', status: 'active', lane: 'billing', perm: { level: 'all', from: 'spawn', parent: null } })
+    m.memberList.push({ name: 'lane-old@kai', kind: 'agent', status: 'left', lane: 'docs' }) // a takeover: the name is in the topic, left, with a lane of its own
+    m.panes.push({ pane_id: 'w:p9', agent: 'claude', agent_status: 'working' })
+    m.api.spawnPerm = async () => ({ perm: 'all' })
+    fs.rmSync(spawnPath(ROOM, `${name}@kai`), { force: true })
+    m.ask(`@daemon.box@kai /spawn claude ${name} ${arg}work`, sender, kind)
+    await m.tick()
+    for (let i = 0; i < 20 && !fs.existsSync(spawnPath(ROOM, `${name}@kai`)); i++) await new Promise((r) => setImmediate(r)) // a takeover first looks for its handoff
+    assert.equal(m.tabs.length, 1, `${name}: ${m.said.at(-1)}`)
+    const joinLine = fs.readFileSync(spawnPath(ROOM, `${name}@kai`), 'utf8').split('\n').find((l) => /^ {3}scorpio join /.test(l))
+    assert.ok(joinLine, name)
+    if (expected) assert.ok(joinLine.endsWith(` ${expected}`), `${name}: ${joinLine}`)
+    else assert.ok(!/lane=/.test(joinLine), `${name}: ${joinLine}`)
   }
 })
 

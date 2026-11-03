@@ -162,7 +162,7 @@ export function renderReminder({ room, name, reason, terminal = false, role = nu
       ? [`${where} Its description:`, quoted(room.topic, terminal, 'description', `scorpio listen topicId=${roomId}${roleArg(role)}`)]
       : [`${where} It has no description.`]),
     '',
-    'Who is in the topic (each member writes their own role card; the lane is the line of work it is on):',
+    'Who is in the topic (each member writes their own role card):',
     '| Member | Who | Lane | Role card |',
     '|---|---|---|---|',
     ...rows,
