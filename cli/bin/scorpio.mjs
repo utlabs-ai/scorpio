@@ -8,7 +8,7 @@ import { setupNetwork } from '../src/net.mjs'
 import { ACTION_ALIASES, NameClash, newSyntax, serverArgs } from '../src/names.mjs'
 import { VERSION, WAIT_DEFAULT_S, server, CliError, done, emit, parseArgs, api, ensureToken, readToken, LOGGED_OUT_FILE, roomPath } from '../src/client.mjs'
 import { login, whoami, topics, logout } from '../src/actions/account.mjs'
-import { join, listen, mark, members, handoffs, create, topic, roleCard, leave } from '../src/actions/topic.mjs'
+import { join, listen, mark, members, handoffs, create, topic, roleCard, lane, leave } from '../src/actions/topic.mjs'
 import { messages, search, files, message } from '../src/actions/read.mjs'
 import { file } from '../src/actions/file.mjs'
 import { exportTopic } from '../src/actions/export.mjs'
@@ -46,8 +46,8 @@ Account and setup
     Print a terminal QR code and its link; without a suitable terminal, print the text only.
 
 Topics and members
-  join topicId= role= [roleCard='…'] [code=] [resume=true] [pane=] [nonce=]
-    Join as role (or resume that seat); code= is the topic passcode, pane= identifies a Herdr pane.
+  join topicId= role= [roleCard='…'] [lane=] [code=] [resume=true] [pane=] [nonce=]
+    Join as role (or resume that seat); code= is the topic passcode, pane= identifies a Herdr pane; lane= sets your lane (left out, it stays as it was).
     Returns topicName, desc, name, cursor, mine, workspace and files. registered=true means
     local delivery registration succeeded; registered=false gives reason and next, but the topic
     join itself succeeded. With registration,
@@ -59,6 +59,8 @@ Topics and members
     List the handoffs stored in the cloud, newest first, with name, status, updatedAt, computer and size, never the text; handoff name= reads one.
   roleCard topicId= roleCard='…'
     Set your role card; returns the stored roleCard and name.
+  lane topicId= lane='…'
+    Set your lane (one word, the line of work you are on; lane= clears it); returns name, lane, laneBy, laneAt.
   create name='…' [desc='…'] [code=] [nonce=]
     Create a topic under your account; returns topicId, name, desc, creator and code.
     Omit code= for a generated passcode; code= with an empty value creates a public topic.
@@ -246,7 +248,7 @@ async function qr(value) {
 
 // ---------- main ----------
 
-const ACTIONS = { login, whoami, topics, logout, create, join, messages, message, search, files, send, file, export: exportTopic, card, handoff, task: todo, memo, schedule, listen, wait, mark, members, handoffs, roleCard, topic, leave, daemon, up, qr }
+const ACTIONS = { login, whoami, topics, logout, create, join, messages, message, search, files, send, file, export: exportTopic, card, handoff, task: todo, memo, schedule, listen, wait, mark, members, handoffs, roleCard, lane, topic, leave, daemon, up, qr }
 const LATER = new Set()
 
 function inCodexSandbox() {

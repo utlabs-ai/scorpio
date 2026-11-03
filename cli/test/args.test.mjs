@@ -15,7 +15,7 @@ test('offline CLI arguments keep their exact output and exit status', (t) => {
   t.after(() => fs.rmSync(home, { recursive: true, force: true }))
   const env = testEnv(home, { SCORPIO_HOME: home, SCORPIO_SERVER: 'http://127.0.0.1:9', CODEX_THREAD_ID: '', CODEX_SESSION_ID: '' })
   const cases = [
-    { args: ['unknown'], status: 1, out: { error: 'bad_request', next: 'Unknown action "unknown". Actions: login, whoami, topics, logout, create, join, messages, message, search, files, send, file, export, card, handoff, task, memo, schedule, listen, wait, mark, members, handoffs, roleCard, topic, leave, daemon, up, qr. See `scorpio help`.' } },
+    { args: ['unknown'], status: 1, out: { error: 'bad_request', next: 'Unknown action "unknown". Actions: login, whoami, topics, logout, create, join, messages, message, search, files, send, file, export, card, handoff, task, memo, schedule, listen, wait, mark, members, handoffs, roleCard, lane, topic, leave, daemon, up, qr. See `scorpio help`.' } },
     { args: ['plan'], status: 1, out: { error: 'bad_request', next: 'The plan is now the task list, and its items are T3 (P3 still works): scorpio task topicId=<topic id> (add= take= done= edit= delete= show=). See the scorpio skill.' } },
     { args: ['messages'], status: 1, out: { error: 'bad_request', next: 'Missing topicId=. Use the topic id from your invitation.' } },
     { args: ['send', 'topicId=x', 'role=bad name'], status: 1, out: { error: 'invalid_role', next: 'Use a role of 1–62 characters from A-Z a-z 0-9 _ . -' } },

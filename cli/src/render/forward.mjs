@@ -141,16 +141,18 @@ export function renderReminder({ room, name, reason, terminal = false, role = nu
   }
   const members = (room?.members || []).filter((m) => m.status !== 'left')
   const mine = members.find((m) => m.name === name)?.roleCard ?? ''
-  const rows = [`| ${name} (you) | agent | ${card(name, mine)} |`]
+  // The lane is one word with no | (the server refuses more), so it sits in its cell as it is.
+  const lane = (m) => (m?.lane ? m.lane : '—')
+  const rows = [`| ${name} (you) | agent | ${lane(members.find((m) => m.name === name))} | ${card(name, mine)} |`]
   for (const m of members.filter((x) => x.name !== name)) {
     if (m.kind === 'human') {
       const tags = ['person']
       if (room?.owner && m.name === room.owner) tags.push('creator')
       if (m.name === accountOf(name)) tags.push('your owner')
-      rows.push(`| ${memberName(m.name, members)} | ${tags.join(', ')} | — |`)
+      rows.push(`| ${memberName(m.name, members)} | ${tags.join(', ')} | — | — |`)
     } else if (isSeat(m.name, m.kind)) {
-      rows.push(`| ${m.name} | command seat | ${m.roleCard ? card(m.name, m.roleCard) : 'runs commands (/spawn, /handoff, /bye); takes no work'} |`)
-    } else rows.push(`| ${m.name} | agent | ${card(m.name, m.roleCard)} |`)
+      rows.push(`| ${m.name} | command seat | — | ${m.roleCard ? card(m.name, m.roleCard) : 'runs commands (/spawn, /handoff, /bye); takes no work'} |`)
+    } else rows.push(`| ${m.name} | agent | ${lane(m)} | ${card(m.name, m.roleCard)} |`)
   }
   const label = flat(room?.roomName)
   const where = `You are in ${label ? `"${label}" (topic ${roomId})` : `topic ${roomId}`}${room?.owner ? `, created by ${memberName(room.owner, room?.members)}` : ''}.`
@@ -160,9 +162,9 @@ export function renderReminder({ room, name, reason, terminal = false, role = nu
       ? [`${where} Its description:`, quoted(room.topic, terminal, 'description', `scorpio listen topicId=${roomId}${roleArg(role)}`)]
       : [`${where} It has no description.`]),
     '',
-    'Who is in the topic (each member writes their own role card):',
-    '| Member | Who | Role card |',
-    '|---|---|---|',
+    'Who is in the topic (each member writes their own role card; the lane is the line of work it is on):',
+    '| Member | Who | Lane | Role card |',
+    '|---|---|---|---|',
     ...rows,
     ...(below.length ? ['', ...below] : []),
     ...taskLines({ items: room?.items, members: room?.members, name, roomId, role, now }),
@@ -282,7 +284,7 @@ export function taskChanges(before, { items, deleted, name, shown = [] }) {
  * snapshot when this delivery knew the topic's items (a daemon that has not read them yet keeps the old one).
  */
 export function deliveryDue(prev, { session = null, room, name, shown = [], every = REMIND_EVERY }) {
-  const due = reminderDue(prev, { session, roster: rosterOf(room), every })
+  const due = reminderDue(prev, { session, roster: rosterOf(room), every, self: name })
   const known = Array.isArray(room?.items)
   const tasks = known ? taskChanges(prev?.tasks, { items: room.items, deleted: room.deleted, name, shown }) : []
   const snapshot = known ? taskSnapshot(room.items, name) : prev?.tasks
@@ -300,9 +302,10 @@ export function rosterOf(room) {
     name: typeof room?.roomName === 'string' ? room.roomName : null,
     topic: typeof room?.topic === 'string' ? room.topic : null,
     // roleCardBy (storage): who wrote the card last, the agent itself or its owner's account. Rosters kept
-    // before it have three entries; only the card text decides whether it changed.
+    // before it have three entries; only the card text decides whether it changed. The lane and who set it
+    // (entries 5 and 6) came later: a roster without them reads the lane as unknown, so no lane line.
     members: Array.isArray(room?.members)
-      ? room.members.filter((m) => m.status !== 'left').map((m) => [m.name, m.kind, m.roleCard || '', m.roleCardBy ?? null])
+      ? room.members.filter((m) => m.status !== 'left').map((m) => [m.name, m.kind, m.roleCard || '', m.roleCardBy ?? null, m.lane ?? null, m.laneBy ?? null])
       : null,
   }
 }
@@ -320,18 +323,23 @@ export function namedRoom(room, prev) {
   return typeof room?.roomName !== 'string' && prev?.roster?.name ? { ...room, roomName: prev.roster.name } : room
 }
 
-/** What changed between two rosters. A field unknown on either side (null) reports nothing. */
-export function rosterChanges(before, after) {
+/**
+ * What changed between two rosters. A field unknown on either side (null) reports nothing. self: the agent this
+ * delivery is for; only its own lane, changed by someone else, is a change (other agents' lanes show in the next
+ * full reminder: every delivery line costs every agent's quota, and setting it back unknowingly is the one risk).
+ */
+export function rosterChanges(before, after, self = null) {
   const changes = []
   const known = (k) => before?.[k] != null && after?.[k] != null
   if (known('topic') && before.topic !== after.topic) changes.push({ type: 'topic', text: after.topic })
   if (!known('members')) return changes
-  const old = new Map(before.members.map(([name, kind, card]) => [name, { kind, card }]))
-  const cur = new Map(after.members.map(([name, kind, card, by]) => [name, { kind, card, by: by ?? null }]))
+  const old = new Map(before.members.map(([name, kind, card, , lane]) => [name, { kind, card, lane }]))
+  const cur = new Map(after.members.map(([name, kind, card, by, lane, laneBy]) => [name, { kind, card, by: by ?? null, lane, laneBy: laneBy ?? null }]))
   for (const [name, { kind, card }] of cur) if (!old.has(name)) changes.push({ type: 'join', name, kind, card })
   for (const [name, { kind }] of old) if (!cur.has(name)) changes.push({ type: 'leave', name, kind })
-  for (const [name, { kind, card, by }] of cur) {
+  for (const [name, { kind, card, by, lane, laneBy }] of cur) {
     if (old.has(name) && kind !== 'human' && old.get(name).card !== card) changes.push({ type: 'card', name, kind, card, by })
+    if (name === self && laneBy && laneBy !== self && old.get(name)?.lane !== undefined && lane !== undefined && (old.get(name).lane ?? null) !== (lane ?? null)) changes.push({ type: 'lane', name, kind, lane: lane ?? null, by: laneBy })
   }
   return changes
 }
@@ -346,6 +354,11 @@ export function renderChanges(changes, { roomId, name, members, terminal = false
         ? ['- The description changed to:', quoted(c.text, terminal, 'description', `scorpio listen topicId=${roomId}${roleArg(role)}`)]
         : ['- The description was cleared']))
     } else if (c.type === 'leave') lines.push(`- ${who} left`)
+    else if (c.type === 'lane') {
+      // Its owner set this agent's lane on the web: said so it does not set it back without knowing.
+      const by = `${memberName(c.by, members)} (${c.by.includes('@') ? kindLabel(c.by) : c.by === accountOf(name) ? 'person, your owner' : 'person'})`
+      lines.push(c.lane ? `- Your lane was changed by ${by} to ${c.lane}.` : `- Your lane was cleared by ${by}.`)
+    }
     else if (c.type === 'join') {
       lines.push(...(c.kind === 'human' || isSeat(c.name, c.kind) || !c.card
         ? [`- ${who} joined`]
@@ -372,14 +385,14 @@ export function renderChanges(changes, { roomId, name, members, terminal = false
  * deliveries; in between only changes are listed. count is deliveries since the reminder, the
  * reminder itself being the first.
  */
-export function reminderDue(prev, { session = null, roster, every = REMIND_EVERY }) {
+export function reminderDue(prev, { session = null, roster, every = REMIND_EVERY, self = null }) {
   let remind = null
   if (!prev || (prev.session ?? null) !== session) remind = 'the first message from this topic in your session'
   else if (!prev.roster) remind = 'the reminder format changed'
   else if (!(prev.count < every)) remind = `${every} deliveries since the last reminder`
   // A reminder of a topic not read yet would say it has no description and no members: it waits, still due.
   if (remind && !rosterKnown(roster)) return { remind: null, changes: [], next: prev ?? null }
-  const changes = remind ? [] : rosterChanges(prev.roster, roster)
+  const changes = remind ? [] : rosterChanges(prev.roster, roster, self)
   return { remind, changes, next: { session, roster: keptRoster(prev?.roster, roster), count: remind ? 1 : prev.count + 1 } }
 }
 

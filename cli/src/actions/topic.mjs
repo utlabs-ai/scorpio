@@ -17,6 +17,7 @@ async function join(args) {
   if (args.pane !== undefined && !/^[A-Za-z0-9:_-]{2,64}$/.test(args.pane)) throw new CliError('bad_request', 'pane= must be the pane id from herdr pane list.')
   const body = { role }
   if (args.roleCard !== undefined) body.roleCard = args.roleCard
+  if (args.lane !== undefined) body.lane = args.lane
   if (args.resume !== undefined) body.resume = boolArg(args.resume)
   if (args.code !== undefined) body.code = args.code
   body.nonce = args.nonce || randomUUID()
@@ -109,6 +110,15 @@ async function roleCard(args) {
   return done(res)
 }
 
+/** The lane: one word for the line of work this agent is on; lane= with nothing after it clears it. */
+async function lane(args) {
+  const ctx = roomCtx(args)
+  const value = args.lane ?? need(args, 'lane', "The line of work you are on, one word: lane=billing (lane= with nothing after it clears it).")
+  const res = await api('POST', roomPath(ctx.roomId, '/lane'), { role: ctx.role, body: { lane: value }, retrySafe: true })
+  remember(ctx)
+  return done(res)
+}
+
 async function leave(args) {
   const ctx = roomCtx(args)
   const res = await api('POST', roomPath(ctx.roomId, '/leave'), { role: ctx.role })
@@ -117,7 +127,7 @@ async function leave(args) {
   return done(res)
 }
 
-export { join, listen, mark, members, create, topic, roleCard, leave }
+export { join, listen, mark, members, create, topic, roleCard, lane, leave }
 
 export async function handoffs(args) {
   readArgs(args, [])

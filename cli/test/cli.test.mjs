@@ -283,6 +283,22 @@ test('0.5.0: every new spelling reaches the server exactly as its old spelling d
   assert.equal((await cli('send', 'topicId=R', 'text=@kai x', 'add=T', 'desc=why')).sent.body.desc, 'why')
 })
 
+test('lane: posts the word, lane= with nothing clears it, nothing at all is a mistake; join passes lane=', async () => {
+  const set = await cli('lane', 'topicId=R', 'role=api', 'lane=billing')
+  assert.equal(set.code, 0, JSON.stringify(set.out))
+  assert.equal(set.sent.url, '/api/v1/rooms/R/lane')
+  assert.deepEqual(set.sent.body, { lane: 'billing' })
+  const cleared = await cli('lane', 'topicId=R', 'role=api', 'lane=')
+  assert.deepEqual(cleared.sent.body, { lane: '' })
+  const missing = await cli('lane', 'topicId=R', 'role=api')
+  assert.equal(missing.code, 1)
+  assert.equal(missing.out.error, 'bad_request')
+  assert.match(missing.out.next, /lane=billing/)
+  const joined = await cli('join', 'topicId=R', 'role=api', 'lane=release')
+  assert.equal(joined.sent.body.lane, 'release')
+  assert.equal((await cli('join', 'topicId=R', 'role=api')).sent.body.lane, undefined)
+})
+
 test('0.5.0: two spellings that disagree stop before the server', async () => {
   for (const args of [['send', 'topicId=R', 'roomId=S', 'text=@kai hi'], ['topic', 'roomId=R', 'desc=a', 'topic=b']]) {
     const r = await cli(...args)

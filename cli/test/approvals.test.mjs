@@ -239,6 +239,12 @@ test('default spawn preserves settings and adds stable hook; all keeps the Claud
   assert.equal(parseSpawn('codex api /tmp/work perm=all do work').perm, 'all')
   assert.equal(parseSpawn('codex api perm=foo').error, 'perm= only takes ask, auto or all.')
   assert.equal(parseSpawn('codex api perm=auto work').perm, 'auto')
+  // lane=: one word of up to 32 characters, no quotes (it is pasted into lane='…' on the join line); it never reaches the prompt
+  assert.deepEqual([parseSpawn('claude api lane=billing do work').lane, parseSpawn('claude api lane=billing do work').prompt], ['billing', 'do work'])
+  assert.equal(parseSpawn('claude api /tmp/work perm=all lane=日历 effort=high work').lane, '日历')
+  assert.equal(parseSpawn('claude api /tmp/work perm=all lane=日历 effort=high work').effort, 'high')
+  assert.equal(parseSpawn('claude api work').lane, undefined)
+  for (const bad of ['lane=', "lane=it's", 'lane=a|b', `lane=${'x'.repeat(33)}`]) assert.equal(parseSpawn(`claude api ${bad} work`).error, 'lane= takes one word of up to 32 characters, e.g. lane=billing.', bad)
   for (const [value, level] of [['ask', 'ask'], ['auto', 'auto'], ['all', 'all'], ['default', 'ask']]) {
     assert.equal(parseSpawn(`codex api perm=${value} work`).perm, level)
   }

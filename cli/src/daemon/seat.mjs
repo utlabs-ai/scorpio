@@ -536,7 +536,7 @@ export function createSeat({
     const toRead = op.handoff?.file ? op.handoff : null
     const file = spawnPath(roomId, op.name)
     fs.mkdirSync(path.dirname(file), { recursive: true, mode: 0o700 })
-    writeJson(file, `${spawnPrompt({ account, by: op.to, roomId, roomName: roomName(roomId), seq: op.seq, name: op.name, pane, prompt: spec.prompt, keepCard: op.keepCard, handoff: op.handoff, scheduled: op.scheduled })}\n`)
+    writeJson(file, `${spawnPrompt({ account, by: op.to, roomId, roomName: roomName(roomId), seq: op.seq, name: op.name, pane, prompt: spec.prompt, keepCard: op.keepCard, handoff: op.handoff, scheduled: op.scheduled, lane: op.lane ?? null })}\n`)
     const shell = await terminal.waitShell(pane, () => !ops.includes(op))
     if (!ops.includes(op)) { log(`${short} was /bye-d while its shell started; not answering`); return }
     if (shell.gone) { drop(op); await say(roomId, `${short}'s pane was closed before it started.`, op.seq, op.to); return }
@@ -809,7 +809,7 @@ export function createSeat({
       const missing = await notInstalled(spec.kind)
       if (missing) return say(roomId, missing, message.seq, to)
       const last = spec.name ? readJson(spawnRecordPath(roomId, `${spec.name}@${account}`)) : null
-      const line = (d, kind = spec.kind, model = spec.model, effort = spec.effort) => fence(`@${seatName} /spawn ${kind}${spec.name ? ` ${spec.name}` : ''}${d ? ` ${spawnDirArg(d)}` : ''}${model ? ` model=${model}` : ''}${effort ? ` effort=${effort}` : ''}${spec.prompt ? ` ${spec.prompt}` : ''}`)
+      const line = (d, kind = spec.kind, model = spec.model, effort = spec.effort) => fence(`@${seatName} /spawn ${kind}${spec.name ? ` ${spec.name}` : ''}${d ? ` ${spawnDirArg(d)}` : ''}${model ? ` model=${model}` : ''}${effort ? ` effort=${effort}` : ''}${spec.lane ? ` lane=${spec.lane}` : ''}${spec.prompt ? ` ${spec.prompt}` : ''}`)
       // An explicit directory in this name's previous /spawn must be repeated for a takeover.
       if (spec.needDir && last?.dir && last.explicitDir !== false) {
         return say(roomId, `Not started: ${spec.name} last worked in ${last.dir}. Copy the command with that directory, or name another one:\n${line(last.dir, last.kind, last.model, last.effort)}`, message.seq, to)
@@ -865,10 +865,13 @@ export function createSeat({
       // A takeover (the name is in the topic, left) keeps its card as the topic has it, whatever that card says; a new name
       // gets the generic one.
       const keepCard = everyone.some((m) => m.name === name)
+      // The lane: lane= as given; else a new name inherits the sending agent's (the topic's members say it, so it works
+      // from any computer; none from a person), and a takeover keeps the lane its seat has, so nothing is passed.
+      const lane = spec.lane ?? (keepCard ? null : (sender.fromKind === 'agent' ? everyone.find((m) => m.name === sender.from)?.lane ?? null : null))
       if (spec.needDir) {
         try { ensureDir(dir) } catch (error) { return say(roomId, `Not started: could not create the topic workspace ${dir}: ${error.message}`, message.seq, to) }
       }
-      const op = { type: 'spawn', stage: 'starting', kind: spec.kind, roomId, seq: message.seq, name, herdrName, to, fromKind: sender.fromKind, scheduled: message.scheduled, keepCard, skipHandoff: keepCard && !!spec.skipHandoff, perm: permOf(spec.kind, spawnArgs(spec.kind, spec)), permFrom: permission.from, permParent: permission.parent, dir, replacedGone }
+      const op = { type: 'spawn', stage: 'starting', kind: spec.kind, roomId, seq: message.seq, name, herdrName, to, fromKind: sender.fromKind, scheduled: message.scheduled, keepCard, lane, skipHandoff: keepCard && !!spec.skipHandoff, perm: permOf(spec.kind, spawnArgs(spec.kind, spec)), permFrom: permission.from, permParent: permission.parent, dir, replacedGone }
       ops.push(op)
       const homeBin = path.join(HOME, 'bin')
       const inheritedPath = spawnEnv.PATH || process.env.PATH || ''

@@ -151,7 +151,7 @@ test('human nicknames appear consistently without changing addresses or agent na
     const text = renderDelivery({ room: named, messages: [msg(701)], name: 'api@kai', remind: 'x', terminal: true })
     assert.ok(text.includes(`#701 from ${shown} (human):`))
     assert.ok(text.includes(`created by ${shown}.`))
-    assert.ok(text.includes(`| ${shown} | person, creator, your owner | — |`))
+    assert.ok(text.includes(`| ${shown} | person, creator, your owner | — | — |`))
     assert.ok(text.includes('| lead@kai | agent |'))
     const changed = renderDelivery({ room: named, messages: [msg(702)], name: 'api@kai', changes: [{ type: 'card', name: 'api@kai', kind: 'agent', by: 'kai', card: 'New card' }] })
     assert.ok(changed.includes(`changed by ${shown} (person, your owner)`))
@@ -203,9 +203,13 @@ test('reminder: first time, then changes, then again after 20', () => {
   assert.equal(first.remind, 'the first message from this topic in your session')
   const text = renderDelivery({ room, messages: [msg(1)], name: 'api@kai', remind: first.remind })
   assert.ok(text.includes('Topic reminder (the first message from this topic in your session)'))
-  assert.ok(text.includes('| api@kai (you) | agent | api: backend endpoints |'))
-  assert.ok(text.includes('| kai | person, creator, your owner | — |'))
-  assert.ok(text.includes('| daemon.box@kai | command seat | … |'))
+  assert.ok(text.includes('| Member | Who | Lane | Role card |\n|---|---|---|---|'))
+  assert.ok(text.includes('| api@kai (you) | agent | — | api: backend endpoints |'))
+  assert.ok(text.includes('| lead@kai | agent | — | lead: plans |'))
+  assert.ok(text.includes('| kai | person, creator, your owner | — | — |'))
+  assert.ok(text.includes('| daemon.box@kai | command seat | — | … |'))
+  const laned = { ...room, members: room.members.map((m) => (m.name === 'lead@kai' ? { ...m, lane: 'release' } : m)) }
+  assert.ok(renderDelivery({ room: laned, messages: [msg(1)], name: 'api@kai', remind: first.remind }).includes('| lead@kai | agent | release | lead: plans |'))
   assert.ok(!text.includes('old@kai'))
   const room2 = { ...room, topic: 'Ship it today', members: [...room.members.slice(0, 2), { name: 'qa@kai', kind: 'agent', roleCard: 'qa', status: 'active' }] }
   const second = reminderDue(first.next, { session: 1, roster: rosterOf(room2) })
@@ -218,6 +222,22 @@ test('reminder: first time, then changes, then again after 20', () => {
   for (let i = 0; i < 18; i += 1) rec = reminderDue(rec, { session: 1, roster: rosterOf(room2) }).next
   assert.equal(reminderDue(rec, { session: 1, roster: rosterOf(room2) }).remind, '20 deliveries since the last reminder')
   assert.equal(reminderDue(first.next, { session: 2, roster }).remind, 'the first message from this topic in your session')
+})
+
+test('lane changes: only your own, set by someone else, is a line; your own setting, others\' lanes and old rosters say nothing', () => {
+  const read = reminderDue(undefined, { session: 1, roster: rosterOf(room), self: 'api@kai' }).next
+  const withLane = (name, lane, laneBy) => ({ ...room, members: room.members.map((m) => (m.name === name ? { ...m, lane, laneBy } : m)) })
+  const byOwner = reminderDue(read, { session: 1, roster: rosterOf(withLane('api@kai', 'billing', 'kai')), self: 'api@kai' })
+  assert.deepEqual(byOwner.changes, [{ type: 'lane', name: 'api@kai', kind: 'agent', lane: 'billing', by: 'kai' }])
+  assert.ok(renderDelivery({ room: withLane('api@kai', 'billing', 'kai'), messages: [msg(4)], name: 'api@kai', changes: byOwner.changes }).includes('Topic changes:\n- Your lane was changed by kai (person, your owner) to billing.'))
+  const cleared = reminderDue(byOwner.next, { session: 1, roster: rosterOf(withLane('api@kai', null, 'kai')), self: 'api@kai' })
+  assert.deepEqual(cleared.changes, [{ type: 'lane', name: 'api@kai', kind: 'agent', lane: null, by: 'kai' }])
+  assert.ok(renderDelivery({ room, messages: [msg(5)], name: 'api@kai', changes: cleared.changes }).includes('- Your lane was cleared by kai (person, your owner).'))
+  assert.deepEqual(reminderDue(read, { session: 1, roster: rosterOf(withLane('api@kai', 'billing', 'api@kai')), self: 'api@kai' }).changes, [], 'set by itself')
+  assert.deepEqual(reminderDue(read, { session: 1, roster: rosterOf(withLane('lead@kai', 'billing', 'kai')), self: 'api@kai' }).changes, [], "another agent's lane")
+  // a roster kept before lanes existed (four entries) reads the lane as unknown
+  const old = { ...read, roster: { ...read.roster, members: read.roster.members.map((m) => m.slice(0, 4)) } }
+  assert.deepEqual(reminderDue(old, { session: 1, roster: rosterOf(withLane('api@kai', 'billing', 'kai')), self: 'api@kai' }).changes, [])
 })
 
 test('a topic not read yet is unknown, not cleared: no change lines, and the kept roster stays the last real reading', () => {
@@ -451,6 +471,10 @@ test('spawnPrompt: a new name joins with the generic role card, a takeover witho
   assert.ok(!/join .*roleCard=/.test(kept))
   assert.ok(kept.includes("api@kai's open tasks and role card are yours now"))
   assert.equal(spawnCard('api', 'kai'), 'api: started by kai with /spawn; takes work from kai')
+  // the lane goes on the join line when the daemon has one (given, or inherited for a new name); a takeover is handed none
+  assert.ok(spawnPrompt({ ...base, lane: 'billing' }).includes(`pane=w:p9 roleCard='api: started by lead@kai with /spawn; takes work from lead@kai' lane='billing'`))
+  assert.match(spawnPrompt({ ...base, keepCard: true, lane: 'billing' }), /^ {3}scorpio join topicId=AbCdEf0123456789_-ghIJ role=api resume=true pane=w:p9 lane='billing'$/m)
+  assert.ok(!/lane=/.test(spawnPrompt({ ...base, keepCard: true })))
 })
 
 test('spawnPrompt full text: takeover with and without a handoff, handoff=skip, new name, no instruction', () => {
@@ -1876,7 +1900,7 @@ test('handoff instructions (the skill\'s Handing off): write, store with scorpio
   assert.ok(!/handover/i.test(h))
   assert.equal(parseCommand(steps[5].split('\n').slice(1, 5).map((l) => l.trim()).join('\n')), null, 'the takeover example is not run as a command')
   for (const c of COMMANDS) assert.ok(!/handover/i.test(c.help), c.name)
-  assert.ok(HELP_FULL.includes('`/spawn claude|codex [name] [<dir>|cwd="…"] [model=…] [effort=…] [handoff=skip] [perm=ask|auto|all] [prompt]`'))
+  assert.ok(HELP_FULL.includes('`/spawn claude|codex [name] [<dir>|cwd="…"] [model=…] [effort=…] [handoff=skip] [perm=ask|auto|all] [lane=…] [prompt]`'))
 })
 
 const API = { roomId: ROOM, name: 'api@kai', role: 'api', pane: 'w:p1' }

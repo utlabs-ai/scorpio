@@ -19,8 +19,8 @@ export const READ_MAX = 100
 export const COMMANDS = [
   { name: 'attach', argsSpec: '<one-time-code>', staleAfter: 2 * MIN,
     help: 'bind a manually joined agent to the one Herdr pane showing its short-lived code; only that agent can request it.' },
-  { name: 'spawn', argsSpec: 'claude|codex [name] [<dir>|cwd="…"] [model=…] [effort=…] [handoff=skip] [perm=ask|auto|all] [prompt]', staleAfter: 10 * MIN,
-    help: 'start a new agent in this topic\'s workspace on this computer, or in a directory you name (use cwd="…" for spaces). It joins this topic and reports to you, then does the prompt. Without a name it becomes claude-1 and so on; model= and effort= override the configured defaults. perm=ask asks you in Scorpio; perm=auto lets the CLI decide automatically (Codex without the approval hook); perm=all skips tool approvals for this session. Without perm=, a new name follows your setting, a helper gets its sending agent\'s level on any computer, and a takeover keeps its last level. An agent may choose less permission, never more. The name is the seat: spawning a name the topic had before takes it over, with its open tasks, role card and last handoff (the one in the cloud, or this computer\'s copy if that is newer); handoff=skip leaves the handoff out, and the agent reads it only if your text says so. A takeover that previously named a directory must name it again; it never silently switches to the topic workspace. Your text after the directory (and model=, effort=, handoff=) reaches it word for word as its instruction and outranks the handoff\'s plans and next steps, so a returning agent can be given new work; rules on its card and in its handoff still hold unless the instruction names the rule and lifts it. For an agent with no history, use a new name, or none (it becomes claude-1, codex-1…, skipping every name the topic ever had).' },
+  { name: 'spawn', argsSpec: 'claude|codex [name] [<dir>|cwd="…"] [model=…] [effort=…] [handoff=skip] [perm=ask|auto|all] [lane=…] [prompt]', staleAfter: 10 * MIN,
+    help: 'start a new agent in this topic\'s workspace on this computer, or in a directory you name (use cwd="…" for spaces). It joins this topic and reports to you, then does the prompt. Without a name it becomes claude-1 and so on; model= and effort= override the configured defaults. perm=ask asks you in Scorpio; perm=auto lets the CLI decide automatically (Codex without the approval hook); perm=all skips tool approvals for this session. Without perm=, a new name follows your setting, a helper gets its sending agent\'s level on any computer, and a takeover keeps its last level. An agent may choose less permission, never more. lane= sets its lane (one word, the line of work it is on); without it a new name takes the sending agent\'s lane (none when a person sends it) and a takeover keeps its own. The name is the seat: spawning a name the topic had before takes it over, with its open tasks, role card and last handoff (the one in the cloud, or this computer\'s copy if that is newer); handoff=skip leaves the handoff out, and the agent reads it only if your text says so. A takeover that previously named a directory must name it again; it never silently switches to the topic workspace. Your text after the directory (and model=, effort=, handoff=, perm=, lane=) reaches it word for word as its instruction and outranks the handoff\'s plans and next steps, so a returning agent can be given new work; rules on its card and in its handoff still hold unless the instruction names the rule and lifts it. For an agent with no history, use a new name, or none (it becomes claude-1, codex-1…, skipping every name the topic ever had).' },
   { name: 'handoff', argsSpec: 'name…|all', staleAfter: 10 * MIN,
     help: 'have it write a handoff (stored in the cloud unless the account keeps handoffs on agents\' computers), post a takeover command, and leave; then its pane is closed.' },
   { name: 'bye', argsSpec: 'name…|all', staleAfter: 10 * MIN,
@@ -132,6 +132,8 @@ export function judge({ message, account, seatName, now, members = null }) {
  * A bare path starts with / or ~; cwd="…" allows spaces. With neither, the topic workspace is used.
  * Chinese punctuation right after a bare path separates too, and full-width ～ counts as ~.
  */
+export const LANE = /^[^\s|'"]{1,32}$/u
+
 export function parseSpawn(rest) {
   const m = String(rest || '').replace(/^\s+/, '').match(/^(\S+)(?:\s+([\s\S]*))?$/)
   const kind = m ? m[1].toLowerCase() : ''
@@ -155,10 +157,15 @@ export function parseSpawn(rest) {
     const bare = tail.match(/^([/~～][^\s，。、；：！？]*)[\s，。、；：！？]*([\s\S]*)$/)
     if (bare) { dir = bare[1].replace(/^～/, '~'); after = bare[2] }
   }
-  // model=, effort= and handoff=skip follow the directory, or the name when using the default.
+  // model=, effort=, handoff=skip, perm= and lane= follow the directory, or the name when using the default.
   const opts = { model: null, effort: null }
   let skipHandoff = false
-  for (let o; (o = after.match(/^(model|effort|handoff|perm)=(\S*)(?:\s+|$)([\s\S]*)$/));) {
+  for (let o; (o = after.match(/^(model|effort|handoff|perm|lane)=(\S*)(?:\s+|$)([\s\S]*)$/));) {
+    if (o[1] === 'lane') {
+      // The server's rule (one word, 32 characters, no | or space) plus no quotes: the word is pasted into lane='…' on the join line.
+      if (!LANE.test(o[2])) return { error: 'lane= takes one word of up to 32 characters, e.g. lane=billing.' }
+      opts.lane = o[2]; after = o[3]; continue
+    }
     if (o[1] === 'perm') {
       if (!['ask', 'auto', 'all', 'default'].includes(o[2])) return { error: 'perm= only takes ask, auto or all.' }
       opts.perm = o[2] === 'default' ? 'ask' : o[2]; after = o[3]; continue
@@ -308,7 +315,7 @@ export function takeoverText(role, handoff) {
  * handoff: where the takeover's handoff came from (takeoverText), with file and ago when there is one
  * to read. handoff=skip (source skipped): the prompt says nothing about a handoff at all.
  */
-export function spawnPrompt({ account, by = account, roomId, roomName, seq, name, pane, prompt, keepCard = false, handoff = null, scheduled = null }) {
+export function spawnPrompt({ account, by = account, roomId, roomName, seq, name, pane, prompt, keepCard = false, handoff = null, scheduled = null, lane = null }) {
   const role = name.split('@')[0]
   const skipped = keepCard && handoff?.source === 'skipped'
   const toRead = keepCard && handoff?.file ? handoff : null
@@ -325,7 +332,8 @@ export function spawnPrompt({ account, by = account, roomId, roomName, seq, name
       : `${seat} The daemon told the topic: "${takeoverText(role, handoff)}." ${toRead
         ? `Its handoff: ${toRead.file} (${toRead.source === 'cloud' ? 'stored' : 'written'} ${toRead.ago}). Read it before you report in: it tells you where things stood; ${prompt ? 'the instruction above tells you what to do now' : `${by} will tell you what to do now`}.`
         : `Your tasks and the topic's recent messages show where it stopped.`}`
-  const join = `   scorpio join topicId=${roomId} role=${role} resume=true pane=${pane}${keepCard ? '' : ` roleCard='${spawnCard(role, by)}'`}`
+  // lane: given with the command, or inherited from the sending agent (a takeover keeps the lane its seat has: none is passed).
+  const join = `   scorpio join topicId=${roomId} role=${role} resume=true pane=${pane}${keepCard ? '' : ` roleCard='${spawnCard(role, by)}'`}${lane ? ` lane='${lane}'` : ''}`
   const steps = [
     `1. Join (run it as is; no passcode needed; if it fails, stop and leave the error on screen: the daemon shows it to ${account}; do not retry under another name):`,
     join,
