@@ -10,6 +10,8 @@
 // A connection here is a doorbell and a presence: frames go to onFrame, and the daemon reads the
 // authoritative state over HTTP (listen) before it types anything.
 
+import { WORKSPACE, wireBytes } from '../workspace-protocol.mjs'
+
 const PING_MS = 30_000
 // No pong (or any frame) for this long: the connection is dead even if no close ever came (a network
 // that dropped it silently). Drop it and connect again.
@@ -62,6 +64,7 @@ export function createLinks({ api, log = () => {}, onFrame, onTokenRejected = ()
           return
         }
         if (typeof ev.data !== 'string') return
+        if (wireBytes(ev.data) > WORKSPACE.frameBytes) { dead(ws, 'frame too large'); return }
         let frame
         try { frame = JSON.parse(ev.data) } catch { return }
         onFrame(link, frame)
@@ -101,6 +104,7 @@ export function createLinks({ api, log = () => {}, onFrame, onTokenRejected = ()
     link.close = () => {
       link.closed = true
       clearTimeout(link.timer); clearInterval(link.ping); clearTimeout(link.opening)
+      onFrame(link, { type: 'closed', reason: 'daemon' })
       try { link.ws?.close(1000, 'daemon') } catch {}
       link.ws = null; link.isOpen = false
     }

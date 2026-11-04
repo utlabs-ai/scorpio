@@ -13,7 +13,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { spawnSync } from 'node:child_process'
 import { pathToFileURL } from 'node:url'
-import { DELIVERY_FILE, HOME, PKG_DIR, idleHandoffMinutes, isDefaultHome, readJson, server, setIdleHandoffMinutes, spawnRecordPath, version, writeJson } from './paths.mjs'
+import { DELIVERY_FILE, HOME, PKG_DIR, deviceId, idleHandoffMinutes, isDefaultHome, readJson, server, setIdleHandoffMinutes, spawnRecordPath, version, writeJson } from './paths.mjs'
 import { takeLock } from './pid.mjs'
 import { entries, markLeft, prune, unregister } from './registry.mjs'
 import { createApi } from './api.mjs'
@@ -21,6 +21,7 @@ import { forgetRejectedToken } from '../client.mjs'
 import { createLogoutMonitor, OFFLINE_LINE, ONLINE_LINE } from './logout.mjs'
 import { setupNetwork } from '../net.mjs'
 import { createLinks } from './links.mjs'
+import { createWorkspaceHost } from './workspace-view.mjs'
 import { createHealth } from './health.mjs'
 import { MIN_NODE, newerNode } from './node.mjs'
 import { minutesText } from './commands.mjs'
@@ -428,12 +429,14 @@ async function main() {
   const disconnectedAt = new Map()
   const pobiAnimator = createPobiAnimator()
 
+  const workspace = createWorkspaceHost({ account: () => seat.account, computerId: () => deviceId() })
   const links = createLinks({
     api,
     onTokenRejected: () => logout.checkToken(api.whoami).catch(tokenCheckFailed),
     log,
     onFrame(link, frame) {
       const roomId = link.roomId
+      if (workspace.handle(link, frame)) return
       if (debug && !frame.type?.startsWith('approval_')) console.log(new Date().toTimeString().slice(0, 8), `frame ${link.key}: ${JSON.stringify(frame).slice(0, 300)}`)
       const isSeat = (to) => link.seat || to === seat.name || (link.host && (!to || to === seat.name))
       switch (frame.type) {
