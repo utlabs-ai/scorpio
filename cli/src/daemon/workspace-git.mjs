@@ -47,7 +47,7 @@ export function createWorkspaceGit(files, { clock = () => performance.now() } = 
     if (await exists(path.join(snapshot.path, '.git/config'))) {
       const config = (await files.read(topicId, configPath, { metadata: true })).bytes.toString('utf8')
       // Git reads these configurations before any command-level override could stop their side effects.
-      if (/^\s*\[\s*(?:include|includeif|filter)(?:\s|\])/im.test(config) || /^\s*(?:worktree|bare)\s*=/im.test(config.replace(/^\s*bare\s*=\s*false\s*$/gim, '')) || /worktreeconfig\s*=\s*true/i.test(config)) unavailable()
+      if (/^\s*\[\s*(?:include|includeif|filter)(?:[.\s]|\])/im.test(config) || /^\s*(?:worktree|bare)\s*=/im.test(config.replace(/^\s*bare\s*=\s*false\s*$/gim, '')) || /worktreeconfig\s*=\s*true/i.test(config)) unavailable()
     }
     const recheck = async () => {
       for (const s of snapshots) {
