@@ -80,3 +80,16 @@ test('Unicode scalar line limit counts a surrogate pair once', () => {
   assert.doesNotThrow(() => validateWorkspaceText(Buffer.from('🙂'.repeat(20000))))
   assert.throws(() => validateWorkspaceText(Buffer.from('🙂'.repeat(20001))), e => e.code === 'workspace_line_limit')
 })
+test('case aliases of Git metadata are denied without hiding independent case-sensitive directories', async t => {
+  const { root, files } = await setup(t)
+  await fs.mkdir(path.join(root, '.git')); await fs.writeFile(path.join(root, '.git/config'), 'metadata')
+  const actual = await fs.lstat(path.join(root, '.git')), alias = await fs.lstat(path.join(root, '.GIT')).catch(() => null)
+  if (alias?.ino === actual.ino && alias.dev === actual.dev) {
+    await rejects(() => files.read(topic, '.GIT/config'), 'workspace_path_denied')
+    await rejects(() => files.list(topic, '.GIT'), 'workspace_path_denied')
+  } else {
+    await fs.mkdir(path.join(root, '.GIT')); await fs.writeFile(path.join(root, '.GIT/file'), 'ordinary')
+    assert.equal((await files.read(topic, '.GIT/file')).bytes.toString(), 'ordinary')
+    assert.equal((await files.list(topic)).entries.some(entry => entry.name === '.GIT'), true)
+  }
+})

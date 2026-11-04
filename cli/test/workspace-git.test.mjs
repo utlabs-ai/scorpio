@@ -84,3 +84,12 @@ test('more than 500 actual changes are bounded and explicitly truncated', async 
   const result = await reader.changes(topic)
   assert.equal(result.repositories[0].changes.length, 500); assert.equal(result.changesTruncated, true)
 })
+test('Git metadata discovery respects actual filesystem case aliases', async t => {
+  const { root, reader, git } = await setup(t)
+  git('init', '-q'); await fs.writeFile(path.join(root, 'file'), 'text')
+  await fs.rename(path.join(root, '.git'), path.join(root, '.GIT'))
+  const upper = await fs.stat(path.join(root, '.GIT')), lower = await fs.stat(path.join(root, '.git')).catch(() => null)
+  const result = await reader.changes(topic)
+  if (lower?.ino === upper.ino && lower.dev === upper.dev) { assert.equal(result.repositories.length, 1); assert.equal(result.unavailable.length, 0) }
+  else assert.equal(result.repositories.length, 0)
+})

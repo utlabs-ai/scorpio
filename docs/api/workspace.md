@@ -81,6 +81,8 @@ Page size is at most 200 and may end early at the JSON byte budget. A cursor is 
 
 Entry kinds are file, directory, link, or special (a non-regular filesystem entry that cannot be read). Links never include their targets. The client validates operation-result schemas before building the tree or change list and ignores unknown response fields.
 
+Git metadata is hidden and cannot be read, including a name such as `.GIT` when the filesystem resolves it to `.git`. A separate `.GIT` directory on a case-sensitive filesystem remains ordinary content.
+
 `changes` uses a json stream with:
 
 ```json
