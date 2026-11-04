@@ -3,6 +3,7 @@ import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
 import os from 'node:os'
 import path from 'node:path'
+import { execFileSync } from 'node:child_process'
 import { createWorkspaceFiles, validateWorkspaceText } from '../src/daemon/workspace-files.mjs'
 const topic = 'aaaaaaaaaaaaaaaaaaaaaa'
 async function setup(t) {
@@ -92,4 +93,9 @@ test('case aliases of Git metadata are denied without hiding independent case-se
     assert.equal((await files.read(topic, '.GIT/file')).bytes.toString(), 'ordinary')
     assert.equal((await files.list(topic)).entries.some(entry => entry.name === '.GIT'), true)
   }
+})
+test('a FIFO is rejected promptly without waiting for a writer', { timeout: 3000 }, async t => {
+  const { root, files } = await setup(t), fifo = path.join(root, 'pipe')
+  execFileSync('mkfifo', [fifo])
+  await rejects(() => files.read(topic, 'pipe'), 'workspace_read_failed')
 })
