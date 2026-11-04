@@ -64,9 +64,9 @@ export function createLinks({ api, log = () => {}, onFrame, onTokenRejected = ()
           return
         }
         if (typeof ev.data !== 'string') return
-        if (wireBytes(ev.data) > WORKSPACE.frameBytes) { dead(ws, 'frame too large'); return }
         let frame
         try { frame = JSON.parse(ev.data) } catch { return }
+        if (frame.type?.startsWith('workspace_') && wireBytes(ev.data) > WORKSPACE.frameBytes) { dead(ws, 'frame too large'); return }
         onFrame(link, frame)
       })
       // An error is always followed by close. A socket already given up on (dead) may close much later,
