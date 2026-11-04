@@ -64,3 +64,7 @@ export declare function workspaceCapacity(pending: {
     account: string;
     viewer: string;
 }[], account: string, viewer: string): boolean;
+
+export declare const WORKSPACE_OPS: readonly WorkspaceOp[];
+export interface WorkspaceHostRequest extends Pick<WorkspaceRequest, "op" | "path" | "repo" | "cursor" | "requestId" | "epoch"> { type: "workspace_request"; v: 1; topicId: string; computerId: string; owner: string; viewerId: string; transferId: string; timeoutMs: number }
+export declare function workspaceHostRequest(value: unknown): WorkspaceHostRequest;

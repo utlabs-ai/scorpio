@@ -39,25 +39,30 @@ const fail = () => {
 function relativeWorkspacePath(value, root = false) {
   return typeof value === "string" && (root || value !== "") && wireBytes(value) <= WORKSPACE.pathBytes && !/[\x00\\]/.test(value) && !/^[a-z]:/i.test(value) && (value === "" || value.split("/").every((p) => p !== "" && p !== "." && p !== ".." && p !== ".git"));
 }
+const WORKSPACE_OPS = Object.freeze(["list", "read", "changes", "diff"]);
+function operationKeys(value) {
+  if (!WORKSPACE_OPS.includes(value.op)) return fail();
+  if (value.op !== "changes" && !relativeWorkspacePath(value.path, value.op === "list")) throw new WorkspaceError("workspace_path_denied");
+  if (value.op === "diff" && !relativeWorkspacePath(value.repo, true)) throw new WorkspaceError("workspace_path_denied");
+  if (value.op === "list" && value.cursor != null && (typeof value.cursor !== "string" || wireBytes(value.cursor) > 512)) return fail();
+  return ["op", ...(value.op === "changes" ? [] : ["path"]), ...(value.op === "list" ? ["cursor"] : []), ...(value.op === "diff" ? ["repo"] : [])];
+}
 function workspaceRequest(value) {
   if (!isObject(value)) return fail();
-  const { connectionId, connectionToken, epoch, requestId, op } = value;
+  const { connectionId, connectionToken, epoch, requestId } = value;
   if (!isWorkspaceId(connectionId) || !isWorkspaceId(epoch) || !isWorkspaceId(requestId) || typeof connectionToken !== "string" || !/^[a-zA-Z0-9_-]{43}$/.test(connectionToken)) return fail();
-  if (op !== "list" && op !== "read" && op !== "changes" && op !== "diff") return fail();
-  const keys = [
-    "connectionId",
-    "connectionToken",
-    "epoch",
-    "requestId",
-    "op",
-    ...op === "changes" ? [] : ["path"],
-    ...op === "list" ? ["cursor"] : [],
-    ...op === "diff" ? ["repo"] : []
-  ];
-  if (Object.keys(value).some((k) => !keys.includes(k))) return fail();
-  if (op !== "changes" && !relativeWorkspacePath(value.path, op === "list")) throw new WorkspaceError("workspace_path_denied");
-  if (op === "diff" && !relativeWorkspacePath(value.repo, true)) throw new WorkspaceError("workspace_path_denied");
-  if (op === "list" && value.cursor != null && (typeof value.cursor !== "string" || wireBytes(value.cursor) > 512)) return fail();
+  const keys = ["connectionId", "connectionToken", "epoch", "requestId", ...operationKeys(value)];
+  if (Object.keys(value).some(k => !keys.includes(k))) return fail();
+  return value;
+}
+function workspaceHostRequest(value) {
+  if (!isObject(value) || value.type !== "workspace_request" || value.v !== WORKSPACE.version ||
+    !/^[A-Za-z0-9_-]{22}$/.test(value.topicId) || typeof value.computerId !== "string" || !value.computerId || wireBytes(value.computerId) > 256 ||
+    typeof value.owner !== "string" || !/^[a-z0-9-]{1,39}$/.test(value.owner) ||
+    !isWorkspaceId(value.viewerId) || !isWorkspaceId(value.requestId) || !isWorkspaceId(value.transferId) || !isWorkspaceId(value.epoch) ||
+    !Number.isFinite(value.timeoutMs) || value.timeoutMs <= 0 || value.timeoutMs > WORKSPACE.totalMs) return fail();
+  const keys = ["type", "v", "topicId", "computerId", "owner", "viewerId", "requestId", "transferId", "epoch", "timeoutMs", ...operationKeys(value)];
+  if (Object.keys(value).some(k => !keys.includes(k))) return fail();
   return value;
 }
 const WORKSPACE_ERRORS = /* @__PURE__ */ new Set([
@@ -146,6 +151,8 @@ function workspaceCapacity(pending, account, viewer) {
   return pending.length < WORKSPACE.topicPending && pending.filter((p) => p.account === account).length < WORKSPACE.accountPending && pending.filter((p) => p.viewer === viewer).length < WORKSPACE.viewerPending;
 }
 export {
+  WORKSPACE_OPS,
+  workspaceHostRequest,
   WORKSPACE,
   WORKSPACE_ERRORS,
   WorkspaceError,
