@@ -51,3 +51,12 @@ test('viewer, account-topic and topic concurrency limits are independent', () =>
   assert.equal(p.workspaceCapacity(Array.from({ length: 32 }, (_, i) => ({ account: String(i), viewer: String(i) })), 'mei', 'next'), false)
   assert.deepEqual(p.safeWorkspaceDetails({ bytes: 123, path: '/private', data: 'secret', limit: -1 }), { bytes: 123 })
 })
+test('operation JSON schemas reject malformed or mismatched results before UI rendering', () => {
+  const list = { path: '', entries: [{ name: 'file', kind: 'file', bytes: 0 }], nextCursor: null, truncated: false, order: 'filesystem' }
+  assert.equal(p.workspaceJsonResult('list', list).entries.length, 1)
+  for (const value of [{ ...list, path: 'other' }, { ...list, entries: [{ name: '.git', kind: 'directory' }] }, { ...list, entries: [list.entries[0], list.entries[0]] }, { ...list, nextCursor: 'x'.repeat(513) }, { ...list, entries: [{ name: 'file', kind: 'file', bytes: -1 }] }]) fails(() => p.workspaceJsonResult('list', value))
+  const changes = { repositories: [{ repo: '', headOid: null, changes: [{ path: 'new', status: '??', kind: 'added', beforeExists: false, afterExists: true }] }], discoveryTruncated: false, changesTruncated: false, unavailable: [] }
+  assert.equal(p.workspaceJsonResult('changes', changes).repositories.length, 1)
+  fails(() => p.workspaceJsonResult('changes', { ...changes, repositories: [{ ...changes.repositories[0], headOid: '/outside' }] }))
+  fails(() => p.workspaceJsonResult('changes', { ...changes, unavailable: [{ repo: '../outside', reason: 'workspace_git_unavailable' }] }))
+})

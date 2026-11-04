@@ -82,6 +82,38 @@ function workspaceHostRequest(value) {
   if (Object.keys(value).some(k => !keys.includes(k))) return fail();
   return value;
 }
+function workspaceJsonResult(op, value, expectedPath = "") {
+  if (!isObject(value)) return fail();
+  const natural = n => typeof n === "number" && Number.isSafeInteger(n) && n >= 0;
+  if (op === "list") {
+    if (value.path !== expectedPath || !relativeWorkspacePath(value.path, true) || !Array.isArray(value.entries) || value.entries.length > 200 ||
+      typeof value.truncated !== "boolean" || value.order !== "filesystem" || value.nextCursor !== null && (typeof value.nextCursor !== "string" || wireBytes(value.nextCursor) > 512)) return fail();
+    const names = new Set();
+    const entries = value.entries.map(entry => {
+      if (!isObject(entry) || typeof entry.name !== "string" || !entry.name || entry.name.includes("/") || entry.name.includes("\0") || entry.name === ".git" || names.has(entry.name) ||
+        !["file", "directory", "link", "special"].includes(entry.kind) || entry.kind === "file" && !natural(entry.bytes)) return fail();
+      names.add(entry.name);
+      return { name: entry.name, kind: entry.kind, ...(entry.kind === "file" ? { bytes: entry.bytes } : {}) };
+    });
+    return { path: value.path, entries, nextCursor: value.nextCursor, truncated: value.truncated, order: "filesystem", ...(value.rootMissing === true ? { rootMissing: true } : {}) };
+  }
+  if (op !== "changes" || !Array.isArray(value.repositories) || !Array.isArray(value.unavailable) || typeof value.discoveryTruncated !== "boolean" || typeof value.changesTruncated !== "boolean") return fail();
+  let count = 0;
+  const repositories = value.repositories.map(repo => {
+    if (!isObject(repo) || !relativeWorkspacePath(repo.repo, true) || repo.headOid !== null && (typeof repo.headOid !== "string" || !/^[a-f0-9]{40}(?:[a-f0-9]{24})?$/.test(repo.headOid)) || !Array.isArray(repo.changes)) return fail();
+    const changes = repo.changes.map(change => {
+      if (++count > 500 || !isObject(change) || !relativeWorkspacePath(change.path) || typeof change.status !== "string" || !/^[ MADRCUT?!]{2}$/.test(change.status) ||
+        !["modified", "added", "deleted", "conflict"].includes(change.kind) || typeof change.beforeExists !== "boolean" || typeof change.afterExists !== "boolean") return fail();
+      return { path: change.path, status: change.status, kind: change.kind, beforeExists: change.beforeExists, afterExists: change.afterExists };
+    });
+    return { repo: repo.repo, headOid: repo.headOid, changes };
+  });
+  const unavailable = value.unavailable.map(item => {
+    if (!isObject(item) || !relativeWorkspacePath(item.repo, true) || item.reason !== "workspace_git_unavailable") return fail();
+    return { repo: item.repo, reason: item.reason };
+  });
+  return { repositories, discoveryTruncated: value.discoveryTruncated, changesTruncated: value.changesTruncated, unavailable, ...(value.rootMissing === true ? { rootMissing: true } : {}) };
+}
 const WORKSPACE_ERRORS = /* @__PURE__ */ new Set([
   "workspace_not_found",
   "workspace_revoked",
@@ -168,6 +200,7 @@ function workspaceCapacity(pending, account, viewer) {
   return pending.length < WORKSPACE.topicPending && pending.filter((p) => p.account === account).length < WORKSPACE.accountPending && pending.filter((p) => p.viewer === viewer).length < WORKSPACE.viewerPending;
 }
 export {
+  workspaceJsonResult,
   validateWorkspaceText,
   WORKSPACE_OPS,
   workspaceHostRequest,

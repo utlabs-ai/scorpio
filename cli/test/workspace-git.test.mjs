@@ -69,3 +69,18 @@ test('names with newline and spaces preserve the two status columns', async t =>
   const result = await reader.changes(topic)
   assert.equal(result.repositories[0].changes[0].path, 'has\nspace name')
 })
+test('staged delete then recreated path compares HEAD with disk once', async t => {
+  const { root, reader, git } = await setup(t)
+  git('init', '-q'); await fs.writeFile(path.join(root, 'file'), 'before'); git('add', '.'); git('commit', '-qm', 'Initial file')
+  git('rm', '-q', 'file'); await fs.writeFile(path.join(root, 'file'), 'recreated')
+  const result = await reader.changes(topic), changes = result.repositories[0].changes
+  assert.equal(changes.length, 1); assert.equal(changes[0].beforeExists, true); assert.equal(changes[0].afterExists, true); assert.equal(changes[0].kind, 'modified')
+  const diff = await reader.diff(topic, '', 'file'); assert.equal(diff.before.bytes.toString(), 'before'); assert.equal(diff.after.bytes.toString(), 'recreated')
+})
+test('more than 500 actual changes are bounded and explicitly truncated', async t => {
+  const { root, reader, git } = await setup(t)
+  git('init', '-q')
+  await Promise.all(Array.from({ length: 505 }, (_, i) => fs.writeFile(path.join(root, `f${i}`), 'x')))
+  const result = await reader.changes(topic)
+  assert.equal(result.repositories[0].changes.length, 500); assert.equal(result.changesTruncated, true)
+})
