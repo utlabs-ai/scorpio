@@ -128,7 +128,9 @@ export function createWorkspaceGit(files, { clock = () => performance.now() } = 
         if (repo === '' && e.code === 'ENOENT') return { repositories: [], discoveryTruncated: false, changesTruncated: false, unavailable: [], rootMissing: true, readAt: Date.now() }
         unavailableRepos.push({ repo, reason: 'workspace_git_unavailable' }); continue
       }
-      if (children.some(x => x.name === '.git')) {
+      const metadata = new Set()
+      for (const child of children) if (child.name.toLowerCase() === '.git' && await files.isMetadataEntry(snapshot, child.name)) metadata.add(child.name)
+      if (metadata.size) {
         try {
           const verified = await repoSnapshot(topicId, repo)
           const headOid = await head(verified, signal)
@@ -169,7 +171,7 @@ export function createWorkspaceGit(files, { clock = () => performance.now() } = 
         } catch { unavailableRepos.push({ repo, reason: 'workspace_git_unavailable' }) }
       }
       for (const child of children) {
-        if (child.name === '.git' || child.name === 'node_modules' || !child.isDirectory() || child.isSymbolicLink()) continue
+        if (metadata.has(child.name) || child.name === 'node_modules' || !child.isDirectory() || child.isSymbolicLink()) continue
         if (depth === 4) { discoveryTruncated = true; continue }
         stack.push({ repo: join(repo, child.name), depth: depth + 1 })
       }

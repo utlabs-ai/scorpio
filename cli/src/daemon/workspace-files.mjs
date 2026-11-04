@@ -11,6 +11,12 @@ import { WORKSPACE, WorkspaceError, relativeWorkspacePath, validateWorkspaceText
 const refuse = (code, details) => { throw new WorkspaceError(code, details) }
 const identity = (s) => `${s.dev}:${s.ino}`
 const version = (s) => `${identity(s)}:${s.size}:${s.mtimeNs}:${s.ctimeNs}`
+async function metadataAlias(parent, name, stat) {
+  if (name === '.git') return true
+  if (name.toLowerCase() !== '.git') return false
+  const git = await fs.lstat(path.join(parent, '.git'), { bigint: true }).catch(error => { if (error.code === 'ENOENT') return null; throw error })
+  return git !== null && identity(git) === identity(stat)
+}
 const contained = (root, target) => {
   const rel = path.relative(root, target)
   return rel !== '..' && !rel.startsWith(`..${path.sep}`) && !path.isAbsolute(rel)
@@ -36,9 +42,11 @@ export function createWorkspaceFiles({ home = HOME, rootFor = workspaceFor, cloc
     const ancestors = []
     const components = [...relativeRoot.split(path.sep), ...relative.split('/').filter(Boolean)]
     for (let i = 0; i < components.length; i++) {
+      const parent = current
       current = path.join(current, components[i])
       const stat = await fs.lstat(current, { bigint: true })
       if (stat.isSymbolicLink()) refuse('workspace_link')
+      if (!metadata && await metadataAlias(parent, components[i], stat)) refuse('workspace_path_denied')
       if ((i < components.length - 1 || directory) && !stat.isDirectory()) refuse('workspace_path_denied')
       ancestors.push({ path: current, id: identity(stat), stat })
     }
@@ -112,6 +120,7 @@ export function createWorkspaceFiles({ home = HOME, rootFor = workspaceFor, cloc
         if (!entry) { eof = true; break }
         if (scanned++ < offset || entry.name === '.git') continue
         const itemPath = path.join(snapshot.path, entry.name), stat = await fs.lstat(itemPath, { bigint: true })
+        if (await metadataAlias(snapshot.path, entry.name, stat)) continue
         const kind = stat.isSymbolicLink() ? 'link' : stat.isDirectory() ? 'directory' : stat.isFile() ? 'file' : 'special'
         const item = { name: entry.name, kind, ...(kind === 'file' ? { bytes: Number(stat.size) } : {}) }
         const size = Buffer.byteLength(JSON.stringify(item)) + 1
@@ -123,5 +132,6 @@ export function createWorkspaceFiles({ home = HOME, rootFor = workspaceFor, cloc
       return { path: relative, entries, nextCursor: !eof && !truncated && hasMore ? Buffer.from(JSON.stringify({ binding, offset: scanned })).toString('base64url') : null, truncated, order: 'filesystem', readAt: Date.now() }
     } catch (e) { classify(e) } finally { await dir?.close().catch(() => {}) }
   }
-  return { inspect, recheck, read, list }
+  const isMetadataEntry = async (snapshot, name) => metadataAlias(snapshot.path, name, await fs.lstat(path.join(snapshot.path, name), { bigint: true }))
+  return { inspect, recheck, read, list, isMetadataEntry }
 }
