@@ -22,6 +22,7 @@ import { createLogoutMonitor, OFFLINE_LINE, ONLINE_LINE } from './logout.mjs'
 import { setupNetwork } from '../net.mjs'
 import { createLinks } from './links.mjs'
 import { createWorkspaceHost } from './workspace-view.mjs'
+import { debugFrame } from './frame-log.mjs'
 import { createHealth } from './health.mjs'
 import { MIN_NODE, newerNode } from './node.mjs'
 import { minutesText } from './commands.mjs'
@@ -437,7 +438,7 @@ async function main() {
     onFrame(link, frame) {
       const roomId = link.roomId
       if (workspace.handle(link, frame)) return
-      if (debug && !frame.type?.startsWith('approval_') && !frame.type?.startsWith('workspace_')) console.log(new Date().toTimeString().slice(0, 8), `frame ${link.key}: ${JSON.stringify(frame).slice(0, 300)}`)
+      if (debug) debugFrame(link.key, frame)
       const isSeat = (to) => link.seat || to === seat.name || (link.host && (!to || to === seat.name))
       switch (frame.type) {
         case 'approval_answer':

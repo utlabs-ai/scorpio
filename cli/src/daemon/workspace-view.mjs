@@ -1,6 +1,6 @@
 // Workspace jobs are attached to a physical host socket, never to an agent pane.
 import { performance } from 'node:perf_hooks'
-import { WORKSPACE, WorkspaceError, WORKSPACE_OPS, workspaceHostRequest, isWorkspaceId, wireBytes, ackWorkspace, beginWorkspace, chunkWorkspace, endWorkspace } from '../workspace-protocol.mjs'
+import { WORKSPACE, WorkspaceError, WORKSPACE_OPS, workspaceHostRequest, workspaceJsonResult, isWorkspaceId, wireBytes, ackWorkspace, beginWorkspace, chunkWorkspace, endWorkspace } from '../workspace-protocol.mjs'
 import { createWorkspaceFiles } from './workspace-files.mjs'
 import { createWorkspaceGit } from './workspace-git.mjs'
 
@@ -51,7 +51,7 @@ export function createWorkspaceHost({ account, computerId, files = createWorkspa
         streams = [{ name: 'before', ...result.before }, { name: 'after', ...result.after }]; meta = result.meta
       } else {
         const result = frame.op === 'list' ? await files.list(link.roomId, frame.path, frame.cursor, computerId()) : await git.changes(link.roomId, { signal })
-        const bytes = Buffer.from(JSON.stringify(result))
+        const bytes = Buffer.from(JSON.stringify(workspaceJsonResult(frame.op, result, frame.path)))
         if (bytes.byteLength > WORKSPACE.jsonBytes) throw new WorkspaceError('workspace_result_too_large')
         streams = [{ name: 'json', exists: true, bytes }]
       }

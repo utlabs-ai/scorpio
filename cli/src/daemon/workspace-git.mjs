@@ -1,7 +1,7 @@
 // Fixed Git commands inspect only verified metadata within the topic workspace.
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import { execFile } from 'node:child_process'
+import { execFile, spawn } from 'node:child_process'
 import { promisify } from 'node:util'
 import { performance } from 'node:perf_hooks'
 import { WORKSPACE, WorkspaceError, relativeWorkspacePath } from '../workspace-protocol.mjs'
@@ -10,6 +10,7 @@ const execute = promisify(execFile)
 const unavailable = () => { throw new WorkspaceError('workspace_git_unavailable') }
 const join = (a, b) => a ? `${a}/${b}` : b
 const hex = /^[a-f0-9]{40}(?:[a-f0-9]{24})?$/
+const baseArgs = ['--no-pager', '--no-optional-locks', '-c', 'core.fsmonitor=false', '-c', 'core.hooksPath=/dev/null', '-c', 'core.attributesFile=/dev/null']
 const exists = async p => fs.lstat(p).catch(e => { if (e.code === 'ENOENT') return null; throw e })
 const gitEnv = () => ({
   ...Object.fromEntries(Object.entries(process.env).filter(([key]) => !key.startsWith('GIT_'))),
@@ -61,12 +62,40 @@ export function createWorkspaceGit(files, { clock = () => performance.now() } = 
     await verified.recheck()
     let output
     try {
-      output = await execute('git', ['--no-pager', '--no-optional-locks', '-c', 'core.fsmonitor=false', '-c', 'core.hooksPath=/dev/null', '-c', 'core.attributesFile=/dev/null', ...args], {
+      output = await execute('git', [...baseArgs, ...args], {
         cwd: verified.snapshot.path, env: gitEnv(), encoding: 'buffer', timeout: 5000, maxBuffer, signal,
       })
     } catch { unavailable() }
     await verified.recheck()
     return output.stdout
+  }
+  async function status(verified, signal) {
+    await verified.recheck()
+    const result = await new Promise((resolve, reject) => {
+      const child = spawn('git', [...baseArgs, 'status', '--porcelain=v1', '-z', '--untracked-files=all', '--ignore-submodules=all', '--no-renames'], {
+        cwd: verified.snapshot.path, env: gitEnv(), stdio: ['ignore', 'pipe', 'ignore'], signal,
+      })
+      let bytes = Buffer.alloc(0), truncated = false, timedOut = false
+      const timer = setTimeout(() => { timedOut = true; child.kill('SIGTERM') }, 5000)
+      child.stdout.on('data', chunk => {
+        if (truncated) return
+        const remaining = WORKSPACE.jsonBytes - bytes.length
+        bytes = Buffer.concat([bytes, chunk.subarray(0, remaining)])
+        let records = 0, end = -1
+        for (let i = 0; i < bytes.length; i++) if (bytes[i] === 0) { records++; end = i; if (records > 500) break }
+        if (records > 500 || chunk.length >= remaining) {
+          truncated = true; bytes = end >= 0 ? bytes.subarray(0, end + 1) : Buffer.alloc(0); child.kill('SIGTERM')
+        }
+      })
+      child.on('error', error => { clearTimeout(timer); reject(error) })
+      child.on('close', code => {
+        clearTimeout(timer)
+        if (timedOut || signal?.aborted || code !== 0 && !truncated) reject(new WorkspaceError('workspace_git_unavailable'))
+        else resolve({ bytes, truncated })
+      })
+    }).catch(() => unavailable())
+    await verified.recheck()
+    return result
   }
   async function head(verified, signal) {
     // show-ref distinguishes an unborn HEAD without treating all other command failures as an empty repository.
@@ -103,15 +132,36 @@ export function createWorkspaceGit(files, { clock = () => performance.now() } = 
         try {
           const verified = await repoSnapshot(topicId, repo)
           const headOid = await head(verified, signal)
-          const raw = await run(verified, ['status', '--porcelain=v1', '-z', '--untracked-files=all', '--ignore-submodules=all', '--no-renames'], { signal })
-          const list = []
-          for (const record of new TextDecoder('utf-8', { fatal: true }).decode(raw).split('\0').filter(Boolean)) {
-            if (remaining === 0) { changesTruncated = true; break }
+          const output = await status(verified, signal)
+          changesTruncated ||= output.truncated
+          const records = new Map()
+          for (const record of new TextDecoder('utf-8', { fatal: true }).decode(output.bytes).split('\0').filter(Boolean)) {
             if (record.length < 4 || record[2] !== ' ') unavailable()
-            const status = record.slice(0, 2), file = record.slice(3)
+            const file = record.slice(3)
             if (!relativeWorkspacePath(file)) unavailable()
-            const beforeExists = headOid !== null && !status.includes('A') && status !== '??'
-            const afterExists = !status.includes('D')
+            if (!records.has(file)) records.set(file, record.slice(0, 2))
+          }
+          const beforePaths = new Set(), candidates = [...records.keys()].slice(0, remaining)
+          if (headOid && candidates.length) {
+            let batch = [], budget = 0
+            const collect = async () => {
+              if (!batch.length) return
+              const tree = await run(verified, ['ls-tree', '-z', headOid, '--', ...batch], { signal })
+              for (const record of new TextDecoder('utf-8', { fatal: true }).decode(tree).split('\0').filter(Boolean)) {
+                const tab = record.indexOf('\t'); if (tab < 0) unavailable()
+                beforePaths.add(record.slice(tab + 1))
+              }
+              batch = []; budget = 0
+            }
+            for (const file of candidates) { const n = Buffer.byteLength(file) + 1; if (budget + n > 60_000) await collect(); batch.push(file); budget += n }
+            await collect()
+          }
+          const list = []
+          for (const [file, status] of records) {
+            if (remaining === 0) { changesTruncated = true; break }
+            const beforeExists = beforePaths.has(file)
+            let afterExists
+            try { await files.inspect(topicId, join(repo, file)); afterExists = true } catch (e) { if (e.code === 'ENOENT') afterExists = false; else if (e.code === 'workspace_link') afterExists = true; else throw e }
             const kind = status.includes('U') || ['AA', 'DD'].includes(status) ? 'conflict' : !beforeExists ? 'added' : !afterExists ? 'deleted' : 'modified'
             list.push({ path: file, status, kind, beforeExists, afterExists }); remaining--
           }

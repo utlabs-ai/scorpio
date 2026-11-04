@@ -70,3 +70,4 @@ export interface WorkspaceHostRequest extends Pick<WorkspaceRequest, "op" | "pat
 export declare function workspaceHostRequest(value: unknown): WorkspaceHostRequest;
 
 export declare function validateWorkspaceText(bytes: Uint8Array): { bom: boolean; eol: string };
+export declare function workspaceJsonResult(op: WorkspaceOp, value: unknown, expectedPath?: string): Record<string, unknown>;

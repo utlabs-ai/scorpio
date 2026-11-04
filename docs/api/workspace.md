@@ -19,7 +19,7 @@ The daemon advertises on its host connection (new daemons enable this by default
 {"type":"workspace_host_ready","v":1,"epoch":"uuid","computerId":"device-id"}
 ```
 
-The second frame is the server reply to that host. A new server epoch sends workspace_reset to v1 hosts as well as viewers; hosts cancel old jobs and re-advertise before new work. Missing/broken reader assets in a new install are visible errors, not a silent disabled feature.
+The second frame is the server reply to that host. An epoch identifies a live connection group, not a server object construction. Normal hibernation retains the epoch, connection IDs and the capabilities reported on each physical host socket. Old-format or inconsistent connections undergo a controlled handshake; ordinary hibernation does not globally reset them. Missing/broken reader assets in a new install are visible errors, not a silent disabled feature.
 
 A human sends a JSON POST with `connectionId`, its memory-only `connectionToken` delivered over that socket, `epoch`, a fresh UUID `requestId`, and one operation:
 
@@ -32,7 +32,7 @@ A human sends a JSON POST with `connectionId`, its memory-only `connectionToken`
 - `changes`: no path; bounded repository discovery in the default workspace.
 - `diff`: `repo` (relative repository root, empty for workspace itself), `path` relative to that repo. Neither is an absolute path or gitDir.
 
-The authenticated URL determines the topic and computer. No owner/root/cwd is accepted from the body. The selected socket must belong to that same human account/topic/computer; the current connection token is required. An ID by itself is insufficient. The token is invalidated at close/reset and never appears in URLs, logs or persistent attachments. Acceptance is sent on that socket **before** dispatch and repeated as the HTTP response:
+The authenticated URL determines the topic and computer. No owner/root/cwd is accepted from the body. The selected socket must belong to that same human account/topic/computer; the current connection token is required. An ID by itself is insufficient. The raw token is invalidated at close or a controlled connection reset and never appears in URLs, logs or persistent attachments. A socket attachment holds its SHA-256 verifier, allowing the current session, membership, computer owner and exact socket binding to be checked after hibernation. A verifier cannot be used as the raw token. Permissions, host selection and budgets are rechecked after the asynchronous digest. Acceptance is sent on that socket **before** dispatch and repeated as the HTTP response:
 
 ```json
 {"type":"workspace_accepted","v":1,"requestId":"uuid","transferId":"uuid","epoch":"uuid","deadlineAt":1700000030000}
@@ -79,6 +79,8 @@ ACK is cumulative and never acknowledges an unsent seq. Repeated ACKs do not ext
 
 Page size is at most 200 and may end early at the JSON byte budget. A cursor is at most 512 bytes and scoped to this topic/computer/path and directory version, not an authorization credential. Directory changes invalidate it. The server does not persist listings.
 
+Entry kinds are file, directory, link, or special (a non-regular filesystem entry that cannot be read). Links never include their targets. The client validates operation-result schemas before building the tree or change list and ignores unknown response fields.
+
 `changes` uses a json stream with:
 
 ```json
@@ -103,7 +105,7 @@ Server status/reset/revocation frames:
 {"type":"workspace_revoked","v":1,"computerId":"device-id"}
 ```
 
-A reset invalidates every old request, connection token and partial buffer; no replay is available. The server sends a new workspace_ready with a fresh epoch/token after reset; hosts receive reset and a new workspace_host_ready after advertising again. Offline status keeps only previously completed viewer memory with its readAt; new or unfinished views have no old result. Reconnect updates status but does not automatically read file contents again. Revocation destroys displayed data and stops reconnects. Changing computer/closing a view cancels work and destroys its old models.
+Normal hibernation recovers connection identity and token verifiers only, with the same logical epoch; it sends no extra ready/reset and performs no automatic content read. Attachments may additionally hold at most two in-flight markers per viewer: requestId, transferId, deadline and the original host connection ID. They never hold operations, paths, stream descriptions, chunks or content. After object reconstruction, each marked old transfer receives a directed workspace_error with code workspace_reset and its original requestId/transferId; the original host socket receives cancel. Markers are cleared, pending bytes are not recovered, and a new explicit request can start once. Such a transfer-scoped error does not reset other requests or connection credentials, even when its accepted frame had not reached the client. A true connection reset invalidates the old token and partial buffers, then sends workspace_ready with fresh credentials; affected hosts re-advertise before work resumes. Offline status keeps only previously completed viewer memory with its readAt; new or unfinished views have no old result. Reconnect updates status but does not automatically read file contents again. Revocation destroys displayed data and stops reconnects. Changing computer/closing a view cancels work and destroys its old models.
 
 ### Errors
 
