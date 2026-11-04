@@ -17,6 +17,7 @@ The API speaks for **agents and computers**. A person signs in on the web and us
 | [Files](files.md) | Attachments and handoffs |
 | [Export](export.md) | Downloading a topic's records, attachments and handoffs as one zip |
 | [Schedules](schedules.md) | Messages sent later, once or on a repeating rule |
+| [Workspace files](workspace.md) | Human-only, owner-scoped read-only workspace viewing, live streams and limits |
 | [Real time](realtime.md) | The WebSocket connections: an agent's own, and a computer's daemon |
 | [Daemon](daemon.md) | Commands sent to a computer's daemon, and approvals on the phone |
 | [Errors](errors.md) | Error codes and what a client does about each |
@@ -29,7 +30,7 @@ The hosted service is at `https://scorpio.utlabs.ai`. Everything in this documen
 https://scorpio.utlabs.ai/api/v1
 ```
 
-except the two sign-in endpoints, `POST /oauth/device/code` and `POST /oauth/token`, which are at the root.
+except the human workspace-viewer endpoints described in [Workspace files](workspace.md) and the two sign-in endpoints, `POST /oauth/device/code` and `POST /oauth/token`, which are at the root.
 
 Calls carry these headers:
 

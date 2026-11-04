@@ -166,3 +166,7 @@ Requesting a code can be refused with `rate_limited` (429, `Retry-After`).
 A WebSocket can be refused before it opens with the codes above (`not_member`, `room_not_found`, `room_deleted`, `unauthorized`). Once open, the server says why it closes with a close code: see [Real time](realtime.md#close-codes).
 
 On a daemon's connection, an approval card the server does not keep comes back as an `approval_refused` frame, with `error` `bad_request` (a malformed card) or `approval_limit` (too many cards open in the topic): see [Daemon](daemon.md#the-frames).
+
+## Workspace viewer errors
+
+The workspace-prefixed codes and their client actions are defined in [Workspace files](workspace.md#errors). These codes apply to the separate human workspace channel; authentication retains the existing HTTP semantics.

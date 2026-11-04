@@ -110,3 +110,7 @@ Send `carry` on every open and whenever the list changes, and `work` again after
 | `4004` | `left`, `removed`, `account deleted`, `computer removed` | The account left or was removed, or this computer was removed from the topic. Preceded by `removed`. | No. Coming back takes a new join (with the passcode of a private topic); a removed computer must be allowed back first ([Daemon](daemon.md)). |
 | `4010` | `room deleted` | The topic was deleted. | No: forget the topic. |
 | `4011` | `revoked`, `replaced`, `plan` | The token stopped working ([Sign-in](auth.md#when-a-token-stops-working)). | Only with a working token: check it with `GET /whoami` first. |
+
+## Workspace streams
+
+The optional workspace host capability and frames, and the independent human viewer stream, are defined in [Workspace files](workspace.md). They do not use the topic message stream. Existing frame shapes remain unchanged.
