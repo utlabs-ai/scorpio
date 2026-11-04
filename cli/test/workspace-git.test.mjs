@@ -93,3 +93,49 @@ test('Git metadata discovery respects actual filesystem case aliases', async t =
   if (lower?.ino === upper.ino && lower.dev === upper.dev) { assert.equal(result.repositories.length, 1); assert.equal(result.unavailable.length, 0) }
   else assert.equal(result.repositories.length, 0)
 })
+test('AM and disabled rename detection compare each actual HEAD and disk side', async t => {
+  const { root, reader, git } = await setup(t)
+  git('init', '-q'); await fs.writeFile(path.join(root, 'old'), 'before'); git('add', '.'); git('commit', '-qm', 'Initial file')
+  await fs.rename(path.join(root, 'old'), path.join(root, 'renamed')); git('add', '-A')
+  await fs.writeFile(path.join(root, 'new'), 'staged'); git('add', 'new'); await fs.writeFile(path.join(root, 'new'), 'disk')
+  const result = await reader.changes(topic), changes = result.repositories[0].changes
+  assert.equal(changes.find(x => x.path === 'new').status, 'AM')
+  assert.equal(changes.find(x => x.path === 'old').kind, 'deleted'); assert.equal(changes.find(x => x.path === 'renamed').kind, 'added')
+  assert.equal(changes.some(x => x.status.includes('R')), false)
+  const diff = await reader.diff(topic, '', 'new'); assert.equal(diff.before.exists, false); assert.equal(diff.after.bytes.toString(), 'disk')
+})
+test('an actual merge conflict retains its conflict status and disk markers', async t => {
+  const { root, reader, git } = await setup(t)
+  git('init', '-q'); await fs.writeFile(path.join(root, 'file'), 'base\n'); git('add', '.'); git('commit', '-qm', 'Base')
+  const branch = git('branch', '--show-current').trim(); git('checkout', '-qb', 'other'); await fs.writeFile(path.join(root, 'file'), 'other\n'); git('commit', '-qam', 'Other')
+  git('checkout', '-q', branch); await fs.writeFile(path.join(root, 'file'), 'current\n'); git('commit', '-qam', 'Current')
+  assert.throws(() => git('merge', 'other'))
+  const changes = (await reader.changes(topic)).repositories[0].changes
+  assert.equal(changes.find(x => x.path === 'file').kind, 'conflict')
+  const diff = await reader.diff(topic, '', 'file'); assert.equal(diff.before.bytes.toString(), 'current\n'); assert.ok(diff.after.bytes.toString().includes('<<<<<<<'))
+})
+test('sibling repositories are grouped separately and discovery limits remain explicit', async t => {
+  const { root, reader, git } = await setup(t)
+  for (const name of ['app-a', 'app-b']) {
+    await fs.mkdir(path.join(root, name)); git('-C', name, 'init', '-q'); await fs.writeFile(path.join(root, name, 'file'), name); git('-C', name, 'add', '.'); git('-C', name, 'commit', '-qm', 'Initial')
+    await fs.writeFile(path.join(root, name, 'file'), 'now')
+  }
+  const result = await reader.changes(topic)
+  assert.deepEqual(new Set(result.repositories.map(x => x.repo)), new Set(['app-a', 'app-b']))
+  assert.equal((await reader.diff(topic, 'app-a', 'file')).before.bytes.toString(), 'app-a')
+  await fs.mkdir(path.join(root, 'one/two/three/four/five'), { recursive: true })
+  assert.equal((await reader.changes(topic)).discoveryTruncated, true)
+})
+test('an actual clean filter tripwire is never executed by the viewer Git path', async t => {
+  const { root, reader, git } = await setup(t)
+  git('init', '-q'); await fs.writeFile(path.join(root, 'file'), 'alpha'); git('add', '.'); git('commit', '-qm', 'Initial')
+  await fs.writeFile(path.join(root, '.gitattributes'), 'file filter=tripwire\n')
+  await fs.writeFile(path.join(root, 'filter.sh'), '#!/bin/sh\nprintf ran > tripwire\ncat\n', { mode: 0o755 })
+  git('config', 'filter.tripwire.clean', './filter.sh'); await fs.writeFile(path.join(root, 'file'), 'bravo')
+  const future = new Date(Date.now() + 2000); await fs.utimes(path.join(root, 'file'), future, future)
+  git('status', '--porcelain=v1')
+  assert.equal(await fs.readFile(path.join(root, 'tripwire'), 'utf8'), 'ran')
+  await fs.unlink(path.join(root, 'tripwire'))
+  assert.equal((await reader.changes(topic)).unavailable.length, 1)
+  assert.equal(await fs.stat(path.join(root, 'tripwire')).catch(() => null), null)
+})
