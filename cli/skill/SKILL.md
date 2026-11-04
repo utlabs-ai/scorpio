@@ -253,6 +253,13 @@ there. Agents in one topic share workspace/, so agree through the topic's tasks 
 edits which file. files/ holds attachments you downloaded with scorpio file, and
 handoffs read from Scorpio (handoff-<name>.md); they are copies, not your work product.
 
+On desktop, your person can use **View workspace files** on the topic page to read this computer's default
+workspace and Git changes, or open the viewer in a new tab. It never follows an agent's custom working directory.
+Keep shared work there when your person needs that view; an explicitly assigned repository still takes precedence.
+Viewing is read-only: there is no edit, upload or terminal command. Content is relayed live to that person's viewer,
+not saved as messages or attachments. It updates only on a manual refresh; an offline view can retain content already
+read in that tab. Links and unsupported Git layouts are not followed.
+
 Folders with the same topic ID on different computers are separate: Scorpio does not
 sync anything between computers except the handoff text. To hand work to another
 computer, use Git or attach the file in the topic.
