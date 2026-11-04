@@ -6,7 +6,7 @@ import { createHash } from 'node:crypto'
 import { performance } from 'node:perf_hooks'
 import { HOME } from './paths.mjs'
 import { workspaceFor } from '../workspace.mjs'
-import { WORKSPACE, WorkspaceError, relativeWorkspacePath } from '../workspace-protocol.mjs'
+import { WORKSPACE, WorkspaceError, relativeWorkspacePath, validateWorkspaceText } from '../workspace-protocol.mjs'
 
 const refuse = (code, details) => { throw new WorkspaceError(code, details) }
 const identity = (s) => `${s.dev}:${s.ino}`
@@ -21,20 +21,7 @@ const classify = (e) => {
   if (e?.code === 'ELOOP') refuse('workspace_link')
   refuse('workspace_read_failed')
 }
-export function validateWorkspaceText(bytes) {
-  if (bytes.byteLength > WORKSPACE.fileBytes) refuse('workspace_too_large', { bytes: bytes.byteLength, limit: WORKSPACE.fileBytes })
-  if (bytes.includes(0)) refuse('workspace_binary', { bytes: bytes.byteLength })
-  let text
-  try { text = new TextDecoder('utf-8', { fatal: true, ignoreBOM: true }).decode(bytes) } catch { refuse('workspace_encoding', { bytes: bytes.byteLength }) }
-  let lines = 1, scalars = 0, wasCR = false
-  for (const c of text) {
-    if (c === '\n' && wasCR) { wasCR = false; continue }
-    if (c === '\r' || c === '\n') { lines++; scalars = 0; wasCR = c === '\r' }
-    else { scalars++; wasCR = false }
-    if (lines > WORKSPACE.lines || scalars > WORKSPACE.lineScalars) refuse('workspace_line_limit', { limit: lines > WORKSPACE.lines ? WORKSPACE.lines : WORKSPACE.lineScalars })
-  }
-  return { bom: bytes.length >= 3 && bytes[0] === 239 && bytes[1] === 187 && bytes[2] === 191, eol: text.includes('\r\n') ? 'crlf' : text.includes('\r') ? 'cr' : 'lf' }
-}
+export { validateWorkspaceText } from '../workspace-protocol.mjs'
 
 /** HOME itself is trusted configuration; none of the topic descendants may be links. */
 export function createWorkspaceFiles({ home = HOME, rootFor = workspaceFor, clock = () => performance.now() } = {}) {

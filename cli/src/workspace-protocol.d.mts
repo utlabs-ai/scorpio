@@ -68,3 +68,5 @@ export declare function workspaceCapacity(pending: {
 export declare const WORKSPACE_OPS: readonly WorkspaceOp[];
 export interface WorkspaceHostRequest extends Pick<WorkspaceRequest, "op" | "path" | "repo" | "cursor" | "requestId" | "epoch"> { type: "workspace_request"; v: 1; topicId: string; computerId: string; owner: string; viewerId: string; transferId: string; timeoutMs: number }
 export declare function workspaceHostRequest(value: unknown): WorkspaceHostRequest;
+
+export declare function validateWorkspaceText(bytes: Uint8Array): { bom: boolean; eol: string };

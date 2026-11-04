@@ -437,7 +437,7 @@ async function main() {
     onFrame(link, frame) {
       const roomId = link.roomId
       if (workspace.handle(link, frame)) return
-      if (debug && !frame.type?.startsWith('approval_')) console.log(new Date().toTimeString().slice(0, 8), `frame ${link.key}: ${JSON.stringify(frame).slice(0, 300)}`)
+      if (debug && !frame.type?.startsWith('approval_') && !frame.type?.startsWith('workspace_')) console.log(new Date().toTimeString().slice(0, 8), `frame ${link.key}: ${JSON.stringify(frame).slice(0, 300)}`)
       const isSeat = (to) => link.seat || to === seat.name || (link.host && (!to || to === seat.name))
       switch (frame.type) {
         case 'approval_answer':

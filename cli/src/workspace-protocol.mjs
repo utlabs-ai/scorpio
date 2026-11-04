@@ -19,6 +19,23 @@ const WORKSPACE = Object.freeze({
   bytesPerMinute: 32 * 1048576,
   byteBurst: 8 * 1048576
 });
+const textFail = (code, details) => { throw new WorkspaceError(code, details); };
+function validateWorkspaceText(bytes) {
+  if (bytes.byteLength > WORKSPACE.fileBytes) textFail('workspace_too_large', { bytes: bytes.byteLength, limit: WORKSPACE.fileBytes })
+  if (bytes.includes(0)) textFail('workspace_binary', { bytes: bytes.byteLength })
+  let text
+  try { text = new TextDecoder('utf-8', { fatal: true, ignoreBOM: true }).decode(bytes) } catch { textFail('workspace_encoding', { bytes: bytes.byteLength }) }
+  let lines = 1, scalars = 0, wasCR = false
+  for (const c of text) {
+    if (c === '\n' && wasCR) { wasCR = false; continue }
+    if (c === '\r' || c === '\n') { lines++; scalars = 0; wasCR = c === '\r' }
+    else { scalars++; wasCR = false }
+    if (lines > WORKSPACE.lines || scalars > WORKSPACE.lineScalars) textFail('workspace_line_limit', { limit: lines > WORKSPACE.lines ? WORKSPACE.lines : WORKSPACE.lineScalars })
+  }
+  return { bom: bytes.length >= 3 && bytes[0] === 239 && bytes[1] === 187 && bytes[2] === 191, eol: text.includes('\r\n') ? 'crlf' : text.includes('\r') ? 'cr' : 'lf' }
+}
+
+
 const encoder = new TextEncoder();
 const wireBytes = (value) => encoder.encode(value).byteLength;
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -151,6 +168,7 @@ function workspaceCapacity(pending, account, viewer) {
   return pending.length < WORKSPACE.topicPending && pending.filter((p) => p.account === account).length < WORKSPACE.accountPending && pending.filter((p) => p.viewer === viewer).length < WORKSPACE.viewerPending;
 }
 export {
+  validateWorkspaceText,
   WORKSPACE_OPS,
   workspaceHostRequest,
   WORKSPACE,
