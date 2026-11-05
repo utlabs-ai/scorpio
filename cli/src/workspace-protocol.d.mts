@@ -19,13 +19,14 @@ export declare const WORKSPACE: Readonly<{
     bytesPerMinute: number;
     byteBurst: number;
 }>;
-export type WorkspaceOp = "list" | "read" | "changes" | "diff";
+export type WorkspaceOp = "list" | "read" | "changes" | "diff" | "locations";
 export interface WorkspaceRequest {
     connectionId: string;
     connectionToken: string;
     epoch: string;
     requestId: string;
     op: WorkspaceOp;
+    directory?: WorkspaceDirectory;
     path?: string;
     repo?: string;
     cursor?: string | null;
@@ -66,8 +67,15 @@ export declare function workspaceCapacity(pending: {
 }[], account: string, viewer: string): boolean;
 
 export declare const WORKSPACE_OPS: readonly WorkspaceOp[];
-export interface WorkspaceHostRequest extends Pick<WorkspaceRequest, "op" | "path" | "repo" | "cursor" | "requestId" | "epoch"> { type: "workspace_request"; v: 1; topicId: string; computerId: string; owner: string; viewerId: string; transferId: string; timeoutMs: number }
+export interface WorkspaceHostRequest extends Pick<WorkspaceRequest, "op" | "path" | "repo" | "cursor" | "directory" | "requestId" | "epoch"> { type: "workspace_request"; v: 1; topicId: string; computerId: string; owner: string; viewerId: string; transferId: string; timeoutMs: number }
 export declare function workspaceHostRequest(value: unknown): WorkspaceHostRequest;
 
 export declare function validateWorkspaceText(bytes: Uint8Array): { bom: boolean; eol: string };
 export declare function workspaceJsonResult(op: WorkspaceOp, value: unknown, expectedPath?: string): Record<string, unknown>;
+
+export interface WorkspaceDirectory { path: string; id?: string }
+export declare function absoluteWorkspacePath(value: unknown): value is string;
+export declare function workspaceDirectory(value: unknown, requireId?: boolean): WorkspaceDirectory;
+export declare function workspaceDirectoryMeta(value: unknown, requireId?: boolean): { directory: WorkspaceDirectory; defaultWorkspace: boolean };
+
+export interface WorkspaceLocation { path: string; kinds: ("default" | "home" | "agent")[]; agents?: string[] }

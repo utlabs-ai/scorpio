@@ -1,4 +1,4 @@
-// Fixed Git commands inspect only verified metadata within the topic workspace.
+// Fixed Git commands inspect only verified metadata within the selected directory.
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { execFile, spawn } from 'node:child_process'
@@ -19,9 +19,9 @@ const gitEnv = () => ({
   GIT_OPTIONAL_LOCKS: '0', LC_ALL: 'C',
 })
 export function createWorkspaceGit(files, { clock = () => performance.now() } = {}) {
-  async function repoSnapshot(topicId, repo) {
+  async function repoSnapshot(topicId, repo, scope) {
     if (!relativeWorkspacePath(repo, true)) throw new WorkspaceError('workspace_path_denied')
-    const snapshot = await files.inspect(topicId, repo, { directory: true })
+    const snapshot = await files.inspect(topicId, repo, { directory: true, scope })
     const gitPath = path.join(snapshot.path, '.git'), stat = await exists(gitPath)
     if (!stat?.isDirectory() || stat.isSymbolicLink()) unavailable()
     const started = clock(), stack = [join(repo, '.git')]
@@ -29,7 +29,7 @@ export function createWorkspaceGit(files, { clock = () => performance.now() } = 
     let entries = 0
     while (stack.length) {
       if (entries > 10000 || clock() - started > 5000) unavailable()
-      const rel = stack.pop(), item = await files.inspect(topicId, rel, { metadata: true })
+      const rel = stack.pop(), item = await files.inspect(topicId, rel, { metadata: true, scope })
       snapshots.push(item); entries++
       if (item.stat.isDirectory()) {
         const dir = await fs.opendir(item.path)
@@ -45,7 +45,7 @@ export function createWorkspaceGit(files, { clock = () => performance.now() } = 
     }
     const configPath = join(repo, '.git/config')
     if (await exists(path.join(snapshot.path, '.git/config'))) {
-      const config = (await files.read(topicId, configPath, { metadata: true })).bytes.toString('utf8')
+      const config = (await files.read(topicId, configPath, { metadata: true, scope })).bytes.toString('utf8')
       // Git reads these configurations before any command-level override could stop their side effects.
       if (/^\s*\[\s*(?:include|includeif|filter)(?:[.\s]|\])/im.test(config) || /^\s*(?:worktree|bare)\s*=/im.test(config.replace(/^\s*bare\s*=\s*false\s*$/gim, '')) || /worktreeconfig\s*=\s*true/i.test(config)) unavailable()
     }
@@ -56,7 +56,7 @@ export function createWorkspaceGit(files, { clock = () => performance.now() } = 
         if (current.size !== s.stat.size || current.mtimeNs !== s.stat.mtimeNs || current.ctimeNs !== s.stat.ctimeNs) unavailable()
       }
     }
-    return { snapshot, recheck, topicId, repo }
+    return { snapshot, recheck, topicId, repo, scope }
   }
   async function run(verified, args, { maxBuffer = WORKSPACE.jsonBytes, signal } = {}) {
     await verified.recheck()
@@ -100,7 +100,7 @@ export function createWorkspaceGit(files, { clock = () => performance.now() } = 
   async function head(verified, signal) {
     // show-ref distinguishes an unborn HEAD without treating all other command failures as an empty repository.
     const bytes = await run(verified, ['for-each-ref', '--format=%(objectname) %(refname)', 'refs/heads'], { signal })
-    const text = (await files.read(verified.topicId, join(verified.repo, '.git/HEAD'), { metadata: true })).bytes.toString('utf8').trim()
+    const text = (await files.read(verified.topicId, join(verified.repo, '.git/HEAD'), { metadata: true, scope: verified.scope })).bytes.toString('utf8').trim()
     if (hex.test(text)) return text
     if (!text.startsWith('ref: refs/heads/') || /[\x00-\x20~^:?*\[\\]/.test(text.slice(5))) unavailable()
     const line = bytes.toString('utf8').split('\n').find(x => x.slice(x.indexOf(' ') + 1) === text.slice(5))
@@ -109,7 +109,7 @@ export function createWorkspaceGit(files, { clock = () => performance.now() } = 
     if (!hex.test(oid)) unavailable()
     return oid
   }
-  async function changes(topicId, { signal } = {}) {
+  async function changes(topicId, { signal, scope } = {}) {
     const repositories = [], unavailableRepos = []
     const stack = [{ repo: '', depth: 0 }], started = clock()
     let entries = 0, discoveryTruncated = false, changesTruncated = false, remaining = 500
@@ -118,13 +118,14 @@ export function createWorkspaceGit(files, { clock = () => performance.now() } = 
       const { repo, depth } = stack.pop()
       let snapshot, children
       try {
-        snapshot = await files.inspect(topicId, repo, { directory: true })
+        snapshot = await files.inspect(topicId, repo, { directory: true, scope })
         const dir = await fs.opendir(snapshot.path); children = []
         try {
           for await (const child of dir) { if (++entries > 10000 || clock() - started > 5000) { discoveryTruncated = true; break }; children.push(child) }
         } finally { await dir.close().catch(() => {}) }
         await files.recheck(snapshot)
       } catch (e) {
+        if (repo === '' && scope && !scope.missing) throw e
         if (repo === '' && e.code === 'ENOENT') return { repositories: [], discoveryTruncated: false, changesTruncated: false, unavailable: [], rootMissing: true, readAt: Date.now() }
         unavailableRepos.push({ repo, reason: 'workspace_git_unavailable' }); continue
       }
@@ -132,7 +133,7 @@ export function createWorkspaceGit(files, { clock = () => performance.now() } = 
       for (const child of children) if (child.name.toLowerCase() === '.git' && await files.isMetadataEntry(snapshot, child.name)) metadata.add(child.name)
       if (metadata.size) {
         try {
-          const verified = await repoSnapshot(topicId, repo)
+          const verified = await repoSnapshot(topicId, repo, scope)
           const headOid = await head(verified, signal)
           const output = await status(verified, signal)
           changesTruncated ||= output.truncated
@@ -163,7 +164,7 @@ export function createWorkspaceGit(files, { clock = () => performance.now() } = 
             if (remaining === 0) { changesTruncated = true; break }
             const beforeExists = beforePaths.has(file)
             let afterExists
-            try { await files.inspect(topicId, join(repo, file)); afterExists = true } catch (e) { if (e.code === 'ENOENT') afterExists = false; else if (e.code === 'workspace_link') afterExists = true; else throw e }
+            try { await files.inspect(topicId, join(repo, file), { scope }); afterExists = true } catch (e) { if (e.code === 'ENOENT') afterExists = false; else if (e.code === 'workspace_link') afterExists = true; else throw e }
             const kind = status.includes('U') || ['AA', 'DD'].includes(status) ? 'conflict' : !beforeExists ? 'added' : !afterExists ? 'deleted' : 'modified'
             list.push({ path: file, status, kind, beforeExists, afterExists }); remaining--
           }
@@ -180,9 +181,9 @@ export function createWorkspaceGit(files, { clock = () => performance.now() } = 
     if (Buffer.byteLength(JSON.stringify(result)) > WORKSPACE.jsonBytes) throw new WorkspaceError('workspace_result_too_large')
     return result
   }
-  async function diff(topicId, repo, relative, { signal } = {}) {
+  async function diff(topicId, repo, relative, { signal, scope } = {}) {
     if (!relativeWorkspacePath(relative)) throw new WorkspaceError('workspace_path_denied')
-    const verified = await repoSnapshot(topicId, repo), headOid = await head(verified, signal)
+    const verified = await repoSnapshot(topicId, repo, scope), headOid = await head(verified, signal)
     let before = { exists: false, bytes: Buffer.alloc(0) }, after = { exists: false, bytes: Buffer.alloc(0) }
     if (headOid) {
       const raw = await run(verified, ['ls-tree', '-z', headOid, '--', relative], { signal })
@@ -198,7 +199,7 @@ export function createWorkspaceGit(files, { clock = () => performance.now() } = 
         before = { exists: true, bytes, meta: validateWorkspaceText(bytes) }
       }
     }
-    try { const result = await files.read(topicId, join(repo, relative)); after = { exists: true, ...result } } catch (e) { if (e.code !== 'workspace_file_missing') throw e }
+    try { const result = await files.read(topicId, join(repo, relative), { scope }); after = { exists: true, ...result } } catch (e) { if (e.code !== 'workspace_file_missing') throw e }
     await verified.recheck()
     if (!before.exists && !after.exists) throw new WorkspaceError('workspace_file_missing')
     return { before, after, meta: { repo, path: relative, headOid } }

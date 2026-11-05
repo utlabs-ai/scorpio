@@ -170,3 +170,5 @@ On a daemon's connection, an approval card the server does not keep comes back a
 ## Workspace viewer errors
 
 The workspace-prefixed codes and their client actions are defined in [Workspace files](workspace.md#errors). These codes apply to the separate human workspace channel; authentication retains the existing HTTP semantics.
+
+Directory navigation uses optional `directoryNavigation:1`, per-request `directory`, bounded `locations`, and safe directory missing/denied/not-directory errors; see [workspace files](workspace.md#directory-navigation-extension).

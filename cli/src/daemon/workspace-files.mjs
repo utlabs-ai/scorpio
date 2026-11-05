@@ -5,18 +5,12 @@ import path from 'node:path'
 import { createHash } from 'node:crypto'
 import { performance } from 'node:perf_hooks'
 import { HOME } from './paths.mjs'
+import { createWorkspaceDirectories, identity, metadataAlias } from './workspace-directories.mjs'
 import { workspaceFor } from '../workspace.mjs'
 import { WORKSPACE, WorkspaceError, relativeWorkspacePath, validateWorkspaceText } from '../workspace-protocol.mjs'
 
 const refuse = (code, details) => { throw new WorkspaceError(code, details) }
-const identity = (s) => `${s.dev}:${s.ino}`
 const version = (s) => `${identity(s)}:${s.size}:${s.mtimeNs}:${s.ctimeNs}`
-async function metadataAlias(parent, name, stat) {
-  if (name === '.git') return true
-  if (name.toLowerCase() !== '.git') return false
-  const git = await fs.lstat(path.join(parent, '.git'), { bigint: true }).catch(error => { if (error.code === 'ENOENT') return null; throw error })
-  return git !== null && identity(git) === identity(stat)
-}
 const contained = (root, target) => {
   const rel = path.relative(root, target)
   return rel !== '..' && !rel.startsWith(`..${path.sep}`) && !path.isAbsolute(rel)
@@ -31,16 +25,29 @@ export { validateWorkspaceText } from '../workspace-protocol.mjs'
 
 /** HOME itself is trusted configuration; none of the topic descendants may be links. */
 export function createWorkspaceFiles({ home = HOME, rootFor = workspaceFor, clock = () => performance.now() } = {}) {
-  async function inspect(topicId, relative, { directory = false, metadata = false } = {}) {
+  const roots = createWorkspaceDirectories({ home, rootFor, clock })
+  async function inspect(topicId, relative, { directory = false, metadata = false, scope } = {}) {
     if (!/^[A-Za-z0-9_-]{22}$/.test(topicId) ||
       !(metadata ? relativeWorkspacePath(relative.split('/').filter(p => p !== '.git').join('/'), true) : relativeWorkspacePath(relative, true))) refuse('workspace_path_denied')
-    const trustedHome = await fs.realpath(home)
-    const logicalRoot = path.resolve(rootFor(topicId))
-    const relativeRoot = path.relative(path.resolve(home), logicalRoot)
-    if (!contained(path.resolve(home), logicalRoot) || relativeRoot !== path.join('topics', topicId, 'workspace')) refuse('workspace_path_denied')
-    let current = trustedHome
-    const ancestors = []
-    const components = [...relativeRoot.split(path.sep), ...relative.split('/').filter(Boolean)]
+    let current, root, ancestors, components
+    if (scope) {
+      if (scope.missing) throw Object.assign(new Error('missing'), { code: 'ENOENT' })
+      current = scope.path; root = scope.path; ancestors = [...scope.ancestors]
+      components = relative.split('/').filter(Boolean)
+      for (let i = 0; i < ancestors.length; i++) {
+        const ancestor = ancestors[i]
+        const stat = await fs.lstat(ancestor.path, { bigint: true })
+        if (stat.isSymbolicLink() || identity(stat) !== ancestor.id) refuse('workspace_directory_changed')
+        ancestors[i] = { ...ancestor, stat }
+      }
+      if (identity(await fs.stat(root, { bigint: true })) !== scope.id) refuse('workspace_directory_changed')
+    } else {
+      const trustedHome = await fs.realpath(home), logicalRoot = path.resolve(rootFor(topicId))
+      const relativeRoot = path.relative(path.resolve(home), logicalRoot)
+      if (!contained(path.resolve(home), logicalRoot) || relativeRoot !== path.join('topics', topicId, 'workspace')) refuse('workspace_path_denied')
+      current = trustedHome; root = path.join(trustedHome, relativeRoot); ancestors = []
+      components = [...relativeRoot.split(path.sep), ...relative.split('/').filter(Boolean)]
+    }
     for (let i = 0; i < components.length; i++) {
       const parent = current
       current = path.join(current, components[i])
@@ -50,7 +57,7 @@ export function createWorkspaceFiles({ home = HOME, rootFor = workspaceFor, cloc
       if ((i < components.length - 1 || directory) && !stat.isDirectory()) refuse('workspace_path_denied')
       ancestors.push({ path: current, id: identity(stat), stat })
     }
-    const root = path.join(trustedHome, relativeRoot), canonical = await fs.realpath(current)
+    const canonical = await fs.realpath(current)
     if (!contained(root, canonical)) refuse('workspace_path_denied')
     const stat = ancestors.at(-1).stat
     return { path: current, root, canonical, stat, ancestors }
@@ -90,18 +97,18 @@ export function createWorkspaceFiles({ home = HOME, rootFor = workspaceFor, cloc
       return { bytes, meta: { path: relative, size: n, mtime: Number(after.mtimeNs / 1_000_000n), ...textMeta } }
     } catch (e) { classify(e) } finally { await handle?.close().catch(() => {}) }
   }
-  async function list(topicId, relative = '', cursor = null, computerId = '') {
+  async function list(topicId, relative = '', cursor = null, computerId = '', scope) {
     let dir
     try {
       let snapshot
-      try { snapshot = await inspect(topicId, relative, { directory: true }) } catch (e) {
-        if (e?.code === 'ENOENT' && relative === '') {
+      try { snapshot = await inspect(topicId, relative, { directory: true, scope }) } catch (e) {
+        if (e?.code === 'ENOENT' && relative === '' && (!scope || scope.missing)) {
           // Absence never creates the workspace as a side effect of viewing it.
           return { path: '', entries: [], nextCursor: null, truncated: false, rootMissing: true, order: 'filesystem', readAt: Date.now() }
         }
         throw e
       }
-      const binding = createHash('sha256').update(`${topicId}\0${computerId}\0${relative}\0${version(snapshot.stat)}`).digest('hex')
+      const binding = createHash('sha256').update(`${topicId}\0${computerId}\0${scope?.path || ""}\0${scope?.id || ""}\0${relative}\0${version(snapshot.stat)}`).digest('hex')
       let offset = 0
       if (cursor != null) {
         if (typeof cursor !== 'string' || Buffer.byteLength(cursor) > 512) refuse('workspace_directory_changed')
@@ -130,8 +137,8 @@ export function createWorkspaceFiles({ home = HOME, rootFor = workspaceFor, cloc
       await recheck(snapshot, 'workspace_directory_changed')
       if (version(await fs.lstat(snapshot.path, { bigint: true })) !== version(snapshot.stat)) refuse('workspace_directory_changed')
       return { path: relative, entries, nextCursor: !eof && !truncated && hasMore ? Buffer.from(JSON.stringify({ binding, offset: scanned })).toString('base64url') : null, truncated, order: 'filesystem', readAt: Date.now() }
-    } catch (e) { classify(e) } finally { await dir?.close().catch(() => {}) }
+    } catch (e) { if (scope && ['EACCES', 'EPERM'].includes(e?.code)) refuse('workspace_directory_denied'); classify(e) } finally { await dir?.close().catch(() => {}) }
   }
   const isMetadataEntry = async (snapshot, name) => metadataAlias(snapshot.path, name, await fs.lstat(path.join(snapshot.path, name), { bigint: true }))
-  return { inspect, recheck, read, list, isMetadataEntry }
+  return { inspect, recheck, read, list, isMetadataEntry, selectDirectory: roots.select, locations: roots.locations }
 }

@@ -1,6 +1,6 @@
 # Workspace files (v1)
 
-A person may read only their own computer's default workspace for a topic they currently belong to. This is not a command for an agent or a way to choose another working directory. Contents are relayed live and are not stored as topic messages or attachments.
+A person may read directories that their own computer's daemon system account can read, for a topic they currently belong to. This is a read-only human view, not an agent command or a change to any process working directory. Contents are relayed live and are not stored as topic messages or attachments.
 
 The human web endpoints are relative to the site origin, **not** `/api/v1`: `GET /r/{topicId}/workspace`, `GET .../workspace/hosts`, `GET .../workspace/ws?computer={computerId}` and `POST .../workspace/request?computer={computerId}`. Session authentication and same-origin checks apply. Agent tokens cannot start reads. The daemon uses its existing authenticated topic host connection.
 
@@ -15,7 +15,7 @@ The workspace socket sends:
 The daemon advertises on its host connection (new daemons enable this by default; there is no opt-in flag):
 
 ```json
-{"type":"workspace_capabilities","v":1,"ops":["list","read","changes","diff"]}
+{"type":"workspace_capabilities","v":1,"ops":["list","read","changes","diff"],"directoryNavigation":1}
 {"type":"workspace_host_ready","v":1,"epoch":"uuid","computerId":"device-id"}
 ```
 
@@ -29,10 +29,10 @@ A human sends a JSON POST with `connectionId`, its memory-only `connectionToken`
 
 - `list`: `path` (relative directory, root empty), optional opaque `cursor` from this same directory.
 - `read`: `path` (relative file).
-- `changes`: no path; bounded repository discovery in the default workspace.
+- `changes`: no path; bounded repository discovery below the selected directory.
 - `diff`: `repo` (relative repository root, empty for workspace itself), `path` relative to that repo. Neither is an absolute path or gitDir.
 
-The authenticated URL determines the topic and computer. No owner/root/cwd is accepted from the body. The selected socket must belong to that same human account/topic/computer; the current connection token is required. An ID by itself is insufficient. The raw token is invalidated at close or a controlled connection reset and never appears in URLs, logs or persistent attachments. A socket attachment holds its domain-separated SHA-256 verifier bound to connectionId, allowing the current session, membership, computer owner and exact socket binding to be checked after hibernation. A verifier cannot be used as the raw token. Permissions, host selection and budgets are rechecked after the asynchronous digest. Acceptance is sent on that socket **before** dispatch and repeated as the HTTP response:
+The authenticated URL determines the topic and computer. No owner or execution cwd is accepted from the body. The selected socket must belong to that same human account/topic/computer; the current connection token is required. An ID by itself is insufficient. The raw token is invalidated at close or a controlled connection reset and never appears in URLs, logs or persistent attachments. A socket attachment holds its domain-separated SHA-256 verifier bound to connectionId, allowing the current session, membership, computer owner and exact socket binding to be checked after hibernation. A verifier cannot be used as the raw token. Permissions, host selection and budgets are rechecked after the asynchronous digest. Acceptance is sent on that socket **before** dispatch and repeated as the HTTP response:
 
 ```json
 {"type":"workspace_accepted","v":1,"requestId":"uuid","transferId":"uuid","epoch":"uuid","deadlineAt":1700000030000}
@@ -56,7 +56,7 @@ Host response frames contain `v`, `topicId`, `epoch`, `transferId`; server→vie
 {"type":"workspace_end","v":1,"topicId":"topic-id","epoch":"uuid","transferId":"uuid","streams":[{"name":"file","bytes":3,"chunks":1}],"readAt":1700000000000}
 ```
 
-`begin.streams` names are file (read), before/after (diff), or json (list/changes). Existence, declared byte lengths and ordered stream names are fixed before chunks. Nonexistent sides declare `exists:false,bytes:0` and have no chunks. Empty existing files declare `exists:true,bytes:0`. Optional metadata includes file size/mtime, BOM/EOL, repository/headOid and change kind; all paths remain relative. Timestamps are epoch milliseconds. The relay assigns readAt when it accepts a complete valid end; device mtime is separate source metadata and device clocks need not match server time.
+`begin.streams` names are file (read), before/after (diff), or json (list/changes/locations). Existence, declared byte lengths and ordered stream names are fixed before chunks. Nonexistent sides declare `exists:false,bytes:0` and have no chunks. Empty existing files declare `exists:true,bytes:0`. Optional metadata includes file size/mtime, BOM/EOL, repository/headOid and change kind; content paths remain relative; directory metadata carries the canonical absolute selected root. Timestamps are epoch milliseconds. The relay assigns readAt when it accepts a complete valid end; device mtime is separate source metadata and device clocks need not match server time.
 
 Chunks have **at most 32,768 decoded bytes**. A request has one global seq starting at 0 and increasing by 1; each stream offset starts at 0 and increases by the decoded byte count. Streams are sent in declared order. JSON frames must be no larger than 65,536 UTF-8 bytes including envelope. Validate base64, totals, offsets, lengths, stream order and final chunk counts before publishing the result. The host waits for the final cumulative ACK before sending end. A premature end fails the transfer. Content is not successful until a valid end; errors discard partial buffers.
 
@@ -131,5 +131,52 @@ HTTP authentication failures retain existing 401 semantics. Before authorization
 | workspace_file_changed / workspace_directory_changed | Input changed while read/paged; refresh from the start |
 | workspace_result_too_large / workspace_git_unavailable | Listing/Git result or layout unsupported; show explicit partial/unavailable state |
 
-No response contains stack traces, raw Git errors or absolute paths. No file body, directory listing or path is persisted or logged by the server. No workspace content enters topic exports/search/messages/attachments.
+No response contains stack traces or raw Git errors. Absolute paths occur only in validated directory/location metadata. No file body, directory listing or path is persisted or logged by the server. No workspace content enters topic exports/search/messages/attachments.
 
+
+### Directory navigation extension
+
+Wire v1 keeps its original four advertised `ops`. A host additionally advertises optional `directoryNavigation:1`, enabling `locations` and optional `directory` on the original operations. Computer summaries in ready/status/hosts carry `directoryNavigation:1|null`. This capability belongs to the current physical host socket and survives normal hibernation as bounded capability metadata. A server rejects extension requests with `workspace_unsupported` if that socket has no capability; it never strips a directory to read the default workspace. An old server can ignore the optional capability and continue its original operations. A new UI requires the extension, with no silent fallback.
+
+Each operation independently selects its root; there is no mutable daemon/server current directory. Omission preserves the original default-topic-workspace meaning, never a previous selection. The request-body budget is 16,384 UTF-8 bytes (413 on overflow). Each absolute/relative path separately remains limited to 4,096 bytes.
+
+```json
+{"op":"list","path":"","cursor":null,"directory":{"path":"/home/kai/project"}}
+{"op":"read","path":"src/main.ts","directory":{"path":"/home/kai/project","id":"1:12345"}}
+```
+
+These examples show operation fields; ordinary connection credentials and requestId are still required. `directory` must be an object with only `path` and optional `id`. Absolute POSIX syntax is `/` or nonempty segments: no NUL, backslash, empty/dot/dot-dot segment or trailing slash. No trimming, Unicode rewriting or secondary URL decoding. An id is decimal dev:ino, 1–32 digits on each side. Only an initial `list,path="",cursor=null` may omit id. Every later explicit operation and page carries the returned id. `directory:null` is invalid. Native Windows drives/UNC are outside this extension.
+
+The daemon canonicalizes the initial root with realpath, allowing root/ancestor aliases, confirms a readable directory and records dev/ino. The candidate and physical path cannot traverse Git metadata, including actual case-insensitive `.git` aliases. Content links are still not followed; `.ssh`/`.env` are ordinary content subject to OS permissions and existing bounds. Each request uses one immutable scope for file and Git reads, rechecking root/ancestor identity. A bound id mismatch is `workspace_directory_changed`; normal child additions do not invalidate root identity. The non-atomic same-machine path-race limitation remains. No extra listener, permission elevation or filesystem sandbox is introduced.
+
+Every successful explicit operation except locations includes validated begin metadata:
+
+```json
+{"directory":{"path":"/home/kai/project","id":"1:12345"},"defaultWorkspace":false}
+```
+
+Publish this identity/tree/preference only after a complete valid end. The sole id-less successful exception is the actual missing default workspace: meta.defaultWorkspace=true, list.rootMissing=true and empty entries. It creates no directory and cannot drive later bound reads. Other missing directories fail. Cursors bind topic, computer, canonical root path/id, relative path, directory version and offset within 512 bytes; cross-root/device reuse and changed versions fail.
+
+`locations` has no directory/path/repo/cursor. Its bounded json stream contains:
+
+```json
+{"defaultPath":"/home/kai/.scorpio/topics/aaaaaaaaaaaaaaaaaaaaaa/workspace","homePath":"/home/kai","entries":[{"path":"/home/kai/.scorpio/topics/aaaaaaaaaaaaaaaaaaaaaa/workspace","kinds":["default"]},{"path":"/home/kai","kinds":["home"]},{"path":"/home/kai/project","kinds":["agent"]}],"truncated":false}
+```
+
+Sources are workspaceFor(topicId), the daemon system account's os.homedir(), and valid dir fields in that topic's existing spawn JSON records. Only the fixed bookkeeping directory is enumerated, never target content or other topics; bad records count toward the scan bound but produce no entry. Missing bookkeeping directory means no records; other read failures return workspace_read_failed. Deduplicate canonical-syntax literal paths and merge kinds, default/home first and agent paths sorted. At most 200 distinct entries, 10,000 scanned records, 5 seconds and 262,144 JSON bytes; any limit makes truncated=true. No target directory is prevalidated. These are shortcuts, never an allowlist.
+
+Git scans only downward from this same scope: selecting an inner folder does not borrow a parent repository. Root access errors cannot become noRepository. Original bounds and unsupported Git layouts/filter refusal remain. Empty nondefault directories are successful empty entries; partial Git discovery/changes is always explicit.
+
+Navigation first increments a local generation, cancels all old jobs/queues, disposes models and clears tree, changes, selection, filename and read time. Only this generation's complete root list can publish scope, then start changes with its id. Late pages, reads, diffs, changes, accepted frames, render work and errors cannot change the new view or preference. Same-root refresh checks the bound root before restoring bounded expanded directories and selection. Reconnect never automatically requests any of the five content operations; completed memory remains stale until manual refresh.
+
+The sole path-storage exception is browser localStorage `view-files-directory-v1:<account>:<computerId>`, holding one last fully successful canonical root path, across topics on that stable computer ID. Trusted viewerAccount comes from authenticated page bootstrap. No id/history/selection/content is stored. Invalid values are discarded; unavailable storage uses the default on the next open. A saved missing/denied/non-directory path shows its error without silent fallback. Logout/account deletion clears that account's preferences. Server stores/logs no paths, locations or content; attachment recovery still holds only identity/verifier, capability and at most two request/transfer/deadline markers.
+
+| Additional code | Meaning |
+|---|---|
+| workspace_directory_missing | Nondefault selected directory does not exist |
+| workspace_directory_denied | Selected directory cannot be listed by the daemon's system account |
+| workspace_not_directory | Selected path is not a directory |
+
+These errors clear old content and retain navigation, with no raw OS error or path in error details. Ordinary file failures retain their existing classification.
+
+Optional `locations.entries[].agents` displays full names derived from that same valid spawn record's `<role>.json` filename and the authenticated daemon account; JSON name/account fields are ignored. Role is `[A-Za-z0-9_.-]{1,62}`, full name `^[A-Za-z0-9_.-]{1,62}@[A-Za-z0-9_.-]+$`, at most 128 UTF-8 bytes. It is a recent spawn association, not proof of current cwd or online state. Merge labels on the literal path, including default/home matches, deduplicate and ASCII-sort; keep the first 32 valid names per entry and mark truncated for extra valid names. Invalid labels never erase a valid dir. Names count within the existing total JSON budget; omit only complete names/entries with truncated=true, never cut strings. Shared schema rejects malformed agents; absent/empty arrays are compatible. Labels use textContent, stay only in live viewer memory, and do not affect authorization/scope/cursors/Git.
