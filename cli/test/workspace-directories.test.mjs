@@ -134,15 +134,19 @@ test('bound roots replaced by files fail changed and bookkeeping links are never
 })
 test('modern and legacy clean filter tripwires are refused under an explicit external Git scope', async t => {
   const { home, a, directories, files } = await setup(t), git = createWorkspaceGit(files)
-  const marker = path.join(home, 'tripwire'), env = { ...process.env, GIT_CONFIG_NOSYSTEM: '1', GIT_CONFIG_GLOBAL: '/dev/null' }
+  const marker = path.join(a, 'tripwire'), env = { ...process.env, GIT_CONFIG_NOSYSTEM: '1', GIT_CONFIG_GLOBAL: '/dev/null' }
   const command = (...args) => execFileSync('git', ['-C', a, ...args], { env, stdio: 'pipe' })
   command('init', '-q'); command('config', 'user.name', 'kai'); command('config', 'user.email', 'kai@example.com')
   await fs.writeFile(path.join(a, 'file'), 'before\n'); command('add', '.'); command('commit', '-qm', 'Initial file')
   await fs.writeFile(path.join(a, 'file'), 'after\n'); await fs.writeFile(path.join(a, '.gitattributes'), 'file filter=tripwire\n')
+  await fs.writeFile(path.join(a, 'filter.sh'), '#!/bin/sh\nprintf ran > tripwire\ncat\n', { mode: 0o755 })
   const original = await fs.readFile(path.join(a, '.git', 'config'), 'utf8')
   for (const section of ['[filter "tripwire"]', '[filter.tripwire]']) {
-    await fs.writeFile(path.join(a, '.git', 'config'), `${original}\n${section}\n clean = touch ${JSON.stringify(marker)}; cat\n`)
-    command('status', '--porcelain=v1'); await fs.stat(marker); await fs.unlink(marker)
+    await fs.writeFile(path.join(a, '.git', 'config'), `${original}\n${section}\n clean = ./filter.sh\n`)
+    await fs.writeFile(path.join(a, 'file'), `after-${section}-${Date.now()}\n`);
+    const future = new Date(Date.now() + 2000); await fs.utimes(path.join(a, 'file'), future, future);
+    assert.equal(command('config', '--get', 'filter.tripwire.clean').toString().trim(), './filter.sh');
+    command('hash-object', '--path=file', 'file'); await fs.stat(marker); await fs.unlink(marker)
     const scope = await directories.select(topic, { path: a })
     assert.equal((await git.changes(topic, { scope })).unavailable.length, 1)
     await rejects(() => git.diff(topic, '', 'file', { scope }), 'workspace_git_unavailable')
