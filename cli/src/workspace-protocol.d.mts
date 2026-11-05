@@ -79,3 +79,5 @@ export declare function workspaceDirectory(value: unknown, requireId?: boolean):
 export declare function workspaceDirectoryMeta(value: unknown, requireId?: boolean): { directory: WorkspaceDirectory; defaultWorkspace: boolean };
 
 export interface WorkspaceLocation { path: string; kinds: ("default" | "home" | "agent")[]; agents?: string[] }
+
+export type WorkspaceListOrder = "filesystem" | "directories-first-name";
