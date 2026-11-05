@@ -115,7 +115,7 @@ function workspaceJsonResult(op, value, expectedPath = "") {
   }
   if (op === "list") {
     if (value.path !== expectedPath || !relativeWorkspacePath(value.path, true) || !Array.isArray(value.entries) || value.entries.length > 200 ||
-      typeof value.truncated !== "boolean" || value.order !== "filesystem" || value.nextCursor !== null && (typeof value.nextCursor !== "string" || wireBytes(value.nextCursor) > 512)) return fail();
+      typeof value.truncated !== "boolean" || !["filesystem", "directories-first-name"].includes(value.order) || value.nextCursor !== null && (typeof value.nextCursor !== "string" || wireBytes(value.nextCursor) > 512)) return fail();
     const names = new Set();
     const entries = value.entries.map(entry => {
       if (!isObject(entry) || typeof entry.name !== "string" || !entry.name || entry.name.includes("/") || entry.name.includes("\0") || entry.name === ".git" || names.has(entry.name) ||
@@ -123,7 +123,7 @@ function workspaceJsonResult(op, value, expectedPath = "") {
       names.add(entry.name);
       return { name: entry.name, kind: entry.kind, ...(entry.kind === "file" ? { bytes: entry.bytes } : {}) };
     });
-    return { path: value.path, entries, nextCursor: value.nextCursor, truncated: value.truncated, order: "filesystem", ...(value.rootMissing === true ? { rootMissing: true } : {}) };
+    return { path: value.path, entries, nextCursor: value.nextCursor, truncated: value.truncated, order: value.order, ...(value.rootMissing === true ? { rootMissing: true } : {}) };
   }
   if (op !== "changes" || !Array.isArray(value.repositories) || !Array.isArray(value.unavailable) || typeof value.discoveryTruncated !== "boolean" || typeof value.changesTruncated !== "boolean") return fail();
   let count = 0;

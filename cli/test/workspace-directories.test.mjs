@@ -153,3 +153,49 @@ test('modern and legacy clean filter tripwires are refused under an explicit ext
     await assert.rejects(fs.stat(marker), e => e.code === 'ENOENT')
   }
 })
+test('explicit directory pages are globally directory-first and name-ordered across the 200-item boundary', async t => {
+  const { a, directories, files } = await setup(t)
+  for (let i = 204; i >= 0; i--) await fs.writeFile(path.join(a, `a-file-${String(i).padStart(3, '0')}`), 'x')
+  for (let i = 2; i >= 0; i--) await fs.mkdir(path.join(a, `z-folder-${i}`))
+  const scope = await directories.select(topic, { path: a }), entries = []
+  let cursor = null
+  do {
+    const page = await files.list(topic, '', cursor, 'box', scope)
+    assert.equal(page.order, 'directories-first-name')
+    assert.ok(page.entries.length <= 200); entries.push(...page.entries); cursor = page.nextCursor
+  } while (cursor)
+  assert.deepEqual(entries.slice(0, 3).map(e => e.name), ['z-folder-0', 'z-folder-1', 'z-folder-2'])
+  assert.deepEqual(entries.slice(3).map(e => e.name), Array.from({ length: 205 }, (_, i) => `a-file-${String(i).padStart(3, '0')}`))
+  assert.equal(new Set(entries.map(e => e.name)).size, 208)
+})
+test('sorted cursors reject legacy mode, partial continuation scans, and directory changes', async t => {
+  const { home, root, directories, files } = await setup(t)
+  for (let i = 0; i < 201; i++) await fs.writeFile(path.join(root, `f${String(i).padStart(3, '0')}`), 'x')
+  const scope = await directories.select(topic, { path: root })
+  const sorted = await files.list(topic, '', null, 'box', scope), legacy = await files.list(topic, '', null, 'box')
+  await rejects(() => files.list(topic, '', legacy.nextCursor, 'box', scope), 'workspace_directory_changed')
+  await rejects(() => files.list(topic, '', sorted.nextCursor, 'box'), 'workspace_directory_changed')
+  let calls = 0
+  const budgeted = createWorkspaceFiles({ home, rootFor: () => root, clock: () => calls++ === 0 ? 0 : 4001 })
+  const partial = await budgeted.list(topic, '', null, 'box', scope)
+  assert.equal(partial.order, 'directories-first-name'); assert.equal(partial.truncated, true); assert.equal(partial.nextCursor, null)
+  calls = 0
+  await rejects(() => budgeted.list(topic, '', sorted.nextCursor, 'box', scope), 'workspace_result_too_large')
+  await fs.writeFile(path.join(root, 'new-child'), 'x')
+  await rejects(() => files.list(topic, '', sorted.nextCursor, 'box', scope), 'workspace_directory_changed')
+})
+test('sorted pages preserve JSON budgets and each child folder has its own complete ordering', async t => {
+  const { a, directories, files } = await setup(t), scope = await directories.select(topic, { path: a })
+  const child = path.join(a, 'child'); await fs.mkdir(child)
+  const names = Array.from({ length: 200 }, (_, i) => '\x01'.repeat(245) + String(i).padStart(3, '0'))
+  for (const name of names) await fs.writeFile(path.join(child, name), 'x')
+  await fs.mkdir(path.join(child, 'z-directory'))
+  let cursor = null; const entries = []; let pages = 0
+  do {
+    const result = await files.list(topic, 'child', cursor, 'box', scope)
+    assert.equal(result.order, 'directories-first-name'); assert.ok(Buffer.byteLength(JSON.stringify(result)) <= 262144)
+    assert.ok(result.entries.length <= 200); entries.push(...result.entries); cursor = result.nextCursor; pages++
+  } while (cursor)
+  assert.ok(pages >= 2); assert.equal(entries[0].name, 'z-directory'); assert.deepEqual(entries.slice(1).map(e => e.name), names)
+  assert.equal(new Set(entries.map(e => e.name)).size, 201)
+})

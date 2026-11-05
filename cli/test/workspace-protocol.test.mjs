@@ -60,3 +60,8 @@ test('operation JSON schemas reject malformed or mismatched results before UI re
   fails(() => p.workspaceJsonResult('changes', { ...changes, repositories: [{ ...changes.repositories[0], headOid: '/outside' }] }))
   fails(() => p.workspaceJsonResult('changes', { ...changes, unavailable: [{ repo: '../outside', reason: 'workspace_git_unavailable' }] }))
 })
+test('list result order preserves both published modes and rejects unknown modes', () => {
+  const list = { path: '', entries: [], nextCursor: null, truncated: false }
+  for (const order of ['filesystem', 'directories-first-name']) assert.equal(p.workspaceJsonResult('list', { ...list, order }).order, order)
+  fails(() => p.workspaceJsonResult('list', { ...list, order: 'unknown' }))
+})

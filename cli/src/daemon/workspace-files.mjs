@@ -6,6 +6,7 @@ import { createHash } from 'node:crypto'
 import { performance } from 'node:perf_hooks'
 import { HOME } from './paths.mjs'
 import { createWorkspaceDirectories, identity, metadataAlias } from './workspace-directories.mjs'
+import { sortedWorkspaceList, DIRECTORY_ORDER, DIRECTORY_ORDER_VERSION } from './workspace-list.mjs'
 import { workspaceFor } from '../workspace.mjs'
 import { WORKSPACE, WorkspaceError, relativeWorkspacePath, validateWorkspaceText } from '../workspace-protocol.mjs'
 
@@ -104,11 +105,11 @@ export function createWorkspaceFiles({ home = HOME, rootFor = workspaceFor, cloc
       try { snapshot = await inspect(topicId, relative, { directory: true, scope }) } catch (e) {
         if (e?.code === 'ENOENT' && relative === '' && (!scope || scope.missing)) {
           // Absence never creates the workspace as a side effect of viewing it.
-          return { path: '', entries: [], nextCursor: null, truncated: false, rootMissing: true, order: 'filesystem', readAt: Date.now() }
+          return { path: '', entries: [], nextCursor: null, truncated: false, rootMissing: true, order: scope ? DIRECTORY_ORDER : 'filesystem', readAt: Date.now() }
         }
         throw e
       }
-      const binding = createHash('sha256').update(`${topicId}\0${computerId}\0${scope?.path || ""}\0${scope?.id || ""}\0${relative}\0${version(snapshot.stat)}`).digest('hex')
+      const binding = createHash('sha256').update(`${topicId}\0${computerId}\0${scope?.path || ""}\0${scope?.id || ""}\0${relative}\0${version(snapshot.stat)}${scope ? `\0${DIRECTORY_ORDER_VERSION}` : ''}`).digest('hex')
       let offset = 0
       if (cursor != null) {
         if (typeof cursor !== 'string' || Buffer.byteLength(cursor) > 512) refuse('workspace_directory_changed')
@@ -117,6 +118,12 @@ export function createWorkspaceFiles({ home = HOME, rootFor = workspaceFor, cloc
           if (value.binding !== binding || !Number.isSafeInteger(value.offset) || value.offset < 0 || value.offset > 20_000) refuse('workspace_directory_changed')
           offset = value.offset
         } catch { refuse('workspace_directory_changed') }
+      }
+      if (scope) {
+        const result = await sortedWorkspaceList(snapshot, relative, { offset, binding, continuing: cursor != null, clock })
+        await recheck(snapshot, 'workspace_directory_changed')
+        if (version(await fs.lstat(snapshot.path, { bigint: true })) !== version(snapshot.stat)) refuse('workspace_directory_changed')
+        return result
       }
       dir = await fs.opendir(snapshot.path)
       const entries = [], started = clock()
