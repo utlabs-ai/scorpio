@@ -124,3 +124,28 @@ test('Git and files share an external scope and selecting an inner directory nev
   const inner = await directories.select(topic, { path: path.join(a, 'src') })
   assert.deepEqual((await git.changes(topic, { scope: inner })).repositories, [])
 })
+test('bound roots replaced by files fail changed and bookkeeping links are never enumerated', async t => {
+  const { home, a, directories } = await setup(t)
+  const scope = await directories.select(topic, { path: a })
+  await fs.rename(a, a + '-old'); await fs.writeFile(a, 'replacement')
+  await rejects(() => directories.select(topic, { path: a, id: scope.id }), 'workspace_directory_changed')
+  await fs.symlink(a + '-old', path.join(home, 'spawns'))
+  await rejects(() => directories.locations(topic, 'kai'), 'workspace_read_failed')
+})
+test('modern and legacy clean filter tripwires are refused under an explicit external Git scope', async t => {
+  const { home, a, directories, files } = await setup(t), git = createWorkspaceGit(files)
+  const marker = path.join(home, 'tripwire'), env = { ...process.env, GIT_CONFIG_NOSYSTEM: '1', GIT_CONFIG_GLOBAL: '/dev/null' }
+  const command = (...args) => execFileSync('git', ['-C', a, ...args], { env, stdio: 'pipe' })
+  command('init', '-q'); command('config', 'user.name', 'kai'); command('config', 'user.email', 'kai@example.com')
+  await fs.writeFile(path.join(a, 'file'), 'before\n'); command('add', '.'); command('commit', '-qm', 'Initial file')
+  await fs.writeFile(path.join(a, 'file'), 'after\n'); await fs.writeFile(path.join(a, '.gitattributes'), 'file filter=tripwire\n')
+  const original = await fs.readFile(path.join(a, '.git', 'config'), 'utf8')
+  for (const section of ['[filter "tripwire"]', '[filter.tripwire]']) {
+    await fs.writeFile(path.join(a, '.git', 'config'), `${original}\n${section}\n clean = touch ${JSON.stringify(marker)}; cat\n`)
+    command('status', '--porcelain=v1'); await fs.stat(marker); await fs.unlink(marker)
+    const scope = await directories.select(topic, { path: a })
+    assert.equal((await git.changes(topic, { scope })).unavailable.length, 1)
+    await rejects(() => git.diff(topic, '', 'file', { scope }), 'workspace_git_unavailable')
+    await assert.rejects(fs.stat(marker), e => e.code === 'ENOENT')
+  }
+})

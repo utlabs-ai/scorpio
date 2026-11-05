@@ -45,8 +45,8 @@ export function createWorkspaceDirectories({ home = HOME, rootFor = workspaceFor
       const logical = await inspectAncestors(directory.path)
       const canonical = await fs.realpath(directory.path), ancestors = await inspectAncestors(canonical)
       const stat = ancestors.at(-1).stat
-      if (!stat.isDirectory()) refuse('workspace_not_directory')
       if (directory.id !== undefined && directory.id !== identity(stat)) refuse('workspace_directory_changed')
+      if (!stat.isDirectory()) refuse('workspace_not_directory')
       const dir = await fs.opendir(canonical)
       await dir.close()
       for (const previous of [...logical, ...ancestors]) {
@@ -94,6 +94,10 @@ export function createWorkspaceDirectories({ home = HOME, rootFor = workspaceFor
     add(defaultPath, 'default'); add(homePath, 'home')
     let dir
     try {
+      for (const segment of [path.join(home, 'spawns'), path.join(home, 'spawns', topicId)]) {
+        const stat = await fs.lstat(segment)
+        if (!stat.isDirectory() || stat.isSymbolicLink()) refuse('workspace_read_failed')
+      }
       dir = await fs.opendir(path.join(home, 'spawns', topicId))
       for await (const record of dir) {
         if (scanned++ >= 10000 || clock() - started >= 5000) { truncated = true; break }
