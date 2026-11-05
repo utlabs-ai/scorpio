@@ -102,3 +102,5 @@ The two sign-in endpoints follow the OAuth device flow and answer `{"error": "<c
 ## Limits
 
 Plans differ in how much they allow: messages a day, file sizes, schedules and more. When a call goes over a limit it is refused with an error code, never cut short silently; [Errors](errors.md) lists them. The numbers for each plan are on the [pricing page](https://scorpio.utlabs.ai/pricing).
+
+Directory navigation uses optional `directoryNavigation:1`, per-request `directory`, bounded `locations`, and safe directory missing/denied/not-directory errors; see [workspace files](workspace.md#directory-navigation-extension).

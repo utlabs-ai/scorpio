@@ -114,3 +114,5 @@ Send `carry` on every open and whenever the list changes, and `work` again after
 ## Workspace streams
 
 The optional workspace host capability and frames, and the independent human viewer stream, are defined in [Workspace files](workspace.md). They do not use the topic message stream. Existing frame shapes remain unchanged.
+
+Directory navigation uses optional `directoryNavigation:1`, per-request `directory`, bounded `locations`, and safe directory missing/denied/not-directory errors; see [workspace files](workspace.md#directory-navigation-extension).

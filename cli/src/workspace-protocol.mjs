@@ -57,12 +57,29 @@ function relativeWorkspacePath(value, root = false) {
   return typeof value === "string" && (root || value !== "") && wireBytes(value) <= WORKSPACE.pathBytes && !/[\x00\\]/.test(value) && !/^[a-z]:/i.test(value) && (value === "" || value.split("/").every((p) => p !== "" && p !== "." && p !== ".." && p !== ".git"));
 }
 const WORKSPACE_OPS = Object.freeze(["list", "read", "changes", "diff"]);
+function absoluteWorkspacePath(value) {
+  return typeof value === "string" && wireBytes(value) <= WORKSPACE.pathBytes && !/[\x00\\]/.test(value) &&
+    (value === "/" || value.startsWith("/") && value.slice(1).split("/").every(p => p !== "" && p !== "." && p !== ".."));
+}
+function workspaceDirectory(value, requireId = true) {
+  if (!isObject(value) || !absoluteWorkspacePath(value.path) || Object.keys(value).some(k => !["path", "id"].includes(k)) ||
+    (value.id !== undefined ? typeof value.id !== "string" || !/^[0-9]{1,32}:[0-9]{1,32}$/.test(value.id) : requireId)) return fail();
+  return { path: value.path, ...(value.id !== undefined ? { id: value.id } : {}) };
+}
+function workspaceDirectoryMeta(value, requireId = true) {
+  if (!isObject(value) || typeof value.defaultWorkspace !== "boolean") return fail();
+  const directory = workspaceDirectory(value.directory, requireId);
+  if (!directory.id && !value.defaultWorkspace) return fail();
+  return { directory, defaultWorkspace: value.defaultWorkspace };
+}
 function operationKeys(value) {
-  if (!WORKSPACE_OPS.includes(value.op)) return fail();
+  if (value.op !== "locations" && !WORKSPACE_OPS.includes(value.op)) return fail();
+  if (value.op === "locations") return ["op"];
   if (value.op !== "changes" && !relativeWorkspacePath(value.path, value.op === "list")) throw new WorkspaceError("workspace_path_denied");
   if (value.op === "diff" && !relativeWorkspacePath(value.repo, true)) throw new WorkspaceError("workspace_path_denied");
   if (value.op === "list" && value.cursor != null && (typeof value.cursor !== "string" || wireBytes(value.cursor) > 512)) return fail();
-  return ["op", ...(value.op === "changes" ? [] : ["path"]), ...(value.op === "list" ? ["cursor"] : []), ...(value.op === "diff" ? ["repo"] : [])];
+  if (value.directory !== undefined) workspaceDirectory(value.directory, !(value.op === "list" && value.path === "" && value.cursor == null));
+  return ["op", "directory", ...(value.op === "changes" ? [] : ["path"]), ...(value.op === "list" ? ["cursor"] : []), ...(value.op === "diff" ? ["repo"] : [])];
 }
 function workspaceRequest(value) {
   if (!isObject(value)) return fail();
@@ -85,6 +102,17 @@ function workspaceHostRequest(value) {
 function workspaceJsonResult(op, value, expectedPath = "") {
   if (!isObject(value)) return fail();
   const natural = n => typeof n === "number" && Number.isSafeInteger(n) && n >= 0;
+  if (op === "locations") {
+    if (!absoluteWorkspacePath(value.defaultPath) || !absoluteWorkspacePath(value.homePath) || !Array.isArray(value.entries) || value.entries.length > 200 || typeof value.truncated !== "boolean") return fail();
+    const seen = new Set();
+    const entries = value.entries.map(entry => {
+      if (!isObject(entry) || !absoluteWorkspacePath(entry.path) || seen.has(entry.path) || !Array.isArray(entry.kinds) || !entry.kinds.length || entry.kinds.length > 3 || new Set(entry.kinds).size !== entry.kinds.length || entry.kinds.some(k => !["default", "home", "agent"].includes(k))) return fail();
+      seen.add(entry.path);
+      if (entry.agents !== undefined && (!Array.isArray(entry.agents) || entry.agents.length > 32 || entry.agents.some(name => typeof name !== "string" || wireBytes(name) > 128 || !/^[A-Za-z0-9_.-]{1,62}@[A-Za-z0-9_.-]+$/.test(name)))) return fail();
+      return { path: entry.path, kinds: [...entry.kinds], ...(entry.agents !== undefined ? { agents: [...entry.agents] } : {}) };
+    });
+    return { defaultPath: value.defaultPath, homePath: value.homePath, entries, truncated: value.truncated };
+  }
   if (op === "list") {
     if (value.path !== expectedPath || !relativeWorkspacePath(value.path, true) || !Array.isArray(value.entries) || value.entries.length > 200 ||
       typeof value.truncated !== "boolean" || value.order !== "filesystem" || value.nextCursor !== null && (typeof value.nextCursor !== "string" || wireBytes(value.nextCursor) > 512)) return fail();
@@ -136,6 +164,9 @@ const WORKSPACE_ERRORS = /* @__PURE__ */ new Set([
   "workspace_line_limit",
   "workspace_file_changed",
   "workspace_directory_changed",
+  "workspace_directory_missing",
+  "workspace_directory_denied",
+  "workspace_not_directory",
   "workspace_result_too_large",
   "workspace_git_unavailable"
 ]);
@@ -200,6 +231,9 @@ function workspaceCapacity(pending, account, viewer) {
   return pending.length < WORKSPACE.topicPending && pending.filter((p) => p.account === account).length < WORKSPACE.accountPending && pending.filter((p) => p.viewer === viewer).length < WORKSPACE.viewerPending;
 }
 export {
+  absoluteWorkspacePath,
+  workspaceDirectory,
+  workspaceDirectoryMeta,
   workspaceJsonResult,
   validateWorkspaceText,
   WORKSPACE_OPS,

@@ -19,7 +19,7 @@ export function createWorkspaceHost({ account, computerId, files = createWorkspa
     job.state.jobs.delete(job.frame.transferId)
   }
   const cancelState = (state) => { if (state) for (const job of [...state.jobs.values()]) cancel(job) }
-  const advertise = link => send(link, link.ws, { type: 'workspace_capabilities', v: 1, ops: WORKSPACE_OPS })
+  const advertise = link => send(link, link.ws, { type: 'workspace_capabilities', v: 1, ops: WORKSPACE_OPS, directoryNavigation: 1 })
   function validRequest(link, state, frame) {
     try { workspaceHostRequest(frame) } catch { return false }
     return state.socket === link.ws && frame.epoch === state.epoch && frame.topicId === link.roomId && frame.owner === account() && frame.computerId === computerId()
@@ -43,18 +43,21 @@ export function createWorkspaceHost({ account, computerId, files = createWorkspa
     job.arm = arm; arm()
     try {
       let streams, meta
+      const scope = frame.directory ? await files.selectDirectory(link.roomId, frame.directory) : undefined
+      const directoryMeta = scope ? { directory: { path: scope.path, ...(scope.id ? { id: scope.id } : {}) }, defaultWorkspace: scope.defaultWorkspace } : null
       if (frame.op === 'read') {
-        const file = await files.read(link.roomId, frame.path)
+        const file = await files.read(link.roomId, frame.path, { scope })
         streams = [{ name: 'file', exists: true, bytes: file.bytes }]; meta = file.meta
       } else if (frame.op === 'diff') {
-        const result = await git.diff(link.roomId, frame.repo, frame.path, { signal })
+        const result = await git.diff(link.roomId, frame.repo, frame.path, { signal, scope })
         streams = [{ name: 'before', ...result.before }, { name: 'after', ...result.after }]; meta = result.meta
       } else {
-        const result = frame.op === 'list' ? await files.list(link.roomId, frame.path, frame.cursor, computerId()) : await git.changes(link.roomId, { signal })
+        const result = frame.op === 'locations' ? await files.locations(link.roomId, account()) : frame.op === 'list' ? await files.list(link.roomId, frame.path, frame.cursor, computerId(), scope) : await git.changes(link.roomId, { signal, scope })
         const bytes = Buffer.from(JSON.stringify(workspaceJsonResult(frame.op, result, frame.path)))
         if (bytes.byteLength > WORKSPACE.jsonBytes) throw new WorkspaceError('workspace_result_too_large')
         streams = [{ name: 'json', exists: true, bytes }]
       }
+      if (directoryMeta) meta = { ...meta, ...directoryMeta }
       check()
       const declarations = streams.map(s => ({ name: s.name, exists: s.exists, bytes: s.bytes.byteLength, encoding: 'utf-8' }))
       job.counts = beginWorkspace(frame.op, declarations)

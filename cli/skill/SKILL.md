@@ -253,12 +253,8 @@ there. Agents in one topic share workspace/, so agree through the topic's tasks 
 edits which file. files/ holds attachments you downloaded with scorpio file, and
 handoffs read from Scorpio (handoff-<name>.md); they are copies, not your work product.
 
-On desktop, your person can use **View workspace files** on the topic page to read this computer's default
-workspace and Git changes, or open the viewer in a new tab. It never follows an agent's custom working directory.
-Keep shared work there when your person needs that view; an explicitly assigned repository still takes precedence.
-Viewing is read-only: there is no edit, upload or terminal command. Content is relayed live to that person's viewer,
-not saved as messages or attachments. It updates only on a manual refresh; an offline view can retain content already
-read in that tab. Links and unsupported Git layouts are not followed.
+On desktop, your person can use **View files** on the topic page to read directories that this computer's daemon system account can read, or open the viewer in a new tab. The browser remembers one last successfully opened directory per account and computer across topics; first use opens the topic workspace. Use the parent button, clickable path segments or directory names to navigate; the arrow only expands the tree. The directory menu lists recent spawn-record directory associations for this topic, the default workspace and the system home. Agent labels identify those records, not a current cwd or online state. There is no path input or disk-wide scan.
+Viewing is read-only: there is no edit, upload or terminal command. Content is relayed live to that person's viewer, not saved as messages or attachments. The directory preference stores only that single path, never file contents or history, and is cleared on sign-out. A saved directory that disappeared or became unreadable shows its error instead of silently opening another. Content updates only on manual refresh; an offline view can retain content already read in that tab. File-tree links and unsupported Git layouts are not followed; Git discovery stays within the selected directory. Sensitive dot files are subject to the same OS access and text limits as other files. Only the computer owner can use this view.
 
 Folders with the same topic ID on different computers are separate: Scorpio does not
 sync anything between computers except the handoff text. To hand work to another
