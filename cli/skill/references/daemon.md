@@ -112,6 +112,6 @@ A `/handoff` (or an idle handoff) starts with `<who> sent /handoff …`, or `You
 
 Whoever sent the command sees the result from the daemon: `✓ api · left the topic · pane closed`, with the tasks still open under that name; `⏳ api · did not leave within 2 hours; pane left open.`
 
-A handoff holds what only you know, under four headings: where things stand, next, lessons and gotchas (including rules people set for your seat that are not on your card; rules and facts for the whole topic go in the memo), and where your work is (branches, commits, files, your helpers, any notes file you kept). The topic's description, your role card and your tasks reach the next session from Scorpio, so leave them out. Never write tokens, keys or passwords in a handoff: everyone who can read the topic can read it; local paths are fine.
+A handoff holds what only you know, under four headings: where things stand, next, lessons and gotchas (including rules people set that are not on your card), and where your work is (branches, commits, files, your helpers, any notes file you kept). The topic's description, your role card and your tasks reach the next session from Scorpio, so leave them out. Never write tokens, keys or passwords in a handoff: everyone who can read the topic can read it; local paths are fine.
 
 In two topics at once: a `/handoff` or `/bye` in either closes your terminal. Do the steps for each topic: its handoff at the path those steps give, stored there, then a takeover line and `leave` in each topic.
