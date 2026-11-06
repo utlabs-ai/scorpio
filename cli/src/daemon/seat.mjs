@@ -825,7 +825,7 @@ export function createSeat({
       if (!spec.needDir && !isDir(dir)) return offer(`Not started: this computer has no directory ${spec.dir}.`)
       const everyone = await members(roomId)
       const roster = everyone.filter((m) => m.status !== 'left')
-      const live = await terminal.agents() || []
+      let live = await terminal.agents() || []
       const short = spec.name || freeName(spec.kind, [...everyone.map((m) => m.name), ...live.map((a) => a.name), ...spawns().map((op) => op.name)])
       const name = `${short}@${account}`
       const previous = permissionLevel(everyone.find((m) => m.name === name)?.perm?.level)
@@ -859,7 +859,13 @@ export function createSeat({
           late: `started but has not joined for ${Math.round(SPAWN_JOIN_MS / MIN)} minutes; its pane is still open` }[pending.stage]
         return say(roomId, `${short} ${where}. To start over, /bye ${short} first.`, message.seq, to)
       }
-      const here = localAgents(roomId, ctx.entries, ctx.panes).get(name)
+      // Left after a /handoff whose job has not closed its pane yet (it does on its next round, after this command):
+      // closed here as that round would, so a takeover sent right after the leave is not refused. The job still answers.
+      // A pane that would not close is still open: refused below, as before.
+      const handedOff = !inRoom(roster, name) && ops.find((op) => op.type === 'handoff' && op.roomId === roomId && op.targets.some((a) => a.name === name && !a.result))
+      const closedNow = handedOff ? await closeHandedOff(handedOff, handedOff.targets.find((a) => a.name === name), ctx.panes, unregister) : false
+      if (closedNow) live = await terminal.agents() || []
+      const here = closedNow ? null : localAgents(roomId, ctx.entries, ctx.panes).get(name)
       if (here?.alive || live.some((a) => a.pane_id === here?.pane)) return say(roomId, `${short} left this topic, but its pane ${here.pane} is still open. /bye ${short} closes it; then /spawn again.`, message.seq, to)
       const herdrName = availableHerdrName(short, live)
       // A takeover (the name is in the topic, left) keeps its card as the topic has it, whatever that card says; a new name
@@ -933,6 +939,14 @@ export function createSeat({
   }
 
   // ---------------------------------------------------------------- pending operations
+  /** A /handoff target that has left the topic: no more delivery, its pane closed, its line in the job's answer. Whether it closed. */
+  async function closeHandedOff(op, agent, panes, unregister) {
+    unregister({ roomId: op.roomId, name: agent.name, pane: agent.pane })
+    const closed = await terminal.closePane(agent.pane, panes)
+    agent.result = `✓ ${shortOf(agent.name)} · left the topic · ${closed ? 'pane closed' : 'pane not closed'}`
+    return closed
+  }
+
   async function progress(ctx, unregister) {
     const rosters = new Map()
     const roster = async (roomId) => {
@@ -969,10 +983,7 @@ export function createSeat({
         op.checkedAt = now()
         if (op.targets.some((a) => !a.result && approvalBusy(a.pane))) { op.deadline += elapsed; continue }
         for (const agent of op.targets.filter((a) => !a.result)) {
-          if (inRoom(list, agent.name)) continue
-          unregister({ roomId: op.roomId, name: agent.name, pane: agent.pane })
-          const closed = await terminal.closePane(agent.pane, ctx.panes)
-          agent.result = `✓ ${shortOf(agent.name)} · left the topic · ${closed ? 'pane closed' : 'pane not closed'}`
+          if (!inRoom(list, agent.name)) await closeHandedOff(op, agent, ctx.panes, unregister)
         }
         const open = op.targets.filter((a) => !a.result)
         if (open.length && now() <= op.deadline) continue

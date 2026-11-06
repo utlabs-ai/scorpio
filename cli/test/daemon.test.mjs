@@ -1089,6 +1089,48 @@ test('seat: /handoff types the instructions, closes the pane after it leaves, re
   assert.deepEqual(m.seat.busyWhy(), [])
 })
 
+test('seat: a takeover sent right after a /handoff leave, before the job closed the pane, takes over', async (t) => {
+  const m = fakeMachine()
+  m.ask('@daemon.box@kai /handoff api')
+  await m.tick()
+  assert.match(m.said.at(-1), /^@kai Got it; asked api to write a handoff\.$/)
+  // api writes its handoff and leaves; its pane is still open when the takeover arrives in the same round.
+  register({ roomId: ROOM, name: 'api@kai', role: 'api', pane: 'w:p1' })
+  markLeft({ roomId: ROOM, name: 'api@kai' })
+  t.after(() => unregister({ roomId: ROOM, name: 'api@kai' }))
+  m.memberList.find((x) => x.name === 'api@kai').status = 'left'
+  m.cloud['api@kai'] = { body: '## Handoff\nContinue.', updatedAt: 1_000_000, computer: 'box' }
+  m.panes.push({ pane_id: 'w:p9', tab_id: 'w:t9', agent: 'claude', agent_status: 'working' })
+  m.ask('@daemon.box@kai /spawn claude api go on')
+  await m.tick([])
+  await until(() => m.said.some((s) => s.includes('Started api')))
+  assert.equal(m.said.some((s) => s.includes('is still open')), false)
+  assert.match(m.said.find((s) => s.includes('Started api')), /taking over api/)
+  assert.deepEqual(m.closed, ['w:p1'])
+  assert.deepEqual(m.unregistered, ['api@kai'])
+  assert.equal(m.said.filter((s) => s === '@kai ✓ api · left the topic · pane closed').length, 1)
+  assert.equal(m.seat.ops.some((op) => op.type === 'handoff'), false)
+})
+
+test('seat: a takeover right after a /handoff leave is still refused when the old pane will not close', async (t) => {
+  const m = fakeMachine()
+  m.ask('@daemon.box@kai /handoff api')
+  await m.tick()
+  register({ roomId: ROOM, name: 'api@kai', role: 'api', pane: 'w:p1' })
+  markLeft({ roomId: ROOM, name: 'api@kai' })
+  t.after(() => unregister({ roomId: ROOM, name: 'api@kai' }))
+  m.memberList.find((x) => x.name === 'api@kai').status = 'left'
+  m.terminal.closePane = async (pane) => { m.closed.push(pane); return false }
+  m.panes.push({ pane_id: 'w:p9', tab_id: 'w:t9', agent: 'claude', agent_status: 'working' })
+  m.ask('@daemon.box@kai /spawn claude api go on')
+  await m.tick([])
+  assert.ok(m.said.includes('@kai api left this topic, but its pane w:p1 is still open. /bye api closes it; then /spawn again.'))
+  assert.equal(m.said.some((s) => s.includes('Started api')), false)
+  assert.deepEqual(m.tabs, [])
+  assert.deepEqual(m.closed, ['w:p1'])
+  assert.equal(m.said.filter((s) => s === '@kai ✓ api · left the topic · pane not closed').length, 1)
+})
+
 test('seat: scheduled /handoff names and answers the creator', async () => {
   const m = fakeMachine()
   m.inbox.push({ seq: 50, from: 'scheduled', fromKind: 'scheduled', scheduled: { id: 'S7', by: 'lead@kai', at: 1_000_000 },
