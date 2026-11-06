@@ -47,7 +47,12 @@ export async function api(method, endpoint, body, { role = null } = {}) {
     signal: AbortSignal.timeout(20_000),
   })
   const data = await response.json().catch(() => null)
-  if (!response.ok) throw new Error(String(data?.next || data?.error || 'Scorpio HTTP ' + response.status))
+  if (!response.ok) {
+    // The message is the server's sentence for the person; callers that react to a case read the code.
+    const error = new Error(String(data?.next || data?.error || 'Scorpio HTTP ' + response.status))
+    if (data?.error) error.code = data.error
+    throw error
+  }
   return data
 }
 

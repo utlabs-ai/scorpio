@@ -16,7 +16,7 @@ export async function memberList(topicId) {
   if (!role) return null
   try { return (await api('GET', roomPath(topicId, '/members'), undefined, { role })).members || [] }
   catch (error) {
-    if (/not.?member|role.?unknown/i.test(error.message)) return null
+    if (error.code === 'not_member' || error.code === 'role_unknown') return null
     throw error
   }
 }
