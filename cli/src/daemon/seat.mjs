@@ -357,7 +357,9 @@ export function createSeat({
    * not seen moving in time (Codex often; the text did arrive): never typed again, Codex would run it
    * twice, and the later timeouts catch it; 'blocked' a dialog is open (herdr says blocked and dialogBlocked
    * does not lift it), nothing typed (keys would answer it); 'gone' no
-   * agent in that pane any more (only a shell), nothing typed (each line would run). A lifted pane is typed
+   * agent in that pane any more (only a shell), nothing typed (each line would run); 'not-ready' Herdr does not
+   * take input from this agent yet (a CLI still on the first prompt it was started with), nothing typed, so
+   * the caller types it again later. A lifted pane is typed
    * into with injectLifted and is 'unknown': Herdr holds it as blocked, so it is never seen working.
    */
   async function promptPane(pane, text) {
@@ -378,6 +380,7 @@ export function createSeat({
       const why = `${error?.stdout || ''}${error?.stderr || ''}${error?.message || ''}`
       if (/agent_not_found/.test(why)) return 'gone'
       if (/agent_blocked/.test(why)) return 'blocked'
+      if (/agent_not_ready/.test(why)) return 'not-ready'
       logError(`typed into ${pane} but did not see it start: ${herdrExit('agent prompt', error)}`)
       return 'unknown'
     }
@@ -589,13 +592,13 @@ export function createSeat({
       return
     }
     const sent = await promptPane(op.pane, nudgePrompt({ file: spawnPath(op.roomId, op.name) }))
-    if (sent === 'blocked' || sent === 'gone') return
+    if (sent === 'blocked' || sent === 'gone' || sent === 'not-ready') return
     op.nudges = nudges + 1; op.nudgedAt = now(); save()
     log(`${short} stopped on an API connection error before joining; told it to carry on (${op.nudges}/${NUDGE_MAX})`)
   }
 
   // ---------------------------------------------------------------- handing over (/handoff, idle handoff)
-  /** Type the handoff instructions into one agent: promptPane's answer and the handoff file. */
+  /** Type the handoff instructions into one agent: promptPane's answer, the handoff file and the text. */
   async function askHandoff({ roomId, agent, panes, by, seq, targets, idleMinutes = null }) {
     const file = handoffPath(roomId, agent.name)
     fs.mkdirSync(path.dirname(file), { recursive: true })
@@ -609,7 +612,7 @@ export function createSeat({
       account, by, roomId, roomName: roomName(roomId), seq, file, targets, daemonName: seatName, kind, name: agent.name,
       dir: (panes || []).find((p) => p.pane_id === agent.pane)?.cwd,
     })
-    return { sent: await promptPane(agent.pane, text), file }
+    return { sent: await promptPane(agent.pane, text), file, text }
   }
 
   /**
@@ -911,13 +914,17 @@ export function createSeat({
         if (agent.missing) { lines.push(aud.missing(agent.name)); continue }
         if (agent.left) { lines.push(`✗ ${shortOf(agent.name)} · already left; /bye ${shortOf(agent.name)} closes its pane`); continue }
         if (!agent.alive || agent.spawning) { lines.push(await byeOne(roomId, agent, ctx.panes, unregister)); continue }
-        const { sent, file } = await askHandoff({ roomId, agent, panes: ctx.panes, by: senderOf(message).from, seq: message.seq, targets: t.all ? 'all' : t.names.map(shortOf).join(' ') })
+        const { sent, file, text } = await askHandoff({ roomId, agent, panes: ctx.panes, by: senderOf(message).from, seq: message.seq, targets: t.all ? 'all' : t.names.map(shortOf).join(' ') })
         if (sent === 'gone') lines.push((await byeOne(roomId, { ...agent, alive: false }, ctx.panes, unregister)).replace('its process was already gone', 'its CLI had exited'))
         else if (sent === 'blocked') {
           if (approvalShown(agent.pane)) lines.push(`✗ ${short} · waiting for its owner to answer an approval card in Scorpio; the handoff instructions were not typed in, nothing done.`)
           else await sayScreen(roomId, aud.text(`✗ ${short} · stuck on a dialog; the handoff instructions were not typed in, nothing done.`), short, tail(await terminal.read(agent.pane), 8), message.seq, senderOf(message).from)
         }
-        else waiting.push({ ...agent, file })
+        else if (sent === 'not-ready') {
+          // Still on its first turn: the job keeps the text and types it on a later round, once Herdr takes input.
+          log(`${short} does not take input yet (still on its first turn); the handoff instructions wait for it`)
+          waiting.push({ ...agent, file, untyped: text })
+        } else waiting.push({ ...agent, file })
       }
       if (waiting.length) {
         ops.push({ type: 'handoff', roomId, seq: message.seq, to: senderOf(message).from, targets: waiting, done: lines.filter(Boolean), deadline: now() + HANDOFF_MS, aud })
@@ -945,6 +952,20 @@ export function createSeat({
     const closed = await terminal.closePane(agent.pane, panes)
     agent.result = `✓ ${shortOf(agent.name)} · left the topic · ${closed ? 'pane closed' : 'pane not closed'}`
     return closed
+  }
+
+  /**
+   * A /handoff target whose instructions Herdr did not take yet (its first turn). Tried again once Herdr no
+   * longer says it is working; its pane gone or its CLI exited meanwhile ends it as at the command.
+   */
+  async function typeLater(op, agent, panes, unregister) {
+    const short = shortOf(agent.name)
+    const pane = panes ? panes.find((p) => p.pane_id === agent.pane) : {}
+    if (!pane) { agent.result = await byeOne(op.roomId, { ...agent, alive: false }, panes, unregister); return }
+    if (pane.agent_status === 'working') return
+    const sent = await promptPane(agent.pane, agent.untyped)
+    if (sent === 'gone') agent.result = (await byeOne(op.roomId, { ...agent, alive: false }, panes, unregister)).replace('its process was already gone', 'its CLI had exited')
+    else if (sent === 'ok' || sent === 'unknown') { delete agent.untyped; log(`typed the handoff instructions into ${short} (${agent.pane}): it takes input now`) }
   }
 
   async function progress(ctx, unregister) {
@@ -984,6 +1005,7 @@ export function createSeat({
         if (op.targets.some((a) => !a.result && approvalBusy(a.pane))) { op.deadline += elapsed; continue }
         for (const agent of op.targets.filter((a) => !a.result)) {
           if (!inRoom(list, agent.name)) await closeHandedOff(op, agent, ctx.panes, unregister)
+          else if (agent.untyped) await typeLater(op, agent, ctx.panes, unregister)
         }
         const open = op.targets.filter((a) => !a.result)
         if (open.length && now() <= op.deadline) continue

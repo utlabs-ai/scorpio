@@ -1162,6 +1162,69 @@ test('seat: /handoff keeps watching past ten minutes, closes on leave, or report
   assert.deepEqual(m.sent.at(-1).screen, hideKeys(tail(m.screen.text, 8)))
 })
 
+// Herdr refuses a prompt to an agent still on the first prompt it was started with, before typing anything.
+const notReady = (pane) => Object.assign(new Error('Command failed: herdr agent prompt'), { code: 1,
+  stderr: JSON.stringify({ error: { code: 'agent_not_ready', message: `agent ${pane} is not an active named agent` }, id: 'cli:agent:prompt' }) })
+
+test('seat: /handoff during the first turn is typed once Herdr takes input, and answered once', async () => {
+  const logs = []
+  const log = Object.assign((line) => logs.push(line), { error: (line) => logs.push(`error: ${line}`) })
+  const m = fakeMachine({ log })
+  const pane = m.panes[0]
+  pane.agent_status = 'working'
+  let refuse = true, tries = 0
+  m.terminal.injectAndWatch = async (p, text) => { tries += 1; if (refuse) throw notReady(p); m.typed.push([p, text]) }
+  m.ask('@daemon.box@kai /handoff api')
+  await m.tick()
+  assert.equal(tries, 1)
+  assert.deepEqual(m.typed, [])
+  assert.deepEqual(m.said, ['@kai Got it; asked api to write a handoff.'])
+  // Still working on that turn: not tried again.
+  await m.tick(); await m.tick()
+  assert.equal(tries, 1)
+  // The turn is over: typed on the next round, and only once.
+  pane.agent_status = 'done'; refuse = false
+  await m.tick()
+  assert.equal(m.typed.length, 1)
+  assert.ok(m.typed[0][1].includes('sent /handoff api (#50)'))
+  await m.tick()
+  assert.equal(m.typed.length, 1)
+  m.memberList.find((x) => x.name === 'api@kai').status = 'left'
+  await m.tick()
+  assert.deepEqual(m.closed, ['w:p1'])
+  assert.deepEqual(m.said, ['@kai Got it; asked api to write a handoff.', '@kai ✓ api · left the topic · pane closed'])
+  assert.equal(logs.some((l) => /did not see it start/.test(l)), false)
+  assert.equal(m.seat.idle(), true)
+})
+
+test('seat: a /handoff waiting for the first turn ends when the pane goes away or the CLI exits', async () => {
+  const m = fakeMachine()
+  m.panes[0].agent_status = 'working'
+  m.terminal.injectAndWatch = async (p) => { throw notReady(p) }
+  m.ask('@daemon.box@kai /handoff api')
+  await m.tick()
+  assert.deepEqual(m.said, ['@kai Got it; asked api to write a handoff.'])
+  m.panes.splice(0, 1)
+  await m.tick()
+  assert.deepEqual(m.said, ['@kai Got it; asked api to write a handoff.', '@kai ✓ api · its process was already gone; left the topic for it'])
+  assert.deepEqual(m.left, ['api'])
+  assert.deepEqual(m.unregistered, ['api@kai'])
+  assert.equal(m.seat.idle(), true)
+
+  const exited = fakeMachine()
+  exited.panes[0].agent_status = 'working'
+  exited.terminal.injectAndWatch = async (p) => { throw notReady(p) }
+  exited.ask('@daemon.box@kai /handoff api')
+  await exited.tick()
+  // Back at the shell: Herdr finds no agent there.
+  Object.assign(exited.panes[0], { agent: null, agent_status: null })
+  exited.terminal.injectAndWatch = async () => { throw Object.assign(new Error('Command failed'), { stderr: '{"error":{"code":"agent_not_found","message":"no agent"}}' }) }
+  await exited.tick()
+  assert.equal(exited.said.at(-1), '@kai ✓ api · its CLI had exited; left the topic for it')
+  assert.deepEqual(exited.left, ['api'])
+  assert.equal(exited.seat.idle(), true)
+})
+
 test('seat: /bye closes a pane left behind after its agent left the room', async () => {
   register({ roomId: ROOM, name: 'api@kai', role: 'api', pane: 'w:p1' })
   markLeft({ roomId: ROOM, name: 'api@kai' })
@@ -1805,6 +1868,27 @@ test('seat: a /spawn-ed agent stopped on a network API error before joining is t
   m.memberList.push({ name: 'qa@kai', kind: 'agent', status: 'active' })
   await m.tick()
   assert.equal(m.seat.ops.length, 0)
+})
+
+test('seat: a nudge Herdr refuses as not ready is not counted and is tried again at the next look', async () => {
+  const logs = []
+  const log = Object.assign((line) => logs.push(line), { error: (line) => logs.push(`error: ${line}`) })
+  const m = fakeMachine({ isDir: () => true, log })
+  const pane = { pane_id: 'w:p9', tab_id: 'w:t9', agent: 'claude', agent_status: 'working', cwd: '/work' }
+  m.panes.push(pane)
+  m.ask('@daemon.box@kai /spawn claude qa /work do things')
+  await m.tick()
+  for (let i = 0; i < 20 && !m.said.some((t) => t.includes('Started qa')); i += 1) await new Promise((r) => setImmediate(r))
+  let refuse = true
+  m.terminal.injectAndWatch = async (p, text) => { if (refuse) throw notReady(p); m.typed.push([p, text]) }
+  pane.agent_status = 'done'; m.screen.text = DROPPED
+  m.advance(20_000); await m.tick()
+  assert.deepEqual(m.typed, [])
+  refuse = false
+  m.advance(20_000); await m.tick()
+  assert.equal(m.typed.filter(([p]) => p === 'w:p9').length, 1)
+  assert.equal(m.seat.ops.find((op) => op.type === 'spawn').nudges, 1)
+  assert.equal(logs.some((l) => /did not see it start/.test(l)), false)
 })
 
 test('seat: /spawn of a name the topic has (left) keeps its card, whatever it says; only a new name gets the generic card', async () => {
