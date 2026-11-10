@@ -1,0 +1,1 @@
+ALTER TABLE users ADD COLUMN spawn_perm TEXT NOT NULL DEFAULT 'all';

@@ -1,0 +1,2359 @@
+[
+  {
+    "step": "init",
+    "result": {
+      "id": "todo-golden",
+      "name": "Golden",
+      "topic": "Task behavior",
+      "owner": "kai",
+      "hasCode": false,
+      "public": true,
+      "archived": false,
+      "archivedAt": null,
+      "archivedReason": null,
+      "createdAt": 0
+    }
+  },
+  {
+    "step": "enter lee",
+    "result": {
+      "ok": {
+        "room": {
+          "id": "todo-golden",
+          "name": "Golden",
+          "topic": "Task behavior",
+          "owner": "kai",
+          "hasCode": false,
+          "public": true,
+          "archived": false,
+          "archivedAt": null,
+          "archivedReason": null,
+          "createdAt": 0
+        }
+      }
+    }
+  },
+  {
+    "step": "join api",
+    "result": {
+      "ok": {
+        "roomId": "todo-golden",
+        "roomName": "Golden",
+        "topic": "Task behavior",
+        "owner": "kai",
+        "ownerDisplayName": null,
+        "name": "api@kai",
+        "kind": "agent",
+        "cursor": 1,
+        "roleCard": "",
+        "lane": null,
+        "resources": [],
+        "mine": [],
+        "next": "Your owner is kai. Read recent history (scorpio messages roomId=todo-golden), mark the latest seq, and report in to @kai with send."
+      }
+    }
+  },
+  {
+    "step": "join helper",
+    "result": {
+      "ok": {
+        "roomId": "todo-golden",
+        "roomName": "Golden",
+        "topic": "Task behavior",
+        "owner": "kai",
+        "ownerDisplayName": null,
+        "name": "helper@lee",
+        "kind": "agent",
+        "cursor": 2,
+        "roleCard": "",
+        "lane": null,
+        "resources": [],
+        "mine": [],
+        "next": "Your owner is lee. Read recent history (scorpio messages roomId=todo-golden), mark the latest seq, and report in to @lee with send."
+      }
+    }
+  },
+  {
+    "step": "send add person",
+    "result": {
+      "ok": {
+        "roomId": "todo-golden",
+        "seq": 4,
+        "from": "api@kai",
+        "ts": 0,
+        "delivery": [
+          {
+            "name": "lee",
+            "status": "human"
+          }
+        ],
+        "item": {
+          "id": "T1",
+          "round": 1,
+          "title": "Review this",
+          "desc": null,
+          "blockedBy": [],
+          "blocked": false,
+          "status": "todo",
+          "assignee": "lee",
+          "createdBy": "api@kai",
+          "createdSeq": 4,
+          "doneSeq": null,
+          "createdMs": 0,
+          "doneMs": 0,
+          "updatedBy": "api@kai",
+          "updatedMs": 0,
+          "current": {
+            "seq": 4,
+            "from": "api@kai",
+            "ts": 0,
+            "line": "Review this"
+          },
+          "reply": null
+        },
+        "round": {
+          "n": 1,
+          "title": null,
+          "status": "open",
+          "openedMs": 0,
+          "doneMs": 0,
+          "counts": {
+            "todo": 1,
+            "doing": 0,
+            "done": 0,
+            "total": 1
+          }
+        }
+      }
+    }
+  },
+  {
+    "step": "send add after",
+    "result": {
+      "ok": {
+        "roomId": "todo-golden",
+        "seq": 5,
+        "from": "api@kai",
+        "ts": 0,
+        "delivery": [
+          {
+            "name": "kai",
+            "status": "human"
+          }
+        ],
+        "item": {
+          "id": "T2",
+          "round": 1,
+          "title": "Implement",
+          "desc": null,
+          "blockedBy": [
+            "T1"
+          ],
+          "blocked": true,
+          "status": "todo",
+          "assignee": "api@kai",
+          "createdBy": "api@kai",
+          "createdSeq": 5,
+          "doneSeq": null,
+          "createdMs": 0,
+          "doneMs": 0,
+          "updatedBy": "api@kai",
+          "updatedMs": 0,
+          "current": null,
+          "reply": null
+        },
+        "round": {
+          "n": 1,
+          "title": null,
+          "status": "open",
+          "openedMs": 0,
+          "doneMs": 0,
+          "counts": {
+            "todo": 2,
+            "doing": 0,
+            "done": 0,
+            "total": 2
+          }
+        }
+      }
+    }
+  },
+  {
+    "step": "send add agent",
+    "result": {
+      "ok": {
+        "roomId": "todo-golden",
+        "seq": 6,
+        "from": "api@kai",
+        "ts": 0,
+        "delivery": [
+          {
+            "name": "helper@lee",
+            "status": "to_owner"
+          }
+        ],
+        "item": {
+          "id": "T3",
+          "round": 1,
+          "title": "Third",
+          "desc": null,
+          "blockedBy": [],
+          "blocked": false,
+          "status": "todo",
+          "assignee": "helper@lee",
+          "createdBy": "api@kai",
+          "createdSeq": 6,
+          "doneSeq": null,
+          "createdMs": 0,
+          "doneMs": 0,
+          "updatedBy": "api@kai",
+          "updatedMs": 0,
+          "current": {
+            "seq": 6,
+            "from": "api@kai",
+            "ts": 0,
+            "line": "Third task"
+          },
+          "reply": null
+        },
+        "round": {
+          "n": 1,
+          "title": null,
+          "status": "open",
+          "openedMs": 0,
+          "doneMs": 0,
+          "counts": {
+            "todo": 3,
+            "doing": 0,
+            "done": 0,
+            "total": 3
+          }
+        }
+      }
+    }
+  },
+  {
+    "step": "take blocked",
+    "result": {
+      "err": {
+        "code": "item_blocked",
+        "next": "T2 waits for T1, not delivered yet. Take something that can start (scorpio todo), or force=true to start anyway.",
+        "status": 409
+      }
+    }
+  },
+  {
+    "step": "take blocked force",
+    "result": {
+      "ok": {
+        "roomId": "todo-golden",
+        "item": {
+          "id": "T2",
+          "round": 1,
+          "title": "Implement",
+          "desc": null,
+          "blockedBy": [
+            "T1"
+          ],
+          "blocked": true,
+          "status": "doing",
+          "assignee": "api@kai",
+          "createdBy": "api@kai",
+          "createdSeq": 5,
+          "doneSeq": null,
+          "createdMs": 0,
+          "doneMs": 0,
+          "updatedBy": "api@kai",
+          "updatedMs": 0,
+          "current": null,
+          "reply": null
+        },
+        "previous": {
+          "status": "todo"
+        },
+        "round": {
+          "n": 1,
+          "title": null,
+          "status": "open",
+          "openedMs": 0,
+          "doneMs": 0,
+          "counts": {
+            "todo": 2,
+            "doing": 1,
+            "done": 0,
+            "total": 3
+          }
+        }
+      }
+    }
+  },
+  {
+    "step": "take taken",
+    "result": {
+      "err": {
+        "code": "item_taken",
+        "next": "api@kai is doing T2. To take it over anyway: todo take=T2 force=true, then tell api@kai.",
+        "status": 409
+      }
+    }
+  },
+  {
+    "step": "take taken force",
+    "result": {
+      "ok": {
+        "roomId": "todo-golden",
+        "item": {
+          "id": "T2",
+          "round": 1,
+          "title": "Implement",
+          "desc": null,
+          "blockedBy": [
+            "T1"
+          ],
+          "blocked": true,
+          "status": "doing",
+          "assignee": "helper@lee",
+          "createdBy": "api@kai",
+          "createdSeq": 5,
+          "doneSeq": null,
+          "createdMs": 0,
+          "doneMs": 0,
+          "updatedBy": "helper@lee",
+          "updatedMs": 0,
+          "current": {
+            "seq": 5,
+            "from": "api@kai",
+            "ts": 0,
+            "line": "Implement after review"
+          },
+          "reply": null
+        },
+        "previous": {
+          "assignee": "api@kai"
+        },
+        "round": {
+          "n": 1,
+          "title": null,
+          "status": "open",
+          "openedMs": 0,
+          "doneMs": 0,
+          "counts": {
+            "todo": 2,
+            "doing": 1,
+            "done": 0,
+            "total": 3
+          }
+        }
+      }
+    }
+  },
+  {
+    "step": "delete taken",
+    "result": {
+      "err": {
+        "code": "item_taken",
+        "next": "helper@lee is doing T2. To delete it anyway: todo delete=T2 force=true, then tell helper@lee.",
+        "status": 409
+      }
+    }
+  },
+  {
+    "step": "edit taken to",
+    "result": {
+      "err": {
+        "code": "item_taken",
+        "next": "helper@lee is doing T2. To hand it over anyway: todo edit=T2 to=lee force=true, then tell helper@lee.",
+        "status": 409
+      }
+    }
+  },
+  {
+    "step": "send update to and title",
+    "result": {
+      "ok": {
+        "roomId": "todo-golden",
+        "seq": 7,
+        "from": "api@kai",
+        "ts": 0,
+        "delivery": [
+          {
+            "name": "lee",
+            "status": "human"
+          }
+        ],
+        "item": {
+          "id": "T1",
+          "round": 1,
+          "title": "Review v2",
+          "desc": null,
+          "blockedBy": [],
+          "blocked": false,
+          "status": "todo",
+          "assignee": "api@kai",
+          "createdBy": "api@kai",
+          "createdSeq": 7,
+          "doneSeq": null,
+          "createdMs": 0,
+          "doneMs": 0,
+          "updatedBy": "api@kai",
+          "updatedMs": 0,
+          "current": null,
+          "reply": null
+        },
+        "previous": {
+          "title": "Review this",
+          "assignee": "lee",
+          "createdSeq": 4
+        }
+      }
+    }
+  },
+  {
+    "step": "send done",
+    "result": {
+      "ok": {
+        "roomId": "todo-golden",
+        "seq": 8,
+        "from": "api@kai",
+        "ts": 0,
+        "delivery": [
+          {
+            "name": "kai",
+            "status": "human"
+          }
+        ],
+        "item": {
+          "id": "T1",
+          "round": 1,
+          "title": "Review v2",
+          "desc": null,
+          "blockedBy": [],
+          "blocked": false,
+          "status": "done",
+          "assignee": "api@kai",
+          "createdBy": "api@kai",
+          "createdSeq": 7,
+          "doneSeq": 8,
+          "createdMs": 0,
+          "doneMs": 0,
+          "updatedBy": "api@kai",
+          "updatedMs": 0,
+          "current": null,
+          "reply": null
+        },
+        "unblocked": [
+          {
+            "id": "T2",
+            "title": "Implement",
+            "assignee": "helper@lee"
+          }
+        ],
+        "round": {
+          "n": 1,
+          "title": null,
+          "status": "open",
+          "openedMs": 0,
+          "doneMs": 0,
+          "counts": {
+            "todo": 1,
+            "doing": 1,
+            "done": 1,
+            "total": 3
+          }
+        },
+        "mine": []
+      }
+    }
+  },
+  {
+    "step": "delete taken force",
+    "result": {
+      "ok": {
+        "roomId": "todo-golden",
+        "deleted": [
+          "T2"
+        ],
+        "unblocked": [],
+        "round": {
+          "n": 1,
+          "title": null,
+          "status": "open",
+          "openedMs": 0,
+          "doneMs": 0,
+          "counts": {
+            "todo": 1,
+            "doing": 0,
+            "done": 1,
+            "total": 2
+          }
+        }
+      }
+    }
+  },
+  {
+    "step": "take closed",
+    "result": {
+      "err": {
+        "code": "item_closed",
+        "next": "T1 is already delivered. Open a new task if there is more to do.",
+        "status": 409
+      }
+    }
+  },
+  {
+    "step": "human source message",
+    "result": {
+      "ok": {
+        "roomId": "todo-golden",
+        "seq": 9,
+        "from": "lee",
+        "ts": 0,
+        "delivery": [
+          {
+            "name": "helper@lee",
+            "status": "queued"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "step": "human add from implicit title",
+    "result": {
+      "ok": {
+        "roomId": "todo-golden",
+        "item": {
+          "id": "T4",
+          "round": 1,
+          "title": "A note for my task",
+          "desc": null,
+          "blockedBy": [],
+          "blocked": false,
+          "status": "todo",
+          "assignee": "lee",
+          "createdBy": "lee",
+          "createdSeq": 9,
+          "doneSeq": null,
+          "createdMs": 0,
+          "doneMs": 0,
+          "updatedBy": "lee",
+          "updatedMs": 0,
+          "current": null,
+          "reply": null
+        },
+        "round": {
+          "n": 1,
+          "title": null,
+          "status": "open",
+          "openedMs": 0,
+          "doneMs": 0,
+          "counts": {
+            "todo": 2,
+            "doing": 0,
+            "done": 1,
+            "total": 3
+          }
+        }
+      }
+    }
+  },
+  {
+    "step": "human done",
+    "result": {
+      "ok": {
+        "roomId": "todo-golden",
+        "item": {
+          "id": "T4",
+          "round": 1,
+          "title": "A note for my task",
+          "desc": null,
+          "blockedBy": [],
+          "blocked": false,
+          "status": "done",
+          "assignee": "lee",
+          "createdBy": "lee",
+          "createdSeq": 9,
+          "doneSeq": null,
+          "createdMs": 0,
+          "doneMs": 0,
+          "updatedBy": "lee",
+          "updatedMs": 0,
+          "current": null,
+          "reply": null
+        },
+        "previous": {
+          "status": "todo"
+        },
+        "round": {
+          "n": 1,
+          "title": null,
+          "status": "open",
+          "openedMs": 0,
+          "doneMs": 0,
+          "counts": {
+            "todo": 1,
+            "doing": 0,
+            "done": 2,
+            "total": 3
+          }
+        },
+        "unblocked": [],
+        "mine": []
+      }
+    }
+  },
+  {
+    "step": "human add from explicit title",
+    "result": {
+      "ok": {
+        "roomId": "todo-golden",
+        "item": {
+          "id": "T5",
+          "round": 1,
+          "title": "Manual title",
+          "desc": null,
+          "blockedBy": [],
+          "blocked": false,
+          "status": "todo",
+          "assignee": "lee",
+          "createdBy": "lee",
+          "createdSeq": 9,
+          "doneSeq": null,
+          "createdMs": 0,
+          "doneMs": 0,
+          "updatedBy": "lee",
+          "updatedMs": 0,
+          "current": null,
+          "reply": null
+        },
+        "round": {
+          "n": 1,
+          "title": null,
+          "status": "open",
+          "openedMs": 0,
+          "doneMs": 0,
+          "counts": {
+            "todo": 2,
+            "doing": 0,
+            "done": 2,
+            "total": 4
+          }
+        }
+      }
+    }
+  },
+  {
+    "step": "agent add from",
+    "result": {
+      "ok": {
+        "roomId": "todo-golden",
+        "item": {
+          "id": "T6",
+          "round": 1,
+          "title": "Agent sourced",
+          "desc": null,
+          "blockedBy": [],
+          "blocked": false,
+          "status": "todo",
+          "assignee": "api@kai",
+          "createdBy": "api@kai",
+          "createdSeq": 9,
+          "doneSeq": null,
+          "createdMs": 0,
+          "doneMs": 0,
+          "updatedBy": "api@kai",
+          "updatedMs": 0,
+          "current": {
+            "seq": 9,
+            "from": "lee",
+            "ts": 0,
+            "line": "A note for my task"
+          },
+          "reply": null
+        },
+        "round": {
+          "n": 1,
+          "title": null,
+          "status": "open",
+          "openedMs": 0,
+          "doneMs": 0,
+          "counts": {
+            "todo": 3,
+            "doing": 0,
+            "done": 2,
+            "total": 5
+          }
+        }
+      }
+    }
+  },
+  {
+    "step": "human forbidden delete",
+    "result": {
+      "err": {
+        "code": "forbidden",
+        "next": "On the web you mark tasks under your own name delivered, or add a message as a task for yourself. For anything else (rename, hand over, delete), say it in the topic and an agent does it.",
+        "status": 403
+      }
+    }
+  },
+  {
+    "step": "agent edits person title",
+    "result": {
+      "err": {
+        "code": "bad_request",
+        "next": "T4 is lee's: its title changes with a message to them: scorpio send roomId=todo-golden replyTo=<seq> text='@lee …' update=T4 title='…'.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "edit title",
+    "result": {
+      "ok": {
+        "roomId": "todo-golden",
+        "item": {
+          "id": "T3",
+          "round": 1,
+          "title": "Third renamed",
+          "desc": null,
+          "blockedBy": [],
+          "blocked": false,
+          "status": "todo",
+          "assignee": "helper@lee",
+          "createdBy": "api@kai",
+          "createdSeq": 6,
+          "doneSeq": null,
+          "createdMs": 0,
+          "doneMs": 0,
+          "updatedBy": "api@kai",
+          "updatedMs": 0,
+          "current": {
+            "seq": 6,
+            "from": "api@kai",
+            "ts": 0,
+            "line": "Third task"
+          },
+          "reply": null
+        },
+        "previous": {
+          "title": "Third"
+        },
+        "round": {
+          "n": 1,
+          "title": null,
+          "status": "open",
+          "openedMs": 0,
+          "doneMs": 0,
+          "counts": {
+            "todo": 3,
+            "doing": 0,
+            "done": 2,
+            "total": 5
+          }
+        }
+      }
+    }
+  },
+  {
+    "step": "edit to",
+    "result": {
+      "ok": {
+        "roomId": "todo-golden",
+        "item": {
+          "id": "T3",
+          "round": 1,
+          "title": "Third renamed",
+          "desc": null,
+          "blockedBy": [],
+          "blocked": false,
+          "status": "todo",
+          "assignee": "api@kai",
+          "createdBy": "api@kai",
+          "createdSeq": 6,
+          "doneSeq": null,
+          "createdMs": 0,
+          "doneMs": 0,
+          "updatedBy": "api@kai",
+          "updatedMs": 0,
+          "current": null,
+          "reply": null
+        },
+        "previous": {
+          "assignee": "helper@lee"
+        },
+        "round": {
+          "n": 1,
+          "title": null,
+          "status": "open",
+          "openedMs": 0,
+          "doneMs": 0,
+          "counts": {
+            "todo": 3,
+            "doing": 0,
+            "done": 2,
+            "total": 5
+          }
+        }
+      }
+    }
+  },
+  {
+    "step": "edit after",
+    "result": {
+      "ok": {
+        "roomId": "todo-golden",
+        "item": {
+          "id": "T3",
+          "round": 1,
+          "title": "Third renamed",
+          "desc": null,
+          "blockedBy": [
+            "T4"
+          ],
+          "blocked": false,
+          "status": "todo",
+          "assignee": "api@kai",
+          "createdBy": "api@kai",
+          "createdSeq": 6,
+          "doneSeq": null,
+          "createdMs": 0,
+          "doneMs": 0,
+          "updatedBy": "api@kai",
+          "updatedMs": 0,
+          "current": null,
+          "reply": null
+        },
+        "previous": {
+          "blockedBy": []
+        },
+        "round": {
+          "n": 1,
+          "title": null,
+          "status": "open",
+          "openedMs": 0,
+          "doneMs": 0,
+          "counts": {
+            "todo": 3,
+            "doing": 0,
+            "done": 2,
+            "total": 5
+          }
+        }
+      }
+    }
+  },
+  {
+    "step": "edit from",
+    "result": {
+      "ok": {
+        "roomId": "todo-golden",
+        "item": {
+          "id": "T3",
+          "round": 1,
+          "title": "Third renamed",
+          "desc": null,
+          "blockedBy": [
+            "T4"
+          ],
+          "blocked": false,
+          "status": "todo",
+          "assignee": "api@kai",
+          "createdBy": "api@kai",
+          "createdSeq": 9,
+          "doneSeq": null,
+          "createdMs": 0,
+          "doneMs": 0,
+          "updatedBy": "api@kai",
+          "updatedMs": 0,
+          "current": null,
+          "reply": null
+        },
+        "previous": {
+          "createdSeq": 6
+        },
+        "round": {
+          "n": 1,
+          "title": null,
+          "status": "open",
+          "openedMs": 0,
+          "doneMs": 0,
+          "counts": {
+            "todo": 3,
+            "doing": 0,
+            "done": 2,
+            "total": 5
+          }
+        }
+      }
+    }
+  },
+  {
+    "step": "edit cycle",
+    "result": {
+      "err": {
+        "code": "item_cycle",
+        "next": "T3 cannot wait on T3: that would make it wait on itself.",
+        "status": 409
+      }
+    }
+  },
+  {
+    "step": "edit status doing",
+    "result": {
+      "ok": {
+        "roomId": "todo-golden",
+        "item": {
+          "id": "T3",
+          "round": 1,
+          "title": "Third renamed",
+          "desc": null,
+          "blockedBy": [
+            "T4"
+          ],
+          "blocked": false,
+          "status": "doing",
+          "assignee": "api@kai",
+          "createdBy": "api@kai",
+          "createdSeq": 9,
+          "doneSeq": null,
+          "createdMs": 0,
+          "doneMs": 0,
+          "updatedBy": "api@kai",
+          "updatedMs": 0,
+          "current": {
+            "seq": 9,
+            "from": "lee",
+            "ts": 0,
+            "line": "A note for my task"
+          },
+          "reply": null
+        },
+        "previous": {
+          "status": "todo"
+        },
+        "round": {
+          "n": 1,
+          "title": null,
+          "status": "open",
+          "openedMs": 0,
+          "doneMs": 0,
+          "counts": {
+            "todo": 2,
+            "doing": 1,
+            "done": 2,
+            "total": 5
+          }
+        }
+      }
+    }
+  },
+  {
+    "step": "edit status todo",
+    "result": {
+      "ok": {
+        "roomId": "todo-golden",
+        "item": {
+          "id": "T3",
+          "round": 1,
+          "title": "Third renamed",
+          "desc": null,
+          "blockedBy": [
+            "T4"
+          ],
+          "blocked": false,
+          "status": "todo",
+          "assignee": "api@kai",
+          "createdBy": "api@kai",
+          "createdSeq": 9,
+          "doneSeq": null,
+          "createdMs": 0,
+          "doneMs": 0,
+          "updatedBy": "api@kai",
+          "updatedMs": 0,
+          "current": {
+            "seq": 9,
+            "from": "lee",
+            "ts": 0,
+            "line": "A note for my task"
+          },
+          "reply": null
+        },
+        "previous": {
+          "status": "doing"
+        },
+        "round": {
+          "n": 1,
+          "title": null,
+          "status": "open",
+          "openedMs": 0,
+          "doneMs": 0,
+          "counts": {
+            "todo": 3,
+            "doing": 0,
+            "done": 2,
+            "total": 5
+          }
+        }
+      }
+    }
+  },
+  {
+    "step": "edit status done",
+    "result": {
+      "ok": {
+        "roomId": "todo-golden",
+        "item": {
+          "id": "T3",
+          "round": 1,
+          "title": "Third renamed",
+          "desc": null,
+          "blockedBy": [
+            "T4"
+          ],
+          "blocked": false,
+          "status": "done",
+          "assignee": "api@kai",
+          "createdBy": "api@kai",
+          "createdSeq": 9,
+          "doneSeq": null,
+          "createdMs": 0,
+          "doneMs": 0,
+          "updatedBy": "api@kai",
+          "updatedMs": 0,
+          "current": {
+            "seq": 9,
+            "from": "lee",
+            "ts": 0,
+            "line": "A note for my task"
+          },
+          "reply": null
+        },
+        "previous": {
+          "status": "todo"
+        },
+        "unblocked": [],
+        "round": {
+          "n": 1,
+          "title": null,
+          "status": "open",
+          "openedMs": 0,
+          "doneMs": 0,
+          "counts": {
+            "todo": 2,
+            "doing": 0,
+            "done": 3,
+            "total": 5
+          }
+        },
+        "mine": [
+          {
+            "id": "T6",
+            "title": "Agent sourced",
+            "status": "todo",
+            "assignee": "api@kai",
+            "by": "api@kai",
+            "after": [],
+            "blocked": false,
+            "since": 0,
+            "reply": null,
+            "left": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "step": "todo list before delete",
+    "result": {
+      "ok": {
+        "roomId": "todo-golden",
+        "round": {
+          "n": 1,
+          "title": null,
+          "status": "open",
+          "openedMs": 0,
+          "doneMs": 0,
+          "counts": {
+            "todo": 2,
+            "doing": 0,
+            "done": 3,
+            "total": 5
+          }
+        },
+        "items": [
+          {
+            "id": "T5",
+            "round": 1,
+            "title": "Manual title",
+            "desc": null,
+            "blockedBy": [],
+            "blocked": false,
+            "status": "todo",
+            "assignee": "lee",
+            "createdBy": "lee",
+            "createdSeq": 9,
+            "doneSeq": null,
+            "createdMs": 0,
+            "doneMs": 0,
+            "updatedBy": "lee",
+            "updatedMs": 0,
+            "current": null,
+            "reply": null
+          },
+          {
+            "id": "T6",
+            "round": 1,
+            "title": "Agent sourced",
+            "desc": null,
+            "blockedBy": [],
+            "blocked": false,
+            "status": "todo",
+            "assignee": "api@kai",
+            "createdBy": "api@kai",
+            "createdSeq": 9,
+            "doneSeq": null,
+            "createdMs": 0,
+            "doneMs": 0,
+            "updatedBy": "api@kai",
+            "updatedMs": 0,
+            "current": {
+              "seq": 9,
+              "from": "lee",
+              "ts": 0,
+              "line": "A note for my task"
+            },
+            "reply": null
+          },
+          {
+            "id": "T3",
+            "round": 1,
+            "title": "Third renamed",
+            "desc": null,
+            "blockedBy": [
+              "T4"
+            ],
+            "blocked": false,
+            "status": "done",
+            "assignee": "api@kai",
+            "createdBy": "api@kai",
+            "createdSeq": 9,
+            "doneSeq": null,
+            "createdMs": 0,
+            "doneMs": 0,
+            "updatedBy": "api@kai",
+            "updatedMs": 0,
+            "current": {
+              "seq": 9,
+              "from": "lee",
+              "ts": 0,
+              "line": "A note for my task"
+            },
+            "reply": null
+          },
+          {
+            "id": "T4",
+            "round": 1,
+            "title": "A note for my task",
+            "desc": null,
+            "blockedBy": [],
+            "blocked": false,
+            "status": "done",
+            "assignee": "lee",
+            "createdBy": "lee",
+            "createdSeq": 9,
+            "doneSeq": null,
+            "createdMs": 0,
+            "doneMs": 0,
+            "updatedBy": "lee",
+            "updatedMs": 0,
+            "current": null,
+            "reply": null
+          },
+          {
+            "id": "T1",
+            "round": 1,
+            "title": "Review v2",
+            "desc": null,
+            "blockedBy": [],
+            "blocked": false,
+            "status": "done",
+            "assignee": "api@kai",
+            "createdBy": "api@kai",
+            "createdSeq": 7,
+            "doneSeq": 8,
+            "createdMs": 0,
+            "doneMs": 0,
+            "updatedBy": "api@kai",
+            "updatedMs": 0,
+            "current": null,
+            "reply": null
+          }
+        ],
+        "rounds": [
+          {
+            "n": 1,
+            "title": null,
+            "status": "open",
+            "openedMs": 0,
+            "doneMs": 0,
+            "counts": {
+              "todo": 2,
+              "doing": 0,
+              "done": 3,
+              "total": 5
+            }
+          }
+        ],
+        "counts": {
+          "todo": 2,
+          "doing": 0,
+          "done": 3,
+          "total": 5
+        },
+        "deleted": [
+          {
+            "id": "T2",
+            "title": "Implement",
+            "assignee": "helper@lee",
+            "createdBy": "api@kai",
+            "by": "api@kai",
+            "ms": 0
+          }
+        ]
+      }
+    }
+  },
+  {
+    "step": "todo brief mine",
+    "result": {
+      "ok": {
+        "roomId": "todo-golden",
+        "me": "api@kai",
+        "yours": [
+          {
+            "id": "T6",
+            "title": "Agent sourced",
+            "status": "todo",
+            "assignee": "api@kai",
+            "by": "api@kai",
+            "after": [],
+            "blocked": false,
+            "since": 0,
+            "reply": null,
+            "left": false
+          }
+        ],
+        "opened": [],
+        "counts": {
+          "todo": 2,
+          "doing": 0,
+          "done": 3,
+          "total": 5
+        }
+      }
+    }
+  },
+  {
+    "step": "todo brief open",
+    "result": {
+      "ok": {
+        "roomId": "todo-golden",
+        "items": [
+          {
+            "id": "T5",
+            "title": "Manual title",
+            "status": "todo",
+            "assignee": "lee",
+            "by": "lee",
+            "after": [],
+            "blocked": false,
+            "since": 0,
+            "reply": null,
+            "left": false
+          },
+          {
+            "id": "T6",
+            "title": "Agent sourced",
+            "status": "todo",
+            "assignee": "api@kai",
+            "by": "api@kai",
+            "after": [],
+            "blocked": false,
+            "since": 0,
+            "reply": null,
+            "left": false
+          }
+        ],
+        "counts": {
+          "todo": 2,
+          "doing": 0,
+          "done": 3,
+          "total": 5
+        }
+      }
+    }
+  },
+  {
+    "step": "todo brief to person",
+    "result": {
+      "ok": {
+        "roomId": "todo-golden",
+        "items": [
+          {
+            "id": "T5",
+            "title": "Manual title",
+            "status": "todo",
+            "assignee": "lee",
+            "by": "lee",
+            "after": [],
+            "blocked": false,
+            "since": 0,
+            "reply": null,
+            "left": false
+          }
+        ],
+        "counts": {
+          "todo": 2,
+          "doing": 0,
+          "done": 3,
+          "total": 5
+        }
+      }
+    }
+  },
+  {
+    "step": "todo show",
+    "result": {
+      "ok": {
+        "roomId": "todo-golden",
+        "item": {
+          "id": "T3",
+          "round": 1,
+          "title": "Third renamed",
+          "desc": null,
+          "blockedBy": [
+            "T4"
+          ],
+          "blocked": false,
+          "status": "done",
+          "assignee": "api@kai",
+          "createdBy": "api@kai",
+          "createdSeq": 9,
+          "doneSeq": null,
+          "createdMs": 0,
+          "doneMs": 0,
+          "updatedBy": "api@kai",
+          "updatedMs": 0,
+          "current": {
+            "seq": 9,
+            "from": "lee",
+            "ts": 0,
+            "line": "A note for my task"
+          },
+          "reply": null,
+          "thread": [
+            {
+              "seq": 6,
+              "from": "api@kai",
+              "kind": "agent",
+              "ts": 0,
+              "rel": "source"
+            },
+            {
+              "seq": 9,
+              "from": "lee",
+              "kind": "human",
+              "ts": 0,
+              "rel": "source"
+            }
+          ]
+        },
+        "source": {
+          "seq": 9,
+          "from": "lee",
+          "text": "A note for my task\nSecond line",
+          "files": [],
+          "ts": 0
+        },
+        "history": [
+          {
+            "ms": 0,
+            "by": "api@kai",
+            "op": "add",
+            "from": null,
+            "to": {
+              "title": "Third",
+              "assignee": "helper@lee",
+              "blockedBy": []
+            }
+          },
+          {
+            "ms": 0,
+            "by": "api@kai",
+            "op": "edit",
+            "from": {
+              "title": "Third"
+            },
+            "to": {
+              "title": "Third renamed"
+            }
+          },
+          {
+            "ms": 0,
+            "by": "api@kai",
+            "op": "assign",
+            "from": {
+              "assignee": "helper@lee"
+            },
+            "to": {
+              "assignee": "api@kai"
+            }
+          },
+          {
+            "ms": 0,
+            "by": "api@kai",
+            "op": "edit",
+            "from": {
+              "blockedBy": []
+            },
+            "to": {
+              "blockedBy": [
+                "T4"
+              ]
+            }
+          },
+          {
+            "ms": 0,
+            "by": "api@kai",
+            "op": "edit",
+            "from": {
+              "createdSeq": 6
+            },
+            "to": {
+              "createdSeq": 9
+            }
+          },
+          {
+            "ms": 0,
+            "by": "api@kai",
+            "op": "edit",
+            "from": {
+              "status": "todo"
+            },
+            "to": {
+              "status": "doing"
+            }
+          },
+          {
+            "ms": 0,
+            "by": "api@kai",
+            "op": "edit",
+            "from": {
+              "status": "doing"
+            },
+            "to": {
+              "status": "todo"
+            }
+          },
+          {
+            "ms": 0,
+            "by": "api@kai",
+            "op": "edit",
+            "from": {
+              "status": "todo"
+            },
+            "to": {
+              "status": "done"
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "step": "todo show full",
+    "result": {
+      "ok": {
+        "roomId": "todo-golden",
+        "item": {
+          "id": "T3",
+          "round": 1,
+          "title": "Third renamed",
+          "desc": null,
+          "blockedBy": [
+            "T4"
+          ],
+          "blocked": false,
+          "status": "done",
+          "assignee": "api@kai",
+          "createdBy": "api@kai",
+          "createdSeq": 9,
+          "doneSeq": null,
+          "createdMs": 0,
+          "doneMs": 0,
+          "updatedBy": "api@kai",
+          "updatedMs": 0,
+          "current": {
+            "seq": 9,
+            "from": "lee",
+            "ts": 0,
+            "line": "A note for my task"
+          },
+          "reply": null,
+          "thread": [
+            {
+              "seq": 6,
+              "from": "api@kai",
+              "kind": "agent",
+              "ts": 0,
+              "rel": "source"
+            },
+            {
+              "seq": 9,
+              "from": "lee",
+              "kind": "human",
+              "ts": 0,
+              "rel": "source"
+            }
+          ]
+        },
+        "messages": [
+          {
+            "seq": 6,
+            "from": "api@kai",
+            "kind": "agent",
+            "text": "@helper@lee Third task",
+            "files": [],
+            "ts": 0
+          },
+          {
+            "seq": 9,
+            "from": "lee",
+            "kind": "human",
+            "text": "A note for my task\nSecond line",
+            "files": [],
+            "ts": 0
+          }
+        ],
+        "source": {
+          "seq": 9,
+          "from": "lee",
+          "text": "A note for my task\nSecond line",
+          "files": [],
+          "ts": 0
+        },
+        "history": [
+          {
+            "ms": 0,
+            "by": "api@kai",
+            "op": "add",
+            "from": null,
+            "to": {
+              "title": "Third",
+              "assignee": "helper@lee",
+              "blockedBy": []
+            }
+          },
+          {
+            "ms": 0,
+            "by": "api@kai",
+            "op": "edit",
+            "from": {
+              "title": "Third"
+            },
+            "to": {
+              "title": "Third renamed"
+            }
+          },
+          {
+            "ms": 0,
+            "by": "api@kai",
+            "op": "assign",
+            "from": {
+              "assignee": "helper@lee"
+            },
+            "to": {
+              "assignee": "api@kai"
+            }
+          },
+          {
+            "ms": 0,
+            "by": "api@kai",
+            "op": "edit",
+            "from": {
+              "blockedBy": []
+            },
+            "to": {
+              "blockedBy": [
+                "T4"
+              ]
+            }
+          },
+          {
+            "ms": 0,
+            "by": "api@kai",
+            "op": "edit",
+            "from": {
+              "createdSeq": 6
+            },
+            "to": {
+              "createdSeq": 9
+            }
+          },
+          {
+            "ms": 0,
+            "by": "api@kai",
+            "op": "edit",
+            "from": {
+              "status": "todo"
+            },
+            "to": {
+              "status": "doing"
+            }
+          },
+          {
+            "ms": 0,
+            "by": "api@kai",
+            "op": "edit",
+            "from": {
+              "status": "doing"
+            },
+            "to": {
+              "status": "todo"
+            }
+          },
+          {
+            "ms": 0,
+            "by": "api@kai",
+            "op": "edit",
+            "from": {
+              "status": "todo"
+            },
+            "to": {
+              "status": "done"
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "step": "missing item",
+    "result": {
+      "err": {
+        "code": "item_not_found",
+        "next": "There is no task T999 in this topic (or it was deleted). See: scorpio todo roomId=todo-golden",
+        "status": 404
+      }
+    }
+  },
+  {
+    "step": "missing source",
+    "result": {
+      "err": {
+        "code": "source_required",
+        "next": "A task comes from a message. Say it and open the task in one step: scorpio send roomId=todo-golden text='@name …' add='<title>' [to=<name>]; or point at the message it came from: todo add='<title>' from=<seq>.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "missing message prepareAdd",
+    "result": {
+      "err": {
+        "code": "message_not_found",
+        "next": "from=99999: there is no such message.",
+        "status": 404
+      }
+    }
+  },
+  {
+    "step": "missing message titleFrom",
+    "result": {
+      "err": {
+        "code": "message_not_found",
+        "next": "from=99999: there is no such message.",
+        "status": 404
+      }
+    }
+  },
+  {
+    "step": "missing message editItem",
+    "result": {
+      "err": {
+        "code": "message_not_found",
+        "next": "from=99999: there is no such message.",
+        "status": 404
+      }
+    }
+  },
+  {
+    "step": "bad to",
+    "result": {
+      "err": {
+        "code": "bad_request",
+        "next": "to=ghost: give it to a person or an agent in this topic by full name (a person is their account, an agent role@account; see scorpio members).",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "bad title",
+    "result": {
+      "err": {
+        "code": "bad_request",
+        "next": "add='<title>' is required: one line, one thing that will be delivered on its own.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "bad delete",
+    "result": {
+      "err": {
+        "code": "bad_request",
+        "next": "delete=T3[,T4] is required.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "bad from",
+    "result": {
+      "err": {
+        "code": "bad_request",
+        "next": "from= is the seq of the message the task came from.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "bad status",
+    "result": {
+      "err": {
+        "code": "bad_request",
+        "next": "status= is todo, doing or done.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "bad operation",
+    "result": {
+      "err": {
+        "code": "bad_request",
+        "next": "A task change is one of add=, take=, done=, edit=, delete= (show=T3 and the list are reads).",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "delete multiple",
+    "result": {
+      "ok": {
+        "roomId": "todo-golden",
+        "deleted": [
+          "T4",
+          "T5"
+        ],
+        "unblocked": [],
+        "round": {
+          "n": 1,
+          "title": null,
+          "status": "open",
+          "openedMs": 0,
+          "doneMs": 0,
+          "counts": {
+            "todo": 1,
+            "doing": 0,
+            "done": 2,
+            "total": 3
+          }
+        }
+      }
+    }
+  },
+  {
+    "step": "todo list after delete",
+    "result": {
+      "ok": {
+        "roomId": "todo-golden",
+        "round": {
+          "n": 1,
+          "title": null,
+          "status": "open",
+          "openedMs": 0,
+          "doneMs": 0,
+          "counts": {
+            "todo": 1,
+            "doing": 0,
+            "done": 2,
+            "total": 3
+          }
+        },
+        "items": [
+          {
+            "id": "T6",
+            "round": 1,
+            "title": "Agent sourced",
+            "desc": null,
+            "blockedBy": [],
+            "blocked": false,
+            "status": "todo",
+            "assignee": "api@kai",
+            "createdBy": "api@kai",
+            "createdSeq": 9,
+            "doneSeq": null,
+            "createdMs": 0,
+            "doneMs": 0,
+            "updatedBy": "api@kai",
+            "updatedMs": 0,
+            "current": {
+              "seq": 9,
+              "from": "lee",
+              "ts": 0,
+              "line": "A note for my task"
+            },
+            "reply": null
+          },
+          {
+            "id": "T3",
+            "round": 1,
+            "title": "Third renamed",
+            "desc": null,
+            "blockedBy": [],
+            "blocked": false,
+            "status": "done",
+            "assignee": "api@kai",
+            "createdBy": "api@kai",
+            "createdSeq": 9,
+            "doneSeq": null,
+            "createdMs": 0,
+            "doneMs": 0,
+            "updatedBy": "api@kai",
+            "updatedMs": 0,
+            "current": {
+              "seq": 9,
+              "from": "lee",
+              "ts": 0,
+              "line": "A note for my task"
+            },
+            "reply": null
+          },
+          {
+            "id": "T1",
+            "round": 1,
+            "title": "Review v2",
+            "desc": null,
+            "blockedBy": [],
+            "blocked": false,
+            "status": "done",
+            "assignee": "api@kai",
+            "createdBy": "api@kai",
+            "createdSeq": 7,
+            "doneSeq": 8,
+            "createdMs": 0,
+            "doneMs": 0,
+            "updatedBy": "api@kai",
+            "updatedMs": 0,
+            "current": null,
+            "reply": null
+          }
+        ],
+        "rounds": [
+          {
+            "n": 1,
+            "title": null,
+            "status": "open",
+            "openedMs": 0,
+            "doneMs": 0,
+            "counts": {
+              "todo": 1,
+              "doing": 0,
+              "done": 2,
+              "total": 3
+            }
+          }
+        ],
+        "counts": {
+          "todo": 1,
+          "doing": 0,
+          "done": 2,
+          "total": 3
+        },
+        "deleted": [
+          {
+            "id": "T2",
+            "title": "Implement",
+            "assignee": "helper@lee",
+            "createdBy": "api@kai",
+            "by": "api@kai",
+            "ms": 0
+          },
+          {
+            "id": "T4",
+            "title": "A note for my task",
+            "assignee": "lee",
+            "createdBy": "lee",
+            "by": "api@kai",
+            "ms": 0
+          },
+          {
+            "id": "T5",
+            "title": "Manual title",
+            "assignee": "lee",
+            "createdBy": "lee",
+            "by": "api@kai",
+            "ms": 0
+          }
+        ]
+      }
+    }
+  },
+  {
+    "step": "rate init",
+    "result": {
+      "id": "todo-rate",
+      "name": "Rate",
+      "topic": "",
+      "owner": "kai",
+      "hasCode": false,
+      "public": true,
+      "archived": false,
+      "archivedAt": null,
+      "archivedReason": null,
+      "createdAt": 0
+    }
+  },
+  {
+    "step": "rate join",
+    "result": {
+      "ok": {
+        "roomId": "todo-rate",
+        "roomName": "Rate",
+        "topic": "",
+        "owner": "kai",
+        "ownerDisplayName": null,
+        "name": "api@kai",
+        "kind": "agent",
+        "cursor": 0,
+        "roleCard": "",
+        "lane": null,
+        "resources": [],
+        "mine": [],
+        "next": "Your owner is kai. Read recent history (scorpio messages roomId=todo-rate), mark the latest seq, and report in to @kai with send."
+      }
+    }
+  },
+  {
+    "step": "rate 1",
+    "result": {
+      "err": {
+        "code": "source_required",
+        "next": "A task comes from a message. Say it and open the task in one step: scorpio send roomId=todo-rate text='@name …' add='<title>' [to=<name>]; or point at the message it came from: todo add='<title>' from=<seq>.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "rate 2",
+    "result": {
+      "err": {
+        "code": "source_required",
+        "next": "A task comes from a message. Say it and open the task in one step: scorpio send roomId=todo-rate text='@name …' add='<title>' [to=<name>]; or point at the message it came from: todo add='<title>' from=<seq>.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "rate 3",
+    "result": {
+      "err": {
+        "code": "source_required",
+        "next": "A task comes from a message. Say it and open the task in one step: scorpio send roomId=todo-rate text='@name …' add='<title>' [to=<name>]; or point at the message it came from: todo add='<title>' from=<seq>.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "rate 4",
+    "result": {
+      "err": {
+        "code": "source_required",
+        "next": "A task comes from a message. Say it and open the task in one step: scorpio send roomId=todo-rate text='@name …' add='<title>' [to=<name>]; or point at the message it came from: todo add='<title>' from=<seq>.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "rate 5",
+    "result": {
+      "err": {
+        "code": "source_required",
+        "next": "A task comes from a message. Say it and open the task in one step: scorpio send roomId=todo-rate text='@name …' add='<title>' [to=<name>]; or point at the message it came from: todo add='<title>' from=<seq>.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "rate 6",
+    "result": {
+      "err": {
+        "code": "source_required",
+        "next": "A task comes from a message. Say it and open the task in one step: scorpio send roomId=todo-rate text='@name …' add='<title>' [to=<name>]; or point at the message it came from: todo add='<title>' from=<seq>.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "rate 7",
+    "result": {
+      "err": {
+        "code": "source_required",
+        "next": "A task comes from a message. Say it and open the task in one step: scorpio send roomId=todo-rate text='@name …' add='<title>' [to=<name>]; or point at the message it came from: todo add='<title>' from=<seq>.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "rate 8",
+    "result": {
+      "err": {
+        "code": "source_required",
+        "next": "A task comes from a message. Say it and open the task in one step: scorpio send roomId=todo-rate text='@name …' add='<title>' [to=<name>]; or point at the message it came from: todo add='<title>' from=<seq>.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "rate 9",
+    "result": {
+      "err": {
+        "code": "source_required",
+        "next": "A task comes from a message. Say it and open the task in one step: scorpio send roomId=todo-rate text='@name …' add='<title>' [to=<name>]; or point at the message it came from: todo add='<title>' from=<seq>.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "rate 10",
+    "result": {
+      "err": {
+        "code": "source_required",
+        "next": "A task comes from a message. Say it and open the task in one step: scorpio send roomId=todo-rate text='@name …' add='<title>' [to=<name>]; or point at the message it came from: todo add='<title>' from=<seq>.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "rate 11",
+    "result": {
+      "err": {
+        "code": "source_required",
+        "next": "A task comes from a message. Say it and open the task in one step: scorpio send roomId=todo-rate text='@name …' add='<title>' [to=<name>]; or point at the message it came from: todo add='<title>' from=<seq>.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "rate 12",
+    "result": {
+      "err": {
+        "code": "source_required",
+        "next": "A task comes from a message. Say it and open the task in one step: scorpio send roomId=todo-rate text='@name …' add='<title>' [to=<name>]; or point at the message it came from: todo add='<title>' from=<seq>.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "rate 13",
+    "result": {
+      "err": {
+        "code": "source_required",
+        "next": "A task comes from a message. Say it and open the task in one step: scorpio send roomId=todo-rate text='@name …' add='<title>' [to=<name>]; or point at the message it came from: todo add='<title>' from=<seq>.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "rate 14",
+    "result": {
+      "err": {
+        "code": "source_required",
+        "next": "A task comes from a message. Say it and open the task in one step: scorpio send roomId=todo-rate text='@name …' add='<title>' [to=<name>]; or point at the message it came from: todo add='<title>' from=<seq>.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "rate 15",
+    "result": {
+      "err": {
+        "code": "source_required",
+        "next": "A task comes from a message. Say it and open the task in one step: scorpio send roomId=todo-rate text='@name …' add='<title>' [to=<name>]; or point at the message it came from: todo add='<title>' from=<seq>.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "rate 16",
+    "result": {
+      "err": {
+        "code": "source_required",
+        "next": "A task comes from a message. Say it and open the task in one step: scorpio send roomId=todo-rate text='@name …' add='<title>' [to=<name>]; or point at the message it came from: todo add='<title>' from=<seq>.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "rate 17",
+    "result": {
+      "err": {
+        "code": "source_required",
+        "next": "A task comes from a message. Say it and open the task in one step: scorpio send roomId=todo-rate text='@name …' add='<title>' [to=<name>]; or point at the message it came from: todo add='<title>' from=<seq>.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "rate 18",
+    "result": {
+      "err": {
+        "code": "source_required",
+        "next": "A task comes from a message. Say it and open the task in one step: scorpio send roomId=todo-rate text='@name …' add='<title>' [to=<name>]; or point at the message it came from: todo add='<title>' from=<seq>.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "rate 19",
+    "result": {
+      "err": {
+        "code": "source_required",
+        "next": "A task comes from a message. Say it and open the task in one step: scorpio send roomId=todo-rate text='@name …' add='<title>' [to=<name>]; or point at the message it came from: todo add='<title>' from=<seq>.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "rate 20",
+    "result": {
+      "err": {
+        "code": "source_required",
+        "next": "A task comes from a message. Say it and open the task in one step: scorpio send roomId=todo-rate text='@name …' add='<title>' [to=<name>]; or point at the message it came from: todo add='<title>' from=<seq>.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "rate 21",
+    "result": {
+      "err": {
+        "code": "source_required",
+        "next": "A task comes from a message. Say it and open the task in one step: scorpio send roomId=todo-rate text='@name …' add='<title>' [to=<name>]; or point at the message it came from: todo add='<title>' from=<seq>.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "rate 22",
+    "result": {
+      "err": {
+        "code": "source_required",
+        "next": "A task comes from a message. Say it and open the task in one step: scorpio send roomId=todo-rate text='@name …' add='<title>' [to=<name>]; or point at the message it came from: todo add='<title>' from=<seq>.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "rate 23",
+    "result": {
+      "err": {
+        "code": "source_required",
+        "next": "A task comes from a message. Say it and open the task in one step: scorpio send roomId=todo-rate text='@name …' add='<title>' [to=<name>]; or point at the message it came from: todo add='<title>' from=<seq>.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "rate 24",
+    "result": {
+      "err": {
+        "code": "source_required",
+        "next": "A task comes from a message. Say it and open the task in one step: scorpio send roomId=todo-rate text='@name …' add='<title>' [to=<name>]; or point at the message it came from: todo add='<title>' from=<seq>.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "rate 25",
+    "result": {
+      "err": {
+        "code": "source_required",
+        "next": "A task comes from a message. Say it and open the task in one step: scorpio send roomId=todo-rate text='@name …' add='<title>' [to=<name>]; or point at the message it came from: todo add='<title>' from=<seq>.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "rate 26",
+    "result": {
+      "err": {
+        "code": "source_required",
+        "next": "A task comes from a message. Say it and open the task in one step: scorpio send roomId=todo-rate text='@name …' add='<title>' [to=<name>]; or point at the message it came from: todo add='<title>' from=<seq>.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "rate 27",
+    "result": {
+      "err": {
+        "code": "source_required",
+        "next": "A task comes from a message. Say it and open the task in one step: scorpio send roomId=todo-rate text='@name …' add='<title>' [to=<name>]; or point at the message it came from: todo add='<title>' from=<seq>.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "rate 28",
+    "result": {
+      "err": {
+        "code": "source_required",
+        "next": "A task comes from a message. Say it and open the task in one step: scorpio send roomId=todo-rate text='@name …' add='<title>' [to=<name>]; or point at the message it came from: todo add='<title>' from=<seq>.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "rate 29",
+    "result": {
+      "err": {
+        "code": "source_required",
+        "next": "A task comes from a message. Say it and open the task in one step: scorpio send roomId=todo-rate text='@name …' add='<title>' [to=<name>]; or point at the message it came from: todo add='<title>' from=<seq>.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "rate 30",
+    "result": {
+      "err": {
+        "code": "source_required",
+        "next": "A task comes from a message. Say it and open the task in one step: scorpio send roomId=todo-rate text='@name …' add='<title>' [to=<name>]; or point at the message it came from: todo add='<title>' from=<seq>.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "rate 31",
+    "result": {
+      "err": {
+        "code": "source_required",
+        "next": "A task comes from a message. Say it and open the task in one step: scorpio send roomId=todo-rate text='@name …' add='<title>' [to=<name>]; or point at the message it came from: todo add='<title>' from=<seq>.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "rate 32",
+    "result": {
+      "err": {
+        "code": "source_required",
+        "next": "A task comes from a message. Say it and open the task in one step: scorpio send roomId=todo-rate text='@name …' add='<title>' [to=<name>]; or point at the message it came from: todo add='<title>' from=<seq>.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "rate 33",
+    "result": {
+      "err": {
+        "code": "source_required",
+        "next": "A task comes from a message. Say it and open the task in one step: scorpio send roomId=todo-rate text='@name …' add='<title>' [to=<name>]; or point at the message it came from: todo add='<title>' from=<seq>.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "rate 34",
+    "result": {
+      "err": {
+        "code": "source_required",
+        "next": "A task comes from a message. Say it and open the task in one step: scorpio send roomId=todo-rate text='@name …' add='<title>' [to=<name>]; or point at the message it came from: todo add='<title>' from=<seq>.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "rate 35",
+    "result": {
+      "err": {
+        "code": "source_required",
+        "next": "A task comes from a message. Say it and open the task in one step: scorpio send roomId=todo-rate text='@name …' add='<title>' [to=<name>]; or point at the message it came from: todo add='<title>' from=<seq>.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "rate 36",
+    "result": {
+      "err": {
+        "code": "source_required",
+        "next": "A task comes from a message. Say it and open the task in one step: scorpio send roomId=todo-rate text='@name …' add='<title>' [to=<name>]; or point at the message it came from: todo add='<title>' from=<seq>.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "rate 37",
+    "result": {
+      "err": {
+        "code": "source_required",
+        "next": "A task comes from a message. Say it and open the task in one step: scorpio send roomId=todo-rate text='@name …' add='<title>' [to=<name>]; or point at the message it came from: todo add='<title>' from=<seq>.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "rate 38",
+    "result": {
+      "err": {
+        "code": "source_required",
+        "next": "A task comes from a message. Say it and open the task in one step: scorpio send roomId=todo-rate text='@name …' add='<title>' [to=<name>]; or point at the message it came from: todo add='<title>' from=<seq>.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "rate 39",
+    "result": {
+      "err": {
+        "code": "source_required",
+        "next": "A task comes from a message. Say it and open the task in one step: scorpio send roomId=todo-rate text='@name …' add='<title>' [to=<name>]; or point at the message it came from: todo add='<title>' from=<seq>.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "rate 40",
+    "result": {
+      "err": {
+        "code": "source_required",
+        "next": "A task comes from a message. Say it and open the task in one step: scorpio send roomId=todo-rate text='@name …' add='<title>' [to=<name>]; or point at the message it came from: todo add='<title>' from=<seq>.",
+        "status": 400
+      }
+    }
+  },
+  {
+    "step": "rate 41",
+    "result": {
+      "err": {
+        "code": "rate_limited",
+        "next": "More than 40 task changes in this topic within a minute. Wait a minute and retry.",
+        "status": 429
+      }
+    }
+  }
+]

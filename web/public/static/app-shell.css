@@ -1,0 +1,130 @@
+/* What the site kit (site.css, static screens) leaves to the live page: the column beside the topic page,
+   settings and my data; which /app layout shows at which width; real inputs and buttons in the kit's shapes; the
+   topic and account menus; search in the column. Colours and sizes are the room's tokens, as the kit's are. */
+
+/* ---------- /app: the computer layout from 1024 px wide, the phone one below ---------- */
+body.appview { height: 100vh; height: 100dvh; overflow: hidden; }
+body.appview .sx-app { height: 100vh; height: 100dvh; }
+body.appview .sx-main2 { overflow: auto; }
+@media (min-width: 1024px) { body.appview .sx-phone-app { display: none; } }
+@media (max-width: 1023px) {
+  body.appview { height: auto; overflow: visible; }
+  body.appview .sx-app { display: none; }
+}
+
+/* ---------- the column beside the topic page, settings and my data: a computer only ---------- */
+@media (min-width: 1024px) {
+  body.has-side { display: flex; flex-direction: row; }
+  body.has-side > .sx-side { flex: none; width: 286px; height: 100vh; height: 100dvh; }
+  body.has-side > .ui { flex: 1; min-width: 0; }
+  :root[data-scorpio-side="folded"] body.has-side > .sx-side { display: none; }
+  :root[data-scorpio-side="folded"] body.appview .sx-app > .sx-side { display: none; }
+  :root[data-scorpio-side="folded"] body.appview .sx-app { grid-template-columns: minmax(0, 1fr); }
+  :root[data-scorpio-side="folded"] body .sx-side-expand { display: grid; }
+  :root[data-scorpio-side="folded"] body.has-side > .ui.desk > .bar { padding-left: 56px; }
+}
+@media (max-width: 1023px) { body.has-side > .sx-side { display: none; } }
+/* the column carries the brand, so the topic topbar starts at the topic's name; my data's bar
+   loses its own too */
+@media (min-width: 1024px) {
+  :root:not([data-scorpio-side="folded"]) body.has-side .ui.desk .roombar .crumbs > .brand, :root:not([data-scorpio-side="folded"]) body.has-side .ui.desk .roombar .crumbs > .sep { display: none; }
+  :root:not([data-scorpio-side="folded"]) body.has-side .ui.desk .bar.home > .brand { display: none; }
+}
+
+/* the kit sets these on body.sx; the column also lives on pages that are not */
+.sx-side, .sx-side *, .sx-menu, .sx-menu * { box-sizing: border-box; }
+.sx-side { font: 16px/1.6 var(--font); color: var(--fg); -webkit-font-smoothing: antialiased; }
+/* resets at no specificity, so every kit rule still wins */
+:where(.sx-side, .sx-phone-app, .sx-app, .sx-menu) a { color: inherit; text-decoration: none; }
+:where(.sx-side, .sx-phone-app, .sx-app, .sx-menu) button { font: inherit; color: inherit; border: 0; background: none; cursor: pointer; padding: 0; }
+
+/* The + and ↑ are SVG, not typed glyphs (a glyph's ink sat 0.8–1.3 px off centre, and moves with the font).
+   Sizes keep each stroke's centre on a whole pixel of the box's middle, so it stays sharp and centred at 1x too. */
+.sx-plus svg, .sx-go svg { display: block; fill: none; stroke: currentColor; stroke-width: 2px; stroke-linecap: round; stroke-linejoin: round; }
+.sx-plus svg path, .sx-go svg path { vector-effect: non-scaling-stroke; }
+.sx-side .sx-new .sx-plus svg { width: 10px; height: 10px; }
+.sx-ph-list .sx-new .sx-plus svg { width: 14px; height: 14px; }
+.sx-box .sx-go svg { width: 18px; height: 18px; }
+
+.sx-side .sx-head .sx-brand { display: flex; align-items: center; color: var(--fg); }
+.sx-side .sx-head .sx-side-collapse { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 10px; color: var(--muted); }
+.sx-side .sx-head .sx-side-collapse:hover { background: var(--hl); }
+.sx-side-expand { display: none; position: fixed; z-index: 4; top: 10px; left: 8px; width: 36px; height: 36px; place-items: center; border: 0; border-radius: 10px; background: transparent; color: var(--bar-muted); cursor: pointer; }
+.sx-side-expand:hover { background: var(--bar-chip); }
+:root:not([data-scorpio-effective-theme="dark"]) body.has-side .sx-side-expand { background: transparent; color: var(--muted); }
+:root:not([data-scorpio-effective-theme="dark"]) body.has-side .sx-side-expand:hover { background: var(--hl); }
+body.appview .sx-side-expand { background: transparent; color: var(--muted); }
+body.appview .sx-side-expand:hover { background: var(--hl); }
+.sx-side .sx-find { width: calc(100% - 24px); text-align: left; }
+.sx-side .sx-find:hover, .sx-side .sx-new:hover { background: var(--hl); }
+.sx-side .sx-me { width: calc(100% - 16px); text-align: left; }
+.sx-ic { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ---------- a topic row: the link fills it; ⋯ shows on hover or focus ---------- */
+.sx-trow { position: relative; }
+.sx-trow .sx-tlink { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; align-self: stretch; }
+.sx-side .sx-trow:hover { background: var(--hl); }
+.sx-side .sx-trow.sx-on:hover { background: var(--surface); }
+.sx-trow .sx-dots { flex: none; width: 24px; height: 24px; border-radius: 6px; color: var(--muted); font-weight: 800; line-height: 1; visibility: hidden; }
+.sx-trow:hover .sx-dots, .sx-trow:focus-within .sx-dots { visibility: visible; }
+.sx-trow .sx-dots:hover { background: var(--line); color: var(--fg); }
+/* tasks open, nobody at work and nothing waiting on me: amber, as the old home page had it */
+.sx-trow.sx-stalled .sx-nm { color: var(--wait-ink); }
+.sx-trow.sx-more { width: 100%; text-align: left; }
+.sx-trow.sx-more .sx-chev { display: inline-block; transition: transform 0.15s; }
+.sx-trow.sx-more.sx-open .sx-chev { transform: rotate(90deg); }
+.sx-trow.sx-arch .sx-w { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.3; }
+.sx-trow.sx-arch .sx-ds { font-size: 12px; color: var(--muted); }
+.sx-trow.sx-arch { height: auto; min-height: 44px; padding-top: 4px; padding-bottom: 4px; }
+.sx-btn.sx-xs { height: 28px; padding: 0 10px; font-size: 12.5px; }
+.sx-empty { padding: 12px 10px; margin: 0; color: var(--muted); font-size: 14px; }
+
+/* ---------- the menus (a topic's, the account's) ---------- */
+.sx-menu { position: fixed; z-index: 80; min-width: 184px; padding: 6px; border-radius: 12px; background: var(--surface); box-shadow: 0 0 0 1px var(--line), 0 14px 32px -12px rgba(16, 22, 40, 0.4); }
+.sx-menu[hidden] { display: none; }
+.sx-menu a, .sx-menu button { display: block; width: 100%; padding: 9px 12px; border-radius: 8px; text-align: left; font-size: 14.5px; color: var(--fg); }
+.sx-menu a:hover, .sx-menu button:hover, .sx-menu :focus-visible { background: var(--hl); outline: none; }
+.sx-menu form { margin: 0; }
+/* the list's own confirm (archive), shaped like the topic page's dialog */
+.sx-dlg { position: fixed; inset: 0; z-index: 90; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(0, 0, 0, 0.4); box-sizing: border-box; }
+.sx-dlgbox { width: 100%; max-width: 420px; padding: 18px 18px 14px; border-radius: 16px; background: var(--surface); color: var(--fg); box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3); box-sizing: border-box; }
+.sx-dlgbox .sx-q { margin: 0 0 14px; font-size: 15px; line-height: 1.55; }
+.sx-dlgbox .sx-btns { display: flex; gap: 8px; justify-content: flex-end; }
+@media (max-width: 760px) {
+  .sx-dlg { align-items: flex-end; padding-bottom: max(16px, env(safe-area-inset-bottom)); }
+  .sx-dlgbox .sx-btns .sx-btn { flex: 1; }
+}
+/* 「邀请朋友」 with a small green tag, the colour of 「在干活」 */
+.sx-menu a.sx-inv { display: flex; align-items: center; gap: 10px; }
+.sx-menu a.sx-inv i { font-style: normal; font-size: 12px; font-weight: 650; line-height: 1; padding: 4px 8px; border-radius: 999px; color: var(--live-ink); background: color-mix(in srgb, var(--live-ink) 13%, transparent); white-space: nowrap; }
+
+/* ---------- search in the column (and on a phone's list) ---------- */
+.sx-searchbar { display: flex; align-items: center; gap: 10px; margin: 0 12px 6px; }
+.sx-searching .sx-side .sx-find { display: none; }
+.sx-ph-list .sx-searchbar { margin: 14px 0 6px; }
+/* app.css makes every label a column and gives every input a border: undone here */
+.sx-searchfield { flex: 1; min-width: 0; display: flex; flex-direction: row; align-items: center; gap: 8px; height: 38px; padding: 0 10px; border-radius: 10px; background: var(--surface); box-shadow: inset 0 0 0 1px var(--line-strong); color: var(--muted); font-size: 15px; }
+.sx-searchfield:focus-within { box-shadow: inset 0 0 0 2px var(--action); }
+.sx-searchfield input { flex: 1; min-width: 0; width: auto; height: auto; margin: 0; padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none; font: inherit; font-size: 15px; color: var(--fg); outline: none; -webkit-appearance: none; appearance: none; }
+.sx-searchfield input:focus { outline: none; }
+.sx-searchfield input::-webkit-search-cancel-button { -webkit-appearance: none; }
+.sx-searchbar .sx-link { color: var(--link); font-weight: 650; font-size: 14px; }
+.sx-hit { display: block; padding: 8px 10px; border-radius: 10px; }
+.sx-hit:hover { background: var(--hl); }
+.sx-hit b { display: block; font-size: 14px; font-weight: 650; line-height: 1.35; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sx-hit span { display: block; font-size: 12.5px; color: var(--muted); line-height: 1.4; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sx-hit mark { background: var(--you-tint); color: inherit; border-radius: 3px; }
+.sx-more-link { display: block; padding: 4px 10px 8px; font-size: 13px; color: var(--link); }
+.sx-list .sx-note, .sx-ph-groups .sx-note, #sx-ph-groups .sx-note { padding: 8px 10px; margin: 0; font-size: 13.5px; color: var(--muted); }
+.sx-note.sx-bad { color: var(--wait-ink); }
+
+/* ---------- the big box and the form: the kit styles the real controls; these are the live states it leaves out ---------- */
+.sx-box { display: block; }
+.sx-ideas button { padding: 7px 14px; border-radius: 999px; font-size: 14px; color: var(--fg); box-shadow: inset 0 0 0 1px var(--line-strong); }
+.sx-ideas button:hover { background: var(--hl); }
+.sx-ask .sx-err { margin: 14px 0 0; text-align: center; font-size: 13.5px; color: var(--you-ink); }
+.sx-err[hidden] { display: none; }
+.sx-ph-form > .sx-err { margin: 0 0 4px; font-size: 13.5px; color: var(--you-ink); }
+.sx-fld.sx-dis .sx-in, .sx-fld.sx-dis > label, .sx-fld.sx-dis .sx-hint { opacity: 0.45; }
+.sx-btn:disabled, .sx-link:disabled { opacity: 0.55; cursor: default; }
+.sx-ph-top .sx-av { cursor: pointer; }

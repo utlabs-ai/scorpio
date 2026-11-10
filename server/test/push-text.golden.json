@@ -1,0 +1,506 @@
+{
+  "todo room no sender": {
+    "en": {
+      "title": "The room",
+      "body": "Waiting on you: T3 Review the plan",
+      "silent": true,
+      "tag": "tag:0",
+      "data": {
+        "url": "/r/r1#0"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    },
+    "zh": {
+      "title": "The room",
+      "body": "等你：T3 Review the plan",
+      "silent": true,
+      "tag": "tag:0",
+      "data": {
+        "url": "/r/r1#0"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    }
+  },
+  "todo no room": {
+    "en": {
+      "title": "Scorpio",
+      "body": "Waiting on you: T3 Review the plan",
+      "silent": false,
+      "tag": "tag:1",
+      "data": {
+        "url": "/r/r1#1"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    },
+    "zh": {
+      "title": "Scorpio",
+      "body": "等你：T3 Review the plan",
+      "silent": false,
+      "tag": "tag:1",
+      "data": {
+        "url": "/r/r1#1"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    }
+  },
+  "todo sender": {
+    "en": {
+      "title": "The room",
+      "body": "Waiting on you: T3 Review the plan (kai)",
+      "silent": true,
+      "tag": "tag:2",
+      "data": {
+        "url": "/r/r1#2"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    },
+    "zh": {
+      "title": "The room",
+      "body": "等你：T3 Review the plan（kai）",
+      "silent": true,
+      "tag": "tag:2",
+      "data": {
+        "url": "/r/r1#2"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    }
+  },
+  "todo same display": {
+    "en": {
+      "title": "The room",
+      "body": "Waiting on you: T3 Review the plan (kai)",
+      "silent": false,
+      "tag": "tag:3",
+      "data": {
+        "url": "/r/r1#3"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    },
+    "zh": {
+      "title": "The room",
+      "body": "等你：T3 Review the plan（kai）",
+      "silent": false,
+      "tag": "tag:3",
+      "data": {
+        "url": "/r/r1#3"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    }
+  },
+  "todo different display": {
+    "en": {
+      "title": "The room",
+      "body": "Waiting on you: T3 Review the plan · Mei（kai）",
+      "silent": true,
+      "tag": "tag:4",
+      "data": {
+        "url": "/r/r1#4"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    },
+    "zh": {
+      "title": "The room",
+      "body": "等你：T3 Review the plan · Mei（kai）",
+      "silent": true,
+      "tag": "tag:4",
+      "data": {
+        "url": "/r/r1#4"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    }
+  },
+  "todo missing item": {
+    "en": {
+      "title": "Scorpio",
+      "body": "",
+      "silent": false,
+      "tag": "tag:5",
+      "data": {
+        "url": "/r/r1#5"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    },
+    "zh": {
+      "title": "Scorpio",
+      "body": "",
+      "silent": false,
+      "tag": "tag:5",
+      "data": {
+        "url": "/r/r1#5"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    }
+  },
+  "test": {
+    "en": {
+      "title": "Scorpio",
+      "body": "Notifications are on: when something is put under your name, it shows up here.",
+      "silent": true,
+      "tag": "tag:6",
+      "data": {
+        "url": "/r/r1#6"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    },
+    "zh": {
+      "title": "Scorpio",
+      "body": "通知已开启：有任务挂到你名下时，会在这里提醒你。",
+      "silent": true,
+      "tag": "tag:6",
+      "data": {
+        "url": "/r/r1#6"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    }
+  },
+  "mention room": {
+    "en": {
+      "title": "The room",
+      "body": "Someone mentioned you",
+      "silent": false,
+      "tag": "tag:7",
+      "data": {
+        "url": "/r/r1#7"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    },
+    "zh": {
+      "title": "The room",
+      "body": "有人 @ 你",
+      "silent": false,
+      "tag": "tag:7",
+      "data": {
+        "url": "/r/r1#7"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    }
+  },
+  "mention no room": {
+    "en": {
+      "title": "Scorpio",
+      "body": "",
+      "silent": true,
+      "tag": "tag:8",
+      "data": {
+        "url": "/r/r1#8"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    },
+    "zh": {
+      "title": "Scorpio",
+      "body": "",
+      "silent": true,
+      "tag": "tag:8",
+      "data": {
+        "url": "/r/r1#8"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    }
+  },
+  "quota room": {
+    "en": {
+      "title": "The room",
+      "body": "90 of today's 100 messages used in this topic (free plan).",
+      "silent": false,
+      "tag": "tag:9",
+      "data": {
+        "url": "/r/r1#9"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    },
+    "zh": {
+      "title": "The room",
+      "body": "今天已发 90 条，免费版每个主题每天 100 条，即将用完。",
+      "silent": false,
+      "tag": "tag:9",
+      "data": {
+        "url": "/r/r1#9"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    }
+  },
+  "quota no room": {
+    "en": {
+      "title": "Scorpio",
+      "body": "",
+      "silent": true,
+      "tag": "tag:10",
+      "data": {
+        "url": "/r/r1#10"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    },
+    "zh": {
+      "title": "Scorpio",
+      "body": "",
+      "silent": true,
+      "tag": "tag:10",
+      "data": {
+        "url": "/r/r1#10"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    }
+  },
+  "blocked approval": {
+    "en": {
+      "title": "The room",
+      "body": "api is stuck at an approval; have a look on that computer.",
+      "silent": false,
+      "tag": "tag:11",
+      "data": {
+        "url": "/r/r1#11"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    },
+    "zh": {
+      "title": "The room",
+      "body": "api 停在审批上，请到那台电脑查看。",
+      "silent": false,
+      "tag": "tag:11",
+      "data": {
+        "url": "/r/r1#11"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    }
+  },
+  "blocked approval detail": {
+    "en": {
+      "title": "The room",
+      "body": "api is stuck at an approval (Bash rm -rf x); have a look on that computer.",
+      "silent": true,
+      "tag": "tag:12",
+      "data": {
+        "url": "/r/r1#12"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    },
+    "zh": {
+      "title": "The room",
+      "body": "api 停在审批上（Bash rm -rf x），请到那台电脑查看。",
+      "silent": true,
+      "tag": "tag:12",
+      "data": {
+        "url": "/r/r1#12"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    }
+  },
+  "blocked question": {
+    "en": {
+      "title": "The room",
+      "body": "api is stuck at a question; have a look on that computer.",
+      "silent": false,
+      "tag": "tag:13",
+      "data": {
+        "url": "/r/r1#13"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    },
+    "zh": {
+      "title": "The room",
+      "body": "api 停在提问上，请到那台电脑查看。",
+      "silent": false,
+      "tag": "tag:13",
+      "data": {
+        "url": "/r/r1#13"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    }
+  },
+  "blocked prompt": {
+    "en": {
+      "title": "The room",
+      "body": "api is stuck at a prompt; have a look on that computer.",
+      "silent": true,
+      "tag": "tag:14",
+      "data": {
+        "url": "/r/r1#14"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    },
+    "zh": {
+      "title": "The room",
+      "body": "api 停在终端提示上，请到那台电脑查看。",
+      "silent": true,
+      "tag": "tag:14",
+      "data": {
+        "url": "/r/r1#14"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    }
+  },
+  "blocked empty reason": {
+    "en": {
+      "title": "The room",
+      "body": "api is stuck at a prompt; have a look on that computer.",
+      "silent": false,
+      "tag": "tag:15",
+      "data": {
+        "url": "/r/r1#15"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    },
+    "zh": {
+      "title": "The room",
+      "body": "api 停在终端提示上，请到那台电脑查看。",
+      "silent": false,
+      "tag": "tag:15",
+      "data": {
+        "url": "/r/r1#15"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    }
+  },
+  "blocked missing name": {
+    "en": {
+      "title": "The room",
+      "body": "agent is stuck at an approval; have a look on that computer.",
+      "silent": true,
+      "tag": "tag:16",
+      "data": {
+        "url": "/r/r1#16"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    },
+    "zh": {
+      "title": "The room",
+      "body": "agent 停在审批上，请到那台电脑查看。",
+      "silent": true,
+      "tag": "tag:16",
+      "data": {
+        "url": "/r/r1#16"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    }
+  },
+  "blocked no room": {
+    "en": {
+      "title": "Scorpio",
+      "body": "",
+      "silent": false,
+      "tag": "tag:17",
+      "data": {
+        "url": "/r/r1#17"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    },
+    "zh": {
+      "title": "Scorpio",
+      "body": "",
+      "silent": false,
+      "tag": "tag:17",
+      "data": {
+        "url": "/r/r1#17"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    }
+  },
+  "alert text": {
+    "en": {
+      "title": "Scorpio alert",
+      "body": "Disk is almost full.",
+      "silent": true,
+      "tag": "tag:18",
+      "data": {
+        "url": "/r/r1#18"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    },
+    "zh": {
+      "title": "Scorpio 告警",
+      "body": "Disk is almost full.",
+      "silent": true,
+      "tag": "tag:18",
+      "data": {
+        "url": "/r/r1#18"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    }
+  },
+  "alert no text": {
+    "en": {
+      "title": "Scorpio alert",
+      "body": "",
+      "silent": false,
+      "tag": "tag:19",
+      "data": {
+        "url": "/r/r1#19"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    },
+    "zh": {
+      "title": "Scorpio 告警",
+      "body": "",
+      "silent": false,
+      "tag": "tag:19",
+      "data": {
+        "url": "/r/r1#19"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    }
+  },
+  "unknown type": {
+    "en": {
+      "title": "Scorpio",
+      "body": "",
+      "silent": true,
+      "tag": "tag:20",
+      "data": {
+        "url": "/r/r1#20"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    },
+    "zh": {
+      "title": "Scorpio",
+      "body": "",
+      "silent": true,
+      "tag": "tag:20",
+      "data": {
+        "url": "/r/r1#20"
+      },
+      "icon": "/static/icons/icon-192.png",
+      "badge": "/static/badge-72.png"
+    }
+  }
+}

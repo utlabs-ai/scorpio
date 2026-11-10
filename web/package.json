@@ -1,0 +1,15 @@
+{
+  "name": "scorpio-workspace-viewer",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node tools/build-workspace.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2",
+    "monaco-editor": "0.57.0"
+  },
+  "overrides": {
+    "dompurify": "3.4.17"
+  }
+}

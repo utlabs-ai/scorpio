@@ -1,0 +1,58 @@
+/* Role cards in the member list, the whole card and the topic's description in a popup,
+   and the edit boxes for both. Linked after the room's other sheets. */
+
+/* a member row: two lines of its card, then › (the row opens the popup) */
+.ui li.seat.hascard { cursor: pointer; }
+.ui li.seat .rcprev { margin-top: 2px; font-size: 13.5px; line-height: 1.45; color: var(--muted); display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; overflow-wrap: anywhere; }
+.ui li.seat .rcprev.none { opacity: 0.75; }
+.ui .rcgo { flex: none; align-self: center; width: 7px; height: 7px; margin: 0 6px 0 4px; border-right: 1.8px solid var(--line-strong); border-top: 1.8px solid var(--line-strong); transform: rotate(45deg); }
+
+/* the description on top of the members: a label, two lines, › */
+.ui .rtopic { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 10px; row-gap: 2px; align-items: center; width: 100%; margin: 0 0 14px; padding: 10px 12px 11px 14px;
+  border: 0; border-radius: 14px; background: var(--hl); color: var(--fg); font: inherit; text-align: left; cursor: pointer; }
+.ui .rtopic .th { grid-column: 1; font-size: 12.5px; font-weight: 700; letter-spacing: 0.02em; color: var(--muted); }
+.ui .rtopic .rcprev { grid-column: 1; font-size: 14.5px; line-height: 1.5; color: var(--fg); display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; overflow-wrap: anywhere; }
+.ui .rtopic .rcprev.none { color: var(--muted); }
+.ui .rtopic .rcgo { grid-column: 2; grid-row: 1 / 3; }
+
+/* the popup (the task detail sheet): who it is, then the whole card */
+.ui .sbody.mpop .mhead { display: flex; align-items: center; gap: 14px; margin: 2px 0 16px; }
+.ui .sbody.mpop .mhead .bot { width: 56px; height: 56px; }
+.ui .sbody.mpop .mhead .mw { min-width: 0; }
+.ui .sbody.mpop .mhead h3 { margin: 0 0 3px; font-size: 18px; overflow-wrap: anywhere; }
+.ui .sbody.mpop .msub { display: flex; flex-wrap: wrap; gap: 4px 10px; font-size: 13.5px; color: var(--muted); }
+.ui .sbody.mpop .msub .st.live { color: var(--live-ink); }
+.ui .sbody.mpop .msub .st.wait { color: var(--wait-ink); font-weight: 650; }
+.ui .sbody.mpop .mlbl { margin: 0 0 6px; font-size: 12.5px; font-weight: 700; letter-spacing: 0.02em; color: var(--muted); }
+.ui .sbody.mpop .mlbl.top { margin: 2px 0 0; }
+.ui .sbody.mpop h3 + .mcard, .ui .sbody.mpop h3 + .topicedit { margin-top: 8px; }
+.ui .sbody.mpop h3.tname { display: flex; align-items: center; gap: 10px; }
+.ui .sbody.mpop h3.tname .btn.sm { flex: none; font-weight: 500; }
+.ui .sbody.mpop .nameedit + .mcard { margin-top: 14px; }
+.ui .sbody.mpop .mcard { color: var(--fg); overflow-wrap: anywhere; }
+.ui .sbody.mpop .mcard.none { color: var(--muted); }
+.ui .sbody.mpop .mcard + .mlbl { margin-top: 14px; }
+.ui .sbody.mpop .mlane { display: flex; align-items: center; gap: 10px; }
+.ui .seathead a.gvlink { text-decoration: none; }   /* the overview's entry: a small button like 主题设置, not a link */
+.ui .seathead { flex-wrap: wrap; }
+.ui .seathead .nums { white-space: nowrap; }
+.ui .seathead .seatacts { display: flex; gap: 8px; margin-left: auto; }   /* 全局图 · 邀请 · 主题设置: one row, under the count when the column is narrow */
+.ui .sbody.mpop .acts { margin-top: 18px; }
+.ui .sbody.mpop .rcnote { margin: 8px 0 0; font-size: 12.5px; line-height: 1.45; }
+/* the seat's handoff in the cloud (docs/api/files.md): one line under the card, to its page */
+.ui .sbody.mpop .mho { display: flex; align-items: center; gap: 10px; margin: 14px 0 0; padding: 10px 12px 10px 14px; border-radius: 14px; background: var(--hl); color: var(--fg); text-decoration: none; }
+.ui .sbody.mpop .mho .th { flex: none; font-size: 12.5px; font-weight: 700; letter-spacing: 0.02em; color: var(--muted); }
+.ui .sbody.mpop .mho .v { flex: 1; min-width: 0; font-size: 14.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.ui .sbody.mpop .mho:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 2px; }
+
+/* the header: the title opens the description */
+.ui .roombar .title { cursor: pointer; }
+.ui .roombar .title:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 2px; border-radius: 6px; }
+
+/* edit boxes: the popup's and the topic settings' */
+.topicedit textarea { display: block; width: 100%; min-height: 132px; max-height: 360px; resize: none; font: 15px/1.55 var(--font); padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--fg); }
+.topicedit input { display: block; width: 100%; font: 16px/1.4 var(--font); padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--fg); }
+.topicedit .topicfoot { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+.topicedit .topicfoot .sp { flex: 1; }
+.topicedit .topicfoot small { font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.topicedit .topicfoot small.over { color: var(--wait-ink); font-weight: 650; }

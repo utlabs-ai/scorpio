@@ -1,0 +1,152 @@
+/* Connect the delivered room components to Scorpio's existing scrolling and controls. */
+.ui { width: 100%; height: 100%; }
+.ui .main { position: relative; flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.ui .main > .feed { flex: 1; min-height: 0; }
+/* The status pill stays above an open sheet's backdrop; only its visible width catches taps. */
+.ui #status { position: absolute; top: 8px; left: 50%; z-index: 8; box-sizing: border-box; width: max-content; max-width: min(92%, 560px); transform: translateX(-50%); opacity: 1; visibility: visible; transition: opacity 150ms, visibility 0s; }
+.ui #status.hidden { display: block !important; opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 150ms, visibility 0s 150ms; }
+@media (prefers-reduced-motion: reduce) { .ui #status, .ui #status.hidden { transition: none; } }
+.ui .feed > .msg:first-child { margin-top: auto; }
+.ui .roombar .brand { display: none; }
+.ui .roombar .crumbs { flex: 1; min-width: 0; }
+.ui .roombar .crumbs .sep { display: none; }
+.ui .roombar .title b { display: flex; align-items: center; gap: 5px; }
+.ui .roombar .title #room-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.ui .rp.msg { padding: 0; margin: 0; border: 0; background: none; border-radius: 0; }
+.ui .rp.msg .m { margin: 0; }
+.ui .rp.msg .m.forme { box-shadow: inset 3px 0 0 var(--you), 0 0 0 1px var(--you-ring), 0 1px 2px rgba(16, 22, 40, 0.06); }
+.ui .rp.flash .m { box-shadow: 0 0 0 2px var(--link); }
+.ui .m.mine.msg { border-left: 0; }
+.ui .todoline { width: 100%; min-width: 0; }
+.ui .m.mine .todoline { justify-content: flex-end; max-width: 100%; align-self: flex-end; }
+.ui .ichip { min-width: 0; max-width: 100%; }
+.ui .ichip > span:not(.t):not(.ck):not(.chev) { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ui .ichip .t { flex: 1; min-width: 0; }
+.ui .m.mine .todoline .ichip { margin-top: 5px; }
+.ui .m.mine .mf .dots { min-width: 24px; min-height: 20px; padding: 0 3px; margin: 0; }
+.ui .msg .mh .who { display: inline-flex; align-items: baseline; }
+.ui .msg .mh .who .acct { margin-left: 2px; }
+.ui #outbox { display: flex; flex-direction: column; gap: 10px; }
+.ui #outbox > .m { align-self: flex-end; }
+.ui .sys.msg { margin: 0; }
+.ui .jumps .jump { position: static; }
+.ui .cmp .ta { display: block; }
+.ui .cmp textarea#input { min-height: 42px; }
+/* With the attachment button the box is 50 px narrower: the hint stays on one line, and on phones
+   under 380 px the round buttons and gaps tighten a little so 「@ 叫人 · / 命令」 still fits whole. */
+.ui .cmp textarea#input::placeholder { white-space: nowrap; overflow: hidden; }
+@media (max-width: 380px) { .ui .cmp .row { gap: 6px; } .ui .cmp .ib { width: 38px; height: 38px; } }
+.ui .cmp .bar2.replying { display: flex; }
+.ui .cmp .bar2 .rqwrap { flex: 1; min-width: 0; }
+.ui .cmp .bar2 .rqfull { display: none; }
+/* The big composer keeps the quote bar: who, #n and the first line or two of what is answered, and ×. */
+body.tall .ui .cmp .bar2 .short { display: inline; }
+body.tall .ui .cmp .bar2 .rq { white-space: normal; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; line-height: 1.45; }
+body.tall .ui .cmp .bar2.replying { align-items: center; }
+.ui .atpop { border: 0; }
+.ui .picker button { padding: 0.6rem 0.8rem; }
+.ui .atpop .pickrow { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 44px; padding: 0 10px; border: 0; border-radius: 13px; text-align: left; }
+.ui .atpop .pickrow.hi { background: var(--hl); }
+.ui .atpop .pickrow.gone { border-top: 1px solid var(--line); margin-top: 4px; color: var(--muted); }
+.ui .atpop .pickrow .nm { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ui .atpop .pickrow .st { flex: none; font-size: 12px; color: var(--muted); }
+.ui .atpop .pickrow .st.live { color: var(--live-ink); }
+.ui .atpop .pickrow .bot { flex: none; }
+.ui .pop a.pi { color: var(--fg); text-decoration: none; }
+.ui .scrim.msgmenu-scrim { z-index: 20; background: rgba(0, 0, 0, 0.42); }
+.ui .msg.menued { outline: none; }
+body.menuopen .ui .msg:not(.menued) { opacity: 1; }
+.ui .msgmenu button { padding: 0.55rem 0.95rem; }
+.ui .msgmenu .sep { margin: 0.25rem 0.95rem; }
+.ui #msgmenu button { flex-direction: row; align-items: center; gap: 10px; min-height: 44px; }
+.ui #msgmenu .mi { width: 18px; height: 18px; flex: none; color: var(--you-ink); fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.ui #msgmenu .mi-at { display: inline-grid; place-items: center; font-size: 19px; font-weight: 700; line-height: 1; }
+.ui #msgmenu button[data-act="copy"] .mi, .ui #msgmenu button[data-act="select"] .mi { color: var(--muted); }
+.ui #msgmenu .menu-copy { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; }
+.ui #msgmenu .mtime { padding: 0.6rem 0.95rem 0.45rem; margin-bottom: 0.25rem; border-bottom: 1px solid var(--line); font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+@media (max-width: 760px) {
+  .ui #msgmenu { min-width: 0; max-width: none; width: auto; max-height: 70vh; overflow-y: auto; border-radius: 18px; }
+  body.room.todo-sheet-open { position: fixed; inset: 0; width: 100%; overflow: hidden; transform: none !important; }
+  .ui .sheet.panel .sbody.long .scroll { overflow-x: hidden; overscroll-behavior: contain; touch-action: pan-y; }
+  .ui .sheet.panel .sbody.long::after { content: none; }
+  .ui .sheet.panel .scroll li.it.you { margin-left: 0; margin-right: 0; }
+  .ui #panel-scrim { touch-action: none; }
+}
+.ui .sheet.panel { display: flex; flex-direction: column; overflow: hidden; padding: 0 16px max(16px, env(safe-area-inset-bottom)); }
+.ui .sheet.panel .panelhead { flex: none; }
+.ui .seg button { white-space: nowrap; flex: none; }
+.ui .sheet .sh { min-width: 0; }
+.ui .sheet .sh .x { flex: none; }
+.ui .sheet.panel .sbody { flex: 1; min-height: 0; overflow-y: auto; }
+.ui .sheet.panel .sbody.long { overflow: hidden; }
+.ui .sheet.panel .sbody.long .scroll { overflow-y: auto; }
+.ui li.it { cursor: pointer; }
+.ui li.it .itemmeta { display: block; color: var(--muted); font-size: 12px; font-weight: 400; margin-top: 2px; }
+.ui li.it .itemmeta a { color: var(--link); text-decoration: none; }
+.ui li.it .itemmeta.ask { overflow: hidden; text-overflow: ellipsis; font-size: 13px; }   /* who asks, the first line of the ask */
+.ui li.it .itemmeta.ask b { font-weight: 600; color: var(--fg); }
+.ui li.it .itemmeta.ask b .acct { font-weight: 500; color: var(--muted); }
+.ui .sheet.up .sbody { overflow-y: auto; }
+.ui .sheet.up dl.kv button[data-item] { color: var(--link); font-weight: 600; text-align: left; }
+.ui .side { display: none; }
+body.tall .ui .cmp { position: fixed; }
+body.tall .ui .cmp .row { grid-template-columns: auto auto 1fr auto; }
+body.tall .ui .cmp .ta { grid-column: 1 / -1; grid-row: 1; }
+body.tall .ui .cmp #btn-pic { grid-column: 1; grid-row: 2; }
+body.tall .ui .cmp #btn-file { grid-column: 2; grid-row: 2; }
+body.tall .ui .cmp #btn-send { grid-column: 4; grid-row: 2; }
+body.tall .ui .cmp textarea#input { max-height: none; height: 100%; }
+@media (max-width: 400px) {
+  .ui .sheet .seg button { padding: 0 11px; }
+  .ui .sheet .seg.sm button { padding: 0 9px; }
+}
+@media (min-width: 761px) {
+  .ui.desk.side-closed { grid-template-columns: minmax(0, 1fr); }
+  .ui.desk.side-closed .side { display: none; }
+  .ui.desk .sheet .grab, .ui.desk .side .grab { display: none; }
+  .ui.desk .roombar .back { display: none; }
+  .ui.desk .roombar .brand { display: inline-flex; }
+  .ui.desk .roombar .crumbs .sep { display: block; flex: none; }
+  .ui.desk .roombar .crumbs .title { flex-direction: row; align-items: baseline; gap: 10px; min-width: 0; }
+  /* the name keeps its width and the description takes what is left; a name too long for the bar ends in … */
+  .ui.desk .roombar .crumbs .title > b { flex: 0 1 auto; min-width: 0; }
+  .ui.desk .roombar .crumbs #room-topic { min-width: 0; flex: 1 1 0; }
+  .ui.desk .main { grid-column: 1; grid-row: 2; }
+  .ui.desk .side { display: flex; grid-column: 2; grid-row: 2; }
+  .ui.desk .side .sh { display: flex; align-items: center; gap: 6px; margin-bottom: 12px; }
+  .ui.desk .side .sh .sp { flex: 1; min-width: 0; }
+  .ui.desk .side .sh .x { display: grid; place-items: center; width: 28px; height: 28px; flex: none; border-radius: 50%; background: var(--hl); color: var(--muted); font-size: 20px; line-height: 1; }
+  .ui.desk .side .sbody { flex: 1; min-height: 0; overflow-y: auto; }
+  .ui.desk .side .sbody.long { overflow: hidden; }
+  .ui.desk .side .sbody.long .scroll { overflow-y: auto; }
+  /* The scrolling list spans the whole chat column, so its scrollbar sits at the column's right edge;
+     app.css caps .feed at 860px for other pages. The messages inside stay centred at 720px (room-ui.css). */
+  .ui.desk .main > .feed { max-width: none; }
+  .ui.desk .main .feed > .rp { max-width: 720px; }
+  .ui.desk .main .feed > #outbox { max-width: 720px; }
+  .ui.desk .panel.sheet { left: auto; right: 12px; bottom: 12px; width: 380px; border-radius: 22px; }
+  .ui.desk .sheet.up { left: auto; right: 16px; bottom: 16px; width: 420px; max-height: calc(100vh - 100px); border-radius: 22px; }
+}
+
+/* The feed before the first frame: a few rows in the shape of messages (avatar, name, lines), breathing
+   slowly; room.js's first render replaces them. Laid out like .msg.fm so nothing jumps when the real rows come. */
+.ui .feed > .fsk { display: flex; flex-direction: column; }
+.ui .fsk-row { display: grid; grid-template-columns: 22px minmax(0, 1fr); column-gap: 9px; padding: 10px 0 9px; }
+.ui .fsk-row + .fsk-row { box-shadow: inset 0 1px 0 var(--line); margin-top: 6px; }
+.ui .fsk-av { width: 22px; height: 22px; border-radius: 50%; background: var(--hl); }
+.ui .fsk-col { display: flex; flex-direction: column; gap: 9px; padding-top: 3px; min-width: 0; }
+.ui .fsk-l { display: block; height: 10px; border-radius: 5px; background: var(--hl); }
+.ui .fsk-l.fsk-who { height: 11px; margin-bottom: 3px; }
+.ui .fsk-l.w30 { width: 30%; } .ui .fsk-l.w34 { width: 34%; } .ui .fsk-l.w38 { width: 38%; } .ui .fsk-l.w40 { width: 40%; }
+.ui .fsk-l.w44 { width: 44%; } .ui .fsk-l.w56 { width: 56%; } .ui .fsk-l.w64 { width: 64%; } .ui .fsk-l.w72 { width: 72%; }
+.ui .fsk-l.w80 { width: 80%; } .ui .fsk-l.w88 { width: 88%; } .ui .fsk-l.w90 { width: 90%; } .ui .fsk-l.w92 { width: 92%; }
+.ui .fsk-l.w96 { width: 96%; }
+.ui .fsk { animation: fsk-breathe 1.6s ease-in-out infinite; }
+@keyframes fsk-breathe { 0%, 100% { opacity: 1; } 50% { opacity: 0.55; } }
+@media (prefers-reduced-motion: reduce) { .ui .fsk { animation: none; } }
+
+/* Today's done tasks fold: the group's title is the button; ⌄ when open. */
+.ui .grp.grp-fold { width: 100%; text-align: left; cursor: pointer; }
+.ui .grp-fold .chev { margin-left: auto; font-size: 15px; line-height: 1; transition: transform 0.15s; }
+.ui .grp-fold.open .chev { transform: rotate(90deg); }
+.ui .grp-note { margin: 6px 2px; font-size: 13px; }

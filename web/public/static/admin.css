@@ -1,0 +1,93 @@
+/* The ops page /admin: three tabs, each a chart, a table and a prompt. Theme tokens from room-tokens.css.
+   The tabs look like the task panel's .seg, the chart picks like .seg.sm, cards, legends and
+   tables like my data's (me-data.css), the SQL like the invite card's code. */
+.ops { max-width: 1100px; margin: 0 auto; padding: 28px 18px 56px; }
+.ops h1 { margin: 0 0 16px; font-size: clamp(24px, 4vw, 34px); }
+.ops h2 { margin: 0 0 12px; font-size: 17px; }
+.ops .muted { color: var(--muted); }
+.ops-tabs { display: inline-flex; gap: 2px; margin: 0 0 18px; padding: 3px; border-radius: 999px; background: var(--hl); }
+.ops-tabs a { display: inline-flex; align-items: center; justify-content: center; height: 32px; padding: 0 16px; border-radius: 999px; color: var(--muted); font-size: 14.5px; font-weight: 650; text-decoration: none; }
+.ops-tabs a.on { background: var(--surface); color: var(--fg); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.16), 0 0 0 1px var(--line); }
+.ops-card { margin: 0 0 20px; padding: 22px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+.ops-seg { display: inline-flex; flex-wrap: wrap; gap: 2px; margin: 0 0 14px; padding: 3px; border-radius: 999px; background: var(--hl); }
+.ops-seg button, .ops-chips button { height: 28px; border: 0; border-radius: 999px; padding: 0 11px; background: none; color: var(--muted); font: inherit; font-size: 13px; font-weight: 650; cursor: pointer; white-space: nowrap; }
+.ops-seg button.on, .ops-chips button.on { background: var(--surface); color: var(--fg); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.16), 0 0 0 1px var(--line); }
+.ops-chips { display: inline-flex; flex-wrap: wrap; gap: 2px; margin: 0 0 14px; padding: 3px; border-radius: 18px; background: var(--hl); }
+.ops-chips::-webkit-scrollbar { display: none; }
+.ops-chips button b { margin-left: 5px; font-weight: 650; opacity: .7; }
+.ops .legend { display: flex; flex-wrap: wrap; gap: 4px 18px; margin: 0 0 14px; color: var(--muted); font-size: 13px; }
+.ops .legend b { color: var(--fg); font-weight: 650; }
+.ops .legend span::before { content: ""; display: inline-block; width: 12px; height: 9px; margin-right: 7px; border-radius: 2px; vertical-align: 0; }
+.ops .bar-key::before { background: var(--you); opacity: .7; }
+.ops .line-key::before { background: var(--live); height: 3px !important; vertical-align: 3px !important; }
+.ops svg { display: block; width: 100%; height: auto; }
+.ops svg .axis { stroke: var(--line); stroke-width: 1.5; }
+.ops svg .bar { fill: var(--you); opacity: .68; }
+.ops svg .ln { fill: none; stroke: var(--live); stroke-width: 3; stroke-linejoin: round; stroke-linecap: round; }
+.ops svg .pt { fill: var(--live); }
+.ops svg .tick { fill: var(--muted); font-size: 13px; font-family: var(--font); }
+.ops svg .endv { fill: var(--live-ink); font-size: 14px; font-weight: 650; font-family: var(--font); }
+.ops svg .mark { stroke: var(--muted); stroke-dasharray: 4 4; stroke-width: 1.5; }
+.ops svg .marklabel { fill: var(--muted); font-size: 12px; font-family: var(--font); }
+.ops .chart-empty { padding: 48px 16px; text-align: center; color: var(--muted); }
+.ops-cap { margin: 8px 0 0; color: var(--muted); font-size: 13.5px; }
+.ops-cap b { color: var(--fg); font-weight: 650; }
+.ops .table-scroll { overflow-x: auto; }
+.ops table { width: 100%; border-collapse: collapse; min-width: 560px; }
+.ops th, .ops td { padding: 13px 10px; border-bottom: 1px solid var(--line); text-align: left; }
+.ops th { color: var(--muted); font-size: 13px; font-weight: 650; white-space: nowrap; }
+.ops th button { border: 0; padding: 0; background: none; color: inherit; font: inherit; cursor: pointer; }
+.ops th[aria-sort="ascending"] button::after { content: " ↑"; }
+.ops th[aria-sort="descending"] button::after { content: " ↓"; }
+.ops td .muted { font-size: 12.5px; }
+.ops-more summary { padding: 12px 0 4px; color: var(--link); cursor: pointer; font-size: 14px; }
+.ops-sum { margin: 14px 0 0; }
+.ops-sum div { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; border-top: 1px solid var(--line); }
+.ops-sum dt { color: var(--muted); }
+.ops-sum dd { margin: 0; font-variant-numeric: tabular-nums; }
+.ops-sum .total { border-top-color: var(--line-strong); font-weight: 700; }
+.ops-sum .total dt { color: var(--fg); }
+.ops-src { margin: 12px 0 0; color: var(--muted); font-size: 12.5px; }
+.ops-src a { color: var(--link); }
+.ops-prompt p { margin: 0 0 10px; }
+.ops-prompt .copy { float: right; height: 30px; margin: -4px 0 8px 10px; padding: 0 12px; border: 0; border-radius: 999px; background: none; box-shadow: inset 0 0 0 1px var(--line-strong); color: var(--fg); font: inherit; font-size: 13px; font-weight: 650; cursor: pointer; }
+.ops pre { clear: both; margin: 0; padding: 12px 14px; overflow-x: auto; border-radius: 12px; background: var(--code-bg); box-shadow: inset 0 0 0 1px var(--line); font: 12px/1.5 var(--mono); }
+@media (max-width: 600px) {
+  .ops { padding: 20px 12px 40px; }
+  .ops-card { padding: 16px; }
+  .ops-chips { flex-wrap: nowrap; max-width: 100%; overflow-x: auto; scrollbar-width: none; border-radius: 999px; }
+  .ops svg .tick { font-size: 24px; }
+  .ops svg .endv { font-size: 25px; }
+  .ops svg .marklabel { font-size: 22px; }
+  .ops table, .ops thead, .ops tbody { display: block; min-width: 0; }
+  .ops thead tr { display: flex; flex-wrap: wrap; gap: 7px; padding-bottom: 12px; }
+  .ops th { display: block; padding: 0; border: 0; }
+  .ops th:not(:has(button)) { display: none; }
+  .ops th button { padding: 6px 9px; border: 1px solid var(--line); border-radius: 7px; }
+  .ops tbody tr { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 8px; padding: 14px 0; border-top: 1px solid var(--line); }
+  .ops td { display: block; padding: 0; border: 0; }
+  .ops td:first-child { grid-column: 1 / -1; font-weight: 650; }
+  .ops td:not(:first-child)::before { content: attr(data-label); display: block; margin-bottom: 2px; color: var(--muted); font-size: 12px; }
+}
+
+/* The account deletion page: its forms in the site kit, what goes as my data's table. */
+.ops-del { max-width: 760px; }
+.ops-del .del-find { display: flex; flex-direction: column; align-items: stretch; gap: 10px; margin: 0 0 20px; }
+.ops-del .del-find .sx-fld { margin: 0; }
+/* what cannot be undone: as big as the form's other buttons, light red */
+.ops-del .sx-btn.sx-danger { background: var(--you-soft); color: var(--you-ink); }
+.ops-del .sx-fld + .sx-btn { margin-top: 2px; }
+.ops-del h2 { margin: 6px 0 10px; font-size: 18px; }
+.ops-del .del-table { margin: 0 0 18px; padding: 4px 18px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); overflow-x: auto; }
+.ops-del .del-table table { min-width: 0; }
+.ops-del .del-table th { width: 38%; white-space: normal; }
+.ops-del .del-table tr:last-child th, .ops-del .del-table tr:last-child td { border-bottom: 0; }
+.ops-del form + form, .ops-del .here, .ops-del .error { margin-top: 14px; }
+.ops-del .here { padding: 10px 12px; border-radius: 12px; background: var(--live-soft); color: var(--live-ink); }
+.ops-del .error { padding: 10px 12px; border-radius: 12px; background: var(--you-soft); color: var(--you-ink); }
+@media (max-width: 600px) {
+  .ops-del .del-table table, .ops-del .del-table tbody { display: table-row-group; }
+  .ops-del .del-table tr { display: table-row; }
+  .ops-del .del-table th, .ops-del .del-table td { display: table-cell; padding: 11px 6px; border-bottom: 1px solid var(--line); }
+  .ops-del .del-table th { display: table-cell; }
+}

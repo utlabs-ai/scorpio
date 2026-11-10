@@ -1,0 +1,128 @@
+/* /spawn 「启动 agent」 card. Replaces the step hints in spawn-steps.css.
+   Classes spc- / spf- / spl-; tokens only, so dark follows. The card sits in #picker (app.css .picker), so every rule that styles a
+   <button> inside it starts with .picker.sp-card: the live `.picker button` rule (block, 100 %, no background, bottom line) would win otherwise. */
+
+/* the card takes the composer's place while it is open */
+body.sp-taskmode .composer .row { visibility: hidden; }
+/* The page behind the open card dims. The composer is its own stacking context (z-index 2, below the top bar),
+   so it rises while the card is open and its ::before is the scrim, under the card and over everything else. A click on it lands on
+   the composer, which the card's document pointerdown already treats as outside. Plain colour only: a blur repaints the page every frame. */
+body.sp-taskmode .ui .cmp { z-index: 9; }
+body.sp-taskmode .ui .cmp::before { content: ""; position: fixed; inset: 0; z-index: 3; background: var(--scrim); }
+body.sp-taskmode .ui .picker.sp-card { z-index: 4; }
+.picker.sp-card { bottom: 8px; max-height: min(86vh, 640px); overflow: visible; padding: 0; border-radius: 16px; background: var(--surface); border: 1px solid var(--line-strong); box-shadow: 0 16px 48px rgba(0, 0, 0, .28); }
+.picker.sp-card > .spc { padding: 14px 16px 16px; }
+.spc-h { display: flex; align-items: baseline; gap: 8px; margin-bottom: 14px; }
+.spc-h b { font-size: 16px; font-weight: 750; }
+.spc-h small { margin-right: auto; color: var(--muted); font-size: 13px; }
+.spc-h .esc { margin-left: auto; font-size: 11.5px; color: var(--muted); border: 1px solid var(--line); border-radius: 5px; padding: 1px 6px; }
+.picker.sp-card .spc-h .x { display: inline-block; flex: none; width: 32px; height: 32px; margin: -6px -6px 0 0; padding: 0; border: 0; border-radius: 999px; background: none;
+  margin-left: 4px; color: var(--muted); font-size: 17px; line-height: 32px; text-align: center; }
+
+
+/* an outlined field with its name on the top edge (Material outlined) */
+.spf { position: relative; border: 1px solid var(--line-strong); border-radius: 10px; background: var(--surface); min-width: 0; }
+.spf > .lab { position: absolute; left: 10px; top: -0.62em; padding: 0 5px; background: var(--surface); font-size: 12px; line-height: 1.2; font-weight: 650;
+  color: var(--muted); white-space: nowrap; }
+.spf > .lab .d { font-weight: 500; }
+.spf.on { border-color: var(--link); box-shadow: 0 0 0 1px var(--link); }
+.spf.on > .lab { color: var(--link); }
+
+/* the task: the big one; 16px on phones or iOS zooms in (design.md §3) */
+.spf.task { margin-bottom: 18px; }
+.spf.task textarea { display: block; width: 100%; box-sizing: border-box; min-height: 7.2rem; max-height: 36vh; resize: none; border: 0; background: none;
+  padding: 14px 13px 11px; color: var(--fg); font: inherit; font-size: 15.5px; line-height: 1.55; outline: none; }
+.spf.task textarea::placeholder { color: var(--muted); }
+
+/* the six parameters: a field button each */
+.spc-ps { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 16px 10px; margin-bottom: 14px; }
+.spc-ps .spf.cli { grid-column: span 2; } .spc-ps .spf.name { grid-column: span 3; } .spc-ps .spf.lane { grid-column: span 2; } .spc-ps .spf.dir { grid-column: span 3; }
+.spc-ps .spf.model { grid-column: span 4; }
+.spc-ps .spf.effort, .spc-ps .spf.perm { grid-column: span 3; }
+.picker.sp-card .spf.p { display: flex; align-items: center; gap: 6px; width: auto; height: 44px; padding: 0 10px 0 12px; border: 1px solid var(--line-strong); border-radius: 10px;
+  background: var(--surface); color: var(--fg); text-align: left; overflow: visible; cursor: pointer; }
+.picker.sp-card .spf.p.on { border-color: var(--link); box-shadow: 0 0 0 1px var(--link); }
+.picker.sp-card .spf.p:focus-visible { outline: none; border-color: var(--link); box-shadow: 0 0 0 1px var(--link); }
+.spf.p .v { flex: 1; min-width: 0; font-size: 14.5px; font-weight: 650; color: var(--fg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.spf.p .v.mono { font-family: var(--mono); font-size: 13px; }
+.spf.p.def .v { color: var(--muted); font-weight: 500; }
+.spf.p .cv { flex: none; width: 12px; height: 12px; fill: none; stroke: var(--muted); stroke-width: 1.6; }
+.spf.p.on .cv { stroke: var(--link); transform: rotate(180deg); }
+/* a takeover's note under the name and the directory */
+.spf.p .sub { position: absolute; left: 12px; right: 8px; bottom: -1.45em; font-size: 11.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.spc-ps.subs { row-gap: 32px; }
+/* first start in a directory this topic has not used: a full-width line right under the directory's row */
+.spc-dn { grid-column: 1 / -1; display: flex; gap: 6px; margin: -8px 0 0; font-size: 12.5px; line-height: 1.5; color: var(--muted); }
+.spc-dn .ic { flex: none; width: 14px; height: 14px; margin-top: 2px; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; }
+
+.spc-note { font-size: 12px; line-height: 1.5; color: var(--muted); margin: 0 0 12px; }
+.spc-f { display: flex; align-items: center; gap: 10px; }
+.spc-f .k { font-size: 12px; color: var(--muted); white-space: nowrap; }
+/* Start: the one primary button in this view */
+.picker.sp-card .spc-f .go { display: inline-block; flex: none; width: auto; height: 40px; margin-left: auto; padding: 0 22px; border: 0; border-radius: 999px;
+  background: var(--action); color: var(--action-fg); font-size: 15px; font-weight: 700; text-align: center; }
+.picker.sp-card .spc-f .go:disabled { background: var(--hl); color: var(--muted); }
+
+/* one parameter's list: floats over the card, above its field */
+.spl { position: absolute; z-index: 5; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2); overflow: auto; }
+.spl .sq { position: sticky; top: 0; z-index: 1; background: var(--surface); box-shadow: 0 0 0 10px var(--surface); margin: 10px 10px 6px; display: flex; align-items: center; gap: 8px; border: 1.5px solid var(--link); border-radius: 8px; padding: 6px 10px; font-family: var(--mono); font-size: 14px; color: var(--fg); }
+.spl .sq .ph { color: var(--muted); font-family: var(--font); }
+.spl .sq i { width: 1.5px; height: 1em; background: var(--link); }
+.spl .gh { padding: 8px 12px 4px; font-size: 11.5px; color: var(--muted); font-weight: 750; }
+.spl .ft { padding: 8px 12px 10px; border-top: 1px solid color-mix(in srgb, var(--line) 60%, transparent); font-size: 12px; color: var(--muted); }
+.spl .it { position: relative; display: flex; align-items: baseline; gap: 8px; min-height: 40px; box-sizing: border-box; padding: 9px 2.6rem 9px 12px;
+  border-top: 1px solid color-mix(in srgb, var(--line) 60%, transparent); font-size: 15px; cursor: pointer; }
+.spl .it b { font-weight: 650; white-space: nowrap; }
+.spl .it small { color: var(--muted); font-size: 12.5px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.spl .it.two { flex-direction: column; gap: 1px; }
+.spl .it.two small { white-space: normal; }
+.spl .it .hit { color: var(--link); }
+.spl .it .mono { font-family: var(--mono); font-size: 13px; }
+/* the highlighted row: tint and a bar on the left; the current value: a ✓ */
+.spl .it.hi { background: color-mix(in srgb, var(--link) 11%, var(--surface)); box-shadow: inset 3px 0 0 var(--link); }
+.spl .it.hi b { color: var(--link); }
+.spl .it.cur::after { content: ""; position: absolute; right: 1rem; top: 50%; width: 6px; height: 11px; margin-top: -8px; border: solid var(--link); border-width: 0 2.2px 2.2px 0; transform: rotate(45deg); }
+.spl .it .use { flex: none; font-size: 13px; padding: 1px 8px; border-radius: 999px; background: color-mix(in srgb, var(--link) 15%, transparent); color: var(--link); font-weight: 700; }
+.spl .it.hi .use { background: var(--link); color: var(--surface); }
+
+/* after @computer: one list, /spawn first; a description wraps to two lines instead of being cut (spOtherCommands is void) */
+.picker.cmdl button.two small { white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.4; }
+/* the selected row in every picker */
+.picker button.hi { background: color-mix(in srgb, var(--link) 11%, var(--surface)); box-shadow: inset 3px 0 0 var(--link); }
+.picker button.hi > b, .picker button.hi .l1 b { color: var(--link); }
+
+@media (hover: hover) {
+  .picker.sp-card .spf.p:not(.on):hover { border-color: color-mix(in srgb, var(--link) 45%, var(--line-strong)); }
+  .spl .it:not(.hi):hover { background: var(--hl); }
+  .picker.sp-card .spc-h .x:hover { background: var(--hl); color: var(--fg); }
+}
+@media (hover: none), (pointer: coarse) { .spc-f .k, .spc-h .esc { display: none; } }
+
+/* phones: a bottom sheet; fields two by two, the directory on its own row; inputs 16px */
+@media (max-width: 760px) {
+  .picker.sp-card { left: 0; right: 0; bottom: 0; border-radius: 24px 24px 0 0; border-bottom: 0; padding-bottom: env(safe-area-inset-bottom); }
+  .spc-ps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .spc-ps .spf.cli, .spc-ps .spf.name, .spc-ps .spf.lane, .spc-ps .spf.model, .spc-ps .spf.effort { grid-column: span 1; }
+  .spc-ps .spf.dir, .spc-ps .spf.perm { grid-column: 1 / -1; }
+  .spf.task textarea, .spl .sq { font-size: 16px; }
+  .spc-f .k { display: none; }
+  .picker.sp-card .spc-f .go { flex: 1; }
+}
+
+
+/* Live typing surfaces and list state; the supplied prototype used a static search face. */
+.picker.sp-card .spf.task > .lab { display: block; width: auto; margin: 0; }
+.spl input.sq { width: calc(100% - 20px); box-sizing: border-box; background: var(--surface); outline: none; }
+.spl input.sq::placeholder { font-family: var(--font); }
+.spl .it[aria-disabled="true"] { opacity: .45; cursor: default; }
+.picker.sp-card .spc-f .go:focus-visible, .picker.sp-card .x:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+
+.spc-error { color: var(--danger); font-size: 13px; line-height: 1.45; margin: -8px 0 16px; }
+.spc-error[hidden] { display: none; }
+.picker.sp-card > .spc { box-sizing: border-box; max-height: min(86vh, 640px); overflow-y: auto; }
+
+/* The invitation shares this entry point with the topic composer. */
+.sx-spawn-t { margin: 0 0 10px; font-size: 15px; line-height: 1.5; color: var(--fg); }
+
+/* Permission descriptions keep CLI flags legible without treating KV text as markup. */
+.spl .it.two small code { font-family: var(--mono); font-size: .93em; white-space: nowrap; }

@@ -1,0 +1,30 @@
+/* The light theme's top bar: the topic page, /me/data and settings (.ui .bar)
+   and the phone's topic list (/app) turn paper; the dark theme keeps its night sky, unchanged. Linked last. */
+
+/* paper like the left column, the feed and the side panel; the bar keeps reading the --bar-* tokens, which in light
+   point at the page's own */
+:root:not([data-scorpio-effective-theme="dark"]) .ui .bar {
+  --bar: var(--surface); --bar-fg: var(--fg); --bar-muted: var(--muted); --bar-line: var(--line); --bar-chip: var(--hl);
+  --bar-you: var(--you-ink); --bar-live: var(--live); --bar-live-ink: var(--live-ink);
+  background-image: none; box-shadow: inset 0 -1px 0 var(--line);
+}
+:root:not([data-scorpio-effective-theme="dark"]) .ui .bar .icon { box-shadow: none; }
+:root:not([data-scorpio-effective-theme="dark"]) .ui.desk .bar .crumbs .sep { background: var(--line); }
+/* the account avatar on the same bar (/me/data, settings) was white-on-night */
+:root:not([data-scorpio-effective-theme="dark"]) .ui .bar .avatar { box-shadow: inset 0 0 0 1px var(--line); }
+:root:not([data-scorpio-effective-theme="dark"]) .ui .bar .avatar.me { background: var(--action); color: var(--action-fg); box-shadow: none; }
+:root:not([data-scorpio-effective-theme="dark"]) .ui .bar .avatar.on { box-shadow: 0 0 0 2px var(--bar), 0 0 0 3.5px var(--fg); }
+/* the phone's topic list (/app) has the same bar */
+:root:not([data-scorpio-effective-theme="dark"]) .sx-ph-top.sx-sky { --sky-fg: var(--fg); background-color: var(--surface); background-image: none; box-shadow: inset 0 -1px 0 var(--line); }
+:root:not([data-scorpio-effective-theme="dark"]) .sx-ph-top .sx-icb { color: var(--fg); background: var(--hl); box-shadow: none; }
+:root:not([data-scorpio-effective-theme="dark"]) .sx-ph-top .sx-av { background: var(--action); color: var(--action-fg); }
+
+/* the 等你 / 在干活 pill in light colours too, like the column's and the list's pills; 在干活 no longer glows
+   (a glow needs a dark sky behind it): its green breathes instead, on the neon's 1.8 s beat. */
+:root:not([data-scorpio-effective-theme="dark"]) .ui .bar .todochip::after { box-shadow: inset 0 0 0 1px var(--line); }
+:root:not([data-scorpio-effective-theme="dark"]) .ui .bar .todochip .rg + .rg { box-shadow: inset 1px 0 0 var(--line); }
+:root:not([data-scorpio-effective-theme="dark"]) .ui .bar .todochip .rg.y:not(.zero) { background: var(--you-soft); }
+:root:not([data-scorpio-effective-theme="dark"]) .ui .bar .todochip .rg.d:not(.zero) { background: var(--live-soft); }
+:root:not([data-scorpio-effective-theme="dark"]) .ui .bar .todochip .rg.d b { text-shadow: none; animation: none; }
+:root:not([data-scorpio-effective-theme="dark"]) .ui .bar .todochip .rg.d:not(.zero) { animation: tb-breathe 1.8s ease-out infinite; }
+@keyframes tb-breathe { 0%, 34%, 100% { background-color: var(--live-soft); } 8% { background-color: rgba(0, 152, 105, 0.26); } 21% { background-color: rgba(0, 152, 105, 0.16); } }

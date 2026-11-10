@@ -1,0 +1,157 @@
+{
+  "presence": [
+    {
+      "case": "online person",
+      "text": "在线"
+    },
+    {
+      "case": "offline person, active before",
+      "text": "3 小时前活跃"
+    },
+    {
+      "case": "offline person, never active",
+      "text": "离线"
+    },
+    {
+      "case": "online computer",
+      "text": "在线"
+    },
+    {
+      "case": "host off",
+      "text": "电脑 20 分钟前离线"
+    },
+    {
+      "case": "working",
+      "text": "运行中"
+    },
+    {
+      "case": "blocked",
+      "text": "等待确认"
+    },
+    {
+      "case": "idle",
+      "text": "空闲"
+    },
+    {
+      "case": "waiting on me",
+      "text": "等你"
+    },
+    {
+      "case": "someone else's agent waiting on me",
+      "text": "等你"
+    },
+    {
+      "case": "offline agent with an item on me",
+      "text": "2 天前活跃"
+    }
+  ],
+  "memberRow": [
+    {
+      "case": "an agent of mine",
+      "html": "<li class=\"seat hascard\" data-name=\"api@kai\"><svg class=\"bot p5 working\"></svg><div class=\"w\"><div class=\"l1\"><b>api@kai</b><span class=\"st live\">运行中</span></div><div class=\"rcprev\">API seat: builds the server. · reviews PRs · docs · | a | b |</div></div><span class=\"rcgo\" aria-hidden=\"true\"></span></li>"
+    },
+    {
+      "case": "someone else's agent",
+      "html": "<li class=\"seat hascard\" data-name=\"helper@lee\"><svg class=\"bot p3 you\"></svg><div class=\"w\"><div class=\"l1\"><b>helper@lee</b><span class=\"st live\">等你</span></div><div class=\"rcprev\">Helps 小李 with &lt;the page &amp; tests.</div></div><span class=\"rcgo\" aria-hidden=\"true\"></span></li>"
+    },
+    {
+      "case": "a computer seat",
+      "html": "<li class=\"seat\" data-name=\"daemon@kai\"><span class=\"pav\">d</span><div class=\"w\"><div class=\"l1\"><b>MacBook (kai-mbp) · office</b><span class=\"st live\">在线</span></div></div></li>"
+    },
+    {
+      "case": "a person",
+      "html": "<li class=\"seat dim\" data-name=\"lee\"><span class=\"pav\">小</span><div class=\"w\"><div class=\"l1\"><b>小李<small class=\"acct\">（lee）</small></b><span class=\"st\">3 小时前活跃</span></div></div></li>"
+    },
+    {
+      "case": "me",
+      "html": "<li class=\"seat\" data-name=\"kai\"><span class=\"pav me\">k</span><div class=\"w\"><div class=\"l1\"><b>Kai<small class=\"acct\">（kai）</small></b><small>你</small><span class=\"st live\">在线</span></div></div></li>"
+    }
+  ],
+  "cardPreview": [
+    {
+      "case": "a written card",
+      "html": "<div class=\"rcprev\">API seat: builds the server. · reviews PRs · docs · | a | b |</div>"
+    },
+    {
+      "case": "a /spawn card",
+      "html": "<div class=\"rcprev none\">还没有职能卡<span class=\"rcby\"> · 由 kai 带入</span></div>"
+    },
+    {
+      "case": "a card that repeats the role",
+      "html": "<div class=\"rcprev\">Answers questions about the split.</div>"
+    },
+    {
+      "case": "no card",
+      "html": "<div class=\"rcprev none\">还没有职能卡</div>"
+    }
+  ],
+  "showMember": [
+    {
+      "case": "my agent",
+      "key": "member:api@kai",
+      "shown": true,
+      "html": "<div class=\"grab\"></div><header class=\"sh\"><span class=\"sp\"></span><button type=\"button\" class=\"x\" data-close-item aria-label=\"关闭\">×</button></header><div class=\"sbody mpop\"><div class=\"mhead\"><svg class=\"bot p5 working big\"></svg><div class=\"mw\"><h3>api@kai</h3><div class=\"msub\"><span class=\"st live\">运行中</span><span>MacBook</span></div></div></div><div class=\"mlbl\">职能</div><div class=\"mcard md\"><p><strong>API</strong> seat: builds the server.</p><ul><li>reviews <code>PRs</code></li><li>docs (<a class=\"lnk\" href=\"https://example.com/docs\" target=\"_blank\" rel=\"noopener noreferrer\">https://example.com/docs</a>)</li></ul><div class=\"tablewrap\"><table><thead><tr><th>a</th><th>b</th></tr></thead><tbody></tbody></table></div></div><div class=\"mlbl\">方向</div><div class=\"mlane\"><span class=\"mcard none\">没有方向</span><button type=\"button\" class=\"btn sm\" data-lane-edit=\"api@kai\">改方向</button></div><div class=\"acts\"><button type=\"button\" class=\"btn wide primary\" data-at=\"api@kai\">@ api</button><button type=\"button\" class=\"btn wide\" data-card-edit=\"api@kai\">编辑职能卡</button></div></div>"
+    },
+    {
+      "case": "my agent while editing, over the limit",
+      "key": "member:api@kai",
+      "shown": true,
+      "html": "<div class=\"grab\"></div><header class=\"sh\"><span class=\"sp\"></span><button type=\"button\" class=\"x\" data-close-item aria-label=\"关闭\">×</button></header><div class=\"sbody mpop\"><div class=\"mhead\"><svg class=\"bot p5 working big\"></svg><div class=\"mw\"><h3>api@kai</h3><div class=\"msub\"><span class=\"st live\">运行中</span><span>MacBook</span></div></div></div><div class=\"mlbl\">职能</div><div class=\"topicedit\"><textarea id=\"pop-edit\" rows=\"6\" placeholder=\"它做什么、别人找它做什么、它不做什么。可以写多行。\">第 1 条：负责服务端的拆分。\n第 2 条：负责服务端的拆分。\n第 3 条：负责服务端的拆分。\n第 4 条：负责服务端的拆分。\n第 5 条：负责服务端的拆分。\n第 6 条：负责服务端的拆分。\n第 7 条：负责服务端的拆分。\n第 8 条：负责服务端的拆分。\n第 9 条：负责服务端的拆分。\n第 10 条：负责服务端的拆分。\n第 11 条：负责服务端的拆分。\n第 12 条：负责服务端的拆分。\n第 13 条：负责服务端的拆分。\n第 14 条：负责服务端的拆分。\n第 15 条：负责服务端的拆分。\n第 16 条：负责服务端的拆分。\n第 17 条：负责服务端的拆分。\n第 18 条：负责服务端的拆分。\n第 19 条：负责服务端的拆分。\n第 20 条：负责服务端的拆分。\n第 21 条：负责服务端的拆分。\n第 22 条：负责服务端的拆分。\n第 23 条：负责服务端的拆分。\n第 24 条：负责服务端的拆分。\n第 25 条：负责服务端的拆分。\n第 26 条：负责服务端的拆分。\n第 27 条：负责服务端的拆分。\n第 28 条：负责服务端的拆分。\n第 29 条：负责服务端的拆分。\n第 30 条：负责服务端的拆分。\n第 31 条：负责服务端的拆分。\n第 32 条：负责服务端的拆分。\n第 33 条：负责服务端的拆分。\n第 34 条：负责服务端的拆分。\n第 35 条：负责服务端的拆分。\n第 36 条：负责服务端的拆分。\n第 37 条：负责服务端的拆分。\n第 38 条：负责服务端的拆分。\n第 39 条：负责服务端的拆分。\n第 40 条：负责服务端的拆分。\n第 41 条：负责服务端的拆分。\n第 42 条：负责服务端的拆分。\n第 43 条：负责服务端的拆分。\n第 44 条：负责服务端的拆分。\n第 45 条：负责服务端的拆分。\n第 46 条：负责服务端的拆分。\n第 47 条：负责服务端的拆分。\n第 48 条：负责服务端的拆分。\n第 49 条：负责服务端的拆分。\n第 50 条：负责服务端的拆分。\n第 51 条：负责服务端的拆分。\n第 52 条：负责服务端的拆分。\n第 53 条：负责服务端的拆分。\n第 54 条：负责服务端的拆分。\n第 55 条：负责服务端的拆分。\n第 56 条：负责服务端的拆分。\n第 57 条：负责服务端的拆分。\n第 58 条：负责服务端的拆分。\n第 59 条：负责服务端的拆分。\n第 60 条：负责服务端的拆分。\n第 61 条：负责服务端的拆分。\n第 62 条：负责服务端的拆分。\n第 63 条：负责服务端的拆分。\n第 64 条：负责服务端的拆分。\n第 65 条：负责服务端的拆分。\n第 66 条：负责服务端的拆分。</textarea><div class=\"topicfoot\"><small class=\"count\" id=\"pop-n\"></small><span class=\"sp\"></span><button type=\"button\" class=\"btn\" data-pop-cancel>取消</button><button type=\"button\" class=\"btn primary\" id=\"pop-save\" data-card-save=\"api@kai\">保存</button></div></div><p class=\"muted small rcnote\">api@kai 会随下一条消息收到新职能卡，之后按新卡工作。</p></div>",
+      "count": {
+        "text": "1112 / 1000 · 超出 112 字",
+        "over": true,
+        "saveDisabled": true,
+        "focused": true
+      }
+    },
+    {
+      "case": "someone else's agent",
+      "key": "member:helper@lee",
+      "shown": true,
+      "html": "<div class=\"grab\"></div><header class=\"sh\"><span class=\"sp\"></span><button type=\"button\" class=\"x\" data-close-item aria-label=\"关闭\">×</button></header><div class=\"sbody mpop\"><div class=\"mhead\"><svg class=\"bot p3 you big\"></svg><div class=\"mw\"><h3>helper@lee</h3><div class=\"msub\"><span class=\"st live\">等你</span><span>lee-pc</span></div></div></div><div class=\"mlbl\">职能</div><div class=\"mcard md\"><p>Helps 小李 with &lt;the&gt; page &amp; tests.</p></div><div class=\"mlbl\">方向</div><div class=\"mlane\"><span class=\"mcard none\">没有方向</span></div><div class=\"acts\"><button type=\"button\" class=\"btn wide primary\" data-at=\"helper@lee\">@ helper</button></div></div>"
+    },
+    {
+      "case": "a left agent with a handoff",
+      "key": "member:old@kai",
+      "shown": true,
+      "html": "<div class=\"grab\"></div><header class=\"sh\"><span class=\"sp\"></span><button type=\"button\" class=\"x\" data-close-item aria-label=\"关闭\">×</button></header><div class=\"sbody mpop\"><div class=\"mhead\"><svg class=\"bot p4 gone big\"></svg><div class=\"mw\"><h3>old@kai</h3><div class=\"msub\"><span class=\"st\">离线</span></div></div></div><div class=\"mlbl\">职能</div><div class=\"mcard md\"><p>The old seat.</p></div><div class=\"mlbl\">方向</div><div class=\"mlane\"><span class=\"mcard none\">没有方向</span><button type=\"button\" class=\"btn sm\" data-lane-edit=\"old@kai\">改方向</button></div><a class=\"mho\" href=\"/r/r1/handoff?name=old%40kai\"><span class=\"th\">交接</span><span class=\"v\">10-17 10:25 · kai-mbp</span><span class=\"rcgo\" aria-hidden=\"true\"></span></a><div class=\"acts\"></div></div>"
+    },
+    {
+      "case": "an agent with no host",
+      "key": "member:nohost@kai",
+      "shown": true,
+      "html": "<div class=\"grab\"></div><header class=\"sh\"><span class=\"sp\"></span><button type=\"button\" class=\"x\" data-close-item aria-label=\"关闭\">×</button></header><div class=\"sbody mpop\"><div class=\"mhead\"><svg class=\"bot p0 unknown big\"></svg><div class=\"mw\"><h3>nohost@kai</h3><div class=\"msub\"><span class=\"st\">2 天前活跃</span></div></div></div><div class=\"mlbl\">职能</div><div class=\"mcard md\"><p>Not on any computer.</p></div><div class=\"mlbl\">方向</div><div class=\"mlane\"><span class=\"mcard none\">没有方向</span><button type=\"button\" class=\"btn sm\" data-lane-edit=\"nohost@kai\">改方向</button></div><div class=\"acts\"><button type=\"button\" class=\"btn wide primary\" data-at=\"nohost@kai\">@ nohost</button><button type=\"button\" class=\"btn wide\" data-card-edit=\"nohost@kai\">编辑职能卡</button></div></div>"
+    }
+  ],
+  "membersHtml": [
+    {
+      "case": "mine open, others folded",
+      "calls": [],
+      "html": "<button type=\"button\" class=\"rtopic\" data-topic><span class=\"th\">描述</span><span class=\"rcprev\">在 Scorpio 里迭代 Scorpio。 · 第二行</span><span class=\"rcgo\" aria-hidden=\"true\"></span></button><div class=\"seathead\"><span class=\"nums\">本主题成员：10 · 3 人</span><span class=\"seatacts\"><a class=\"btn sm gvlink\" href=\"/r/r1/view\">全局图</a><button type=\"button\" class=\"btn sm primary\" data-invite>邀请</button><button type=\"button\" class=\"btn sm\" data-settings>主题设置</button></span></div><section class=\"own\"><button type=\"button\" class=\"oh\" data-fold-member=\"kai\" aria-expanded=\"true\"><span class=\"pav me\">k</span><span class=\"w\"><span class=\"l1\"><b>Kai<small class=\"acct\">（kai）</small></b><small>你</small><small class=\"sep\">·</small><small>创建者</small><small class=\"sep\">·</small><span class=\"st live\">在线</span></span><span class=\"l2\">6 个 agent · <b class=\"live-ink\">1 运行中</b> · <b class=\"wait-ink\">1 等待确认</b> · <b class=\"wait-ink\">2 离线</b> · <b>2 空闲</b></span></span><span class=\"fold-ic\" aria-hidden=\"true\"></span></button><div class=\"grp sub computer\"><svg class=\"dmn term s15\"></svg><span>MacBook (kai-mbp) · office</span><span class=\"sp\"></span><button type=\"button\" class=\"x\" data-remove-computer=\"daemon@kai\" aria-label=\"移出这台电脑（MacBook (kai-mbp) · office）\">×</button></div><ul class=\"seats sub\"><li class=\"seat hascard\" data-name=\"api@kai\"><svg class=\"bot p5 working\"></svg><div class=\"w\"><div class=\"l1\"><b>api@kai</b><span class=\"st live\">运行中</span></div><div class=\"rcprev\">API seat: builds the server. · reviews PRs · docs · | a | b |</div></div><span class=\"rcgo\" aria-hidden=\"true\"></span></li><li class=\"seat hascard\" data-name=\"ask@kai\"><svg class=\"bot p2 blocked\"></svg><div class=\"w\"><div class=\"l1\"><b>ask@kai</b><span class=\"st wait\">等待确认</span></div><div class=\"rcprev\">Answers questions about the split.</div></div><span class=\"rcgo\" aria-hidden=\"true\"></span></li><li class=\"seat hascard\" data-name=\"idle@kai\"><svg class=\"bot p3 idle\"></svg><div class=\"w\"><div class=\"l1\"><b>idle@kai</b><span class=\"st live\">空闲</span></div><div class=\"rcprev none\">还没有职能卡</div></div><span class=\"rcgo\" aria-hidden=\"true\"></span></li><li class=\"seat hascard\" data-name=\"wait@kai\"><svg class=\"bot p2 you\"></svg><div class=\"w\"><div class=\"l1\"><b>wait@kai</b><span class=\"st live\">等你</span></div><div class=\"rcprev none\">还没有职能卡<span class=\"rcby\"> · 由 kai 带入</span></div></div><span class=\"rcgo\" aria-hidden=\"true\"></span></li></ul><div class=\"grp sub computer\"><svg class=\"dmn term offline s15\"></svg><span>kai-mini（mini@kai）</span><span class=\"sp\"></span><button type=\"button\" class=\"x\" data-remove-computer=\"mini@kai\" aria-label=\"移出这台电脑（kai-mini）\">×</button></div><ul class=\"seats sub\"><li class=\"seat hascard dim\" data-name=\"off@kai\"><svg class=\"bot p4 offline\"></svg><div class=\"w\"><div class=\"l1\"><b>off@kai</b><span class=\"st\">电脑 20 分钟前离线</span></div><div class=\"rcprev\">Runs at home.</div></div><span class=\"rcgo\" aria-hidden=\"true\"></span></li></ul><div class=\"grp sub computer\"><svg class=\"dmn term offline s15\"></svg><span>电脑</span></div><ul class=\"seats sub\"><li class=\"seat hascard dim\" data-name=\"nohost@kai\"><svg class=\"bot p0 unknown\"></svg><div class=\"w\"><div class=\"l1\"><b>nohost@kai</b><span class=\"st\">2 天前活跃</span></div><div class=\"rcprev\">Not on any computer.</div></div><span class=\"rcgo\" aria-hidden=\"true\"></span></li></ul><button type=\"button\" class=\"grp sub left-fold\" data-fold-member=\"left:kai\" aria-expanded=\"false\"><span>已离开 · 2</span><span class=\"fold-ic\" aria-hidden=\"true\"></span></button></section><section class=\"own folded\"><button type=\"button\" class=\"oh\" data-fold-member=\"lee\" aria-expanded=\"false\"><span class=\"pav\">小</span><span class=\"w\"><span class=\"l1\"><b>小李<small class=\"acct\">（lee）</small></b><span class=\"st\">3 小时前活跃</span></span><span class=\"l2\">1 个 agent · <b>1 空闲</b></span></span><span class=\"fold-ic\" aria-hidden=\"true\"></span></button></section><section class=\"own folded\"><button type=\"button\" class=\"oh\" data-fold-member=\"zed\" aria-expanded=\"false\"><span class=\"pav\">z</span><span class=\"w\"><span class=\"l1\"><b>zed</b><span class=\"st\">离线</span></span><span class=\"l2\">没有 agent</span></span><span class=\"fold-ic\" aria-hidden=\"true\"></span></button></section>"
+    },
+    {
+      "case": "lee opened",
+      "calls": [
+        "openPanel members",
+        "renderSide"
+      ],
+      "html": "<button type=\"button\" class=\"rtopic\" data-topic><span class=\"th\">描述</span><span class=\"rcprev\">在 Scorpio 里迭代 Scorpio。 · 第二行</span><span class=\"rcgo\" aria-hidden=\"true\"></span></button><div class=\"seathead\"><span class=\"nums\">本主题成员：10 · 3 人</span><span class=\"seatacts\"><a class=\"btn sm gvlink\" href=\"/r/r1/view\">全局图</a><button type=\"button\" class=\"btn sm primary\" data-invite>邀请</button><button type=\"button\" class=\"btn sm\" data-settings>主题设置</button></span></div><section class=\"own\"><button type=\"button\" class=\"oh\" data-fold-member=\"kai\" aria-expanded=\"true\"><span class=\"pav me\">k</span><span class=\"w\"><span class=\"l1\"><b>Kai<small class=\"acct\">（kai）</small></b><small>你</small><small class=\"sep\">·</small><small>创建者</small><small class=\"sep\">·</small><span class=\"st live\">在线</span></span><span class=\"l2\">6 个 agent · <b class=\"live-ink\">1 运行中</b> · <b class=\"wait-ink\">1 等待确认</b> · <b class=\"wait-ink\">2 离线</b> · <b>2 空闲</b></span></span><span class=\"fold-ic\" aria-hidden=\"true\"></span></button><div class=\"grp sub computer\"><svg class=\"dmn term s15\"></svg><span>MacBook (kai-mbp) · office</span><span class=\"sp\"></span><button type=\"button\" class=\"x\" data-remove-computer=\"daemon@kai\" aria-label=\"移出这台电脑（MacBook (kai-mbp) · office）\">×</button></div><ul class=\"seats sub\"><li class=\"seat hascard\" data-name=\"api@kai\"><svg class=\"bot p5 working\"></svg><div class=\"w\"><div class=\"l1\"><b>api@kai</b><span class=\"st live\">运行中</span></div><div class=\"rcprev\">API seat: builds the server. · reviews PRs · docs · | a | b |</div></div><span class=\"rcgo\" aria-hidden=\"true\"></span></li><li class=\"seat hascard\" data-name=\"ask@kai\"><svg class=\"bot p2 blocked\"></svg><div class=\"w\"><div class=\"l1\"><b>ask@kai</b><span class=\"st wait\">等待确认</span></div><div class=\"rcprev\">Answers questions about the split.</div></div><span class=\"rcgo\" aria-hidden=\"true\"></span></li><li class=\"seat hascard\" data-name=\"idle@kai\"><svg class=\"bot p3 idle\"></svg><div class=\"w\"><div class=\"l1\"><b>idle@kai</b><span class=\"st live\">空闲</span></div><div class=\"rcprev none\">还没有职能卡</div></div><span class=\"rcgo\" aria-hidden=\"true\"></span></li><li class=\"seat hascard\" data-name=\"wait@kai\"><svg class=\"bot p2 you\"></svg><div class=\"w\"><div class=\"l1\"><b>wait@kai</b><span class=\"st live\">等你</span></div><div class=\"rcprev none\">还没有职能卡<span class=\"rcby\"> · 由 kai 带入</span></div></div><span class=\"rcgo\" aria-hidden=\"true\"></span></li></ul><div class=\"grp sub computer\"><svg class=\"dmn term offline s15\"></svg><span>kai-mini（mini@kai）</span><span class=\"sp\"></span><button type=\"button\" class=\"x\" data-remove-computer=\"mini@kai\" aria-label=\"移出这台电脑（kai-mini）\">×</button></div><ul class=\"seats sub\"><li class=\"seat hascard dim\" data-name=\"off@kai\"><svg class=\"bot p4 offline\"></svg><div class=\"w\"><div class=\"l1\"><b>off@kai</b><span class=\"st\">电脑 20 分钟前离线</span></div><div class=\"rcprev\">Runs at home.</div></div><span class=\"rcgo\" aria-hidden=\"true\"></span></li></ul><div class=\"grp sub computer\"><svg class=\"dmn term offline s15\"></svg><span>电脑</span></div><ul class=\"seats sub\"><li class=\"seat hascard dim\" data-name=\"nohost@kai\"><svg class=\"bot p0 unknown\"></svg><div class=\"w\"><div class=\"l1\"><b>nohost@kai</b><span class=\"st\">2 天前活跃</span></div><div class=\"rcprev\">Not on any computer.</div></div><span class=\"rcgo\" aria-hidden=\"true\"></span></li></ul><button type=\"button\" class=\"grp sub left-fold\" data-fold-member=\"left:kai\" aria-expanded=\"false\"><span>已离开 · 2</span><span class=\"fold-ic\" aria-hidden=\"true\"></span></button></section><section class=\"own\"><button type=\"button\" class=\"oh\" data-fold-member=\"lee\" aria-expanded=\"true\"><span class=\"pav\">小</span><span class=\"w\"><span class=\"l1\"><b>小李<small class=\"acct\">（lee）</small></b><span class=\"st\">3 小时前活跃</span></span><span class=\"l2\">1 个 agent · <b>1 空闲</b></span></span><span class=\"fold-ic\" aria-hidden=\"true\"></span></button><div class=\"grp sub computer\"><svg class=\"dmn term s15\"></svg><span>lee-pc（daemon@lee）</span></div><ul class=\"seats sub\"><li class=\"seat hascard\" data-name=\"helper@lee\"><svg class=\"bot p3 you\"></svg><div class=\"w\"><div class=\"l1\"><b>helper@lee</b><span class=\"st live\">等你</span></div><div class=\"rcprev\">Helps 小李 with &lt;the page &amp; tests.</div></div><span class=\"rcgo\" aria-hidden=\"true\"></span></li></ul></section><section class=\"own folded\"><button type=\"button\" class=\"oh\" data-fold-member=\"zed\" aria-expanded=\"false\"><span class=\"pav\">z</span><span class=\"w\"><span class=\"l1\"><b>zed</b><span class=\"st\">离线</span></span><span class=\"l2\">没有 agent</span></span><span class=\"fold-ic\" aria-hidden=\"true\"></span></button></section>"
+    },
+    {
+      "case": "my left agents opened",
+      "calls": [
+        "openPanel members",
+        "renderSide"
+      ],
+      "html": "<button type=\"button\" class=\"rtopic\" data-topic><span class=\"th\">描述</span><span class=\"rcprev\">在 Scorpio 里迭代 Scorpio。 · 第二行</span><span class=\"rcgo\" aria-hidden=\"true\"></span></button><div class=\"seathead\"><span class=\"nums\">本主题成员：10 · 3 人</span><span class=\"seatacts\"><a class=\"btn sm gvlink\" href=\"/r/r1/view\">全局图</a><button type=\"button\" class=\"btn sm primary\" data-invite>邀请</button><button type=\"button\" class=\"btn sm\" data-settings>主题设置</button></span></div><section class=\"own\"><button type=\"button\" class=\"oh\" data-fold-member=\"kai\" aria-expanded=\"true\"><span class=\"pav me\">k</span><span class=\"w\"><span class=\"l1\"><b>Kai<small class=\"acct\">（kai）</small></b><small>你</small><small class=\"sep\">·</small><small>创建者</small><small class=\"sep\">·</small><span class=\"st live\">在线</span></span><span class=\"l2\">6 个 agent · <b class=\"live-ink\">1 运行中</b> · <b class=\"wait-ink\">1 等待确认</b> · <b class=\"wait-ink\">2 离线</b> · <b>2 空闲</b></span></span><span class=\"fold-ic\" aria-hidden=\"true\"></span></button><div class=\"grp sub computer\"><svg class=\"dmn term s15\"></svg><span>MacBook (kai-mbp) · office</span><span class=\"sp\"></span><button type=\"button\" class=\"x\" data-remove-computer=\"daemon@kai\" aria-label=\"移出这台电脑（MacBook (kai-mbp) · office）\">×</button></div><ul class=\"seats sub\"><li class=\"seat hascard\" data-name=\"api@kai\"><svg class=\"bot p5 working\"></svg><div class=\"w\"><div class=\"l1\"><b>api@kai</b><span class=\"st live\">运行中</span></div><div class=\"rcprev\">API seat: builds the server. · reviews PRs · docs · | a | b |</div></div><span class=\"rcgo\" aria-hidden=\"true\"></span></li><li class=\"seat hascard\" data-name=\"ask@kai\"><svg class=\"bot p2 blocked\"></svg><div class=\"w\"><div class=\"l1\"><b>ask@kai</b><span class=\"st wait\">等待确认</span></div><div class=\"rcprev\">Answers questions about the split.</div></div><span class=\"rcgo\" aria-hidden=\"true\"></span></li><li class=\"seat hascard\" data-name=\"idle@kai\"><svg class=\"bot p3 idle\"></svg><div class=\"w\"><div class=\"l1\"><b>idle@kai</b><span class=\"st live\">空闲</span></div><div class=\"rcprev none\">还没有职能卡</div></div><span class=\"rcgo\" aria-hidden=\"true\"></span></li><li class=\"seat hascard\" data-name=\"wait@kai\"><svg class=\"bot p2 you\"></svg><div class=\"w\"><div class=\"l1\"><b>wait@kai</b><span class=\"st live\">等你</span></div><div class=\"rcprev none\">还没有职能卡<span class=\"rcby\"> · 由 kai 带入</span></div></div><span class=\"rcgo\" aria-hidden=\"true\"></span></li></ul><div class=\"grp sub computer\"><svg class=\"dmn term offline s15\"></svg><span>kai-mini（mini@kai）</span><span class=\"sp\"></span><button type=\"button\" class=\"x\" data-remove-computer=\"mini@kai\" aria-label=\"移出这台电脑（kai-mini）\">×</button></div><ul class=\"seats sub\"><li class=\"seat hascard dim\" data-name=\"off@kai\"><svg class=\"bot p4 offline\"></svg><div class=\"w\"><div class=\"l1\"><b>off@kai</b><span class=\"st\">电脑 20 分钟前离线</span></div><div class=\"rcprev\">Runs at home.</div></div><span class=\"rcgo\" aria-hidden=\"true\"></span></li></ul><div class=\"grp sub computer\"><svg class=\"dmn term offline s15\"></svg><span>电脑</span></div><ul class=\"seats sub\"><li class=\"seat hascard dim\" data-name=\"nohost@kai\"><svg class=\"bot p0 unknown\"></svg><div class=\"w\"><div class=\"l1\"><b>nohost@kai</b><span class=\"st\">2 天前活跃</span></div><div class=\"rcprev\">Not on any computer.</div></div><span class=\"rcgo\" aria-hidden=\"true\"></span></li></ul><button type=\"button\" class=\"grp sub left-fold open\" data-fold-member=\"left:kai\" aria-expanded=\"true\"><span>已离开 · 2</span><span class=\"fold-ic\" aria-hidden=\"true\"></span></button><ul class=\"seats sub\"><li class=\"seat hascard dim\" data-name=\"old@kai\"><svg class=\"bot p4 gone\"></svg><div class=\"w\"><div class=\"l1\"><b>old@kai</b><span class=\"st\">已离开</span></div><div class=\"rcprev\">The old seat.</div></div><span class=\"rcgo\" aria-hidden=\"true\"></span></li><li class=\"seat hascard dim\" data-name=\"past@kai\"><svg class=\"bot p3 gone\"></svg><div class=\"w\"><div class=\"l1\"><b>past@kai</b><span class=\"st\">已离开</span></div><div class=\"rcprev none\">还没有职能卡</div></div><span class=\"rcgo\" aria-hidden=\"true\"></span></li></ul></section><section class=\"own\"><button type=\"button\" class=\"oh\" data-fold-member=\"lee\" aria-expanded=\"true\"><span class=\"pav\">小</span><span class=\"w\"><span class=\"l1\"><b>小李<small class=\"acct\">（lee）</small></b><span class=\"st\">3 小时前活跃</span></span><span class=\"l2\">1 个 agent · <b>1 空闲</b></span></span><span class=\"fold-ic\" aria-hidden=\"true\"></span></button><div class=\"grp sub computer\"><svg class=\"dmn term s15\"></svg><span>lee-pc（daemon@lee）</span></div><ul class=\"seats sub\"><li class=\"seat hascard\" data-name=\"helper@lee\"><svg class=\"bot p3 you\"></svg><div class=\"w\"><div class=\"l1\"><b>helper@lee</b><span class=\"st live\">等你</span></div><div class=\"rcprev\">Helps 小李 with &lt;the page &amp; tests.</div></div><span class=\"rcgo\" aria-hidden=\"true\"></span></li></ul></section><section class=\"own folded\"><button type=\"button\" class=\"oh\" data-fold-member=\"zed\" aria-expanded=\"false\"><span class=\"pav\">z</span><span class=\"w\"><span class=\"l1\"><b>zed</b><span class=\"st\">离线</span></span><span class=\"l2\">没有 agent</span></span><span class=\"fold-ic\" aria-hidden=\"true\"></span></button></section>"
+    },
+    {
+      "case": "mine folded",
+      "calls": [
+        "openPanel members",
+        "renderSide"
+      ],
+      "html": "<button type=\"button\" class=\"rtopic\" data-topic><span class=\"th\">描述</span><span class=\"rcprev\">在 Scorpio 里迭代 Scorpio。 · 第二行</span><span class=\"rcgo\" aria-hidden=\"true\"></span></button><div class=\"seathead\"><span class=\"nums\">本主题成员：10 · 3 人</span><span class=\"seatacts\"><a class=\"btn sm gvlink\" href=\"/r/r1/view\">全局图</a><button type=\"button\" class=\"btn sm primary\" data-invite>邀请</button><button type=\"button\" class=\"btn sm\" data-settings>主题设置</button></span></div><section class=\"own folded\"><button type=\"button\" class=\"oh\" data-fold-member=\"kai\" aria-expanded=\"false\"><span class=\"pav me\">k</span><span class=\"w\"><span class=\"l1\"><b>Kai<small class=\"acct\">（kai）</small></b><small>你</small><small class=\"sep\">·</small><small>创建者</small><small class=\"sep\">·</small><span class=\"st live\">在线</span></span><span class=\"l2\">6 个 agent · <b class=\"live-ink\">1 运行中</b> · <b class=\"wait-ink\">1 等待确认</b> · <b class=\"wait-ink\">2 离线</b> · <b>2 空闲</b></span></span><span class=\"fold-ic\" aria-hidden=\"true\"></span></button></section><section class=\"own\"><button type=\"button\" class=\"oh\" data-fold-member=\"lee\" aria-expanded=\"true\"><span class=\"pav\">小</span><span class=\"w\"><span class=\"l1\"><b>小李<small class=\"acct\">（lee）</small></b><span class=\"st\">3 小时前活跃</span></span><span class=\"l2\">1 个 agent · <b>1 空闲</b></span></span><span class=\"fold-ic\" aria-hidden=\"true\"></span></button><div class=\"grp sub computer\"><svg class=\"dmn term s15\"></svg><span>lee-pc（daemon@lee）</span></div><ul class=\"seats sub\"><li class=\"seat hascard\" data-name=\"helper@lee\"><svg class=\"bot p3 you\"></svg><div class=\"w\"><div class=\"l1\"><b>helper@lee</b><span class=\"st live\">等你</span></div><div class=\"rcprev\">Helps 小李 with &lt;the page &amp; tests.</div></div><span class=\"rcgo\" aria-hidden=\"true\"></span></li></ul></section><section class=\"own folded\"><button type=\"button\" class=\"oh\" data-fold-member=\"zed\" aria-expanded=\"false\"><span class=\"pav\">z</span><span class=\"w\"><span class=\"l1\"><b>zed</b><span class=\"st\">离线</span></span><span class=\"l2\">没有 agent</span></span><span class=\"fold-ic\" aria-hidden=\"true\"></span></button></section>"
+    }
+  ]
+}

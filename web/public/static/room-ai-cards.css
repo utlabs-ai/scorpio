@@ -1,0 +1,62 @@
+/* Reply buttons and chart cards on an agent's message (docs/api/messages.md). Linked last. */
+
+/* buttons: a row in the foot, first; one column, each full width, when the row does not fit (room-ai-cards.js) */
+.ui .fm-foot .aib { flex: 1 1 100%; display: flex; flex-wrap: nowrap; gap: 8px; padding-top: 8px; min-width: 0; }
+.ui .fm-foot .aib.stack { flex-direction: column; align-items: stretch; }
+.ui .aib-b { position: relative; flex: none; display: inline-flex; align-items: center; justify-content: center; min-height: 36px; padding: 0 14px;
+  border: 1.5px solid var(--line-strong); border-radius: 999px; background: transparent; color: var(--fg);
+  font: inherit; font-size: 14.5px; font-weight: 650; line-height: 1.25; white-space: nowrap; cursor: pointer; }
+.ui .aib.stack .aib-b { width: 100%; }
+/* chosen by someone: light grey; your own choice: a dark ring */
+.ui .aib-b.picked { background: var(--hl); }
+.ui .aib-b.mine { border: 2px solid var(--fg); }
+@media (hover: hover) { .ui .aib-b:not(:disabled):hover { background: var(--hl); } }
+.ui .aib-b:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+/* a viewer, or an archived topic: drawn, not pressable (docs/design.md §4) */
+.ui .aib-b:disabled { color: var(--muted); opacity: 0.45; cursor: default; }
+/* a press on its way: that button waits, and the group takes no other tap */
+.ui .aib[data-busy] .aib-b { cursor: progress; }
+.ui .aib[data-busy="0"] .aib-b:nth-child(1), .ui .aib[data-busy="1"] .aib-b:nth-child(2),
+.ui .aib[data-busy="2"] .aib-b:nth-child(3), .ui .aib[data-busy="3"] .aib-b:nth-child(4) { opacity: 0.55; }
+/* who chose it: their avatars on the button's top right, the latest on top */
+.ui .aib-avs { position: absolute; top: -10px; right: -8px; display: flex; flex-direction: row-reverse; align-items: center; pointer-events: none; }
+.ui .aib-avs .pav { width: 22px; height: 22px; font-size: 11.5px; box-shadow: 0 0 0 2px var(--bg); }
+.ui .aib-avs .pav + .pav { margin-right: -7px; }
+.ui .aib-more { order: 9; margin-right: 3px; padding: 0 5px; border-radius: 999px; background: var(--hl); color: var(--muted); font-size: 11.5px; font-weight: 700; line-height: 18px; }
+
+/* a card: its summary in grey under the text, then the chart on the message itself, no card frame around it */
+.ui .aic { position: relative; margin-top: 10px; }
+.ui .aic-sum { margin: 0 0 12px; color: var(--muted); font-size: 15px; line-height: 1.55; overflow-wrap: anywhere; }
+.ui .aic-no { display: none; margin: 0 0 4px; font-size: 15px; line-height: 1.55; }
+.ui .aic-box { position: relative; }
+.ui .aic-box:empty { height: 160px; }
+.ui .aic-fr { display: block; width: 100%; height: 160px; border: 0; background: transparent; }
+/* capped at half the screen: the bottom fades, 「⤢ 全屏看」 sits on the fade */
+.ui .aic.capped .aic-fr { -webkit-mask-image: linear-gradient(to bottom, black calc(100% - 88px), transparent); mask-image: linear-gradient(to bottom, black calc(100% - 88px), transparent); }
+.ui .aic-full { display: none; position: absolute; left: 0; bottom: 6px; align-items: center; height: 32px; padding: 0 14px; border: 0; border-radius: 999px;
+  background: var(--hl); color: var(--link); font: inherit; font-size: 14.5px; font-weight: 650; cursor: pointer; }
+.ui .aic.capped .aic-full { display: inline-flex; }
+.ui .aic-full:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+/* not shown (no ticket, no ready within 8 s): the not-shown line (.aic-no), then the summary as text */
+.ui .aic.failed .aic-no { display: block; }
+.ui .aic.failed .aic-sum { color: var(--fg); }
+.ui .aic.failed .aic-box, .ui .aic.failed .aic-full { display: none; }
+
+/* full screen: the whole screen on a phone, a large box over the topic on a desktop; × top left */
+.ui .aic-over { position: fixed; inset: 0; z-index: 35; display: flex; background: var(--surface); }
+.ui .aic-sheet { display: flex; flex-direction: column; width: 100%; min-height: 0; background: var(--surface); }
+.ui .aic-top { flex: none; display: flex; align-items: center; gap: 10px; height: 54px; padding: 0 16px 0 6px; border-bottom: 1px solid var(--line);
+  padding-top: env(safe-area-inset-top); box-sizing: content-box; }
+.ui .aic-x { flex: none; width: 44px; height: 44px; border: 0; border-radius: 999px; background: transparent; color: var(--fg); font: inherit; font-size: 28px; line-height: 1; cursor: pointer; }
+.ui .aic-x:focus-visible { outline: 2px solid var(--link); outline-offset: -2px; }
+.ui .aic-av { display: inline-flex; }
+.ui .aic-av .bot, .ui .aic-av .dmn, .ui .aic-av .pav { width: 22px; height: 22px; }
+.ui .aic-who { font-size: 15.5px; font-weight: 650; white-space: nowrap; }
+.ui .aic-meta { color: var(--muted); font-size: 13px; font-weight: 650; white-space: nowrap; }
+.ui .aic-scroll { flex: 1; min-height: 0; overflow: auto; padding: 18px 16px calc(24px + env(safe-area-inset-bottom)); }
+.ui .aic.full { margin-top: 0; }
+@media (min-width: 761px) {
+  .ui .aic-over { inset: 0; padding: 44px; background: var(--scrim); }
+  .ui .aic-sheet { border-radius: 16px; box-shadow: var(--card-shadow); overflow: hidden; }
+  .ui .aic-scroll { padding: 20px 96px 32px; }
+}

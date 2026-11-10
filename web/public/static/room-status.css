@@ -1,0 +1,95 @@
+/* Scorpio status marks, visual proposal "deep space". Needs the theme tokens.
+   Three families:
+     .rc  a message: how far it got        (checks)  sending · sent · delivered · read · later · gone · failed
+     .sd  a seat: what it is doing          (dots)    working · idle · blocked · offline · unknown   (agents)
+                                                       online · seen                                 (people)
+     .ck  a TODO item: where it stands      (rings)   you · doing · wait · todo · done
+   Agents show a robot instead of .sd (same six states plus "waits for you"); .sd stays for
+   people and for small summaries (the TODO chip in the top bar).
+   Loops run only while something is going on (sending, working). A state change plays once: add
+   class "fresh" when the state changes in front of the reader, take it off after ~600 ms.
+   Only classes and SVG attributes: works under the room page's CSP (style-src 'self'). */
+
+/* ---------- .rc  message receipt: <span class="rc read"><svg …/><span>已读</span></span> ---------- */
+.rc { display: inline-flex; align-items: center; gap: 3px; font-size: 12px; line-height: 1; color: var(--muted); white-space: nowrap; }
+.rc svg { width: 18px; height: 12px; flex: none; overflow: visible; fill: none; stroke: var(--muted); stroke-width: 1.6; stroke-linecap: butt; stroke-linejoin: miter; }
+.rc .ring, .rc .orb, .rc .c1, .rc .c2, .rc .bang { display: none; }
+.rc .c1, .rc .c2 { stroke-dasharray: 1; stroke-dashoffset: 0; }
+
+.rc.sending .ring, .rc.sending .orb { display: inline; }
+.rc.sending .ring { stroke: var(--line-strong); stroke-width: 1.3; }
+.rc.sending .orb { fill: var(--fg); stroke: none; transform-box: view-box; transform-origin: 6px 6px; animation: rc-orbit 0.9s linear infinite; }
+
+.rc.sent .c1, .rc.later .c1, .rc.gone .c1,
+.rc.delivered .c1, .rc.delivered .c2,
+.rc.read .c1, .rc.read .c2 { display: inline; }
+
+.rc.read { color: var(--live-ink); }
+.rc.read svg { stroke: var(--live); }
+.rc.later { color: var(--wait-ink); }
+.rc.later svg { stroke: var(--wait); }
+.rc.gone { color: var(--you-ink); font-weight: 600; }
+.rc.gone svg { stroke: var(--you); }
+.rc.failed { color: var(--you-ink); font-weight: 600; }
+.rc.failed .bang { display: inline; }
+.rc.failed .bang circle { fill: var(--you); stroke: none; }
+.rc.failed .bang path { stroke: var(--you-fg); stroke-width: 1.7; }
+
+.rc.fresh.sent .c1, .rc.fresh.later .c1, .rc.fresh.gone .c1 { animation: rc-draw 0.26s ease-out both; }
+.rc.fresh.delivered .c2 { animation: rc-draw 0.26s ease-out both; }
+.rc.fresh.read svg { animation: rc-pop 0.34s ease-out; }
+.rc.fresh.failed svg { animation: rc-pop 0.34s ease-out; }
+
+@keyframes rc-orbit { to { transform: rotate(360deg); } }
+@keyframes rc-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes rc-pop { 0% { transform: scale(1); } 45% { transform: scale(1.3); } 100% { transform: scale(1); } }
+
+/* ---------- .sd  status dot: <span class="sd working"></span> ---------- */
+.sd { position: relative; display: inline-block; flex: none; width: 8px; height: 8px; border-radius: 50%; box-sizing: border-box; }
+.sd.online, .sd.working { background: var(--live); }
+.sd.idle { border: 1.5px solid var(--live); }
+.sd.seen { border: 1.5px solid var(--idle); }
+.sd.unknown { border: 1.5px dashed var(--idle); }
+.sd.blocked { width: 10px; height: 9px; border-radius: 0; background: var(--wait); clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+/* the computer is offline: a crescent, it sleeps and wakes up by itself */
+.sd.offline { width: 9px; height: 9px; background: transparent; box-shadow: inset 2.6px -1.4px 0 0 var(--wait); transform: rotate(-24deg); }
+
+/* working: a heartbeat, two quick beats then rest (Antares is the scorpion's heart) */
+.sd.working { animation: sd-core 1.8s ease-out infinite; }
+.sd.working::before, .sd.working::after {
+  content: ""; position: absolute; inset: 0; border-radius: 50%; background: var(--live); opacity: 0;
+  animation: sd-ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+.sd.working::after { animation-delay: 0.24s; }
+@keyframes sd-core { 0%, 34%, 100% { transform: scale(1); } 8% { transform: scale(1.25); } 21% { transform: scale(1.15); } }
+@keyframes sd-ping { 0% { transform: scale(1); opacity: 0.45; } 50%, 100% { transform: scale(2.6); opacity: 0; } }
+.sd.fresh.blocked { animation: sd-shake 0.45s ease-out; }
+.sd.fresh.online, .sd.fresh.idle { animation: sd-in 0.3s ease-out; }
+@keyframes sd-shake { 20% { transform: translateX(-1.5px); } 40% { transform: translateX(1.5px); } 60% { transform: translateX(-1px); } 80% { transform: translateX(1px); } }
+@keyframes sd-in { from { transform: scale(0.2); opacity: 0; } }
+
+/* ---------- .ck  TODO ring: <span class="ck doing"></span> ---------- */
+.ck { position: relative; display: inline-block; flex: none; width: 22px; height: 22px; border-radius: 50%; box-sizing: border-box; border: 1.5px solid var(--line-strong); background: var(--surface); }
+.ck::after { content: ""; position: absolute; inset: 3.5px; border-radius: 50%; }
+/* todo = ready to start: the plain grey ring */
+.ck.doing { border-color: var(--live); }
+.ck.doing::after { background: linear-gradient(90deg, transparent 50%, var(--live) 50%); }
+/* wait = waiting on items before it: grey and dashed, nobody has to move it */
+.ck.wait { border-style: dashed; border-color: var(--idle); }
+.ck.you { border: 2px solid var(--you); }
+.ck.you::after { inset: 5px; background: var(--you); clip-path: polygon(50% 0, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); border-radius: 0; }
+.ck.done { border-color: var(--live); background: var(--live); }
+/* the tick's ink is centred in the ring: a translate, because left/top are painted at whole pixels */
+.ck.done::after { inset: auto; left: 7px; top: 3.5px; width: 5px; height: 9.5px; border-radius: 0; border: solid var(--surface); border-width: 0 2px 2px 0; transform: translate(-0.25px, -1.7px) rotate(45deg); }
+.ck.fresh.done { animation: rc-pop 0.34s ease-out; }
+.ck.fresh.doing::after { animation: sd-in 0.3s ease-out; }
+.ck.sm { width: 16px; height: 16px; border-width: 1.5px; }
+.ck.sm::after { inset: 2.5px; }
+.ck.sm.you::after { inset: 3px; }
+.ck.sm.done::after { left: 5px; top: 2.2px; width: 3.6px; height: 7px; border-width: 0 1.7px 1.7px 0; transform: translate(-0.4px, -0.55px) rotate(45deg); }
+
+/* ---------- reduced motion: nothing loops; working keeps a still halo so it still reads apart from online ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .rc .orb, .sd.working, .sd.working::before, .sd.working::after, .fresh, .fresh::after, .fresh svg, .fresh path { animation: none !important; }
+  .sd.working::before { opacity: 0.22; transform: scale(2); }
+}

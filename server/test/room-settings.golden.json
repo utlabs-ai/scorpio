@@ -1,0 +1,488 @@
+{
+  "showSettings": [
+    {
+      "case": "owner, private",
+      "kind": "settings",
+      "shown": true,
+      "html": "<div class=\"panelhead\"><b>主题设置</b><button type=\"button\" class=\"x\" data-close>×</button></div><h4>主题名</h4><div class=\"topicedit nameedit\"><input id=\"set-name\" type=\"text\" maxlength=\"80\"><div class=\"topicfoot\"><small id=\"name-n\" class=\"count\"></small><span class=\"sp\"></span><button type=\"button\" class=\"btn primary\" id=\"name-save\" data-savename>保存</button></div></div><h4>描述</h4><div class=\"topicedit\"><textarea id=\"set-topic\" rows=\"5\" placeholder=\"这个主题做什么、谁决定、有什么规则。可以写多行。\"></textarea><div class=\"topicfoot\"><small id=\"topic-n\" class=\"count\"></small><span class=\"sp\"></span><button type=\"button\" class=\"btn primary\" id=\"topic-save\" data-savetopic>保存</button></div></div><h4>谁能加入</h4><label class=\"radio\"><input type=\"radio\" name=\"vis\" value=\"private\" checked> <span><b>私有</b> <small class=\"muted\">需要口令</small></span></label><label class=\"radio\"><input type=\"radio\" name=\"vis\" value=\"public\"> <span><b>公开</b> <small class=\"muted\">拿到链接并登录即可加入，可查看全部历史</small></span></label><h4>主题成员</h4><div class=\"chips\"><span class=\"chip\">kai（创建者）</span></div><h4>导出</h4><p class=\"muted small\">把这个主题的记录打包下载：消息、任务、附件、交接、定时消息和备忘，导之前可以勾选。</p><button type=\"button\" class=\"btn xp-sec-btn\" data-export>导出</button><h4>归档</h4><p class=\"muted small\">归档后主题只读：历史保留，不能发送消息、置顶或修改任务。首页上移至「已归档」，可随时恢复。归档 90 天未恢复，即永久删除。</p><button type=\"button\" class=\"btn danger\" data-archive>归档这个主题</button><h4>删除主题</h4><p class=\"muted small\">消息、文件和任务将立即永久删除，无法恢复。</p><button type=\"button\" class=\"btn danger\" data-delroom>删除主题</button>",
+      "topic": "在 Scorpio 里迭代 **Scorpio**。\n- 第二行",
+      "height": "122px",
+      "count": {
+        "text": "32 / 2000",
+        "over": false,
+        "saveDisabled": false
+      }
+    },
+    {
+      "case": "owner, public",
+      "kind": "settings",
+      "shown": true,
+      "html": "<div class=\"panelhead\"><b>主题设置</b><button type=\"button\" class=\"x\" data-close>×</button></div><h4>主题名</h4><div class=\"topicedit nameedit\"><input id=\"set-name\" type=\"text\" maxlength=\"80\"><div class=\"topicfoot\"><small id=\"name-n\" class=\"count\"></small><span class=\"sp\"></span><button type=\"button\" class=\"btn primary\" id=\"name-save\" data-savename>保存</button></div></div><h4>描述</h4><div class=\"topicedit\"><textarea id=\"set-topic\" rows=\"5\" placeholder=\"这个主题做什么、谁决定、有什么规则。可以写多行。\"></textarea><div class=\"topicfoot\"><small id=\"topic-n\" class=\"count\"></small><span class=\"sp\"></span><button type=\"button\" class=\"btn primary\" id=\"topic-save\" data-savetopic>保存</button></div></div><h4>谁能加入</h4><label class=\"radio\"><input type=\"radio\" name=\"vis\" value=\"private\"> <span><b>私有</b> <small class=\"muted\">需要口令</small></span></label><label class=\"radio\"><input type=\"radio\" name=\"vis\" value=\"public\" checked> <span><b>公开</b> <small class=\"muted\">拿到链接并登录即可加入，可查看全部历史</small></span></label><h4>主题成员</h4><div class=\"chips\"><span class=\"chip\">kai（创建者）</span></div><h4>导出</h4><p class=\"muted small\">把这个主题的记录打包下载：消息、任务、附件、交接、定时消息和备忘，导之前可以勾选。</p><button type=\"button\" class=\"btn xp-sec-btn\" data-export>导出</button><h4>归档</h4><p class=\"muted small\">归档后主题只读：历史保留，不能发送消息、置顶或修改任务。首页上移至「已归档」，可随时恢复。归档 90 天未恢复，即永久删除。</p><button type=\"button\" class=\"btn danger\" data-archive>归档这个主题</button><h4>删除主题</h4><p class=\"muted small\">消息、文件和任务将立即永久删除，无法恢复。</p><button type=\"button\" class=\"btn danger\" data-delroom>删除主题</button>",
+      "topic": "在 Scorpio 里迭代 **Scorpio**。\n- 第二行",
+      "height": "122px",
+      "count": {
+        "text": "32 / 2000",
+        "over": false,
+        "saveDisabled": false
+      }
+    },
+    {
+      "case": "archived",
+      "kind": "settings",
+      "shown": true,
+      "html": "<div class=\"panelhead\"><b>主题设置</b><button type=\"button\" class=\"x\" data-close>×</button></div><h4>主题名</h4><div class=\"topicedit nameedit\"><input id=\"set-name\" type=\"text\" maxlength=\"80\"><div class=\"topicfoot\"><small id=\"name-n\" class=\"count\"></small><span class=\"sp\"></span><button type=\"button\" class=\"btn primary\" id=\"name-save\" data-savename>保存</button></div></div><h4>描述</h4><div class=\"topicedit\"><textarea id=\"set-topic\" rows=\"5\" placeholder=\"这个主题做什么、谁决定、有什么规则。可以写多行。\"></textarea><div class=\"topicfoot\"><small id=\"topic-n\" class=\"count\"></small><span class=\"sp\"></span><button type=\"button\" class=\"btn primary\" id=\"topic-save\" data-savetopic>保存</button></div></div><h4>谁能加入</h4><label class=\"radio\"><input type=\"radio\" name=\"vis\" value=\"private\" checked> <span><b>私有</b> <small class=\"muted\">需要口令</small></span></label><label class=\"radio\"><input type=\"radio\" name=\"vis\" value=\"public\"> <span><b>公开</b> <small class=\"muted\">拿到链接并登录即可加入，可查看全部历史</small></span></label><h4>主题成员</h4><div class=\"chips\"><span class=\"chip\">kai（创建者）</span></div><h4>导出</h4><p class=\"muted small\">把这个主题的记录打包下载：消息、任务、附件、交接、定时消息和备忘，导之前可以勾选。</p><button type=\"button\" class=\"btn xp-sec-btn\" data-export>导出</button><h4>归档</h4><p class=\"muted small\">归档后主题只读：历史保留，不能发送消息、置顶或修改任务。首页上移至「已归档」，可随时恢复。归档 90 天未恢复，即永久删除。</p><button type=\"button\" class=\"btn\" data-restore>恢复</button><h4>删除主题</h4><p class=\"muted small\">消息、文件和任务将立即永久删除，无法恢复。</p><button type=\"button\" class=\"btn danger\" data-delroom>删除主题</button>",
+      "topic": "在 Scorpio 里迭代 **Scorpio**。\n- 第二行",
+      "height": "122px",
+      "count": {
+        "text": "32 / 2000",
+        "over": false,
+        "saveDisabled": false
+      }
+    },
+    {
+      "case": "with a note",
+      "kind": "settings",
+      "shown": true,
+      "html": "<div class=\"panelhead\"><b>主题设置</b><button type=\"button\" class=\"x\" data-close>×</button></div><h4>主题名</h4><div class=\"topicedit nameedit\"><input id=\"set-name\" type=\"text\" maxlength=\"80\"><div class=\"topicfoot\"><small id=\"name-n\" class=\"count\"></small><span class=\"sp\"></span><button type=\"button\" class=\"btn primary\" id=\"name-save\" data-savename>保存</button></div></div><h4>描述</h4><div class=\"topicedit\"><textarea id=\"set-topic\" rows=\"5\" placeholder=\"这个主题做什么、谁决定、有什么规则。可以写多行。\"></textarea><div class=\"topicfoot\"><small id=\"topic-n\" class=\"count\"></small><span class=\"sp\"></span><button type=\"button\" class=\"btn primary\" id=\"topic-save\" data-savetopic>保存</button></div></div><h4>谁能加入</h4><label class=\"radio\"><input type=\"radio\" name=\"vis\" value=\"private\" checked> <span><b>私有</b> <small class=\"muted\">需要口令</small></span></label><label class=\"radio\"><input type=\"radio\" name=\"vis\" value=\"public\"> <span><b>公开</b> <small class=\"muted\">拿到链接并登录即可加入，可查看全部历史</small></span></label><h4>主题成员</h4><div class=\"chips\"><span class=\"chip\">kai（创建者）</span></div><p class=\"note\">已移出。持有口令仍可重新加入；要彻底阻止，请更换口令。</p><h4>导出</h4><p class=\"muted small\">把这个主题的记录打包下载：消息、任务、附件、交接、定时消息和备忘，导之前可以勾选。</p><button type=\"button\" class=\"btn xp-sec-btn\" data-export>导出</button><h4>归档</h4><p class=\"muted small\">归档后主题只读：历史保留，不能发送消息、置顶或修改任务。首页上移至「已归档」，可随时恢复。归档 90 天未恢复，即永久删除。</p><button type=\"button\" class=\"btn danger\" data-archive>归档这个主题</button><h4>删除主题</h4><p class=\"muted small\">消息、文件和任务将立即永久删除，无法恢复。</p><button type=\"button\" class=\"btn danger\" data-delroom>删除主题</button>",
+      "topic": "在 Scorpio 里迭代 **Scorpio**。\n- 第二行",
+      "height": "122px",
+      "count": {
+        "text": "32 / 2000",
+        "over": false,
+        "saveDisabled": false
+      }
+    },
+    {
+      "case": "several accounts",
+      "kind": "settings",
+      "shown": true,
+      "html": "<div class=\"panelhead\"><b>主题设置</b><button type=\"button\" class=\"x\" data-close>×</button></div><h4>主题名</h4><div class=\"topicedit nameedit\"><input id=\"set-name\" type=\"text\" maxlength=\"80\"><div class=\"topicfoot\"><small id=\"name-n\" class=\"count\"></small><span class=\"sp\"></span><button type=\"button\" class=\"btn primary\" id=\"name-save\" data-savename>保存</button></div></div><h4>描述</h4><div class=\"topicedit\"><textarea id=\"set-topic\" rows=\"5\" placeholder=\"这个主题做什么、谁决定、有什么规则。可以写多行。\"></textarea><div class=\"topicfoot\"><small id=\"topic-n\" class=\"count\"></small><span class=\"sp\"></span><button type=\"button\" class=\"btn primary\" id=\"topic-save\" data-savetopic>保存</button></div></div><h4>谁能加入</h4><label class=\"radio\"><input type=\"radio\" name=\"vis\" value=\"private\" checked> <span><b>私有</b> <small class=\"muted\">需要口令</small></span></label><label class=\"radio\"><input type=\"radio\" name=\"vis\" value=\"public\"> <span><b>公开</b> <small class=\"muted\">拿到链接并登录即可加入，可查看全部历史</small></span></label><h4>主题成员</h4><div class=\"chips\"><span class=\"chip\">kai（创建者）</span><span class=\"chip\">amy <button type=\"button\" class=\"x\" data-remove=\"amy\" aria-label=\"移出 amy\">×</button></span><span class=\"chip\">bo&lt;b&gt; <button type=\"button\" class=\"x\" data-remove=\"bo&lt;b&gt;\" aria-label=\"移出 bo&lt;b&gt;\">×</button></span><span class=\"chip\">lee <button type=\"button\" class=\"x\" data-remove=\"lee\" aria-label=\"移出 lee\">×</button></span></div><h4>导出</h4><p class=\"muted small\">把这个主题的记录打包下载：消息、任务、附件、交接、定时消息和备忘，导之前可以勾选。</p><button type=\"button\" class=\"btn xp-sec-btn\" data-export>导出</button><h4>归档</h4><p class=\"muted small\">归档后主题只读：历史保留，不能发送消息、置顶或修改任务。首页上移至「已归档」，可随时恢复。归档 90 天未恢复，即永久删除。</p><button type=\"button\" class=\"btn danger\" data-archive>归档这个主题</button><h4>删除主题</h4><p class=\"muted small\">消息、文件和任务将立即永久删除，无法恢复。</p><button type=\"button\" class=\"btn danger\" data-delroom>删除主题</button>",
+      "topic": "在 Scorpio 里迭代 **Scorpio**。\n- 第二行",
+      "height": "122px",
+      "count": {
+        "text": "32 / 2000",
+        "over": false,
+        "saveDisabled": false
+      }
+    },
+    {
+      "case": "a description over the limit",
+      "kind": "settings",
+      "shown": true,
+      "html": "<div class=\"panelhead\"><b>主题设置</b><button type=\"button\" class=\"x\" data-close>×</button></div><h4>主题名</h4><div class=\"topicedit nameedit\"><input id=\"set-name\" type=\"text\" maxlength=\"80\"><div class=\"topicfoot\"><small id=\"name-n\" class=\"count\"></small><span class=\"sp\"></span><button type=\"button\" class=\"btn primary\" id=\"name-save\" data-savename>保存</button></div></div><h4>描述</h4><div class=\"topicedit\"><textarea id=\"set-topic\" rows=\"5\" placeholder=\"这个主题做什么、谁决定、有什么规则。可以写多行。\"></textarea><div class=\"topicfoot\"><small id=\"topic-n\" class=\"count\"></small><span class=\"sp\"></span><button type=\"button\" class=\"btn primary\" id=\"topic-save\" data-savetopic>保存</button></div></div><h4>谁能加入</h4><label class=\"radio\"><input type=\"radio\" name=\"vis\" value=\"private\" checked> <span><b>私有</b> <small class=\"muted\">需要口令</small></span></label><label class=\"radio\"><input type=\"radio\" name=\"vis\" value=\"public\"> <span><b>公开</b> <small class=\"muted\">拿到链接并登录即可加入，可查看全部历史</small></span></label><h4>主题成员</h4><div class=\"chips\"><span class=\"chip\">kai（创建者）</span></div><h4>导出</h4><p class=\"muted small\">把这个主题的记录打包下载：消息、任务、附件、交接、定时消息和备忘，导之前可以勾选。</p><button type=\"button\" class=\"btn xp-sec-btn\" data-export>导出</button><h4>归档</h4><p class=\"muted small\">归档后主题只读：历史保留，不能发送消息、置顶或修改任务。首页上移至「已归档」，可随时恢复。归档 90 天未恢复，即永久删除。</p><button type=\"button\" class=\"btn danger\" data-archive>归档这个主题</button><h4>删除主题</h4><p class=\"muted small\">消息、文件和任务将立即永久删除，无法恢复。</p><button type=\"button\" class=\"btn danger\" data-delroom>删除主题</button>",
+      "topic": "第 1 条：主题的描述写得太长了。\n第 2 条：主题的描述写得太长了。\n第 3 条：主题的描述写得太长了。\n第 4 条：主题的描述写得太长了。\n第 5 条：主题的描述写得太长了。\n第 6 条：主题的描述写得太长了。\n第 7 条：主题的描述写得太长了。\n第 8 条：主题的描述写得太长了。\n第 9 条：主题的描述写得太长了。\n第 10 条：主题的描述写得太长了。\n第 11 条：主题的描述写得太长了。\n第 12 条：主题的描述写得太长了。\n第 13 条：主题的描述写得太长了。\n第 14 条：主题的描述写得太长了。\n第 15 条：主题的描述写得太长了。\n第 16 条：主题的描述写得太长了。\n第 17 条：主题的描述写得太长了。\n第 18 条：主题的描述写得太长了。\n第 19 条：主题的描述写得太长了。\n第 20 条：主题的描述写得太长了。\n第 21 条：主题的描述写得太长了。\n第 22 条：主题的描述写得太长了。\n第 23 条：主题的描述写得太长了。\n第 24 条：主题的描述写得太长了。\n第 25 条：主题的描述写得太长了。\n第 26 条：主题的描述写得太长了。\n第 27 条：主题的描述写得太长了。\n第 28 条：主题的描述写得太长了。\n第 29 条：主题的描述写得太长了。\n第 30 条：主题的描述写得太长了。\n第 31 条：主题的描述写得太长了。\n第 32 条：主题的描述写得太长了。\n第 33 条：主题的描述写得太长了。\n第 34 条：主题的描述写得太长了。\n第 35 条：主题的描述写得太长了。\n第 36 条：主题的描述写得太长了。\n第 37 条：主题的描述写得太长了。\n第 38 条：主题的描述写得太长了。\n第 39 条：主题的描述写得太长了。\n第 40 条：主题的描述写得太长了。\n第 41 条：主题的描述写得太长了。\n第 42 条：主题的描述写得太长了。\n第 43 条：主题的描述写得太长了。\n第 44 条：主题的描述写得太长了。\n第 45 条：主题的描述写得太长了。\n第 46 条：主题的描述写得太长了。\n第 47 条：主题的描述写得太长了。\n第 48 条：主题的描述写得太长了。\n第 49 条：主题的描述写得太长了。\n第 50 条：主题的描述写得太长了。\n第 51 条：主题的描述写得太长了。\n第 52 条：主题的描述写得太长了。\n第 53 条：主题的描述写得太长了。\n第 54 条：主题的描述写得太长了。\n第 55 条：主题的描述写得太长了。\n第 56 条：主题的描述写得太长了。\n第 57 条：主题的描述写得太长了。\n第 58 条：主题的描述写得太长了。\n第 59 条：主题的描述写得太长了。\n第 60 条：主题的描述写得太长了。\n第 61 条：主题的描述写得太长了。\n第 62 条：主题的描述写得太长了。\n第 63 条：主题的描述写得太长了。\n第 64 条：主题的描述写得太长了。\n第 65 条：主题的描述写得太长了。\n第 66 条：主题的描述写得太长了。\n第 67 条：主题的描述写得太长了。\n第 68 条：主题的描述写得太长了。\n第 69 条：主题的描述写得太长了。\n第 70 条：主题的描述写得太长了。\n第 71 条：主题的描述写得太长了。\n第 72 条：主题的描述写得太长了。\n第 73 条：主题的描述写得太长了。\n第 74 条：主题的描述写得太长了。\n第 75 条：主题的描述写得太长了。\n第 76 条：主题的描述写得太长了。\n第 77 条：主题的描述写得太长了。\n第 78 条：主题的描述写得太长了。\n第 79 条：主题的描述写得太长了。\n第 80 条：主题的描述写得太长了。\n第 81 条：主题的描述写得太长了。\n第 82 条：主题的描述写得太长了。\n第 83 条：主题的描述写得太长了。\n第 84 条：主题的描述写得太长了。\n第 85 条：主题的描述写得太长了。\n第 86 条：主题的描述写得太长了。\n第 87 条：主题的描述写得太长了。\n第 88 条：主题的描述写得太长了。\n第 89 条：主题的描述写得太长了。\n第 90 条：主题的描述写得太长了。\n第 91 条：主题的描述写得太长了。\n第 92 条：主题的描述写得太长了。\n第 93 条：主题的描述写得太长了。\n第 94 条：主题的描述写得太长了。\n第 95 条：主题的描述写得太长了。\n第 96 条：主题的描述写得太长了。\n第 97 条：主题的描述写得太长了。\n第 98 条：主题的描述写得太长了。\n第 99 条：主题的描述写得太长了。\n第 100 条：主题的描述写得太长了。\n第 101 条：主题的描述写得太长了。\n第 102 条：主题的描述写得太长了。\n第 103 条：主题的描述写得太长了。\n第 104 条：主题的描述写得太长了。\n第 105 条：主题的描述写得太长了。\n第 106 条：主题的描述写得太长了。\n第 107 条：主题的描述写得太长了。\n第 108 条：主题的描述写得太长了。\n第 109 条：主题的描述写得太长了。\n第 110 条：主题的描述写得太长了。\n第 111 条：主题的描述写得太长了。\n第 112 条：主题的描述写得太长了。\n第 113 条：主题的描述写得太长了。\n第 114 条：主题的描述写得太长了。\n第 115 条：主题的描述写得太长了。\n第 116 条：主题的描述写得太长了。\n第 117 条：主题的描述写得太长了。\n第 118 条：主题的描述写得太长了。\n第 119 条：主题的描述写得太长了。\n第 120 条：主题的描述写得太长了。",
+      "height": "122px",
+      "count": {
+        "text": "2291 / 2000 · 超出 291 字",
+        "over": true,
+        "saveDisabled": true
+      }
+    }
+  ],
+  "showInvite": [
+    {
+      "case": "owner, private, with a code",
+      "kind": "invite",
+      "shown": true,
+      "html": "<div class=\"panelhead\"><b>邀请</b><button type=\"button\" class=\"x\" data-close>×</button></div><p class=\"invite-label\">启动一个新 agent</p><p class=\"sx-spawn-t\">你的电脑 daemon 已经在这个主题里，直接在它上面启动一个：</p><div class=\"row gap\"><button class=\"btn primary\" type=\"button\" data-invite-spawn>启动 agent</button></div><p class=\"invite-label\">给已有的 agent</p><pre class=\"invite\" id=\"invite-text\">使用 scorpio skill 加入 Scorpio 主题：主题 ID `r1`，口令 `K7Q2-P9`，描述「在 Scorpio 里迭代 **Scorpio**。\n- 第二行」。加入后报到：你是谁、负责什么。（尚未安装 scorpio skill？先运行安装命令：`curl -fsSL https://scorpio.example/install | sh`）</pre><div class=\"row gap\"><button class=\"btn\" type=\"button\" data-copy=\"invite-text\" data-invite-copy-agent>复制</button><button class=\"btn\" type=\"button\" id=\"btn-newcode\">更换口令</button></div><p class=\"invite-label\">给同事</p><pre class=\"invite\" id=\"colleague-text\">加入我的 Scorpio 主题「Scorpio &lt;测试&gt;」：https://scorpio.example/r/r1（口令 K7Q2-P9）</pre><div class=\"row gap\"><button class=\"btn\" type=\"button\" data-copy=\"colleague-text\" data-invite-copy-colleague>复制</button></div>",
+      "invitation": "使用 scorpio skill 加入 Scorpio 主题：主题 ID `r1`，口令 `K7Q2-P9`，描述「在 Scorpio 里迭代 **Scorpio**。\n- 第二行」。加入后报到：你是谁、负责什么。（尚未安装 scorpio skill？先运行安装命令：`curl -fsSL https://scorpio.example/install | sh`）",
+      "colleague": "加入我的 Scorpio 主题「Scorpio <测试>」：https://scorpio.example/r/r1（口令 K7Q2-P9）"
+    },
+    {
+      "case": "owner, private, without a code",
+      "kind": "invite",
+      "shown": true,
+      "html": "<div class=\"panelhead\"><b>邀请</b><button type=\"button\" class=\"x\" data-close>×</button></div><p class=\"invite-label\">启动一个新 agent</p><p class=\"sx-spawn-t\">你的电脑 daemon 已经在这个主题里，直接在它上面启动一个：</p><div class=\"row gap\"><button class=\"btn primary\" type=\"button\" data-invite-spawn>启动 agent</button></div><p class=\"invite-label\">给已有的 agent</p><pre class=\"invite\" id=\"invite-text\">使用 scorpio skill 加入 Scorpio 主题：主题 ID `r1`，描述「在 Scorpio 里迭代 **Scorpio**。\n- 第二行」。加入后报到：你是谁、负责什么。（尚未安装 scorpio skill？先运行安装命令：`curl -fsSL https://scorpio.example/install | sh`）</pre><div class=\"row gap\"><button class=\"btn\" type=\"button\" data-copy=\"invite-text\" data-invite-copy-agent>复制</button><button class=\"btn\" type=\"button\" id=\"btn-newcode\">更换口令</button></div><p class=\"invite-label\">给同事</p><pre class=\"invite\" id=\"colleague-text\">加入我的 Scorpio 主题「Scorpio &lt;测试&gt;」：https://scorpio.example/r/r1</pre><div class=\"row gap\"><button class=\"btn\" type=\"button\" data-copy=\"colleague-text\" data-invite-copy-colleague>复制</button></div>",
+      "invitation": "使用 scorpio skill 加入 Scorpio 主题：主题 ID `r1`，描述「在 Scorpio 里迭代 **Scorpio**。\n- 第二行」。加入后报到：你是谁、负责什么。（尚未安装 scorpio skill？先运行安装命令：`curl -fsSL https://scorpio.example/install | sh`）",
+      "colleague": "加入我的 Scorpio 主题「Scorpio <测试>」：https://scorpio.example/r/r1"
+    },
+    {
+      "case": "public",
+      "kind": "invite",
+      "shown": true,
+      "html": "<div class=\"panelhead\"><b>邀请</b><button type=\"button\" class=\"x\" data-close>×</button></div><p class=\"invite-label\">启动一个新 agent</p><p class=\"sx-spawn-t\">你的电脑 daemon 已经在这个主题里，直接在它上面启动一个：</p><div class=\"row gap\"><button class=\"btn primary\" type=\"button\" data-invite-spawn>启动 agent</button></div><p class=\"invite-label\">给已有的 agent</p><pre class=\"invite\" id=\"invite-text\">使用 scorpio skill 加入 Scorpio 主题：主题 ID `r1`，描述「在 Scorpio 里迭代 **Scorpio**。\n- 第二行」。加入后报到：你是谁、负责什么。（尚未安装 scorpio skill？先运行安装命令：`curl -fsSL https://scorpio.example/install | sh`）</pre><div class=\"row gap\"><button class=\"btn\" type=\"button\" data-copy=\"invite-text\" data-invite-copy-agent>复制</button></div><p class=\"invite-label\">给同事</p><pre class=\"invite\" id=\"colleague-text\">加入我的 Scorpio 主题「Scorpio &lt;测试&gt;」：https://scorpio.example/r/r1</pre><div class=\"row gap\"><button class=\"btn\" type=\"button\" data-copy=\"colleague-text\" data-invite-copy-colleague>复制</button></div>",
+      "invitation": "使用 scorpio skill 加入 Scorpio 主题：主题 ID `r1`，描述「在 Scorpio 里迭代 **Scorpio**。\n- 第二行」。加入后报到：你是谁、负责什么。（尚未安装 scorpio skill？先运行安装命令：`curl -fsSL https://scorpio.example/install | sh`）",
+      "colleague": "加入我的 Scorpio 主题「Scorpio <测试>」：https://scorpio.example/r/r1"
+    },
+    {
+      "case": "not the owner",
+      "kind": "invite",
+      "shown": true,
+      "html": "<div class=\"panelhead\"><b>邀请</b><button type=\"button\" class=\"x\" data-close>×</button></div><p class=\"invite-label\">给已有的 agent</p><pre class=\"invite\" id=\"invite-text\">使用 scorpio skill 加入 Scorpio 主题：主题 ID `r1`，口令 `K7Q2-P9`，描述「在 Scorpio 里迭代 **Scorpio**。\n- 第二行」。加入后报到：你是谁、负责什么。（尚未安装 scorpio skill？先运行安装命令：`curl -fsSL https://scorpio.example/install | sh`）</pre><div class=\"row gap\"><button class=\"btn\" type=\"button\" data-copy=\"invite-text\" data-invite-copy-agent>复制</button></div><p class=\"invite-label\">给同事</p><pre class=\"invite\" id=\"colleague-text\">加入我的 Scorpio 主题「Scorpio &lt;测试&gt;」：https://scorpio.example/r/r1（口令 K7Q2-P9）</pre><div class=\"row gap\"><button class=\"btn\" type=\"button\" data-copy=\"colleague-text\" data-invite-copy-colleague>复制</button></div>",
+      "invitation": "使用 scorpio skill 加入 Scorpio 主题：主题 ID `r1`，口令 `K7Q2-P9`，描述「在 Scorpio 里迭代 **Scorpio**。\n- 第二行」。加入后报到：你是谁、负责什么。（尚未安装 scorpio skill？先运行安装命令：`curl -fsSL https://scorpio.example/install | sh`）",
+      "colleague": "加入我的 Scorpio 主题「Scorpio <测试>」：https://scorpio.example/r/r1（口令 K7Q2-P9）"
+    }
+  ],
+  "inviteCard": [
+    {
+      "case": "with a code and share support",
+      "className": "sx-invite",
+      "html": "<div class=\"sx-ih\"><span class=\"sx-art\"><svg class=\"dmn term\"></svg><svg class=\"bot p4 idle big\"></svg></span><b>邀请</b></div><p class=\"invite-label\">启动一个新 agent</p><p class=\"sx-spawn-t\">你的电脑 daemon 已经在这个主题里，直接在它上面启动一个：</p><div class=\"row gap\"><button class=\"btn primary\" type=\"button\" data-invite-spawn>启动 agent</button></div><p class=\"invite-label\">给已有的 agent</p><pre class=\"invite\" id=\"card-invite-text\">使用 scorpio skill 加入 Scorpio 主题：主题 ID `r1`，口令 `K7Q2-P9`，描述「在 Scorpio 里迭代 **Scorpio**。\n- 第二行」。加入后报到：你是谁、负责什么。（尚未安装 scorpio skill？先运行安装命令：`curl -fsSL https://scorpio.example/install | sh`）</pre><div class=\"row gap\"><button class=\"btn\" type=\"button\" data-copy=\"card-invite-text\" data-invite-copy-agent>复制</button></div><p class=\"invite-label\">给同事</p><pre class=\"invite\" id=\"card-colleague-text\">加入我的 Scorpio 主题「Scorpio &lt;测试&gt;」：https://scorpio.example/r/r1（口令 K7Q2-P9）</pre><div class=\"row gap\"><button class=\"btn\" type=\"button\" data-copy=\"card-colleague-text\" data-invite-copy-colleague>复制</button></div>",
+      "copied": [
+        {
+          "text": "使用 scorpio skill 加入 Scorpio 主题：主题 ID `r1`，口令 `K7Q2-P9`，描述「在 Scorpio 里迭代 **Scorpio**。\n- 第二行」。加入后报到：你是谁、负责什么。（尚未安装 scorpio skill？先运行安装命令：`curl -fsSL https://scorpio.example/install | sh`）",
+          "label": "已复制"
+        },
+        {
+          "text": "加入我的 Scorpio 主题「Scorpio <测试>」：https://scorpio.example/r/r1（口令 K7Q2-P9）",
+          "label": "已复制"
+        }
+      ]
+    },
+    {
+      "case": "without a code",
+      "className": "sx-invite",
+      "html": "<div class=\"sx-ih\"><span class=\"sx-art\"><svg class=\"dmn term\"></svg><svg class=\"bot p4 idle big\"></svg></span><b>邀请</b></div><p class=\"invite-label\">启动一个新 agent</p><p class=\"sx-spawn-t\">你的电脑 daemon 已经在这个主题里，直接在它上面启动一个：</p><div class=\"row gap\"><button class=\"btn primary\" type=\"button\" data-invite-spawn>启动 agent</button></div><p class=\"invite-label\">给已有的 agent</p><pre class=\"invite\" id=\"card-invite-text\">使用 scorpio skill 加入 Scorpio 主题：主题 ID `r1`，描述「在 Scorpio 里迭代 **Scorpio**。\n- 第二行」。加入后报到：你是谁、负责什么。（尚未安装 scorpio skill？先运行安装命令：`curl -fsSL https://scorpio.example/install | sh`）</pre><div class=\"row gap\"><button class=\"btn\" type=\"button\" data-copy=\"card-invite-text\" data-invite-copy-agent>复制</button></div><p class=\"invite-label\">给同事</p><pre class=\"invite\" id=\"card-colleague-text\">加入我的 Scorpio 主题「Scorpio &lt;测试&gt;」：https://scorpio.example/r/r1</pre><div class=\"row gap\"><button class=\"btn\" type=\"button\" data-copy=\"card-colleague-text\" data-invite-copy-colleague>复制</button></div>",
+      "copied": [
+        {
+          "text": "使用 scorpio skill 加入 Scorpio 主题：主题 ID `r1`，描述「在 Scorpio 里迭代 **Scorpio**。\n- 第二行」。加入后报到：你是谁、负责什么。（尚未安装 scorpio skill？先运行安装命令：`curl -fsSL https://scorpio.example/install | sh`）",
+          "label": "已复制"
+        },
+        {
+          "text": "加入我的 Scorpio 主题「Scorpio <测试>」：https://scorpio.example/r/r1",
+          "label": "已复制"
+        }
+      ]
+    }
+  ],
+  "applyRoom": [
+    {
+      "case": "active, no quota",
+      "name": "Scorpio <测试>",
+      "topic": "在 Scorpio 里迭代 Scorpio。 …",
+      "publicTag": {
+        "text": "公开",
+        "hidden": true
+      },
+      "composerHidden": false,
+      "readonly": {
+        "hidden": true,
+        "html": ""
+      },
+      "quotaNote": {
+        "hidden": true,
+        "text": ""
+      },
+      "calls": [
+        "updateChips"
+      ]
+    },
+    {
+      "case": "archived by its owner, for the owner",
+      "name": "Scorpio <测试>",
+      "topic": "在 Scorpio 里迭代 Scorpio。 …",
+      "publicTag": {
+        "text": "公开",
+        "hidden": true
+      },
+      "composerHidden": true,
+      "readonly": {
+        "hidden": false,
+        "html": "<span>这个主题已归档，只读。历史保留，不能再发送消息。<small class=\"expiry\">80 天后永久删除。</small></span><button type=\"button\" class=\"btn\" data-restore>恢复</button>"
+      },
+      "quotaNote": {
+        "hidden": true,
+        "text": ""
+      },
+      "calls": [
+        "updateChips"
+      ]
+    },
+    {
+      "case": "archived for retention, for the owner",
+      "name": "Scorpio <测试>",
+      "topic": "在 Scorpio 里迭代 Scorpio。 …",
+      "publicTag": {
+        "text": "公开",
+        "hidden": true
+      },
+      "composerHidden": true,
+      "readonly": {
+        "hidden": false,
+        "html": "<span>这个主题已归档，只读。历史保留，不能再发送消息。<small class=\"expiry\">90 天没有新消息，已自动归档。80 天后永久删除。</small></span><button type=\"button\" class=\"btn\" data-restore>恢复</button>"
+      },
+      "quotaNote": {
+        "hidden": true,
+        "text": ""
+      },
+      "calls": [
+        "updateChips"
+      ]
+    },
+    {
+      "case": "archived for retention, for others",
+      "name": "Scorpio <测试>",
+      "topic": "在 Scorpio 里迭代 Scorpio。 …",
+      "publicTag": {
+        "text": "公开",
+        "hidden": true
+      },
+      "composerHidden": true,
+      "readonly": {
+        "hidden": false,
+        "html": "<span>这个主题已归档，只读。历史保留，不能再发送消息。<small class=\"expiry\">90 天没有新消息，已自动归档。80 天后永久删除。</small></span>"
+      },
+      "quotaNote": {
+        "hidden": true,
+        "text": ""
+      },
+      "calls": [
+        "updateChips"
+      ]
+    },
+    {
+      "case": "quota out, for the owner",
+      "name": "Scorpio <测试>",
+      "topic": "在 Scorpio 里迭代 Scorpio。 …",
+      "publicTag": {
+        "text": "公开",
+        "hidden": true
+      },
+      "composerHidden": true,
+      "readonly": {
+        "hidden": false,
+        "html": "<span>本主题今日 200 条消息已用完，17:00 起可再发送。Pro 不限每日条数。</span><a class=\"btn\" href=\"/pricing\">查看 Pro</a>"
+      },
+      "quotaNote": {
+        "hidden": true,
+        "text": ""
+      },
+      "calls": [
+        "updateChips"
+      ]
+    },
+    {
+      "case": "quota out, for others",
+      "name": "Scorpio <测试>",
+      "topic": "在 Scorpio 里迭代 Scorpio。 …",
+      "publicTag": {
+        "text": "公开",
+        "hidden": true
+      },
+      "composerHidden": true,
+      "readonly": {
+        "hidden": false,
+        "html": "<span>本主题今日 200 条消息已用完，17:00 起可再发送。</span>"
+      },
+      "quotaNote": {
+        "hidden": true,
+        "text": ""
+      },
+      "calls": [
+        "updateChips"
+      ]
+    },
+    {
+      "case": "the 80% note, for the owner",
+      "name": "Scorpio <测试>",
+      "topic": "在 Scorpio 里迭代 Scorpio。 …",
+      "publicTag": {
+        "text": "公开",
+        "hidden": true
+      },
+      "composerHidden": false,
+      "readonly": {
+        "hidden": true,
+        "html": ""
+      },
+      "quotaNote": {
+        "hidden": false,
+        "text": "这个主题今天还可发送 30 条（免费版每个主题每天 200 条，17:00 重新计算）。Pro 不限每日条数。"
+      },
+      "calls": [
+        "updateChips"
+      ]
+    },
+    {
+      "case": "the 80% note, for others",
+      "name": "Scorpio <测试>",
+      "topic": "在 Scorpio 里迭代 Scorpio。 …",
+      "publicTag": {
+        "text": "公开",
+        "hidden": true
+      },
+      "composerHidden": false,
+      "readonly": {
+        "hidden": true,
+        "html": ""
+      },
+      "quotaNote": {
+        "hidden": false,
+        "text": "这个主题今天还可发送 30 条（免费版每个主题每天 200 条，17:00 重新计算）。"
+      },
+      "calls": [
+        "updateChips"
+      ]
+    },
+    {
+      "case": "quota from a day that ended",
+      "name": "Scorpio <测试>",
+      "topic": "在 Scorpio 里迭代 Scorpio。 …",
+      "publicTag": {
+        "text": "公开",
+        "hidden": true
+      },
+      "composerHidden": false,
+      "readonly": {
+        "hidden": true,
+        "html": ""
+      },
+      "quotaNote": {
+        "hidden": true,
+        "text": ""
+      },
+      "calls": [
+        "updateChips"
+      ]
+    },
+    {
+      "case": "a viewer of a public topic",
+      "name": "Scorpio <测试>",
+      "topic": "在 Scorpio 里迭代 Scorpio。 …",
+      "publicTag": {
+        "text": "公开",
+        "hidden": false
+      },
+      "composerHidden": true,
+      "readonly": {
+        "hidden": false,
+        "html": "<span>你正在查看这个公开主题。加入后可参与。</span><button type=\"button\" class=\"btn primary\" data-join>加入</button>"
+      },
+      "quotaNote": {
+        "hidden": true,
+        "text": ""
+      },
+      "calls": [
+        "updateChips"
+      ]
+    }
+  ],
+  "renderRoomMenu": [
+    {
+      "case": "viewer",
+      "html": "<button type=\"button\" class=\"pi\" data-room-menu=\"members\">成员<span class=\"v\">2</span></button><button type=\"button\" class=\"pi\" data-room-menu=\"files\">附件</button><button type=\"button\" class=\"pi\" data-room-menu=\"invite\">邀请</button><div class=\"sep\"></div><a class=\"pi\" href=\"/settings\">设置</a>"
+    },
+    {
+      "case": "owner, mute unknown, @me not loaded",
+      "html": "<button type=\"button\" class=\"pi\" data-room-menu=\"members\">成员<span class=\"v\">3</span></button><button type=\"button\" class=\"pi\" data-room-menu=\"files\">附件</button><button type=\"button\" class=\"pi\" data-room-menu=\"at\">@我 的消息<span class=\"v\">…</span></button><button type=\"button\" class=\"pi\" data-room-menu=\"invite\">邀请</button><button type=\"button\" class=\"pi\" data-room-menu=\"mute\" disabled>静音这个主题</button><div class=\"sep\"></div><button type=\"button\" class=\"pi\" data-room-menu=\"room-settings\">主题设置</button><a class=\"pi\" href=\"/settings\">设置</a><button type=\"button\" class=\"pi\" data-room-menu=\"archive\">归档这个主题</button>"
+    },
+    {
+      "case": "owner, muted",
+      "html": "<button type=\"button\" class=\"pi\" data-room-menu=\"members\">成员<span class=\"v\">3</span></button><button type=\"button\" class=\"pi\" data-room-menu=\"files\">附件</button><button type=\"button\" class=\"pi\" data-room-menu=\"at\">@我 的消息<span class=\"v\">3</span></button><button type=\"button\" class=\"pi\" data-room-menu=\"invite\">邀请</button><button type=\"button\" class=\"pi\" data-room-menu=\"mute\"><span class=\"sd seen\" aria-hidden=\"true\"></span>取消静音（这台设备）</button><div class=\"sep\"></div><button type=\"button\" class=\"pi\" data-room-menu=\"room-settings\">主题设置</button><a class=\"pi\" href=\"/settings\">设置</a><button type=\"button\" class=\"pi\" data-room-menu=\"archive\">归档这个主题</button>"
+    },
+    {
+      "case": "owner, not muted",
+      "html": "<button type=\"button\" class=\"pi\" data-room-menu=\"members\">成员<span class=\"v\">3</span></button><button type=\"button\" class=\"pi\" data-room-menu=\"files\">附件</button><button type=\"button\" class=\"pi\" data-room-menu=\"at\">@我 的消息<span class=\"v\">3</span></button><button type=\"button\" class=\"pi\" data-room-menu=\"invite\">邀请</button><button type=\"button\" class=\"pi\" data-room-menu=\"mute\">静音这个主题</button><div class=\"sep\"></div><button type=\"button\" class=\"pi\" data-room-menu=\"room-settings\">主题设置</button><a class=\"pi\" href=\"/settings\">设置</a><button type=\"button\" class=\"pi\" data-room-menu=\"archive\">归档这个主题</button>"
+    },
+    {
+      "case": "member",
+      "html": "<button type=\"button\" class=\"pi\" data-room-menu=\"members\">成员<span class=\"v\">2</span></button><button type=\"button\" class=\"pi\" data-room-menu=\"files\">附件</button><button type=\"button\" class=\"pi\" data-room-menu=\"at\">@我 的消息<span class=\"v\">3</span></button><button type=\"button\" class=\"pi\" data-room-menu=\"invite\">邀请</button><button type=\"button\" class=\"pi\" data-room-menu=\"mute\">静音这个主题</button><div class=\"sep\"></div><button type=\"button\" class=\"pi\" data-room-menu=\"room-settings\">主题设置</button><a class=\"pi\" href=\"/settings\">设置</a><button type=\"button\" class=\"pi\" data-room-menu=\"leave\">离开</button>"
+    },
+    {
+      "case": "archived, owner",
+      "html": "<button type=\"button\" class=\"pi\" data-room-menu=\"members\">成员<span class=\"v\">3</span></button><button type=\"button\" class=\"pi\" data-room-menu=\"files\">附件</button><button type=\"button\" class=\"pi\" data-room-menu=\"at\">@我 的消息<span class=\"v\">3</span></button><button type=\"button\" class=\"pi\" data-room-menu=\"invite\">邀请</button><button type=\"button\" class=\"pi\" data-room-menu=\"mute\">静音这个主题</button><div class=\"sep\"></div><button type=\"button\" class=\"pi\" data-room-menu=\"room-settings\">主题设置</button><a class=\"pi\" href=\"/settings\">设置</a>"
+    },
+    {
+      "case": "archived, member",
+      "html": "<button type=\"button\" class=\"pi\" data-room-menu=\"members\">成员<span class=\"v\">2</span></button><button type=\"button\" class=\"pi\" data-room-menu=\"files\">附件</button><button type=\"button\" class=\"pi\" data-room-menu=\"at\">@我 的消息<span class=\"v\">3</span></button><button type=\"button\" class=\"pi\" data-room-menu=\"invite\">邀请</button><button type=\"button\" class=\"pi\" data-room-menu=\"mute\">静音这个主题</button><div class=\"sep\"></div><button type=\"button\" class=\"pi\" data-room-menu=\"room-settings\">主题设置</button><a class=\"pi\" href=\"/settings\">设置</a><button type=\"button\" class=\"pi\" data-room-menu=\"leave\">离开</button>"
+    }
+  ],
+  "topicHtml": [
+    {
+      "case": "owner, with a description",
+      "html": "<button type=\"button\" class=\"rtopic\" data-topic><span class=\"th\">描述</span><span class=\"rcprev\">在 Scorpio 里迭代 Scorpio。 · 第二行</span><span class=\"rcgo\" aria-hidden=\"true\"></span></button>"
+    },
+    {
+      "case": "owner, no description",
+      "html": "<button type=\"button\" class=\"rtopic\" data-topic><span class=\"th\">描述</span><span class=\"rcprev none\">还没有描述：这个主题做什么、谁决定、有什么规则。</span><span class=\"rcgo\" aria-hidden=\"true\"></span></button>"
+    },
+    {
+      "case": "member, with a description",
+      "html": "<button type=\"button\" class=\"rtopic\" data-topic><span class=\"th\">描述</span><span class=\"rcprev\">在 Scorpio 里迭代 Scorpio。 · 第二行</span><span class=\"rcgo\" aria-hidden=\"true\"></span></button>"
+    },
+    {
+      "case": "member, no description",
+      "html": ""
+    },
+    {
+      "case": "archived, owner, no description",
+      "html": ""
+    },
+    {
+      "case": "viewer, no description",
+      "html": ""
+    }
+  ],
+  "showTopic": [
+    {
+      "case": "owner, reading",
+      "key": "topic",
+      "shown": true,
+      "editing": null,
+      "html": "<div class=\"grab\"></div><header class=\"sh\"><span class=\"sp\"></span><button type=\"button\" class=\"x\" data-close-item aria-label=\"关闭\">×</button></header><div class=\"sbody mpop\"><div class=\"mlbl top\">描述</div><h3 class=\"tname\">Scorpio &lt;测试&gt; <button type=\"button\" class=\"btn sm\" data-name-edit>改名</button></h3><div class=\"mcard md\"><p>在 Scorpio 里迭代 <strong>Scorpio</strong>。</p><ul><li>第二行</li></ul></div><div class=\"acts\"><button type=\"button\" class=\"btn wide\" data-topic-edit>编辑</button></div></div>"
+    },
+    {
+      "case": "owner, no description",
+      "key": "topic",
+      "shown": true,
+      "editing": null,
+      "html": "<div class=\"grab\"></div><header class=\"sh\"><span class=\"sp\"></span><button type=\"button\" class=\"x\" data-close-item aria-label=\"关闭\">×</button></header><div class=\"sbody mpop\"><div class=\"mlbl top\">描述</div><h3 class=\"tname\">Scorpio &lt;测试&gt; <button type=\"button\" class=\"btn sm\" data-name-edit>改名</button></h3><p class=\"mcard none\">还没有描述：这个主题做什么、谁决定、有什么规则。</p><div class=\"acts\"><button type=\"button\" class=\"btn wide\" data-topic-edit>写一张</button></div></div>"
+    },
+    {
+      "case": "member, reading",
+      "key": "topic",
+      "shown": true,
+      "editing": null,
+      "html": "<div class=\"grab\"></div><header class=\"sh\"><span class=\"sp\"></span><button type=\"button\" class=\"x\" data-close-item aria-label=\"关闭\">×</button></header><div class=\"sbody mpop\"><div class=\"mlbl top\">描述</div><h3 class=\"tname\">Scorpio &lt;测试&gt;</h3><div class=\"mcard md\"><p>在 Scorpio 里迭代 <strong>Scorpio</strong>。</p><ul><li>第二行</li></ul></div></div>"
+    },
+    {
+      "case": "member, no description",
+      "key": "topic",
+      "shown": true,
+      "editing": null,
+      "html": "<div class=\"grab\"></div><header class=\"sh\"><span class=\"sp\"></span><button type=\"button\" class=\"x\" data-close-item aria-label=\"关闭\">×</button></header><div class=\"sbody mpop\"><div class=\"mlbl top\">描述</div><h3 class=\"tname\">Scorpio &lt;测试&gt;</h3><p class=\"mcard none\">还没有描述：这个主题做什么、谁决定、有什么规则。</p></div>"
+    },
+    {
+      "case": "owner, editing",
+      "key": "topic",
+      "shown": true,
+      "editing": "topic",
+      "html": "<div class=\"grab\"></div><header class=\"sh\"><span class=\"sp\"></span><button type=\"button\" class=\"x\" data-close-item aria-label=\"关闭\">×</button></header><div class=\"sbody mpop\"><div class=\"mlbl top\">描述</div><h3 class=\"tname\">Scorpio &lt;测试&gt;</h3><div class=\"topicedit\"><textarea id=\"pop-edit\" rows=\"6\" placeholder=\"这个主题做什么、谁决定、有什么规则。可以写多行。\">在 Scorpio 里迭代 **Scorpio**。\n- 第二行</textarea><div class=\"topicfoot\"><small class=\"count\" id=\"pop-n\"></small><span class=\"sp\"></span><button type=\"button\" class=\"btn\" data-pop-cancel>取消</button><button type=\"button\" class=\"btn primary\" id=\"pop-save\" data-topic-save>保存</button></div></div></div>",
+      "count": {
+        "text": "32 / 2000",
+        "over": false,
+        "saveDisabled": false,
+        "focused": true,
+        "height": "122px"
+      }
+    },
+    {
+      "case": "owner, editing, over the limit",
+      "key": "topic",
+      "shown": true,
+      "editing": "topic",
+      "html": "<div class=\"grab\"></div><header class=\"sh\"><span class=\"sp\"></span><button type=\"button\" class=\"x\" data-close-item aria-label=\"关闭\">×</button></header><div class=\"sbody mpop\"><div class=\"mlbl top\">描述</div><h3 class=\"tname\">Scorpio &lt;测试&gt;</h3><div class=\"topicedit\"><textarea id=\"pop-edit\" rows=\"6\" placeholder=\"这个主题做什么、谁决定、有什么规则。可以写多行。\">第 1 条：主题的描述写得太长了。\n第 2 条：主题的描述写得太长了。\n第 3 条：主题的描述写得太长了。\n第 4 条：主题的描述写得太长了。\n第 5 条：主题的描述写得太长了。\n第 6 条：主题的描述写得太长了。\n第 7 条：主题的描述写得太长了。\n第 8 条：主题的描述写得太长了。\n第 9 条：主题的描述写得太长了。\n第 10 条：主题的描述写得太长了。\n第 11 条：主题的描述写得太长了。\n第 12 条：主题的描述写得太长了。\n第 13 条：主题的描述写得太长了。\n第 14 条：主题的描述写得太长了。\n第 15 条：主题的描述写得太长了。\n第 16 条：主题的描述写得太长了。\n第 17 条：主题的描述写得太长了。\n第 18 条：主题的描述写得太长了。\n第 19 条：主题的描述写得太长了。\n第 20 条：主题的描述写得太长了。\n第 21 条：主题的描述写得太长了。\n第 22 条：主题的描述写得太长了。\n第 23 条：主题的描述写得太长了。\n第 24 条：主题的描述写得太长了。\n第 25 条：主题的描述写得太长了。\n第 26 条：主题的描述写得太长了。\n第 27 条：主题的描述写得太长了。\n第 28 条：主题的描述写得太长了。\n第 29 条：主题的描述写得太长了。\n第 30 条：主题的描述写得太长了。\n第 31 条：主题的描述写得太长了。\n第 32 条：主题的描述写得太长了。\n第 33 条：主题的描述写得太长了。\n第 34 条：主题的描述写得太长了。\n第 35 条：主题的描述写得太长了。\n第 36 条：主题的描述写得太长了。\n第 37 条：主题的描述写得太长了。\n第 38 条：主题的描述写得太长了。\n第 39 条：主题的描述写得太长了。\n第 40 条：主题的描述写得太长了。\n第 41 条：主题的描述写得太长了。\n第 42 条：主题的描述写得太长了。\n第 43 条：主题的描述写得太长了。\n第 44 条：主题的描述写得太长了。\n第 45 条：主题的描述写得太长了。\n第 46 条：主题的描述写得太长了。\n第 47 条：主题的描述写得太长了。\n第 48 条：主题的描述写得太长了。\n第 49 条：主题的描述写得太长了。\n第 50 条：主题的描述写得太长了。\n第 51 条：主题的描述写得太长了。\n第 52 条：主题的描述写得太长了。\n第 53 条：主题的描述写得太长了。\n第 54 条：主题的描述写得太长了。\n第 55 条：主题的描述写得太长了。\n第 56 条：主题的描述写得太长了。\n第 57 条：主题的描述写得太长了。\n第 58 条：主题的描述写得太长了。\n第 59 条：主题的描述写得太长了。\n第 60 条：主题的描述写得太长了。\n第 61 条：主题的描述写得太长了。\n第 62 条：主题的描述写得太长了。\n第 63 条：主题的描述写得太长了。\n第 64 条：主题的描述写得太长了。\n第 65 条：主题的描述写得太长了。\n第 66 条：主题的描述写得太长了。\n第 67 条：主题的描述写得太长了。\n第 68 条：主题的描述写得太长了。\n第 69 条：主题的描述写得太长了。\n第 70 条：主题的描述写得太长了。\n第 71 条：主题的描述写得太长了。\n第 72 条：主题的描述写得太长了。\n第 73 条：主题的描述写得太长了。\n第 74 条：主题的描述写得太长了。\n第 75 条：主题的描述写得太长了。\n第 76 条：主题的描述写得太长了。\n第 77 条：主题的描述写得太长了。\n第 78 条：主题的描述写得太长了。\n第 79 条：主题的描述写得太长了。\n第 80 条：主题的描述写得太长了。\n第 81 条：主题的描述写得太长了。\n第 82 条：主题的描述写得太长了。\n第 83 条：主题的描述写得太长了。\n第 84 条：主题的描述写得太长了。\n第 85 条：主题的描述写得太长了。\n第 86 条：主题的描述写得太长了。\n第 87 条：主题的描述写得太长了。\n第 88 条：主题的描述写得太长了。\n第 89 条：主题的描述写得太长了。\n第 90 条：主题的描述写得太长了。\n第 91 条：主题的描述写得太长了。\n第 92 条：主题的描述写得太长了。\n第 93 条：主题的描述写得太长了。\n第 94 条：主题的描述写得太长了。\n第 95 条：主题的描述写得太长了。\n第 96 条：主题的描述写得太长了。\n第 97 条：主题的描述写得太长了。\n第 98 条：主题的描述写得太长了。\n第 99 条：主题的描述写得太长了。\n第 100 条：主题的描述写得太长了。\n第 101 条：主题的描述写得太长了。\n第 102 条：主题的描述写得太长了。\n第 103 条：主题的描述写得太长了。\n第 104 条：主题的描述写得太长了。\n第 105 条：主题的描述写得太长了。\n第 106 条：主题的描述写得太长了。\n第 107 条：主题的描述写得太长了。\n第 108 条：主题的描述写得太长了。\n第 109 条：主题的描述写得太长了。\n第 110 条：主题的描述写得太长了。\n第 111 条：主题的描述写得太长了。\n第 112 条：主题的描述写得太长了。\n第 113 条：主题的描述写得太长了。\n第 114 条：主题的描述写得太长了。\n第 115 条：主题的描述写得太长了。\n第 116 条：主题的描述写得太长了。\n第 117 条：主题的描述写得太长了。\n第 118 条：主题的描述写得太长了。\n第 119 条：主题的描述写得太长了。\n第 120 条：主题的描述写得太长了。</textarea><div class=\"topicfoot\"><small class=\"count\" id=\"pop-n\"></small><span class=\"sp\"></span><button type=\"button\" class=\"btn\" data-pop-cancel>取消</button><button type=\"button\" class=\"btn primary\" id=\"pop-save\" data-topic-save>保存</button></div></div></div>",
+      "count": {
+        "text": "2291 / 2000 · 超出 291 字",
+        "over": true,
+        "saveDisabled": true,
+        "focused": true,
+        "height": "122px"
+      }
+    },
+    {
+      "case": "member asks to edit",
+      "key": "topic",
+      "shown": true,
+      "editing": null,
+      "html": "<div class=\"grab\"></div><header class=\"sh\"><span class=\"sp\"></span><button type=\"button\" class=\"x\" data-close-item aria-label=\"关闭\">×</button></header><div class=\"sbody mpop\"><div class=\"mlbl top\">描述</div><h3 class=\"tname\">Scorpio &lt;测试&gt;</h3><div class=\"mcard md\"><p>在 Scorpio 里迭代 <strong>Scorpio</strong>。</p><ul><li>第二行</li></ul></div></div>"
+    },
+    {
+      "case": "archived, owner asks to edit",
+      "key": "topic",
+      "shown": true,
+      "editing": null,
+      "html": "<div class=\"grab\"></div><header class=\"sh\"><span class=\"sp\"></span><button type=\"button\" class=\"x\" data-close-item aria-label=\"关闭\">×</button></header><div class=\"sbody mpop\"><div class=\"mlbl top\">描述</div><h3 class=\"tname\">Scorpio &lt;测试&gt;</h3><div class=\"mcard md\"><p>在 Scorpio 里迭代 <strong>Scorpio</strong>。</p><ul><li>第二行</li></ul></div></div>"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+/* The export sheet and the settings' export section. Reused as they are: the sheet (.sheet .sh .x .grab, h3, .sbody),
+   .btn .primary, .scrim, the settings rows' hairline. New here: the check box (.xp-ck), the only one on the page. */
+.ui .sheet.up.export-sheet { z-index: 12; }
+.ui #export-scrim { z-index: 11; } /* above the settings panel: one layer at a time */
+.ui .export-sheet .sh { margin-bottom: 4px; }
+.ui .export-sheet .sh h3 { margin: 0; }
+.ui .export-sheet .sbody { overflow-y: auto; }
+.ui .xp-rows { margin: 0 0 14px; }
+.ui label.xp-row { display: flex; flex-direction: row; align-items: center; text-align: left; gap: 14px; min-height: 52px; padding: 8px 0; font-size: 15.5px; color: var(--fg); box-shadow: inset 0 -1px 0 var(--line); cursor: pointer; }
+.ui label.xp-row:last-child { box-shadow: none; }
+.ui .xp-t { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.ui .xp-s { font-size: 12.5px; color: var(--muted); line-height: 1.35; }
+.ui input.xp-ck { -webkit-appearance: none; appearance: none; flex: none; width: 22px; height: 22px; margin: 0; border-radius: 7px; border: 1.5px solid var(--line-strong); background: var(--surface); position: relative; cursor: pointer; }
+.ui input.xp-ck::after { content: ""; position: absolute; left: 6.5px; top: 2.5px; box-sizing: content-box; width: 5px; height: 10px; border: solid var(--action-fg); border-width: 0 2.2px 2.2px 0; transform: rotate(45deg); opacity: 0; }
+.ui input.xp-ck:checked { background: var(--action); border-color: var(--action); }
+.ui input.xp-ck:checked::after { opacity: 1; }
+.ui input.xp-ck:disabled { opacity: 0.45; cursor: default; }
+.ui input.xp-ck:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+.ui .xp-err { margin: 0 0 12px; color: var(--you-ink); font-size: 14px; line-height: 1.45; }
+.ui .xp-acts { display: flex; padding-bottom: 6px; }
+.ui .xp-acts .btn { flex: 1; min-height: 48px; justify-content: center; }
+.ui .xp-acts .btn:disabled { opacity: 0.55; }
+@media (max-width: 760px) {
+  .ui .export-sheet { max-height: calc(100% - 56px); }
+}
+@media (min-width: 761px) {
+  .ui.desk .export-sheet .sh { margin-top: 16px; }
+}
+/* the settings section: as 归档's (h4, a muted line, one button) */
+.ui .panel .xp-sec-btn { margin-top: 2px; }

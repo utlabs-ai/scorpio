@@ -1,0 +1,2139 @@
+[
+  {
+    "step": "1 plain send",
+    "status": 200,
+    "body": {
+      "roomId": "<topic>",
+      "seq": 4,
+      "from": "api@kai",
+      "ts": 0,
+      "delivery": [
+        {
+          "name": "kai",
+          "status": "human"
+        }
+      ]
+    },
+    "browser": {
+      "types": [
+        "message"
+      ],
+      "message": {
+        "type": "message",
+        "message": {
+          "seq": 4,
+          "from": "api@kai",
+          "fromKind": "agent",
+          "kind": "text",
+          "text": "@kai The build is green.",
+          "mentions": [
+            "kai"
+          ],
+          "broadcast": false,
+          "reply": null,
+          "command": null,
+          "event": null,
+          "scheduled": null,
+          "ts": 0,
+          "delivery": [
+            {
+              "name": "kai",
+              "status": "human"
+            }
+          ]
+        }
+      },
+      "todo": "none"
+    },
+    "agent": {
+      "types": [],
+      "push": "none"
+    }
+  },
+  {
+    "step": "2 add to person",
+    "status": 200,
+    "body": {
+      "roomId": "<topic>",
+      "seq": 5,
+      "from": "api@kai",
+      "ts": 0,
+      "delivery": [
+        {
+          "name": "lee",
+          "status": "human"
+        }
+      ],
+      "item": {
+        "id": "T1",
+        "round": 1,
+        "title": "Review the draft",
+        "desc": null,
+        "blockedBy": [],
+        "blocked": false,
+        "status": "todo",
+        "assignee": "lee",
+        "createdBy": "api@kai",
+        "createdSeq": 5,
+        "doneSeq": null,
+        "createdMs": 0,
+        "doneMs": null,
+        "updatedBy": "api@kai",
+        "updatedMs": 0,
+        "current": {
+          "seq": 5,
+          "from": "api@kai",
+          "ts": 0,
+          "line": "Please review the draft."
+        },
+        "reply": null
+      },
+      "round": {
+        "n": 1,
+        "title": null,
+        "status": "open",
+        "openedMs": 0,
+        "doneMs": null,
+        "counts": {
+          "todo": 1,
+          "doing": 0,
+          "done": 0,
+          "total": 1
+        }
+      }
+    },
+    "browser": {
+      "types": [
+        "message",
+        "todo"
+      ],
+      "message": {
+        "type": "message",
+        "message": {
+          "seq": 5,
+          "from": "api@kai",
+          "fromKind": "agent",
+          "kind": "text",
+          "text": "@lee Please review the draft.",
+          "mentions": [
+            "lee"
+          ],
+          "broadcast": false,
+          "reply": null,
+          "command": null,
+          "event": null,
+          "scheduled": null,
+          "todo": [
+            {
+              "id": "T1",
+              "title": "Review the draft",
+              "assignee": "lee",
+              "status": "todo",
+              "round": 1,
+              "rel": "source"
+            }
+          ],
+          "ts": 0,
+          "delivery": [
+            {
+              "name": "lee",
+              "status": "human"
+            }
+          ]
+        }
+      },
+      "todo": {
+        "type": "todo",
+        "round": {
+          "n": 1,
+          "title": null,
+          "status": "open",
+          "openedMs": 0,
+          "doneMs": null,
+          "counts": {
+            "todo": 1,
+            "doing": 0,
+            "done": 0,
+            "total": 1
+          }
+        },
+        "items": [
+          {
+            "id": "T1",
+            "round": 1,
+            "title": "Review the draft",
+            "desc": null,
+            "blockedBy": [],
+            "blocked": false,
+            "status": "todo",
+            "assignee": "lee",
+            "createdBy": "api@kai",
+            "createdSeq": 5,
+            "doneSeq": null,
+            "createdMs": 0,
+            "doneMs": null,
+            "updatedBy": "api@kai",
+            "updatedMs": 0,
+            "current": {
+              "seq": 5,
+              "from": "api@kai",
+              "ts": 0,
+              "line": "Please review the draft."
+            },
+            "reply": null
+          }
+        ],
+        "rounds": [
+          {
+            "n": 1,
+            "title": null,
+            "status": "open",
+            "openedMs": 0,
+            "doneMs": null,
+            "counts": {
+              "todo": 1,
+              "doing": 0,
+              "done": 0,
+              "total": 1
+            }
+          }
+        ],
+        "counts": {
+          "todo": 1,
+          "doing": 0,
+          "done": 0,
+          "total": 1
+        },
+        "deleted": [],
+        "done": []
+      }
+    },
+    "agent": {
+      "types": [],
+      "push": "none"
+    }
+  },
+  {
+    "step": "3 done",
+    "status": 200,
+    "body": {
+      "roomId": "<topic>",
+      "seq": 6,
+      "from": "api@kai",
+      "ts": 0,
+      "delivery": [
+        {
+          "name": "kai",
+          "status": "human"
+        }
+      ],
+      "item": {
+        "id": "T2",
+        "round": 1,
+        "title": "Fix the login bug",
+        "desc": null,
+        "blockedBy": [],
+        "blocked": false,
+        "status": "done",
+        "assignee": "api@kai",
+        "createdBy": "api@kai",
+        "createdSeq": 4,
+        "doneSeq": 6,
+        "createdMs": 0,
+        "doneMs": 0,
+        "updatedBy": "api@kai",
+        "updatedMs": 0,
+        "current": null,
+        "reply": null
+      },
+      "unblocked": [
+        {
+          "id": "T3",
+          "title": "Release the fix",
+          "assignee": "api@kai"
+        }
+      ],
+      "round": {
+        "n": 1,
+        "title": null,
+        "status": "open",
+        "openedMs": 0,
+        "doneMs": null,
+        "counts": {
+          "todo": 2,
+          "doing": 0,
+          "done": 1,
+          "total": 3
+        }
+      },
+      "mine": [
+        {
+          "id": "T3",
+          "title": "Release the fix",
+          "status": "todo",
+          "assignee": "api@kai",
+          "by": "api@kai",
+          "after": [
+            "T2"
+          ],
+          "blocked": false,
+          "since": 0,
+          "reply": null,
+          "left": false
+        }
+      ]
+    },
+    "browser": {
+      "types": [
+        "message",
+        "todo"
+      ],
+      "message": {
+        "type": "message",
+        "message": {
+          "seq": 6,
+          "from": "api@kai",
+          "fromKind": "agent",
+          "kind": "text",
+          "text": "@kai Fixed the login bug.",
+          "mentions": [
+            "kai"
+          ],
+          "broadcast": false,
+          "reply": null,
+          "command": null,
+          "event": null,
+          "scheduled": null,
+          "todo": [
+            {
+              "id": "T2",
+              "title": "Fix the login bug",
+              "assignee": "api@kai",
+              "status": "todo",
+              "round": 1,
+              "rel": "result"
+            }
+          ],
+          "ts": 0,
+          "delivery": [
+            {
+              "name": "kai",
+              "status": "human"
+            }
+          ]
+        }
+      },
+      "todo": {
+        "type": "todo",
+        "round": {
+          "n": 1,
+          "title": null,
+          "status": "open",
+          "openedMs": 0,
+          "doneMs": null,
+          "counts": {
+            "todo": 2,
+            "doing": 0,
+            "done": 1,
+            "total": 3
+          }
+        },
+        "items": [
+          {
+            "id": "T1",
+            "round": 1,
+            "title": "Review the draft",
+            "desc": null,
+            "blockedBy": [],
+            "blocked": false,
+            "status": "todo",
+            "assignee": "lee",
+            "createdBy": "api@kai",
+            "createdSeq": 5,
+            "doneSeq": null,
+            "createdMs": 0,
+            "doneMs": null,
+            "updatedBy": "api@kai",
+            "updatedMs": 0,
+            "current": {
+              "seq": 5,
+              "from": "api@kai",
+              "ts": 0,
+              "line": "Please review the draft."
+            },
+            "reply": null
+          },
+          {
+            "id": "T3",
+            "round": 1,
+            "title": "Release the fix",
+            "desc": null,
+            "blockedBy": [
+              "T2"
+            ],
+            "blocked": false,
+            "status": "todo",
+            "assignee": "api@kai",
+            "createdBy": "api@kai",
+            "createdSeq": 4,
+            "doneSeq": null,
+            "createdMs": 0,
+            "doneMs": null,
+            "updatedBy": "api@kai",
+            "updatedMs": 0,
+            "current": null,
+            "reply": null
+          }
+        ],
+        "rounds": [
+          {
+            "n": 1,
+            "title": null,
+            "status": "open",
+            "openedMs": 0,
+            "doneMs": null,
+            "counts": {
+              "todo": 2,
+              "doing": 0,
+              "done": 1,
+              "total": 3
+            }
+          }
+        ],
+        "counts": {
+          "todo": 2,
+          "doing": 0,
+          "done": 1,
+          "total": 3
+        },
+        "deleted": [],
+        "done": [
+          "T2"
+        ]
+      }
+    },
+    "agent": {
+      "types": [],
+      "push": "none"
+    }
+  },
+  {
+    "step": "4 done missing",
+    "status": 200,
+    "body": {
+      "roomId": "<topic>",
+      "seq": 7,
+      "from": "api@kai",
+      "ts": 0,
+      "delivery": [
+        {
+          "name": "kai",
+          "status": "human"
+        }
+      ],
+      "item": {
+        "error": "item_not_found",
+        "next": "There is no task T999 in this topic (or it was deleted). See: scorpio todo roomId=<topic>"
+      }
+    },
+    "browser": {
+      "types": [
+        "message"
+      ],
+      "message": {
+        "type": "message",
+        "message": {
+          "seq": 7,
+          "from": "api@kai",
+          "fromKind": "agent",
+          "kind": "text",
+          "text": "@kai Done with that one.",
+          "mentions": [
+            "kai"
+          ],
+          "broadcast": false,
+          "reply": null,
+          "command": null,
+          "event": null,
+          "scheduled": null,
+          "ts": 0,
+          "delivery": [
+            {
+              "name": "kai",
+              "status": "human"
+            }
+          ]
+        }
+      },
+      "todo": "none"
+    },
+    "agent": {
+      "types": [],
+      "push": "none"
+    }
+  },
+  {
+    "step": "5 update to and title",
+    "status": 200,
+    "body": {
+      "roomId": "<topic>",
+      "seq": 8,
+      "from": "api@kai",
+      "ts": 0,
+      "delivery": [
+        {
+          "name": "lee",
+          "status": "human"
+        }
+      ],
+      "item": {
+        "id": "T3",
+        "round": 1,
+        "title": "Release v2",
+        "desc": null,
+        "blockedBy": [
+          "T2"
+        ],
+        "blocked": false,
+        "status": "todo",
+        "assignee": "lee",
+        "createdBy": "api@kai",
+        "createdSeq": 8,
+        "doneSeq": null,
+        "createdMs": 0,
+        "doneMs": null,
+        "updatedBy": "api@kai",
+        "updatedMs": 0,
+        "current": {
+          "seq": 4,
+          "from": "api@kai",
+          "ts": 0,
+          "line": "The build is green."
+        },
+        "reply": null
+      },
+      "previous": {
+        "title": "Release the fix",
+        "assignee": "api@kai",
+        "createdSeq": 4
+      }
+    },
+    "browser": {
+      "types": [
+        "message",
+        "todo"
+      ],
+      "message": {
+        "type": "message",
+        "message": {
+          "seq": 8,
+          "from": "api@kai",
+          "fromKind": "agent",
+          "kind": "text",
+          "text": "@lee Please take over the release.",
+          "mentions": [
+            "lee"
+          ],
+          "broadcast": false,
+          "reply": null,
+          "command": null,
+          "event": null,
+          "scheduled": null,
+          "ts": 0,
+          "delivery": [
+            {
+              "name": "lee",
+              "status": "human"
+            }
+          ]
+        }
+      },
+      "todo": {
+        "type": "todo",
+        "round": {
+          "n": 1,
+          "title": null,
+          "status": "open",
+          "openedMs": 0,
+          "doneMs": null,
+          "counts": {
+            "todo": 2,
+            "doing": 0,
+            "done": 1,
+            "total": 3
+          }
+        },
+        "items": [
+          {
+            "id": "T1",
+            "round": 1,
+            "title": "Review the draft",
+            "desc": null,
+            "blockedBy": [],
+            "blocked": false,
+            "status": "todo",
+            "assignee": "lee",
+            "createdBy": "api@kai",
+            "createdSeq": 5,
+            "doneSeq": null,
+            "createdMs": 0,
+            "doneMs": null,
+            "updatedBy": "api@kai",
+            "updatedMs": 0,
+            "current": {
+              "seq": 5,
+              "from": "api@kai",
+              "ts": 0,
+              "line": "Please review the draft."
+            },
+            "reply": null
+          },
+          {
+            "id": "T3",
+            "round": 1,
+            "title": "Release v2",
+            "desc": null,
+            "blockedBy": [
+              "T2"
+            ],
+            "blocked": false,
+            "status": "todo",
+            "assignee": "lee",
+            "createdBy": "api@kai",
+            "createdSeq": 8,
+            "doneSeq": null,
+            "createdMs": 0,
+            "doneMs": null,
+            "updatedBy": "api@kai",
+            "updatedMs": 0,
+            "current": {
+              "seq": 8,
+              "from": "api@kai",
+              "ts": 0,
+              "line": "Please take over the release."
+            },
+            "reply": null
+          }
+        ],
+        "rounds": [
+          {
+            "n": 1,
+            "title": null,
+            "status": "open",
+            "openedMs": 0,
+            "doneMs": null,
+            "counts": {
+              "todo": 2,
+              "doing": 0,
+              "done": 1,
+              "total": 3
+            }
+          }
+        ],
+        "counts": {
+          "todo": 2,
+          "doing": 0,
+          "done": 1,
+          "total": 3
+        },
+        "deleted": [],
+        "done": [
+          "T2"
+        ]
+      }
+    },
+    "agent": {
+      "types": [],
+      "push": "none"
+    }
+  },
+  {
+    "step": "6 update missing",
+    "status": 200,
+    "body": {
+      "roomId": "<topic>",
+      "seq": 9,
+      "from": "api@kai",
+      "ts": 0,
+      "delivery": [
+        {
+          "name": "kai",
+          "status": "human"
+        }
+      ],
+      "item": {
+        "error": "item_not_found",
+        "next": "There is no task T999 in this topic (or it was deleted). See: scorpio todo roomId=<topic>"
+      }
+    },
+    "browser": {
+      "types": [
+        "message"
+      ],
+      "message": {
+        "type": "message",
+        "message": {
+          "seq": 9,
+          "from": "api@kai",
+          "fromKind": "agent",
+          "kind": "text",
+          "text": "@kai Updating a missing task.",
+          "mentions": [
+            "kai"
+          ],
+          "broadcast": false,
+          "reply": null,
+          "command": null,
+          "event": null,
+          "scheduled": null,
+          "ts": 0,
+          "delivery": [
+            {
+              "name": "kai",
+              "status": "human"
+            }
+          ]
+        }
+      },
+      "todo": "none"
+    },
+    "agent": {
+      "types": [],
+      "push": "none"
+    }
+  },
+  {
+    "step": "7 update taken",
+    "status": 200,
+    "body": {
+      "roomId": "<topic>",
+      "seq": 10,
+      "from": "api@kai",
+      "ts": 0,
+      "delivery": [
+        {
+          "name": "helper@lee",
+          "status": "to_owner"
+        }
+      ],
+      "item": {
+        "error": "item_taken",
+        "next": "helper@lee is doing T4. To hand it over anyway: scorpio todo roomId=<topic> edit=T4 to=api@kai from=10 force=true, then tell helper@lee."
+      }
+    },
+    "browser": {
+      "types": [
+        "message"
+      ],
+      "message": {
+        "type": "message",
+        "message": {
+          "seq": 10,
+          "from": "api@kai",
+          "fromKind": "agent",
+          "kind": "text",
+          "text": "@helper@lee I will handle the logs.",
+          "mentions": [
+            "helper@lee"
+          ],
+          "broadcast": false,
+          "reply": null,
+          "command": null,
+          "event": null,
+          "scheduled": null,
+          "ts": 0,
+          "delivery": [
+            {
+              "name": "helper@lee",
+              "status": "to_owner"
+            }
+          ]
+        }
+      },
+      "todo": "none"
+    },
+    "agent": {
+      "types": [],
+      "push": "none"
+    }
+  },
+  {
+    "step": "8 person reply into thread",
+    "status": 200,
+    "body": {
+      "roomId": "<topic>",
+      "seq": 12,
+      "from": "lee",
+      "ts": 0,
+      "delivery": [
+        {
+          "name": "kai",
+          "status": "human"
+        },
+        {
+          "name": "helper@lee",
+          "status": "online"
+        }
+      ],
+      "message": {
+        "seq": 12,
+        "from": "lee",
+        "fromKind": "human",
+        "kind": "text",
+        "text": "@kai Debug level is fine.",
+        "mentions": [
+          "kai"
+        ],
+        "broadcast": false,
+        "reply": {
+          "seq": 11,
+          "from": "helper@lee",
+          "text": "@lee Can you confirm the log level?"
+        },
+        "command": null,
+        "event": null,
+        "scheduled": null,
+        "todo": [
+          {
+            "id": "T5",
+            "title": "Confirm the log level",
+            "assignee": "lee",
+            "status": "todo",
+            "round": 1,
+            "rel": "reply",
+            "closer": "helper@lee"
+          }
+        ],
+        "ts": 0,
+        "delivery": [
+          {
+            "name": "kai",
+            "status": "human"
+          },
+          {
+            "name": "helper@lee",
+            "status": "online"
+          }
+        ]
+      }
+    },
+    "browser": {
+      "types": [
+        "message",
+        "todo"
+      ],
+      "message": {
+        "type": "message",
+        "message": {
+          "seq": 12,
+          "from": "lee",
+          "fromKind": "human",
+          "kind": "text",
+          "text": "@kai Debug level is fine.",
+          "mentions": [
+            "kai"
+          ],
+          "broadcast": false,
+          "reply": {
+            "seq": 11,
+            "from": "helper@lee",
+            "text": "@lee Can you confirm the log level?"
+          },
+          "command": null,
+          "event": null,
+          "scheduled": null,
+          "todo": [
+            {
+              "id": "T5",
+              "title": "Confirm the log level",
+              "assignee": "lee",
+              "status": "todo",
+              "round": 1,
+              "rel": "reply",
+              "closer": "helper@lee"
+            }
+          ],
+          "ts": 0
+        }
+      },
+      "todo": {
+        "type": "todo",
+        "round": {
+          "n": 1,
+          "title": null,
+          "status": "open",
+          "openedMs": 0,
+          "doneMs": null,
+          "counts": {
+            "todo": 3,
+            "doing": 1,
+            "done": 1,
+            "total": 5
+          }
+        },
+        "items": [
+          {
+            "id": "T4",
+            "round": 1,
+            "title": "Check the logs",
+            "desc": null,
+            "blockedBy": [],
+            "blocked": false,
+            "status": "doing",
+            "assignee": "helper@lee",
+            "createdBy": "helper@lee",
+            "createdSeq": 4,
+            "doneSeq": null,
+            "createdMs": 0,
+            "doneMs": null,
+            "updatedBy": "helper@lee",
+            "updatedMs": 0,
+            "current": {
+              "seq": 4,
+              "from": "api@kai",
+              "ts": 0,
+              "line": "The build is green."
+            },
+            "reply": null
+          },
+          {
+            "id": "T1",
+            "round": 1,
+            "title": "Review the draft",
+            "desc": null,
+            "blockedBy": [],
+            "blocked": false,
+            "status": "todo",
+            "assignee": "lee",
+            "createdBy": "api@kai",
+            "createdSeq": 5,
+            "doneSeq": null,
+            "createdMs": 0,
+            "doneMs": null,
+            "updatedBy": "api@kai",
+            "updatedMs": 0,
+            "current": {
+              "seq": 5,
+              "from": "api@kai",
+              "ts": 0,
+              "line": "Please review the draft."
+            },
+            "reply": null
+          },
+          {
+            "id": "T3",
+            "round": 1,
+            "title": "Release v2",
+            "desc": null,
+            "blockedBy": [
+              "T2"
+            ],
+            "blocked": false,
+            "status": "todo",
+            "assignee": "lee",
+            "createdBy": "api@kai",
+            "createdSeq": 8,
+            "doneSeq": null,
+            "createdMs": 0,
+            "doneMs": null,
+            "updatedBy": "api@kai",
+            "updatedMs": 0,
+            "current": {
+              "seq": 8,
+              "from": "api@kai",
+              "ts": 0,
+              "line": "Please take over the release."
+            },
+            "reply": null
+          },
+          {
+            "id": "T5",
+            "round": 1,
+            "title": "Confirm the log level",
+            "desc": null,
+            "blockedBy": [],
+            "blocked": false,
+            "status": "todo",
+            "assignee": "lee",
+            "createdBy": "helper@lee",
+            "createdSeq": 11,
+            "doneSeq": null,
+            "createdMs": 0,
+            "doneMs": null,
+            "updatedBy": "helper@lee",
+            "updatedMs": 0,
+            "current": {
+              "seq": 11,
+              "from": "helper@lee",
+              "ts": 0,
+              "line": "Can you confirm the log level?"
+            },
+            "reply": {
+              "seq": 12,
+              "from": "lee",
+              "ts": 0,
+              "closer": "helper@lee"
+            }
+          }
+        ],
+        "rounds": [
+          {
+            "n": 1,
+            "title": null,
+            "status": "open",
+            "openedMs": 0,
+            "doneMs": null,
+            "counts": {
+              "todo": 3,
+              "doing": 1,
+              "done": 1,
+              "total": 5
+            }
+          }
+        ],
+        "counts": {
+          "todo": 3,
+          "doing": 1,
+          "done": 1,
+          "total": 5
+        },
+        "deleted": [],
+        "done": [
+          "T2"
+        ]
+      }
+    },
+    "agent": {
+      "types": [
+        "push"
+      ],
+      "push": {
+        "type": "push",
+        "message": {
+          "seq": 12,
+          "from": "lee",
+          "fromKind": "human",
+          "kind": "text",
+          "text": "@kai Debug level is fine.",
+          "mentions": [
+            "kai"
+          ],
+          "broadcast": false,
+          "reply": {
+            "seq": 11,
+            "from": "helper@lee",
+            "text": "@lee Can you confirm the log level?"
+          },
+          "command": null,
+          "event": null,
+          "scheduled": null,
+          "todo": [
+            {
+              "id": "T5",
+              "title": "Confirm the log level",
+              "assignee": "lee",
+              "status": "todo",
+              "round": 1,
+              "rel": "reply",
+              "closer": "helper@lee"
+            }
+          ],
+          "ts": 0,
+          "card": null,
+          "trusted": null
+        }
+      }
+    }
+  },
+  {
+    "step": "9 T-number join",
+    "status": 200,
+    "body": {
+      "roomId": "<topic>",
+      "seq": 13,
+      "from": "api@kai",
+      "ts": 0,
+      "delivery": [
+        {
+          "name": "lee",
+          "status": "human"
+        }
+      ]
+    },
+    "browser": {
+      "types": [
+        "message",
+        "todo"
+      ],
+      "message": {
+        "type": "message",
+        "message": {
+          "seq": 13,
+          "from": "api@kai",
+          "fromKind": "agent",
+          "kind": "text",
+          "text": "@lee Any news on T1?",
+          "mentions": [
+            "lee"
+          ],
+          "broadcast": false,
+          "reply": null,
+          "command": null,
+          "event": null,
+          "scheduled": null,
+          "todo": [
+            {
+              "id": "T1",
+              "title": "Review the draft",
+              "assignee": "lee",
+              "status": "todo",
+              "round": 1,
+              "rel": "thread"
+            }
+          ],
+          "ts": 0,
+          "delivery": [
+            {
+              "name": "lee",
+              "status": "human"
+            }
+          ]
+        }
+      },
+      "todo": {
+        "type": "todo",
+        "round": {
+          "n": 1,
+          "title": null,
+          "status": "open",
+          "openedMs": 0,
+          "doneMs": null,
+          "counts": {
+            "todo": 3,
+            "doing": 1,
+            "done": 1,
+            "total": 5
+          }
+        },
+        "items": [
+          {
+            "id": "T4",
+            "round": 1,
+            "title": "Check the logs",
+            "desc": null,
+            "blockedBy": [],
+            "blocked": false,
+            "status": "doing",
+            "assignee": "helper@lee",
+            "createdBy": "helper@lee",
+            "createdSeq": 4,
+            "doneSeq": null,
+            "createdMs": 0,
+            "doneMs": null,
+            "updatedBy": "helper@lee",
+            "updatedMs": 0,
+            "current": {
+              "seq": 4,
+              "from": "api@kai",
+              "ts": 0,
+              "line": "The build is green."
+            },
+            "reply": null
+          },
+          {
+            "id": "T1",
+            "round": 1,
+            "title": "Review the draft",
+            "desc": null,
+            "blockedBy": [],
+            "blocked": false,
+            "status": "todo",
+            "assignee": "lee",
+            "createdBy": "api@kai",
+            "createdSeq": 5,
+            "doneSeq": null,
+            "createdMs": 0,
+            "doneMs": null,
+            "updatedBy": "api@kai",
+            "updatedMs": 0,
+            "current": {
+              "seq": 13,
+              "from": "api@kai",
+              "ts": 0,
+              "line": "Any news on T1?"
+            },
+            "reply": null
+          },
+          {
+            "id": "T3",
+            "round": 1,
+            "title": "Release v2",
+            "desc": null,
+            "blockedBy": [
+              "T2"
+            ],
+            "blocked": false,
+            "status": "todo",
+            "assignee": "lee",
+            "createdBy": "api@kai",
+            "createdSeq": 8,
+            "doneSeq": null,
+            "createdMs": 0,
+            "doneMs": null,
+            "updatedBy": "api@kai",
+            "updatedMs": 0,
+            "current": {
+              "seq": 8,
+              "from": "api@kai",
+              "ts": 0,
+              "line": "Please take over the release."
+            },
+            "reply": null
+          },
+          {
+            "id": "T5",
+            "round": 1,
+            "title": "Confirm the log level",
+            "desc": null,
+            "blockedBy": [],
+            "blocked": false,
+            "status": "todo",
+            "assignee": "lee",
+            "createdBy": "helper@lee",
+            "createdSeq": 11,
+            "doneSeq": null,
+            "createdMs": 0,
+            "doneMs": null,
+            "updatedBy": "helper@lee",
+            "updatedMs": 0,
+            "current": {
+              "seq": 11,
+              "from": "helper@lee",
+              "ts": 0,
+              "line": "Can you confirm the log level?"
+            },
+            "reply": {
+              "seq": 12,
+              "from": "lee",
+              "ts": 0,
+              "closer": "helper@lee"
+            }
+          }
+        ],
+        "rounds": [
+          {
+            "n": 1,
+            "title": null,
+            "status": "open",
+            "openedMs": 0,
+            "doneMs": null,
+            "counts": {
+              "todo": 3,
+              "doing": 1,
+              "done": 1,
+              "total": 5
+            }
+          }
+        ],
+        "counts": {
+          "todo": 3,
+          "doing": 1,
+          "done": 1,
+          "total": 5
+        },
+        "deleted": [],
+        "done": [
+          "T2"
+        ]
+      }
+    },
+    "agent": {
+      "types": [],
+      "push": "none"
+    }
+  },
+  {
+    "step": "10a replay add",
+    "status": 200,
+    "body": {
+      "roomId": "<topic>",
+      "seq": 5,
+      "from": "api@kai",
+      "ts": 0,
+      "delivery": [
+        {
+          "name": "lee",
+          "status": "human"
+        }
+      ],
+      "item": {
+        "id": "T1",
+        "round": 1,
+        "title": "Review the draft",
+        "desc": null,
+        "blockedBy": [],
+        "blocked": false,
+        "status": "todo",
+        "assignee": "lee",
+        "createdBy": "api@kai",
+        "createdSeq": 5,
+        "doneSeq": null,
+        "createdMs": 0,
+        "doneMs": null,
+        "updatedBy": "api@kai",
+        "updatedMs": 0,
+        "current": {
+          "seq": 13,
+          "from": "api@kai",
+          "ts": 0,
+          "line": "Any news on T1?"
+        },
+        "reply": null
+      },
+      "round": {
+        "n": 1,
+        "title": null,
+        "status": "open",
+        "openedMs": 0,
+        "doneMs": null,
+        "counts": {
+          "todo": 3,
+          "doing": 1,
+          "done": 1,
+          "total": 5
+        }
+      }
+    },
+    "browser": {
+      "types": [],
+      "message": "none",
+      "todo": "none"
+    },
+    "agent": {
+      "types": [],
+      "push": "none"
+    }
+  },
+  {
+    "step": "10b add and done",
+    "status": 200,
+    "body": {
+      "roomId": "<topic>",
+      "seq": 14,
+      "from": "api@kai",
+      "ts": 0,
+      "delivery": [
+        {
+          "name": "kai",
+          "status": "human"
+        }
+      ],
+      "item": {
+        "id": "T6",
+        "round": 1,
+        "title": "Prepare the release notes",
+        "desc": null,
+        "blockedBy": [],
+        "blocked": false,
+        "status": "done",
+        "assignee": "api@kai",
+        "createdBy": "api@kai",
+        "createdSeq": 4,
+        "doneSeq": 14,
+        "createdMs": 0,
+        "doneMs": 0,
+        "updatedBy": "api@kai",
+        "updatedMs": 0,
+        "current": null,
+        "reply": null
+      },
+      "round": {
+        "n": 1,
+        "title": null,
+        "status": "open",
+        "openedMs": 0,
+        "doneMs": null,
+        "counts": {
+          "todo": 4,
+          "doing": 1,
+          "done": 2,
+          "total": 7
+        }
+      },
+      "added": {
+        "id": "T7",
+        "round": 1,
+        "title": "Announce the release",
+        "desc": null,
+        "blockedBy": [],
+        "blocked": false,
+        "status": "todo",
+        "assignee": null,
+        "createdBy": "api@kai",
+        "createdSeq": 14,
+        "doneSeq": null,
+        "createdMs": 0,
+        "doneMs": null,
+        "updatedBy": "api@kai",
+        "updatedMs": 0,
+        "current": null,
+        "reply": null
+      },
+      "unblocked": [],
+      "mine": []
+    },
+    "browser": {
+      "types": [
+        "message",
+        "todo"
+      ],
+      "message": {
+        "type": "message",
+        "message": {
+          "seq": 14,
+          "from": "api@kai",
+          "fromKind": "agent",
+          "kind": "text",
+          "text": "@kai The release notes are out.",
+          "mentions": [
+            "kai"
+          ],
+          "broadcast": false,
+          "reply": null,
+          "command": null,
+          "event": null,
+          "scheduled": null,
+          "todo": [
+            {
+              "id": "T6",
+              "title": "Prepare the release notes",
+              "assignee": "api@kai",
+              "status": "todo",
+              "round": 1,
+              "rel": "result"
+            },
+            {
+              "id": "T7",
+              "title": "Announce the release",
+              "assignee": null,
+              "status": "todo",
+              "round": 1,
+              "rel": "source"
+            }
+          ],
+          "ts": 0,
+          "delivery": [
+            {
+              "name": "kai",
+              "status": "human"
+            }
+          ]
+        }
+      },
+      "todo": {
+        "type": "todo",
+        "round": {
+          "n": 1,
+          "title": null,
+          "status": "open",
+          "openedMs": 0,
+          "doneMs": null,
+          "counts": {
+            "todo": 4,
+            "doing": 1,
+            "done": 2,
+            "total": 7
+          }
+        },
+        "items": [
+          {
+            "id": "T4",
+            "round": 1,
+            "title": "Check the logs",
+            "desc": null,
+            "blockedBy": [],
+            "blocked": false,
+            "status": "doing",
+            "assignee": "helper@lee",
+            "createdBy": "helper@lee",
+            "createdSeq": 4,
+            "doneSeq": null,
+            "createdMs": 0,
+            "doneMs": null,
+            "updatedBy": "helper@lee",
+            "updatedMs": 0,
+            "current": {
+              "seq": 4,
+              "from": "api@kai",
+              "ts": 0,
+              "line": "The build is green."
+            },
+            "reply": null
+          },
+          {
+            "id": "T1",
+            "round": 1,
+            "title": "Review the draft",
+            "desc": null,
+            "blockedBy": [],
+            "blocked": false,
+            "status": "todo",
+            "assignee": "lee",
+            "createdBy": "api@kai",
+            "createdSeq": 5,
+            "doneSeq": null,
+            "createdMs": 0,
+            "doneMs": null,
+            "updatedBy": "api@kai",
+            "updatedMs": 0,
+            "current": {
+              "seq": 13,
+              "from": "api@kai",
+              "ts": 0,
+              "line": "Any news on T1?"
+            },
+            "reply": null
+          },
+          {
+            "id": "T3",
+            "round": 1,
+            "title": "Release v2",
+            "desc": null,
+            "blockedBy": [
+              "T2"
+            ],
+            "blocked": false,
+            "status": "todo",
+            "assignee": "lee",
+            "createdBy": "api@kai",
+            "createdSeq": 8,
+            "doneSeq": null,
+            "createdMs": 0,
+            "doneMs": null,
+            "updatedBy": "api@kai",
+            "updatedMs": 0,
+            "current": {
+              "seq": 8,
+              "from": "api@kai",
+              "ts": 0,
+              "line": "Please take over the release."
+            },
+            "reply": null
+          },
+          {
+            "id": "T5",
+            "round": 1,
+            "title": "Confirm the log level",
+            "desc": null,
+            "blockedBy": [],
+            "blocked": false,
+            "status": "todo",
+            "assignee": "lee",
+            "createdBy": "helper@lee",
+            "createdSeq": 11,
+            "doneSeq": null,
+            "createdMs": 0,
+            "doneMs": null,
+            "updatedBy": "helper@lee",
+            "updatedMs": 0,
+            "current": {
+              "seq": 11,
+              "from": "helper@lee",
+              "ts": 0,
+              "line": "Can you confirm the log level?"
+            },
+            "reply": {
+              "seq": 12,
+              "from": "lee",
+              "ts": 0,
+              "closer": "helper@lee"
+            }
+          },
+          {
+            "id": "T7",
+            "round": 1,
+            "title": "Announce the release",
+            "desc": null,
+            "blockedBy": [],
+            "blocked": false,
+            "status": "todo",
+            "assignee": null,
+            "createdBy": "api@kai",
+            "createdSeq": 14,
+            "doneSeq": null,
+            "createdMs": 0,
+            "doneMs": null,
+            "updatedBy": "api@kai",
+            "updatedMs": 0,
+            "current": null,
+            "reply": null
+          }
+        ],
+        "rounds": [
+          {
+            "n": 1,
+            "title": null,
+            "status": "open",
+            "openedMs": 0,
+            "doneMs": null,
+            "counts": {
+              "todo": 4,
+              "doing": 1,
+              "done": 2,
+              "total": 7
+            }
+          }
+        ],
+        "counts": {
+          "todo": 4,
+          "doing": 1,
+          "done": 2,
+          "total": 7
+        },
+        "deleted": [],
+        "done": [
+          "T6",
+          "T2"
+        ]
+      }
+    },
+    "agent": {
+      "types": [],
+      "push": "none"
+    }
+  },
+  {
+    "step": "10c replay add and done",
+    "status": 200,
+    "body": {
+      "roomId": "<topic>",
+      "seq": 14,
+      "from": "api@kai",
+      "ts": 0,
+      "delivery": [
+        {
+          "name": "kai",
+          "status": "human"
+        }
+      ],
+      "item": {
+        "id": "T6",
+        "round": 1,
+        "title": "Prepare the release notes",
+        "desc": null,
+        "blockedBy": [],
+        "blocked": false,
+        "status": "done",
+        "assignee": "api@kai",
+        "createdBy": "api@kai",
+        "createdSeq": 4,
+        "doneSeq": 14,
+        "createdMs": 0,
+        "doneMs": 0,
+        "updatedBy": "api@kai",
+        "updatedMs": 0,
+        "current": null,
+        "reply": null
+      },
+      "unblocked": [],
+      "round": {
+        "n": 1,
+        "title": null,
+        "status": "open",
+        "openedMs": 0,
+        "doneMs": null,
+        "counts": {
+          "todo": 4,
+          "doing": 1,
+          "done": 2,
+          "total": 7
+        }
+      },
+      "added": {
+        "id": "T7",
+        "round": 1,
+        "title": "Announce the release",
+        "desc": null,
+        "blockedBy": [],
+        "blocked": false,
+        "status": "todo",
+        "assignee": null,
+        "createdBy": "api@kai",
+        "createdSeq": 14,
+        "doneSeq": null,
+        "createdMs": 0,
+        "doneMs": null,
+        "updatedBy": "api@kai",
+        "updatedMs": 0,
+        "current": null,
+        "reply": null
+      }
+    },
+    "browser": {
+      "types": [],
+      "message": "none",
+      "todo": "none"
+    },
+    "agent": {
+      "types": [],
+      "push": "none"
+    }
+  },
+  {
+    "step": "11 scheduled send now",
+    "status": 200,
+    "body": {
+      "roomId": "<topic>",
+      "seq": 16,
+      "item": null
+    },
+    "browser": {
+      "types": [
+        "message",
+        "schedules",
+        "todo"
+      ],
+      "message": {
+        "type": "message",
+        "message": {
+          "seq": 16,
+          "from": "scheduled",
+          "fromKind": "scheduled",
+          "kind": "text",
+          "text": "@lee Reminder: T1 is still open.",
+          "mentions": [
+            "lee"
+          ],
+          "broadcast": false,
+          "reply": null,
+          "command": null,
+          "event": null,
+          "scheduled": {
+            "id": "S1",
+            "by": "api@kai",
+            "at": 0
+          },
+          "todo": [
+            {
+              "id": "T1",
+              "title": "Review the draft",
+              "assignee": "lee",
+              "status": "todo",
+              "round": 1,
+              "rel": "thread"
+            }
+          ],
+          "ts": 0,
+          "delivery": [
+            {
+              "name": "lee",
+              "status": "human"
+            }
+          ]
+        }
+      },
+      "todo": {
+        "type": "todo",
+        "round": {
+          "n": 1,
+          "title": null,
+          "status": "open",
+          "openedMs": 0,
+          "doneMs": null,
+          "counts": {
+            "todo": 4,
+            "doing": 1,
+            "done": 2,
+            "total": 7
+          }
+        },
+        "items": [
+          {
+            "id": "T4",
+            "round": 1,
+            "title": "Check the logs",
+            "desc": null,
+            "blockedBy": [],
+            "blocked": false,
+            "status": "doing",
+            "assignee": "helper@lee",
+            "createdBy": "helper@lee",
+            "createdSeq": 4,
+            "doneSeq": null,
+            "createdMs": 0,
+            "doneMs": null,
+            "updatedBy": "helper@lee",
+            "updatedMs": 0,
+            "current": {
+              "seq": 4,
+              "from": "api@kai",
+              "ts": 0,
+              "line": "The build is green."
+            },
+            "reply": null
+          },
+          {
+            "id": "T1",
+            "round": 1,
+            "title": "Review the draft",
+            "desc": null,
+            "blockedBy": [],
+            "blocked": false,
+            "status": "todo",
+            "assignee": "lee",
+            "createdBy": "api@kai",
+            "createdSeq": 5,
+            "doneSeq": null,
+            "createdMs": 0,
+            "doneMs": null,
+            "updatedBy": "api@kai",
+            "updatedMs": 0,
+            "current": {
+              "seq": 16,
+              "from": "scheduled",
+              "ts": 0,
+              "line": "Reminder: T1 is still open."
+            },
+            "reply": null
+          },
+          {
+            "id": "T3",
+            "round": 1,
+            "title": "Release v2",
+            "desc": null,
+            "blockedBy": [
+              "T2"
+            ],
+            "blocked": false,
+            "status": "todo",
+            "assignee": "lee",
+            "createdBy": "api@kai",
+            "createdSeq": 8,
+            "doneSeq": null,
+            "createdMs": 0,
+            "doneMs": null,
+            "updatedBy": "api@kai",
+            "updatedMs": 0,
+            "current": {
+              "seq": 8,
+              "from": "api@kai",
+              "ts": 0,
+              "line": "Please take over the release."
+            },
+            "reply": null
+          },
+          {
+            "id": "T5",
+            "round": 1,
+            "title": "Confirm the log level",
+            "desc": null,
+            "blockedBy": [],
+            "blocked": false,
+            "status": "todo",
+            "assignee": "lee",
+            "createdBy": "helper@lee",
+            "createdSeq": 11,
+            "doneSeq": null,
+            "createdMs": 0,
+            "doneMs": null,
+            "updatedBy": "helper@lee",
+            "updatedMs": 0,
+            "current": {
+              "seq": 11,
+              "from": "helper@lee",
+              "ts": 0,
+              "line": "Can you confirm the log level?"
+            },
+            "reply": {
+              "seq": 12,
+              "from": "lee",
+              "ts": 0,
+              "closer": "helper@lee"
+            }
+          },
+          {
+            "id": "T7",
+            "round": 1,
+            "title": "Announce the release",
+            "desc": null,
+            "blockedBy": [],
+            "blocked": false,
+            "status": "todo",
+            "assignee": null,
+            "createdBy": "api@kai",
+            "createdSeq": 14,
+            "doneSeq": null,
+            "createdMs": 0,
+            "doneMs": null,
+            "updatedBy": "api@kai",
+            "updatedMs": 0,
+            "current": null,
+            "reply": null
+          }
+        ],
+        "rounds": [
+          {
+            "n": 1,
+            "title": null,
+            "status": "open",
+            "openedMs": 0,
+            "doneMs": null,
+            "counts": {
+              "todo": 4,
+              "doing": 1,
+              "done": 2,
+              "total": 7
+            }
+          }
+        ],
+        "counts": {
+          "todo": 4,
+          "doing": 1,
+          "done": 2,
+          "total": 7
+        },
+        "deleted": [],
+        "done": [
+          "T6",
+          "T2"
+        ]
+      }
+    },
+    "agent": {
+      "types": [],
+      "push": "none"
+    }
+  },
+  {
+    "step": "12 countMessage fails",
+    "status": 500,
+    "body": {
+      "error": "server_error",
+      "next": "Something broke on the server. Retry in a minute; if it keeps failing, tell your person."
+    },
+    "browser": {
+      "types": [
+        "message"
+      ],
+      "message": {
+        "type": "message",
+        "message": {
+          "seq": 5,
+          "from": "api@kai",
+          "fromKind": "agent",
+          "kind": "text",
+          "text": "@kai Fixed the crash.",
+          "mentions": [
+            "kai"
+          ],
+          "broadcast": false,
+          "reply": null,
+          "command": null,
+          "event": null,
+          "scheduled": null,
+          "todo": [
+            {
+              "id": "T1",
+              "title": "Fix the crash",
+              "assignee": "api@kai",
+              "status": "todo",
+              "round": 1,
+              "rel": "result"
+            }
+          ],
+          "ts": 0,
+          "delivery": [
+            {
+              "name": "kai",
+              "status": "human"
+            }
+          ]
+        }
+      },
+      "todo": "none"
+    },
+    "agent": {
+      "types": [],
+      "push": "none"
+    },
+    "after": {
+      "roomId": "<topic-fail>",
+      "item": {
+        "id": "T1",
+        "round": 1,
+        "title": "Fix the crash",
+        "desc": null,
+        "blockedBy": [],
+        "blocked": false,
+        "status": "todo",
+        "assignee": "api@kai",
+        "createdBy": "api@kai",
+        "createdSeq": 4,
+        "doneSeq": null,
+        "createdMs": 0,
+        "doneMs": null,
+        "updatedBy": "api@kai",
+        "updatedMs": 0,
+        "current": null,
+        "reply": null,
+        "thread": [
+          {
+            "seq": 4,
+            "from": "api@kai",
+            "kind": "agent",
+            "ts": 0,
+            "rel": "source"
+          },
+          {
+            "seq": 5,
+            "from": "api@kai",
+            "kind": "agent",
+            "ts": 0,
+            "rel": "result"
+          }
+        ]
+      },
+      "source": {
+        "seq": 4,
+        "from": "api@kai",
+        "text": "@kai The app crashes on start.",
+        "files": [],
+        "ts": 0
+      },
+      "history": [
+        {
+          "ms": 0,
+          "by": "api@kai",
+          "op": "add",
+          "from": null,
+          "to": {
+            "title": "Fix the crash",
+            "assignee": "api@kai",
+            "blockedBy": []
+          }
+        }
+      ]
+    }
+  },
+  {
+    "step": "13 file",
+    "status": 200,
+    "body": {
+      "roomId": "<topic>",
+      "seq": 17,
+      "from": "api@kai",
+      "ts": 0,
+      "delivery": [
+        {
+          "name": "kai",
+          "status": "human"
+        }
+      ],
+      "files": [
+        {
+          "id": "<file-1>",
+          "name": "notes.txt",
+          "size": 13,
+          "link": "https://scorpio.test/v/<file-1>"
+        }
+      ]
+    },
+    "browser": {
+      "types": [
+        "message"
+      ],
+      "message": {
+        "type": "message",
+        "message": {
+          "seq": 17,
+          "from": "api@kai",
+          "fromKind": "agent",
+          "kind": "text",
+          "text": "@kai Notes attached.",
+          "mentions": [
+            "kai"
+          ],
+          "broadcast": false,
+          "reply": null,
+          "command": null,
+          "event": null,
+          "scheduled": null,
+          "files": [
+            {
+              "id": "<file-1>",
+              "name": "notes.txt",
+              "type": "text/plain",
+              "size": 13,
+              "url": "/f/<topic>/<file-1>",
+              "link": "https://scorpio.test/v/<file-1>",
+              "view": true
+            }
+          ],
+          "ts": 0,
+          "delivery": [
+            {
+              "name": "kai",
+              "status": "human"
+            }
+          ]
+        }
+      },
+      "todo": "none"
+    },
+    "agent": {
+      "types": [],
+      "push": "none"
+    }
+  },
+  {
+    "step": "14a update with done",
+    "status": 400,
+    "body": {
+      "error": "bad_request",
+      "next": "update= goes alone: its to= is the task's new assignee. Send done= or add= in a message of their own."
+    },
+    "browser": {
+      "types": [],
+      "message": "none",
+      "todo": "none"
+    },
+    "agent": {
+      "types": [],
+      "push": "none"
+    }
+  },
+  {
+    "step": "14b add to person not mentioned",
+    "status": 400,
+    "body": {
+      "error": "bad_request",
+      "next": "A task for a person comes from a message to them: @lee in it (or let them write it)."
+    },
+    "browser": {
+      "types": [],
+      "message": "none",
+      "todo": "none"
+    },
+    "agent": {
+      "types": [],
+      "push": "none"
+    }
+  },
+  {
+    "step": "14c task writes exhausted",
+    "status": 429,
+    "body": {
+      "error": "rate_limited",
+      "next": "More than 20 task changes in this topic within a minute. Wait a minute and retry."
+    },
+    "browser": {
+      "types": [],
+      "message": "none",
+      "todo": "none"
+    },
+    "agent": {
+      "types": [],
+      "push": "none"
+    }
+  }
+]

@@ -1,0 +1,12 @@
+/* The invite card a new topic shows until an agent comes in (site kit, sx- names). Sits in the feed, the topic page is unchanged. */
+.ui .feed > .sx-invite { margin: auto 0 8px; padding: 18px 18px 16px; border-radius: 18px; background: var(--surface); box-shadow: 0 0 0 1px var(--line), 0 18px 40px -28px rgba(16, 22, 40, 0.45); }
+:root[data-scorpio-effective-theme="dark"] .ui .feed > .sx-invite { background: var(--surface); box-shadow: 0 0 0 1px var(--line-strong); }
+.sx-invite .sx-ih { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.sx-invite .sx-ih .sx-art { display: flex; align-items: flex-end; gap: 2px; }
+.sx-invite .sx-ih .sx-art .dmn { width: 30px; height: 30px; }
+.sx-invite .sx-ih .sx-art .bot { width: 34px; height: 34px; }
+.sx-invite .sx-ih b { font-size: 18px; font-weight: 800; line-height: 1.3; }
+.panel .invite-label, .sx-invite .invite-label { margin: 14px 0 6px; font-size: 14px; color: var(--muted); }
+.sx-invite .row.gap { margin-bottom: 14px; }
+.sx-invite .row.gap:last-child { margin-bottom: 0; }
+.sx-invite .row.gap .btn { flex: 1; min-height: 42px; }

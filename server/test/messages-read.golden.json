@@ -1,0 +1,1407 @@
+[
+  {
+    "step": "messages kai default",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "messages": [
+          {"seq":70,"from":"lee","fromKind":"human","kind":"text","text":"note 70","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790797200000},
+          {"seq":71,"from":"kai","fromKind":"human","kind":"text","text":"note 71","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790797800000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":72,"from":"lee","fromKind":"human","kind":"text","text":"note 72","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790798400000},
+          {"seq":73,"from":"kai","fromKind":"human","kind":"text","text":"note 73","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790799000000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":74,"from":"lee","fromKind":"human","kind":"text","text":"note 74","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790799600000},
+          {"seq":75,"from":"kai","fromKind":"human","kind":"text","text":"note 75","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790800200000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":76,"from":"lee","fromKind":"human","kind":"text","text":"note 76","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790800800000},
+          {"seq":77,"from":"kai","fromKind":"human","kind":"text","text":"note 77","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790801400000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":78,"from":"lee","fromKind":"human","kind":"text","text":"note 78","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790802000000},
+          {"seq":79,"from":"kai","fromKind":"human","kind":"text","text":"note 79","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790802600000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":80,"from":"lee","fromKind":"human","kind":"text","text":"note 80","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790803200000},
+          {"seq":81,"from":"kai","fromKind":"human","kind":"text","text":"note 81","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790803800000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":82,"from":"lee","fromKind":"human","kind":"text","text":"note 82","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790804400000},
+          {"seq":83,"from":"kai","fromKind":"human","kind":"text","text":"note 83","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790805000000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":84,"from":"lee","fromKind":"human","kind":"text","text":"note 84","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790805600000},
+          {"seq":85,"from":"kai","fromKind":"human","kind":"text","text":"note 85","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790806200000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":86,"from":"lee","fromKind":"human","kind":"text","text":"note 86","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790806800000},
+          {"seq":87,"from":"kai","fromKind":"human","kind":"text","text":"note 87","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790807400000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":88,"from":"lee","fromKind":"human","kind":"text","text":"note 88","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790808000000},
+          {"seq":89,"from":"kai","fromKind":"human","kind":"text","text":"note 89","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790808600000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":90,"from":"lee","fromKind":"human","kind":"text","text":"note 90","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790809200000},
+          {"seq":91,"from":"kai","fromKind":"human","kind":"text","text":"note 91","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790809800000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":92,"from":"lee","fromKind":"human","kind":"text","text":"note 92","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790810400000},
+          {"seq":93,"from":"kai","fromKind":"human","kind":"text","text":"note 93","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790811000000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":94,"from":"lee","fromKind":"human","kind":"text","text":"note 94","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790811600000},
+          {"seq":95,"from":"kai","fromKind":"human","kind":"text","text":"note 95","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790812200000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":96,"from":"lee","fromKind":"human","kind":"text","text":"note 96","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790812800000},
+          {"seq":97,"from":"kai","fromKind":"human","kind":"text","text":"note 97","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790813400000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":98,"from":"lee","fromKind":"human","kind":"text","text":"note 98","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790814000000},
+          {"seq":99,"from":"kai","fromKind":"human","kind":"text","text":"note 99","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790814600000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":100,"from":"lee","fromKind":"human","kind":"text","text":"note 100","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790815200000},
+          {"seq":101,"from":"kai","fromKind":"human","kind":"text","text":"note 101","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790815800000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":102,"from":"lee","fromKind":"human","kind":"text","text":"note 102","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790816400000},
+          {"seq":103,"from":"kai","fromKind":"human","kind":"text","text":"note 103","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790817000000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":104,"from":"lee","fromKind":"human","kind":"text","text":"note 104","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790817600000},
+          {"seq":105,"from":"kai","fromKind":"human","kind":"text","text":"note 105","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790818200000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":106,"from":"lee","fromKind":"human","kind":"text","text":"note 106","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790818800000},
+          {"seq":107,"from":"kai","fromKind":"human","kind":"text","text":"note 107","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790819400000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":108,"from":"lee","fromKind":"human","kind":"text","text":"note 108","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790820000000},
+          {"seq":109,"from":"kai","fromKind":"human","kind":"text","text":"note 109","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790820600000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":110,"from":"lee","fromKind":"human","kind":"text","text":"note 110","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790821200000},
+          {"seq":111,"from":"kai","fromKind":"human","kind":"text","text":"note 111","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790821800000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":112,"from":"lee","fromKind":"human","kind":"text","text":"note 112","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790822400000},
+          {"seq":113,"from":"kai","fromKind":"human","kind":"text","text":"note 113","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790823000000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":114,"from":"lee","fromKind":"human","kind":"text","text":"note 114","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790823600000},
+          {"seq":115,"from":"kai","fromKind":"human","kind":"text","text":"@api@kai Please write the summary.","mentions":["api@kai"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790824200000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":116,"from":"api@kai","fromKind":"agent","kind":"text","text":"@kai @lee Summary: T1 is open.","mentions":["kai","lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"thread"}],"ts":1790824800000,"delivery":[{"name":"kai","status":"human"},{"name":"lee","status":"human"}]},
+          {"seq":117,"from":"lee","fromKind":"human","kind":"text","text":"@api@kai Agreed.","mentions":["api@kai"],"broadcast":false,"reply":{"seq":116,"from":"api@kai","text":"@kai @lee Summary: T1 is open."},"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"reply","closer":"api@kai"}],"ts":1790825400000},
+          {"seq":118,"from":"kai","fromKind":"human","kind":"text","text":"@lee see `@api@kai` in code, @lee in prose.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790826000000,"delivery":[{"name":"lee","status":"human"}]},
+          {"seq":119,"from":"lee","fromKind":"human","kind":"text","text":"@kai One more question.","mentions":["kai"],"broadcast":false,"reply":{"seq":5,"from":"api@kai","text":"@lee Please review the draft."},"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"reply","closer":"api@kai"}],"ts":1790826600000}
+        ]
+      }
+    }
+  },
+  {
+    "step": "messages api from 1 limit 20",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "messages": [
+          {"seq":1,"from":"system","fromKind":"system","kind":"text","text":"lee joined","mentions":[],"broadcast":false,"reply":null,"command":null,"event":{"type":"join","name":"lee"},"scheduled":null,"ts":1790755800000},
+          {"seq":2,"from":"system","fromKind":"system","kind":"text","text":"api@kai joined","mentions":[],"broadcast":false,"reply":null,"command":null,"event":{"type":"join","name":"api@kai"},"scheduled":null,"ts":1790756400000},
+          {"seq":3,"from":"system","fromKind":"system","kind":"text","text":"helper@lee joined","mentions":[],"broadcast":false,"reply":null,"command":null,"event":{"type":"join","name":"helper@lee"},"scheduled":null,"ts":1790757000000},
+          {"seq":4,"from":"kai","fromKind":"human","kind":"text","text":"Morning, everyone.","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790757600000},
+          {"seq":5,"from":"api@kai","fromKind":"agent","kind":"text","text":"@lee Please review the draft.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"source"}],"ts":1790758200000,"delivery":[{"name":"lee","status":"human"}]},
+          {"seq":6,"from":"lee","fromKind":"human","kind":"text","text":"@api@kai Reviewed, two notes on page 3.","mentions":["api@kai"],"broadcast":false,"reply":{"seq":5,"from":"api@kai","text":"@lee Please review the draft."},"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"reply","closer":"api@kai"}],"ts":1790758800000},
+          {"seq":7,"from":"helper@lee","fromKind":"agent","kind":"text","text":"@kai @lee The logs are clean.","mentions":["kai","lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790759400000},
+          {"seq":8,"from":"kai","fromKind":"human","kind":"text","text":"@api@kai @helper@lee Please check T1 before noon.","mentions":["api@kai","helper@lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790760000000},
+          {"seq":9,"from":"api@kai","fromKind":"agent","kind":"text","text":"@kai Here is the report.","mentions":["kai"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"files":[{"id":"f-report","name":"report.pdf","type":"application/pdf","size":2048,"url":"/f/reads/f-report","link":"https://scorpio.test/v/f-report","view":false},{"id":"f-old","name":"old.png","type":"image/png","size":512,"url":"/f/reads/f-old","deleted":1790760600000,"link":"https://scorpio.test/v/f-old","view":false}],"ts":1790760600000,"delivery":[{"name":"kai","status":"human"}]},
+          {"seq":10,"from":"api@kai","fromKind":"agent","kind":"text","text":"@lee Reminder: standup at ten.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":{"id":"s1","by":"kai","at":1},"ts":1790761200000},
+          {"seq":11,"from":"kai","fromKind":"human","kind":"text","text":"@api@kai /spawn claude worker ~/work check the logs","mentions":["api@kai"],"broadcast":false,"reply":null,"command":"/spawn","event":null,"scheduled":null,"ts":1790761800000},
+          {"seq":12,"from":"lee","fromKind":"human","kind":"text","text":"Thanks, all.","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790762400000},
+          {"seq":13,"from":"helper@lee","fromKind":"agent","kind":"text","text":"@lee see `@kai` in the log; @lee in prose.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790763000000},
+          {"seq":14,"from":"lee","fromKind":"human","kind":"text","text":"@api@kai What about T1?","mentions":["api@kai"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"reply","closer":"api@kai"}],"ts":1790763600000},
+          {"seq":15,"from":"kai","fromKind":"human","kind":"text","text":"note 15","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790764200000},
+          {"seq":16,"from":"lee","fromKind":"human","kind":"text","text":"note 16","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790764800000},
+          {"seq":17,"from":"kai","fromKind":"human","kind":"text","text":"note 17","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790765400000},
+          {"seq":18,"from":"lee","fromKind":"human","kind":"text","text":"note 18","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790766000000},
+          {"seq":19,"from":"kai","fromKind":"human","kind":"text","text":"note 19","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790766600000},
+          {"seq":20,"from":"lee","fromKind":"human","kind":"text","text":"note 20","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790767200000}
+        ]
+      }
+    }
+  },
+  {
+    "step": "messages stranger",
+    "result": {
+      "err": {"code":"not_member","next":"bot@zed is not in this topic. Join first: scorpio join roomId=reads role=bot roleCard='…' (add code=… if the topic has a passcode; resume=true if it was you before).","status":403}
+    }
+  },
+  {
+    "step": "history kai default",
+    "result": {
+      "ok": {
+        "messages": [
+          {"seq":20,"from":"lee","fromKind":"human","kind":"text","text":"note 20","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790767200000},
+          {"seq":21,"from":"kai","fromKind":"human","kind":"text","text":"note 21","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790767800000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":22,"from":"lee","fromKind":"human","kind":"text","text":"note 22","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790768400000},
+          {"seq":23,"from":"kai","fromKind":"human","kind":"text","text":"note 23","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790769000000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":24,"from":"lee","fromKind":"human","kind":"text","text":"note 24","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790769600000},
+          {"seq":25,"from":"kai","fromKind":"human","kind":"text","text":"note 25","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790770200000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":26,"from":"lee","fromKind":"human","kind":"text","text":"note 26","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790770800000},
+          {"seq":27,"from":"kai","fromKind":"human","kind":"text","text":"note 27","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790771400000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":28,"from":"lee","fromKind":"human","kind":"text","text":"note 28","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790772000000},
+          {"seq":29,"from":"kai","fromKind":"human","kind":"text","text":"note 29","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790772600000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":30,"from":"lee","fromKind":"human","kind":"text","text":"note 30","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790773200000},
+          {"seq":31,"from":"kai","fromKind":"human","kind":"text","text":"note 31","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790773800000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":32,"from":"lee","fromKind":"human","kind":"text","text":"note 32","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790774400000},
+          {"seq":33,"from":"kai","fromKind":"human","kind":"text","text":"note 33","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790775000000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":34,"from":"lee","fromKind":"human","kind":"text","text":"note 34","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790775600000},
+          {"seq":35,"from":"kai","fromKind":"human","kind":"text","text":"note 35","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790776200000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":36,"from":"lee","fromKind":"human","kind":"text","text":"note 36","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790776800000},
+          {"seq":37,"from":"kai","fromKind":"human","kind":"text","text":"note 37","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790777400000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":38,"from":"lee","fromKind":"human","kind":"text","text":"note 38","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790778000000},
+          {"seq":39,"from":"kai","fromKind":"human","kind":"text","text":"note 39","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790778600000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":40,"from":"lee","fromKind":"human","kind":"text","text":"note 40","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790779200000},
+          {"seq":41,"from":"kai","fromKind":"human","kind":"text","text":"note 41","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790779800000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":42,"from":"lee","fromKind":"human","kind":"text","text":"note 42","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790780400000},
+          {"seq":43,"from":"kai","fromKind":"human","kind":"text","text":"note 43","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790781000000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":44,"from":"lee","fromKind":"human","kind":"text","text":"note 44","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790781600000},
+          {"seq":45,"from":"kai","fromKind":"human","kind":"text","text":"note 45","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790782200000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":46,"from":"lee","fromKind":"human","kind":"text","text":"note 46","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790782800000},
+          {"seq":47,"from":"kai","fromKind":"human","kind":"text","text":"note 47","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790783400000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":48,"from":"lee","fromKind":"human","kind":"text","text":"note 48","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790784000000},
+          {"seq":49,"from":"kai","fromKind":"human","kind":"text","text":"note 49","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790784600000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":50,"from":"lee","fromKind":"human","kind":"text","text":"note 50","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790785200000},
+          {"seq":51,"from":"kai","fromKind":"human","kind":"text","text":"note 51","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790785800000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":52,"from":"lee","fromKind":"human","kind":"text","text":"note 52","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790786400000},
+          {"seq":53,"from":"kai","fromKind":"human","kind":"text","text":"note 53","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790787000000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":54,"from":"lee","fromKind":"human","kind":"text","text":"note 54","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790787600000},
+          {"seq":55,"from":"kai","fromKind":"human","kind":"text","text":"note 55","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790788200000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":56,"from":"lee","fromKind":"human","kind":"text","text":"note 56","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790788800000},
+          {"seq":57,"from":"kai","fromKind":"human","kind":"text","text":"note 57","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790789400000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":58,"from":"lee","fromKind":"human","kind":"text","text":"note 58","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790790000000},
+          {"seq":59,"from":"kai","fromKind":"human","kind":"text","text":"note 59","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790790600000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":60,"from":"lee","fromKind":"human","kind":"text","text":"note 60","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790791200000},
+          {"seq":61,"from":"kai","fromKind":"human","kind":"text","text":"note 61","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790791800000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":62,"from":"lee","fromKind":"human","kind":"text","text":"note 62","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790792400000},
+          {"seq":63,"from":"kai","fromKind":"human","kind":"text","text":"note 63","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790793000000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":64,"from":"lee","fromKind":"human","kind":"text","text":"note 64","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790793600000},
+          {"seq":65,"from":"kai","fromKind":"human","kind":"text","text":"note 65","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790794200000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":66,"from":"lee","fromKind":"human","kind":"text","text":"note 66","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790794800000},
+          {"seq":67,"from":"kai","fromKind":"human","kind":"text","text":"note 67","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790795400000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":68,"from":"lee","fromKind":"human","kind":"text","text":"note 68","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790796000000},
+          {"seq":69,"from":"kai","fromKind":"human","kind":"text","text":"note 69","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790796600000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":70,"from":"lee","fromKind":"human","kind":"text","text":"note 70","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790797200000},
+          {"seq":71,"from":"kai","fromKind":"human","kind":"text","text":"note 71","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790797800000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":72,"from":"lee","fromKind":"human","kind":"text","text":"note 72","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790798400000},
+          {"seq":73,"from":"kai","fromKind":"human","kind":"text","text":"note 73","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790799000000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":74,"from":"lee","fromKind":"human","kind":"text","text":"note 74","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790799600000},
+          {"seq":75,"from":"kai","fromKind":"human","kind":"text","text":"note 75","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790800200000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":76,"from":"lee","fromKind":"human","kind":"text","text":"note 76","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790800800000},
+          {"seq":77,"from":"kai","fromKind":"human","kind":"text","text":"note 77","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790801400000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":78,"from":"lee","fromKind":"human","kind":"text","text":"note 78","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790802000000},
+          {"seq":79,"from":"kai","fromKind":"human","kind":"text","text":"note 79","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790802600000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":80,"from":"lee","fromKind":"human","kind":"text","text":"note 80","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790803200000},
+          {"seq":81,"from":"kai","fromKind":"human","kind":"text","text":"note 81","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790803800000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":82,"from":"lee","fromKind":"human","kind":"text","text":"note 82","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790804400000},
+          {"seq":83,"from":"kai","fromKind":"human","kind":"text","text":"note 83","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790805000000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":84,"from":"lee","fromKind":"human","kind":"text","text":"note 84","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790805600000},
+          {"seq":85,"from":"kai","fromKind":"human","kind":"text","text":"note 85","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790806200000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":86,"from":"lee","fromKind":"human","kind":"text","text":"note 86","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790806800000},
+          {"seq":87,"from":"kai","fromKind":"human","kind":"text","text":"note 87","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790807400000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":88,"from":"lee","fromKind":"human","kind":"text","text":"note 88","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790808000000},
+          {"seq":89,"from":"kai","fromKind":"human","kind":"text","text":"note 89","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790808600000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":90,"from":"lee","fromKind":"human","kind":"text","text":"note 90","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790809200000},
+          {"seq":91,"from":"kai","fromKind":"human","kind":"text","text":"note 91","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790809800000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":92,"from":"lee","fromKind":"human","kind":"text","text":"note 92","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790810400000},
+          {"seq":93,"from":"kai","fromKind":"human","kind":"text","text":"note 93","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790811000000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":94,"from":"lee","fromKind":"human","kind":"text","text":"note 94","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790811600000},
+          {"seq":95,"from":"kai","fromKind":"human","kind":"text","text":"note 95","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790812200000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":96,"from":"lee","fromKind":"human","kind":"text","text":"note 96","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790812800000},
+          {"seq":97,"from":"kai","fromKind":"human","kind":"text","text":"note 97","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790813400000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":98,"from":"lee","fromKind":"human","kind":"text","text":"note 98","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790814000000},
+          {"seq":99,"from":"kai","fromKind":"human","kind":"text","text":"note 99","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790814600000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":100,"from":"lee","fromKind":"human","kind":"text","text":"note 100","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790815200000},
+          {"seq":101,"from":"kai","fromKind":"human","kind":"text","text":"note 101","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790815800000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":102,"from":"lee","fromKind":"human","kind":"text","text":"note 102","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790816400000},
+          {"seq":103,"from":"kai","fromKind":"human","kind":"text","text":"note 103","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790817000000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":104,"from":"lee","fromKind":"human","kind":"text","text":"note 104","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790817600000},
+          {"seq":105,"from":"kai","fromKind":"human","kind":"text","text":"note 105","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790818200000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":106,"from":"lee","fromKind":"human","kind":"text","text":"note 106","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790818800000},
+          {"seq":107,"from":"kai","fromKind":"human","kind":"text","text":"note 107","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790819400000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":108,"from":"lee","fromKind":"human","kind":"text","text":"note 108","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790820000000},
+          {"seq":109,"from":"kai","fromKind":"human","kind":"text","text":"note 109","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790820600000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":110,"from":"lee","fromKind":"human","kind":"text","text":"note 110","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790821200000},
+          {"seq":111,"from":"kai","fromKind":"human","kind":"text","text":"note 111","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790821800000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":112,"from":"lee","fromKind":"human","kind":"text","text":"note 112","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790822400000},
+          {"seq":113,"from":"kai","fromKind":"human","kind":"text","text":"note 113","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790823000000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":114,"from":"lee","fromKind":"human","kind":"text","text":"note 114","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790823600000},
+          {"seq":115,"from":"kai","fromKind":"human","kind":"text","text":"@api@kai Please write the summary.","mentions":["api@kai"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790824200000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":116,"from":"api@kai","fromKind":"agent","kind":"text","text":"@kai @lee Summary: T1 is open.","mentions":["kai","lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"thread"}],"ts":1790824800000,"delivery":[{"name":"kai","status":"human"},{"name":"lee","status":"human"}]},
+          {"seq":117,"from":"lee","fromKind":"human","kind":"text","text":"@api@kai Agreed.","mentions":["api@kai"],"broadcast":false,"reply":{"seq":116,"from":"api@kai","text":"@kai @lee Summary: T1 is open."},"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"reply","closer":"api@kai"}],"ts":1790825400000},
+          {"seq":118,"from":"kai","fromKind":"human","kind":"text","text":"@lee see `@api@kai` in code, @lee in prose.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790826000000,"delivery":[{"name":"lee","status":"human"}]},
+          {"seq":119,"from":"lee","fromKind":"human","kind":"text","text":"@kai One more question.","mentions":["kai"],"broadcast":false,"reply":{"seq":5,"from":"api@kai","text":"@lee Please review the draft."},"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"reply","closer":"api@kai"}],"ts":1790826600000}
+        ]
+      }
+    }
+  },
+  {
+    "step": "history kai before page start",
+    "result": {
+      "ok": {
+        "messages": [
+          {"seq":1,"from":"system","fromKind":"system","kind":"text","text":"lee joined","mentions":[],"broadcast":false,"reply":null,"command":null,"event":{"type":"join","name":"lee"},"scheduled":null,"ts":1790755800000},
+          {"seq":2,"from":"system","fromKind":"system","kind":"text","text":"api@kai joined","mentions":[],"broadcast":false,"reply":null,"command":null,"event":{"type":"join","name":"api@kai"},"scheduled":null,"ts":1790756400000},
+          {"seq":3,"from":"system","fromKind":"system","kind":"text","text":"helper@lee joined","mentions":[],"broadcast":false,"reply":null,"command":null,"event":{"type":"join","name":"helper@lee"},"scheduled":null,"ts":1790757000000},
+          {"seq":4,"from":"kai","fromKind":"human","kind":"text","text":"Morning, everyone.","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790757600000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":5,"from":"api@kai","fromKind":"agent","kind":"text","text":"@lee Please review the draft.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"source"}],"ts":1790758200000,"delivery":[{"name":"lee","status":"human"}]},
+          {"seq":6,"from":"lee","fromKind":"human","kind":"text","text":"@api@kai Reviewed, two notes on page 3.","mentions":["api@kai"],"broadcast":false,"reply":{"seq":5,"from":"api@kai","text":"@lee Please review the draft."},"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"reply","closer":"api@kai"}],"ts":1790758800000},
+          {"seq":7,"from":"helper@lee","fromKind":"agent","kind":"text","text":"@kai @lee The logs are clean.","mentions":["kai","lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790759400000},
+          {"seq":8,"from":"kai","fromKind":"human","kind":"text","text":"@api@kai @helper@lee Please check T1 before noon.","mentions":["api@kai","helper@lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790760000000,"delivery":[{"name":"api@kai","status":"queued"},{"name":"helper@lee","status":"to_owner"}]},
+          {"seq":9,"from":"api@kai","fromKind":"agent","kind":"text","text":"@kai Here is the report.","mentions":["kai"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"files":[{"id":"f-report","name":"report.pdf","type":"application/pdf","size":2048,"url":"/f/reads/f-report","link":"https://scorpio.test/v/f-report","view":false},{"id":"f-old","name":"old.png","type":"image/png","size":512,"url":"/f/reads/f-old","deleted":1790760600000,"link":"https://scorpio.test/v/f-old","view":false}],"ts":1790760600000,"delivery":[{"name":"kai","status":"human"}]},
+          {"seq":10,"from":"api@kai","fromKind":"agent","kind":"text","text":"@lee Reminder: standup at ten.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":{"id":"s1","by":"kai","at":1},"ts":1790761200000,"delivery":[{"name":"lee","status":"human"}]},
+          {"seq":11,"from":"kai","fromKind":"human","kind":"text","text":"@api@kai /spawn claude worker ~/work check the logs","mentions":["api@kai"],"broadcast":false,"reply":null,"command":"/spawn","event":null,"scheduled":null,"ts":1790761800000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":12,"from":"lee","fromKind":"human","kind":"text","text":"Thanks, all.","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790762400000},
+          {"seq":13,"from":"helper@lee","fromKind":"agent","kind":"text","text":"@lee see `@kai` in the log; @lee in prose.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790763000000},
+          {"seq":14,"from":"lee","fromKind":"human","kind":"text","text":"@api@kai What about T1?","mentions":["api@kai"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"reply","closer":"api@kai"}],"ts":1790763600000},
+          {"seq":15,"from":"kai","fromKind":"human","kind":"text","text":"note 15","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790764200000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":16,"from":"lee","fromKind":"human","kind":"text","text":"note 16","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790764800000},
+          {"seq":17,"from":"kai","fromKind":"human","kind":"text","text":"note 17","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790765400000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":18,"from":"lee","fromKind":"human","kind":"text","text":"note 18","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790766000000},
+          {"seq":19,"from":"kai","fromKind":"human","kind":"text","text":"note 19","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790766600000,"delivery":[{"name":"api@kai","status":"queued"}]}
+        ]
+      }
+    }
+  },
+  {
+    "step": "history api before 19",
+    "result": {
+      "ok": {
+        "messages": [
+          {"seq":1,"from":"system","fromKind":"system","kind":"text","text":"lee joined","mentions":[],"broadcast":false,"reply":null,"command":null,"event":{"type":"join","name":"lee"},"scheduled":null,"ts":1790755800000},
+          {"seq":2,"from":"system","fromKind":"system","kind":"text","text":"api@kai joined","mentions":[],"broadcast":false,"reply":null,"command":null,"event":{"type":"join","name":"api@kai"},"scheduled":null,"ts":1790756400000},
+          {"seq":3,"from":"system","fromKind":"system","kind":"text","text":"helper@lee joined","mentions":[],"broadcast":false,"reply":null,"command":null,"event":{"type":"join","name":"helper@lee"},"scheduled":null,"ts":1790757000000},
+          {"seq":4,"from":"kai","fromKind":"human","kind":"text","text":"Morning, everyone.","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790757600000},
+          {"seq":5,"from":"api@kai","fromKind":"agent","kind":"text","text":"@lee Please review the draft.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"source"}],"ts":1790758200000,"delivery":[{"name":"lee","status":"human"}]},
+          {"seq":6,"from":"lee","fromKind":"human","kind":"text","text":"@api@kai Reviewed, two notes on page 3.","mentions":["api@kai"],"broadcast":false,"reply":{"seq":5,"from":"api@kai","text":"@lee Please review the draft."},"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"reply","closer":"api@kai"}],"ts":1790758800000},
+          {"seq":7,"from":"helper@lee","fromKind":"agent","kind":"text","text":"@kai @lee The logs are clean.","mentions":["kai","lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790759400000},
+          {"seq":8,"from":"kai","fromKind":"human","kind":"text","text":"@api@kai @helper@lee Please check T1 before noon.","mentions":["api@kai","helper@lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790760000000},
+          {"seq":9,"from":"api@kai","fromKind":"agent","kind":"text","text":"@kai Here is the report.","mentions":["kai"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"files":[{"id":"f-report","name":"report.pdf","type":"application/pdf","size":2048,"url":"/f/reads/f-report","link":"https://scorpio.test/v/f-report","view":false},{"id":"f-old","name":"old.png","type":"image/png","size":512,"url":"/f/reads/f-old","deleted":1790760600000,"link":"https://scorpio.test/v/f-old","view":false}],"ts":1790760600000,"delivery":[{"name":"kai","status":"human"}]},
+          {"seq":10,"from":"api@kai","fromKind":"agent","kind":"text","text":"@lee Reminder: standup at ten.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":{"id":"s1","by":"kai","at":1},"ts":1790761200000},
+          {"seq":11,"from":"kai","fromKind":"human","kind":"text","text":"@api@kai /spawn claude worker ~/work check the logs","mentions":["api@kai"],"broadcast":false,"reply":null,"command":"/spawn","event":null,"scheduled":null,"ts":1790761800000},
+          {"seq":12,"from":"lee","fromKind":"human","kind":"text","text":"Thanks, all.","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790762400000},
+          {"seq":13,"from":"helper@lee","fromKind":"agent","kind":"text","text":"@lee see `@kai` in the log; @lee in prose.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790763000000},
+          {"seq":14,"from":"lee","fromKind":"human","kind":"text","text":"@api@kai What about T1?","mentions":["api@kai"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"reply","closer":"api@kai"}],"ts":1790763600000},
+          {"seq":15,"from":"kai","fromKind":"human","kind":"text","text":"note 15","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790764200000},
+          {"seq":16,"from":"lee","fromKind":"human","kind":"text","text":"note 16","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790764800000},
+          {"seq":17,"from":"kai","fromKind":"human","kind":"text","text":"note 17","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790765400000},
+          {"seq":18,"from":"lee","fromKind":"human","kind":"text","text":"note 18","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790766000000}
+        ]
+      }
+    }
+  },
+  {
+    "step": "history lee before 19",
+    "result": {
+      "ok": {
+        "messages": [
+          {"seq":1,"from":"system","fromKind":"system","kind":"text","text":"lee joined","mentions":[],"broadcast":false,"reply":null,"command":null,"event":{"type":"join","name":"lee"},"scheduled":null,"ts":1790755800000},
+          {"seq":2,"from":"system","fromKind":"system","kind":"text","text":"api@kai joined","mentions":[],"broadcast":false,"reply":null,"command":null,"event":{"type":"join","name":"api@kai"},"scheduled":null,"ts":1790756400000},
+          {"seq":3,"from":"system","fromKind":"system","kind":"text","text":"helper@lee joined","mentions":[],"broadcast":false,"reply":null,"command":null,"event":{"type":"join","name":"helper@lee"},"scheduled":null,"ts":1790757000000},
+          {"seq":4,"from":"kai","fromKind":"human","kind":"text","text":"Morning, everyone.","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790757600000},
+          {"seq":5,"from":"api@kai","fromKind":"agent","kind":"text","text":"@lee Please review the draft.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"source"}],"ts":1790758200000},
+          {"seq":6,"from":"lee","fromKind":"human","kind":"text","text":"@api@kai Reviewed, two notes on page 3.","mentions":["api@kai"],"broadcast":false,"reply":{"seq":5,"from":"api@kai","text":"@lee Please review the draft."},"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"reply","closer":"api@kai"}],"ts":1790758800000,"delivery":[{"name":"api@kai","status":"to_owner"}]},
+          {"seq":7,"from":"helper@lee","fromKind":"agent","kind":"text","text":"@kai @lee The logs are clean.","mentions":["kai","lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790759400000,"delivery":[{"name":"kai","status":"human"},{"name":"lee","status":"human"}]},
+          {"seq":8,"from":"kai","fromKind":"human","kind":"text","text":"@api@kai @helper@lee Please check T1 before noon.","mentions":["api@kai","helper@lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790760000000},
+          {"seq":9,"from":"api@kai","fromKind":"agent","kind":"text","text":"@kai Here is the report.","mentions":["kai"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"files":[{"id":"f-report","name":"report.pdf","type":"application/pdf","size":2048,"url":"/f/reads/f-report","link":"https://scorpio.test/v/f-report","view":false},{"id":"f-old","name":"old.png","type":"image/png","size":512,"url":"/f/reads/f-old","deleted":1790760600000,"link":"https://scorpio.test/v/f-old","view":false}],"ts":1790760600000},
+          {"seq":10,"from":"api@kai","fromKind":"agent","kind":"text","text":"@lee Reminder: standup at ten.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":{"id":"s1","by":"kai","at":1},"ts":1790761200000},
+          {"seq":11,"from":"kai","fromKind":"human","kind":"text","text":"@api@kai /spawn claude worker ~/work check the logs","mentions":["api@kai"],"broadcast":false,"reply":null,"command":"/spawn","event":null,"scheduled":null,"ts":1790761800000},
+          {"seq":12,"from":"lee","fromKind":"human","kind":"text","text":"Thanks, all.","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790762400000,"delivery":[{"name":"helper@lee","status":"queued"}]},
+          {"seq":13,"from":"helper@lee","fromKind":"agent","kind":"text","text":"@lee see `@kai` in the log; @lee in prose.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790763000000,"delivery":[{"name":"lee","status":"human"}]},
+          {"seq":14,"from":"lee","fromKind":"human","kind":"text","text":"@api@kai What about T1?","mentions":["api@kai"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"reply","closer":"api@kai"}],"ts":1790763600000,"delivery":[{"name":"api@kai","status":"to_owner"}]},
+          {"seq":15,"from":"kai","fromKind":"human","kind":"text","text":"note 15","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790764200000},
+          {"seq":16,"from":"lee","fromKind":"human","kind":"text","text":"note 16","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790764800000,"delivery":[{"name":"helper@lee","status":"queued"}]},
+          {"seq":17,"from":"kai","fromKind":"human","kind":"text","text":"note 17","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790765400000},
+          {"seq":18,"from":"lee","fromKind":"human","kind":"text","text":"note 18","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790766000000,"delivery":[{"name":"helper@lee","status":"queued"}]}
+        ]
+      }
+    }
+  },
+  {
+    "step": "history guest before 19",
+    "result": {
+      "ok": {
+        "messages": [
+          {"seq":1,"from":"system","fromKind":"system","kind":"text","text":"lee joined","mentions":[],"broadcast":false,"reply":null,"command":null,"event":{"type":"join","name":"lee"},"scheduled":null,"ts":1790755800000},
+          {"seq":2,"from":"system","fromKind":"system","kind":"text","text":"api@kai joined","mentions":[],"broadcast":false,"reply":null,"command":null,"event":{"type":"join","name":"api@kai"},"scheduled":null,"ts":1790756400000},
+          {"seq":3,"from":"system","fromKind":"system","kind":"text","text":"helper@lee joined","mentions":[],"broadcast":false,"reply":null,"command":null,"event":{"type":"join","name":"helper@lee"},"scheduled":null,"ts":1790757000000},
+          {"seq":4,"from":"kai","fromKind":"human","kind":"text","text":"Morning, everyone.","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790757600000},
+          {"seq":5,"from":"api@kai","fromKind":"agent","kind":"text","text":"@lee Please review the draft.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"source"}],"ts":1790758200000},
+          {"seq":6,"from":"lee","fromKind":"human","kind":"text","text":"@api@kai Reviewed, two notes on page 3.","mentions":["api@kai"],"broadcast":false,"reply":{"seq":5,"from":"api@kai","text":"@lee Please review the draft."},"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"reply","closer":"api@kai"}],"ts":1790758800000},
+          {"seq":7,"from":"helper@lee","fromKind":"agent","kind":"text","text":"@kai @lee The logs are clean.","mentions":["kai","lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790759400000},
+          {"seq":8,"from":"kai","fromKind":"human","kind":"text","text":"@api@kai @helper@lee Please check T1 before noon.","mentions":["api@kai","helper@lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790760000000},
+          {"seq":9,"from":"api@kai","fromKind":"agent","kind":"text","text":"@kai Here is the report.","mentions":["kai"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"files":[{"id":"f-report","name":"report.pdf","type":"application/pdf","size":2048,"url":"/f/reads/f-report","link":"https://scorpio.test/v/f-report","view":false},{"id":"f-old","name":"old.png","type":"image/png","size":512,"url":"/f/reads/f-old","deleted":1790760600000,"link":"https://scorpio.test/v/f-old","view":false}],"ts":1790760600000},
+          {"seq":10,"from":"api@kai","fromKind":"agent","kind":"text","text":"@lee Reminder: standup at ten.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":{"id":"s1","by":"kai","at":1},"ts":1790761200000},
+          {"seq":11,"from":"kai","fromKind":"human","kind":"text","text":"@api@kai /spawn claude worker ~/work check the logs","mentions":["api@kai"],"broadcast":false,"reply":null,"command":"/spawn","event":null,"scheduled":null,"ts":1790761800000},
+          {"seq":12,"from":"lee","fromKind":"human","kind":"text","text":"Thanks, all.","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790762400000},
+          {"seq":13,"from":"helper@lee","fromKind":"agent","kind":"text","text":"@lee see `@kai` in the log; @lee in prose.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790763000000},
+          {"seq":14,"from":"lee","fromKind":"human","kind":"text","text":"@api@kai What about T1?","mentions":["api@kai"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"reply","closer":"api@kai"}],"ts":1790763600000},
+          {"seq":15,"from":"kai","fromKind":"human","kind":"text","text":"note 15","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790764200000},
+          {"seq":16,"from":"lee","fromKind":"human","kind":"text","text":"note 16","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790764800000},
+          {"seq":17,"from":"kai","fromKind":"human","kind":"text","text":"note 17","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790765400000},
+          {"seq":18,"from":"lee","fromKind":"human","kind":"text","text":"note 18","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790766000000}
+        ]
+      }
+    }
+  },
+  {
+    "step": "history api latest limit 10",
+    "result": {
+      "ok": {
+        "messages": [
+          {"seq":110,"from":"lee","fromKind":"human","kind":"text","text":"note 110","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790821200000},
+          {"seq":111,"from":"kai","fromKind":"human","kind":"text","text":"note 111","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790821800000},
+          {"seq":112,"from":"lee","fromKind":"human","kind":"text","text":"note 112","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790822400000},
+          {"seq":113,"from":"kai","fromKind":"human","kind":"text","text":"note 113","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790823000000},
+          {"seq":114,"from":"lee","fromKind":"human","kind":"text","text":"note 114","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790823600000},
+          {"seq":115,"from":"kai","fromKind":"human","kind":"text","text":"@api@kai Please write the summary.","mentions":["api@kai"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790824200000},
+          {"seq":116,"from":"api@kai","fromKind":"agent","kind":"text","text":"@kai @lee Summary: T1 is open.","mentions":["kai","lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"thread"}],"ts":1790824800000,"delivery":[{"name":"kai","status":"human"},{"name":"lee","status":"human"}]},
+          {"seq":117,"from":"lee","fromKind":"human","kind":"text","text":"@api@kai Agreed.","mentions":["api@kai"],"broadcast":false,"reply":{"seq":116,"from":"api@kai","text":"@kai @lee Summary: T1 is open."},"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"reply","closer":"api@kai"}],"ts":1790825400000},
+          {"seq":118,"from":"kai","fromKind":"human","kind":"text","text":"@lee see `@api@kai` in code, @lee in prose.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790826000000},
+          {"seq":119,"from":"lee","fromKind":"human","kind":"text","text":"@kai One more question.","mentions":["kai"],"broadcast":false,"reply":{"seq":5,"from":"api@kai","text":"@lee Please review the draft."},"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"reply","closer":"api@kai"}],"ts":1790826600000}
+        ]
+      }
+    }
+  },
+  {
+    "step": "history stranger",
+    "result": {
+      "err": {"code":"not_member","next":"bot@zed is not in this topic. Join first: scorpio join roomId=reads role=bot roleCard='…' (add code=… if the topic has a passcode; resume=true if it was you before).","status":403}
+    }
+  },
+  {
+    "step": "around kai 60",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "messages": [
+          {"seq":10,"from":"api@kai","fromKind":"agent","kind":"text","text":"@lee Reminder: standup at ten.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":{"id":"s1","by":"kai","at":1},"ts":1790761200000,"delivery":[{"name":"lee","status":"human"}]},
+          {"seq":11,"from":"kai","fromKind":"human","kind":"text","text":"@api@kai /spawn claude worker ~/work check the logs","mentions":["api@kai"],"broadcast":false,"reply":null,"command":"/spawn","event":null,"scheduled":null,"ts":1790761800000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":12,"from":"lee","fromKind":"human","kind":"text","text":"Thanks, all.","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790762400000},
+          {"seq":13,"from":"helper@lee","fromKind":"agent","kind":"text","text":"@lee see `@kai` in the log; @lee in prose.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790763000000},
+          {"seq":14,"from":"lee","fromKind":"human","kind":"text","text":"@api@kai What about T1?","mentions":["api@kai"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"reply","closer":"api@kai"}],"ts":1790763600000},
+          {"seq":15,"from":"kai","fromKind":"human","kind":"text","text":"note 15","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790764200000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":16,"from":"lee","fromKind":"human","kind":"text","text":"note 16","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790764800000},
+          {"seq":17,"from":"kai","fromKind":"human","kind":"text","text":"note 17","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790765400000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":18,"from":"lee","fromKind":"human","kind":"text","text":"note 18","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790766000000},
+          {"seq":19,"from":"kai","fromKind":"human","kind":"text","text":"note 19","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790766600000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":20,"from":"lee","fromKind":"human","kind":"text","text":"note 20","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790767200000},
+          {"seq":21,"from":"kai","fromKind":"human","kind":"text","text":"note 21","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790767800000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":22,"from":"lee","fromKind":"human","kind":"text","text":"note 22","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790768400000},
+          {"seq":23,"from":"kai","fromKind":"human","kind":"text","text":"note 23","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790769000000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":24,"from":"lee","fromKind":"human","kind":"text","text":"note 24","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790769600000},
+          {"seq":25,"from":"kai","fromKind":"human","kind":"text","text":"note 25","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790770200000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":26,"from":"lee","fromKind":"human","kind":"text","text":"note 26","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790770800000},
+          {"seq":27,"from":"kai","fromKind":"human","kind":"text","text":"note 27","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790771400000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":28,"from":"lee","fromKind":"human","kind":"text","text":"note 28","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790772000000},
+          {"seq":29,"from":"kai","fromKind":"human","kind":"text","text":"note 29","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790772600000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":30,"from":"lee","fromKind":"human","kind":"text","text":"note 30","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790773200000},
+          {"seq":31,"from":"kai","fromKind":"human","kind":"text","text":"note 31","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790773800000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":32,"from":"lee","fromKind":"human","kind":"text","text":"note 32","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790774400000},
+          {"seq":33,"from":"kai","fromKind":"human","kind":"text","text":"note 33","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790775000000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":34,"from":"lee","fromKind":"human","kind":"text","text":"note 34","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790775600000},
+          {"seq":35,"from":"kai","fromKind":"human","kind":"text","text":"note 35","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790776200000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":36,"from":"lee","fromKind":"human","kind":"text","text":"note 36","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790776800000},
+          {"seq":37,"from":"kai","fromKind":"human","kind":"text","text":"note 37","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790777400000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":38,"from":"lee","fromKind":"human","kind":"text","text":"note 38","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790778000000},
+          {"seq":39,"from":"kai","fromKind":"human","kind":"text","text":"note 39","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790778600000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":40,"from":"lee","fromKind":"human","kind":"text","text":"note 40","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790779200000},
+          {"seq":41,"from":"kai","fromKind":"human","kind":"text","text":"note 41","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790779800000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":42,"from":"lee","fromKind":"human","kind":"text","text":"note 42","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790780400000},
+          {"seq":43,"from":"kai","fromKind":"human","kind":"text","text":"note 43","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790781000000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":44,"from":"lee","fromKind":"human","kind":"text","text":"note 44","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790781600000},
+          {"seq":45,"from":"kai","fromKind":"human","kind":"text","text":"note 45","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790782200000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":46,"from":"lee","fromKind":"human","kind":"text","text":"note 46","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790782800000},
+          {"seq":47,"from":"kai","fromKind":"human","kind":"text","text":"note 47","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790783400000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":48,"from":"lee","fromKind":"human","kind":"text","text":"note 48","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790784000000},
+          {"seq":49,"from":"kai","fromKind":"human","kind":"text","text":"note 49","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790784600000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":50,"from":"lee","fromKind":"human","kind":"text","text":"note 50","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790785200000},
+          {"seq":51,"from":"kai","fromKind":"human","kind":"text","text":"note 51","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790785800000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":52,"from":"lee","fromKind":"human","kind":"text","text":"note 52","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790786400000},
+          {"seq":53,"from":"kai","fromKind":"human","kind":"text","text":"note 53","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790787000000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":54,"from":"lee","fromKind":"human","kind":"text","text":"note 54","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790787600000},
+          {"seq":55,"from":"kai","fromKind":"human","kind":"text","text":"note 55","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790788200000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":56,"from":"lee","fromKind":"human","kind":"text","text":"note 56","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790788800000},
+          {"seq":57,"from":"kai","fromKind":"human","kind":"text","text":"note 57","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790789400000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":58,"from":"lee","fromKind":"human","kind":"text","text":"note 58","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790790000000},
+          {"seq":59,"from":"kai","fromKind":"human","kind":"text","text":"note 59","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790790600000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":60,"from":"lee","fromKind":"human","kind":"text","text":"note 60","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790791200000},
+          {"seq":61,"from":"kai","fromKind":"human","kind":"text","text":"note 61","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790791800000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":62,"from":"lee","fromKind":"human","kind":"text","text":"note 62","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790792400000},
+          {"seq":63,"from":"kai","fromKind":"human","kind":"text","text":"note 63","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790793000000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":64,"from":"lee","fromKind":"human","kind":"text","text":"note 64","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790793600000},
+          {"seq":65,"from":"kai","fromKind":"human","kind":"text","text":"note 65","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790794200000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":66,"from":"lee","fromKind":"human","kind":"text","text":"note 66","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790794800000},
+          {"seq":67,"from":"kai","fromKind":"human","kind":"text","text":"note 67","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790795400000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":68,"from":"lee","fromKind":"human","kind":"text","text":"note 68","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790796000000},
+          {"seq":69,"from":"kai","fromKind":"human","kind":"text","text":"note 69","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790796600000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":70,"from":"lee","fromKind":"human","kind":"text","text":"note 70","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790797200000},
+          {"seq":71,"from":"kai","fromKind":"human","kind":"text","text":"note 71","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790797800000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":72,"from":"lee","fromKind":"human","kind":"text","text":"note 72","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790798400000},
+          {"seq":73,"from":"kai","fromKind":"human","kind":"text","text":"note 73","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790799000000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":74,"from":"lee","fromKind":"human","kind":"text","text":"note 74","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790799600000},
+          {"seq":75,"from":"kai","fromKind":"human","kind":"text","text":"note 75","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790800200000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":76,"from":"lee","fromKind":"human","kind":"text","text":"note 76","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790800800000},
+          {"seq":77,"from":"kai","fromKind":"human","kind":"text","text":"note 77","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790801400000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":78,"from":"lee","fromKind":"human","kind":"text","text":"note 78","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790802000000},
+          {"seq":79,"from":"kai","fromKind":"human","kind":"text","text":"note 79","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790802600000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":80,"from":"lee","fromKind":"human","kind":"text","text":"note 80","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790803200000},
+          {"seq":81,"from":"kai","fromKind":"human","kind":"text","text":"note 81","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790803800000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":82,"from":"lee","fromKind":"human","kind":"text","text":"note 82","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790804400000},
+          {"seq":83,"from":"kai","fromKind":"human","kind":"text","text":"note 83","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790805000000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":84,"from":"lee","fromKind":"human","kind":"text","text":"note 84","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790805600000},
+          {"seq":85,"from":"kai","fromKind":"human","kind":"text","text":"note 85","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790806200000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":86,"from":"lee","fromKind":"human","kind":"text","text":"note 86","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790806800000},
+          {"seq":87,"from":"kai","fromKind":"human","kind":"text","text":"note 87","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790807400000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":88,"from":"lee","fromKind":"human","kind":"text","text":"note 88","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790808000000},
+          {"seq":89,"from":"kai","fromKind":"human","kind":"text","text":"note 89","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790808600000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":90,"from":"lee","fromKind":"human","kind":"text","text":"note 90","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790809200000},
+          {"seq":91,"from":"kai","fromKind":"human","kind":"text","text":"note 91","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790809800000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":92,"from":"lee","fromKind":"human","kind":"text","text":"note 92","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790810400000},
+          {"seq":93,"from":"kai","fromKind":"human","kind":"text","text":"note 93","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790811000000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":94,"from":"lee","fromKind":"human","kind":"text","text":"note 94","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790811600000},
+          {"seq":95,"from":"kai","fromKind":"human","kind":"text","text":"note 95","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790812200000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":96,"from":"lee","fromKind":"human","kind":"text","text":"note 96","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790812800000},
+          {"seq":97,"from":"kai","fromKind":"human","kind":"text","text":"note 97","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790813400000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":98,"from":"lee","fromKind":"human","kind":"text","text":"note 98","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790814000000},
+          {"seq":99,"from":"kai","fromKind":"human","kind":"text","text":"note 99","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790814600000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":100,"from":"lee","fromKind":"human","kind":"text","text":"note 100","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790815200000},
+          {"seq":101,"from":"kai","fromKind":"human","kind":"text","text":"note 101","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790815800000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":102,"from":"lee","fromKind":"human","kind":"text","text":"note 102","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790816400000},
+          {"seq":103,"from":"kai","fromKind":"human","kind":"text","text":"note 103","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790817000000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":104,"from":"lee","fromKind":"human","kind":"text","text":"note 104","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790817600000},
+          {"seq":105,"from":"kai","fromKind":"human","kind":"text","text":"note 105","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790818200000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":106,"from":"lee","fromKind":"human","kind":"text","text":"note 106","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790818800000},
+          {"seq":107,"from":"kai","fromKind":"human","kind":"text","text":"note 107","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790819400000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":108,"from":"lee","fromKind":"human","kind":"text","text":"note 108","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790820000000},
+          {"seq":109,"from":"kai","fromKind":"human","kind":"text","text":"note 109","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790820600000,"delivery":[{"name":"api@kai","status":"queued"}]},
+          {"seq":110,"from":"lee","fromKind":"human","kind":"text","text":"note 110","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790821200000}
+        ]
+      }
+    }
+  },
+  {
+    "step": "around lee 5",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "messages": [
+          {"seq":1,"from":"system","fromKind":"system","kind":"text","text":"lee joined","mentions":[],"broadcast":false,"reply":null,"command":null,"event":{"type":"join","name":"lee"},"scheduled":null,"ts":1790755800000},
+          {"seq":2,"from":"system","fromKind":"system","kind":"text","text":"api@kai joined","mentions":[],"broadcast":false,"reply":null,"command":null,"event":{"type":"join","name":"api@kai"},"scheduled":null,"ts":1790756400000},
+          {"seq":3,"from":"system","fromKind":"system","kind":"text","text":"helper@lee joined","mentions":[],"broadcast":false,"reply":null,"command":null,"event":{"type":"join","name":"helper@lee"},"scheduled":null,"ts":1790757000000},
+          {"seq":4,"from":"kai","fromKind":"human","kind":"text","text":"Morning, everyone.","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790757600000},
+          {"seq":5,"from":"api@kai","fromKind":"agent","kind":"text","text":"@lee Please review the draft.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"source"}],"ts":1790758200000},
+          {"seq":6,"from":"lee","fromKind":"human","kind":"text","text":"@api@kai Reviewed, two notes on page 3.","mentions":["api@kai"],"broadcast":false,"reply":{"seq":5,"from":"api@kai","text":"@lee Please review the draft."},"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"reply","closer":"api@kai"}],"ts":1790758800000,"delivery":[{"name":"api@kai","status":"to_owner"}]},
+          {"seq":7,"from":"helper@lee","fromKind":"agent","kind":"text","text":"@kai @lee The logs are clean.","mentions":["kai","lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790759400000,"delivery":[{"name":"kai","status":"human"},{"name":"lee","status":"human"}]},
+          {"seq":8,"from":"kai","fromKind":"human","kind":"text","text":"@api@kai @helper@lee Please check T1 before noon.","mentions":["api@kai","helper@lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790760000000},
+          {"seq":9,"from":"api@kai","fromKind":"agent","kind":"text","text":"@kai Here is the report.","mentions":["kai"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"files":[{"id":"f-report","name":"report.pdf","type":"application/pdf","size":2048,"url":"/f/reads/f-report","link":"https://scorpio.test/v/f-report","view":false},{"id":"f-old","name":"old.png","type":"image/png","size":512,"url":"/f/reads/f-old","deleted":1790760600000,"link":"https://scorpio.test/v/f-old","view":false}],"ts":1790760600000},
+          {"seq":10,"from":"api@kai","fromKind":"agent","kind":"text","text":"@lee Reminder: standup at ten.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":{"id":"s1","by":"kai","at":1},"ts":1790761200000},
+          {"seq":11,"from":"kai","fromKind":"human","kind":"text","text":"@api@kai /spawn claude worker ~/work check the logs","mentions":["api@kai"],"broadcast":false,"reply":null,"command":"/spawn","event":null,"scheduled":null,"ts":1790761800000},
+          {"seq":12,"from":"lee","fromKind":"human","kind":"text","text":"Thanks, all.","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790762400000,"delivery":[{"name":"helper@lee","status":"queued"}]},
+          {"seq":13,"from":"helper@lee","fromKind":"agent","kind":"text","text":"@lee see `@kai` in the log; @lee in prose.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790763000000,"delivery":[{"name":"lee","status":"human"}]},
+          {"seq":14,"from":"lee","fromKind":"human","kind":"text","text":"@api@kai What about T1?","mentions":["api@kai"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"reply","closer":"api@kai"}],"ts":1790763600000,"delivery":[{"name":"api@kai","status":"to_owner"}]},
+          {"seq":15,"from":"kai","fromKind":"human","kind":"text","text":"note 15","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790764200000},
+          {"seq":16,"from":"lee","fromKind":"human","kind":"text","text":"note 16","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790764800000,"delivery":[{"name":"helper@lee","status":"queued"}]},
+          {"seq":17,"from":"kai","fromKind":"human","kind":"text","text":"note 17","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790765400000},
+          {"seq":18,"from":"lee","fromKind":"human","kind":"text","text":"note 18","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790766000000,"delivery":[{"name":"helper@lee","status":"queued"}]},
+          {"seq":19,"from":"kai","fromKind":"human","kind":"text","text":"note 19","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790766600000},
+          {"seq":20,"from":"lee","fromKind":"human","kind":"text","text":"note 20","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790767200000,"delivery":[{"name":"helper@lee","status":"queued"}]},
+          {"seq":21,"from":"kai","fromKind":"human","kind":"text","text":"note 21","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790767800000},
+          {"seq":22,"from":"lee","fromKind":"human","kind":"text","text":"note 22","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790768400000,"delivery":[{"name":"helper@lee","status":"queued"}]},
+          {"seq":23,"from":"kai","fromKind":"human","kind":"text","text":"note 23","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790769000000},
+          {"seq":24,"from":"lee","fromKind":"human","kind":"text","text":"note 24","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790769600000,"delivery":[{"name":"helper@lee","status":"queued"}]},
+          {"seq":25,"from":"kai","fromKind":"human","kind":"text","text":"note 25","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790770200000},
+          {"seq":26,"from":"lee","fromKind":"human","kind":"text","text":"note 26","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790770800000,"delivery":[{"name":"helper@lee","status":"queued"}]},
+          {"seq":27,"from":"kai","fromKind":"human","kind":"text","text":"note 27","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790771400000},
+          {"seq":28,"from":"lee","fromKind":"human","kind":"text","text":"note 28","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790772000000,"delivery":[{"name":"helper@lee","status":"queued"}]},
+          {"seq":29,"from":"kai","fromKind":"human","kind":"text","text":"note 29","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790772600000},
+          {"seq":30,"from":"lee","fromKind":"human","kind":"text","text":"note 30","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790773200000,"delivery":[{"name":"helper@lee","status":"queued"}]},
+          {"seq":31,"from":"kai","fromKind":"human","kind":"text","text":"note 31","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790773800000},
+          {"seq":32,"from":"lee","fromKind":"human","kind":"text","text":"note 32","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790774400000,"delivery":[{"name":"helper@lee","status":"queued"}]},
+          {"seq":33,"from":"kai","fromKind":"human","kind":"text","text":"note 33","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790775000000},
+          {"seq":34,"from":"lee","fromKind":"human","kind":"text","text":"note 34","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790775600000,"delivery":[{"name":"helper@lee","status":"queued"}]},
+          {"seq":35,"from":"kai","fromKind":"human","kind":"text","text":"note 35","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790776200000},
+          {"seq":36,"from":"lee","fromKind":"human","kind":"text","text":"note 36","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790776800000,"delivery":[{"name":"helper@lee","status":"queued"}]},
+          {"seq":37,"from":"kai","fromKind":"human","kind":"text","text":"note 37","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790777400000},
+          {"seq":38,"from":"lee","fromKind":"human","kind":"text","text":"note 38","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790778000000,"delivery":[{"name":"helper@lee","status":"queued"}]},
+          {"seq":39,"from":"kai","fromKind":"human","kind":"text","text":"note 39","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790778600000},
+          {"seq":40,"from":"lee","fromKind":"human","kind":"text","text":"note 40","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790779200000,"delivery":[{"name":"helper@lee","status":"queued"}]},
+          {"seq":41,"from":"kai","fromKind":"human","kind":"text","text":"note 41","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790779800000},
+          {"seq":42,"from":"lee","fromKind":"human","kind":"text","text":"note 42","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790780400000,"delivery":[{"name":"helper@lee","status":"queued"}]},
+          {"seq":43,"from":"kai","fromKind":"human","kind":"text","text":"note 43","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790781000000},
+          {"seq":44,"from":"lee","fromKind":"human","kind":"text","text":"note 44","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790781600000,"delivery":[{"name":"helper@lee","status":"queued"}]},
+          {"seq":45,"from":"kai","fromKind":"human","kind":"text","text":"note 45","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790782200000},
+          {"seq":46,"from":"lee","fromKind":"human","kind":"text","text":"note 46","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790782800000,"delivery":[{"name":"helper@lee","status":"queued"}]},
+          {"seq":47,"from":"kai","fromKind":"human","kind":"text","text":"note 47","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790783400000},
+          {"seq":48,"from":"lee","fromKind":"human","kind":"text","text":"note 48","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790784000000,"delivery":[{"name":"helper@lee","status":"queued"}]},
+          {"seq":49,"from":"kai","fromKind":"human","kind":"text","text":"note 49","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790784600000},
+          {"seq":50,"from":"lee","fromKind":"human","kind":"text","text":"note 50","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790785200000,"delivery":[{"name":"helper@lee","status":"queued"}]},
+          {"seq":51,"from":"kai","fromKind":"human","kind":"text","text":"note 51","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790785800000},
+          {"seq":52,"from":"lee","fromKind":"human","kind":"text","text":"note 52","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790786400000,"delivery":[{"name":"helper@lee","status":"queued"}]},
+          {"seq":53,"from":"kai","fromKind":"human","kind":"text","text":"note 53","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790787000000},
+          {"seq":54,"from":"lee","fromKind":"human","kind":"text","text":"note 54","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790787600000,"delivery":[{"name":"helper@lee","status":"queued"}]},
+          {"seq":55,"from":"kai","fromKind":"human","kind":"text","text":"note 55","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790788200000}
+        ]
+      }
+    }
+  },
+  {
+    "step": "around api 117",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "messages": [
+          {"seq":67,"from":"kai","fromKind":"human","kind":"text","text":"note 67","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790795400000},
+          {"seq":68,"from":"lee","fromKind":"human","kind":"text","text":"note 68","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790796000000},
+          {"seq":69,"from":"kai","fromKind":"human","kind":"text","text":"note 69","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790796600000},
+          {"seq":70,"from":"lee","fromKind":"human","kind":"text","text":"note 70","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790797200000},
+          {"seq":71,"from":"kai","fromKind":"human","kind":"text","text":"note 71","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790797800000},
+          {"seq":72,"from":"lee","fromKind":"human","kind":"text","text":"note 72","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790798400000},
+          {"seq":73,"from":"kai","fromKind":"human","kind":"text","text":"note 73","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790799000000},
+          {"seq":74,"from":"lee","fromKind":"human","kind":"text","text":"note 74","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790799600000},
+          {"seq":75,"from":"kai","fromKind":"human","kind":"text","text":"note 75","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790800200000},
+          {"seq":76,"from":"lee","fromKind":"human","kind":"text","text":"note 76","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790800800000},
+          {"seq":77,"from":"kai","fromKind":"human","kind":"text","text":"note 77","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790801400000},
+          {"seq":78,"from":"lee","fromKind":"human","kind":"text","text":"note 78","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790802000000},
+          {"seq":79,"from":"kai","fromKind":"human","kind":"text","text":"note 79","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790802600000},
+          {"seq":80,"from":"lee","fromKind":"human","kind":"text","text":"note 80","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790803200000},
+          {"seq":81,"from":"kai","fromKind":"human","kind":"text","text":"note 81","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790803800000},
+          {"seq":82,"from":"lee","fromKind":"human","kind":"text","text":"note 82","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790804400000},
+          {"seq":83,"from":"kai","fromKind":"human","kind":"text","text":"note 83","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790805000000},
+          {"seq":84,"from":"lee","fromKind":"human","kind":"text","text":"note 84","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790805600000},
+          {"seq":85,"from":"kai","fromKind":"human","kind":"text","text":"note 85","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790806200000},
+          {"seq":86,"from":"lee","fromKind":"human","kind":"text","text":"note 86","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790806800000},
+          {"seq":87,"from":"kai","fromKind":"human","kind":"text","text":"note 87","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790807400000},
+          {"seq":88,"from":"lee","fromKind":"human","kind":"text","text":"note 88","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790808000000},
+          {"seq":89,"from":"kai","fromKind":"human","kind":"text","text":"note 89","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790808600000},
+          {"seq":90,"from":"lee","fromKind":"human","kind":"text","text":"note 90","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790809200000},
+          {"seq":91,"from":"kai","fromKind":"human","kind":"text","text":"note 91","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790809800000},
+          {"seq":92,"from":"lee","fromKind":"human","kind":"text","text":"note 92","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790810400000},
+          {"seq":93,"from":"kai","fromKind":"human","kind":"text","text":"note 93","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790811000000},
+          {"seq":94,"from":"lee","fromKind":"human","kind":"text","text":"note 94","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790811600000},
+          {"seq":95,"from":"kai","fromKind":"human","kind":"text","text":"note 95","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790812200000},
+          {"seq":96,"from":"lee","fromKind":"human","kind":"text","text":"note 96","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790812800000},
+          {"seq":97,"from":"kai","fromKind":"human","kind":"text","text":"note 97","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790813400000},
+          {"seq":98,"from":"lee","fromKind":"human","kind":"text","text":"note 98","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790814000000},
+          {"seq":99,"from":"kai","fromKind":"human","kind":"text","text":"note 99","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790814600000},
+          {"seq":100,"from":"lee","fromKind":"human","kind":"text","text":"note 100","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790815200000},
+          {"seq":101,"from":"kai","fromKind":"human","kind":"text","text":"note 101","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790815800000},
+          {"seq":102,"from":"lee","fromKind":"human","kind":"text","text":"note 102","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790816400000},
+          {"seq":103,"from":"kai","fromKind":"human","kind":"text","text":"note 103","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790817000000},
+          {"seq":104,"from":"lee","fromKind":"human","kind":"text","text":"note 104","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790817600000},
+          {"seq":105,"from":"kai","fromKind":"human","kind":"text","text":"note 105","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790818200000},
+          {"seq":106,"from":"lee","fromKind":"human","kind":"text","text":"note 106","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790818800000},
+          {"seq":107,"from":"kai","fromKind":"human","kind":"text","text":"note 107","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790819400000},
+          {"seq":108,"from":"lee","fromKind":"human","kind":"text","text":"note 108","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790820000000},
+          {"seq":109,"from":"kai","fromKind":"human","kind":"text","text":"note 109","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790820600000},
+          {"seq":110,"from":"lee","fromKind":"human","kind":"text","text":"note 110","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790821200000},
+          {"seq":111,"from":"kai","fromKind":"human","kind":"text","text":"note 111","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790821800000},
+          {"seq":112,"from":"lee","fromKind":"human","kind":"text","text":"note 112","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790822400000},
+          {"seq":113,"from":"kai","fromKind":"human","kind":"text","text":"note 113","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790823000000},
+          {"seq":114,"from":"lee","fromKind":"human","kind":"text","text":"note 114","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790823600000},
+          {"seq":115,"from":"kai","fromKind":"human","kind":"text","text":"@api@kai Please write the summary.","mentions":["api@kai"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790824200000},
+          {"seq":116,"from":"api@kai","fromKind":"agent","kind":"text","text":"@kai @lee Summary: T1 is open.","mentions":["kai","lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"thread"}],"ts":1790824800000,"delivery":[{"name":"kai","status":"human"},{"name":"lee","status":"human"}]},
+          {"seq":117,"from":"lee","fromKind":"human","kind":"text","text":"@api@kai Agreed.","mentions":["api@kai"],"broadcast":false,"reply":{"seq":116,"from":"api@kai","text":"@kai @lee Summary: T1 is open."},"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"reply","closer":"api@kai"}],"ts":1790825400000},
+          {"seq":118,"from":"kai","fromKind":"human","kind":"text","text":"@lee see `@api@kai` in code, @lee in prose.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790826000000},
+          {"seq":119,"from":"lee","fromKind":"human","kind":"text","text":"@kai One more question.","mentions":["kai"],"broadcast":false,"reply":{"seq":5,"from":"api@kai","text":"@lee Please review the draft."},"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"reply","closer":"api@kai"}],"ts":1790826600000}
+        ]
+      }
+    }
+  },
+  {
+    "step": "around kai missing",
+    "result": {
+      "err": {"code":"message_not_found","next":"There is no message #999 in this topic.","status":404}
+    }
+  },
+  {
+    "step": "message 1 kai",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":1,"from":"system","fromKind":"system","kind":"text","text":"lee joined","mentions":[],"broadcast":false,"reply":null,"command":null,"event":{"type":"join","name":"lee"},"scheduled":null,"ts":1790755800000}
+      }
+    }
+  },
+  {
+    "step": "message 1 api",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":1,"from":"system","fromKind":"system","kind":"text","text":"lee joined","mentions":[],"broadcast":false,"reply":null,"command":null,"event":{"type":"join","name":"lee"},"scheduled":null,"ts":1790755800000}
+      }
+    }
+  },
+  {
+    "step": "message 1 lee",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":1,"from":"system","fromKind":"system","kind":"text","text":"lee joined","mentions":[],"broadcast":false,"reply":null,"command":null,"event":{"type":"join","name":"lee"},"scheduled":null,"ts":1790755800000}
+      }
+    }
+  },
+  {
+    "step": "message 1 guest",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":1,"from":"system","fromKind":"system","kind":"text","text":"lee joined","mentions":[],"broadcast":false,"reply":null,"command":null,"event":{"type":"join","name":"lee"},"scheduled":null,"ts":1790755800000}
+      }
+    }
+  },
+  {
+    "step": "message 4 kai",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":4,"from":"kai","fromKind":"human","kind":"text","text":"Morning, everyone.","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790757600000,"delivery":[{"name":"api@kai","status":"queued"}]}
+      }
+    }
+  },
+  {
+    "step": "message 4 api",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":4,"from":"kai","fromKind":"human","kind":"text","text":"Morning, everyone.","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790757600000}
+      }
+    }
+  },
+  {
+    "step": "message 4 lee",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":4,"from":"kai","fromKind":"human","kind":"text","text":"Morning, everyone.","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790757600000}
+      }
+    }
+  },
+  {
+    "step": "message 4 guest",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":4,"from":"kai","fromKind":"human","kind":"text","text":"Morning, everyone.","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790757600000}
+      }
+    }
+  },
+  {
+    "step": "message 5 kai",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":5,"from":"api@kai","fromKind":"agent","kind":"text","text":"@lee Please review the draft.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"source"}],"ts":1790758200000,"delivery":[{"name":"lee","status":"human"}]}
+      }
+    }
+  },
+  {
+    "step": "message 5 api",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":5,"from":"api@kai","fromKind":"agent","kind":"text","text":"@lee Please review the draft.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"source"}],"ts":1790758200000,"delivery":[{"name":"lee","status":"human"}]}
+      }
+    }
+  },
+  {
+    "step": "message 5 lee",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":5,"from":"api@kai","fromKind":"agent","kind":"text","text":"@lee Please review the draft.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"source"}],"ts":1790758200000}
+      }
+    }
+  },
+  {
+    "step": "message 5 guest",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":5,"from":"api@kai","fromKind":"agent","kind":"text","text":"@lee Please review the draft.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"source"}],"ts":1790758200000}
+      }
+    }
+  },
+  {
+    "step": "message 6 kai",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":6,"from":"lee","fromKind":"human","kind":"text","text":"@api@kai Reviewed, two notes on page 3.","mentions":["api@kai"],"broadcast":false,"reply":{"seq":5,"from":"api@kai","text":"@lee Please review the draft."},"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"reply","closer":"api@kai"}],"ts":1790758800000}
+      }
+    }
+  },
+  {
+    "step": "message 6 api",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":6,"from":"lee","fromKind":"human","kind":"text","text":"@api@kai Reviewed, two notes on page 3.","mentions":["api@kai"],"broadcast":false,"reply":{"seq":5,"from":"api@kai","text":"@lee Please review the draft."},"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"reply","closer":"api@kai"}],"ts":1790758800000}
+      }
+    }
+  },
+  {
+    "step": "message 6 lee",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":6,"from":"lee","fromKind":"human","kind":"text","text":"@api@kai Reviewed, two notes on page 3.","mentions":["api@kai"],"broadcast":false,"reply":{"seq":5,"from":"api@kai","text":"@lee Please review the draft."},"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"reply","closer":"api@kai"}],"ts":1790758800000,"delivery":[{"name":"api@kai","status":"to_owner"}]}
+      }
+    }
+  },
+  {
+    "step": "message 6 guest",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":6,"from":"lee","fromKind":"human","kind":"text","text":"@api@kai Reviewed, two notes on page 3.","mentions":["api@kai"],"broadcast":false,"reply":{"seq":5,"from":"api@kai","text":"@lee Please review the draft."},"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"reply","closer":"api@kai"}],"ts":1790758800000}
+      }
+    }
+  },
+  {
+    "step": "message 9 kai",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":9,"from":"api@kai","fromKind":"agent","kind":"text","text":"@kai Here is the report.","mentions":["kai"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"files":[{"id":"f-report","name":"report.pdf","type":"application/pdf","size":2048,"url":"/f/reads/f-report","link":"https://scorpio.test/v/f-report","view":false},{"id":"f-old","name":"old.png","type":"image/png","size":512,"url":"/f/reads/f-old","deleted":1790760600000,"link":"https://scorpio.test/v/f-old","view":false}],"ts":1790760600000,"delivery":[{"name":"kai","status":"human"}]}
+      }
+    }
+  },
+  {
+    "step": "message 9 api",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":9,"from":"api@kai","fromKind":"agent","kind":"text","text":"@kai Here is the report.","mentions":["kai"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"files":[{"id":"f-report","name":"report.pdf","type":"application/pdf","size":2048,"url":"/f/reads/f-report","link":"https://scorpio.test/v/f-report","view":false},{"id":"f-old","name":"old.png","type":"image/png","size":512,"url":"/f/reads/f-old","deleted":1790760600000,"link":"https://scorpio.test/v/f-old","view":false}],"ts":1790760600000,"delivery":[{"name":"kai","status":"human"}]}
+      }
+    }
+  },
+  {
+    "step": "message 9 lee",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":9,"from":"api@kai","fromKind":"agent","kind":"text","text":"@kai Here is the report.","mentions":["kai"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"files":[{"id":"f-report","name":"report.pdf","type":"application/pdf","size":2048,"url":"/f/reads/f-report","link":"https://scorpio.test/v/f-report","view":false},{"id":"f-old","name":"old.png","type":"image/png","size":512,"url":"/f/reads/f-old","deleted":1790760600000,"link":"https://scorpio.test/v/f-old","view":false}],"ts":1790760600000}
+      }
+    }
+  },
+  {
+    "step": "message 9 guest",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":9,"from":"api@kai","fromKind":"agent","kind":"text","text":"@kai Here is the report.","mentions":["kai"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"files":[{"id":"f-report","name":"report.pdf","type":"application/pdf","size":2048,"url":"/f/reads/f-report","link":"https://scorpio.test/v/f-report","view":false},{"id":"f-old","name":"old.png","type":"image/png","size":512,"url":"/f/reads/f-old","deleted":1790760600000,"link":"https://scorpio.test/v/f-old","view":false}],"ts":1790760600000}
+      }
+    }
+  },
+  {
+    "step": "message 10 kai",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":10,"from":"api@kai","fromKind":"agent","kind":"text","text":"@lee Reminder: standup at ten.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":{"id":"s1","by":"kai","at":1},"ts":1790761200000,"delivery":[{"name":"lee","status":"human"}]}
+      }
+    }
+  },
+  {
+    "step": "message 10 api",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":10,"from":"api@kai","fromKind":"agent","kind":"text","text":"@lee Reminder: standup at ten.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":{"id":"s1","by":"kai","at":1},"ts":1790761200000}
+      }
+    }
+  },
+  {
+    "step": "message 10 lee",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":10,"from":"api@kai","fromKind":"agent","kind":"text","text":"@lee Reminder: standup at ten.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":{"id":"s1","by":"kai","at":1},"ts":1790761200000}
+      }
+    }
+  },
+  {
+    "step": "message 10 guest",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":10,"from":"api@kai","fromKind":"agent","kind":"text","text":"@lee Reminder: standup at ten.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":{"id":"s1","by":"kai","at":1},"ts":1790761200000}
+      }
+    }
+  },
+  {
+    "step": "message 11 kai",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":11,"from":"kai","fromKind":"human","kind":"text","text":"@api@kai /spawn claude worker ~/work check the logs","mentions":["api@kai"],"broadcast":false,"reply":null,"command":"/spawn","event":null,"scheduled":null,"ts":1790761800000,"delivery":[{"name":"api@kai","status":"queued"}]}
+      }
+    }
+  },
+  {
+    "step": "message 11 api",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":11,"from":"kai","fromKind":"human","kind":"text","text":"@api@kai /spawn claude worker ~/work check the logs","mentions":["api@kai"],"broadcast":false,"reply":null,"command":"/spawn","event":null,"scheduled":null,"ts":1790761800000}
+      }
+    }
+  },
+  {
+    "step": "message 11 lee",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":11,"from":"kai","fromKind":"human","kind":"text","text":"@api@kai /spawn claude worker ~/work check the logs","mentions":["api@kai"],"broadcast":false,"reply":null,"command":"/spawn","event":null,"scheduled":null,"ts":1790761800000}
+      }
+    }
+  },
+  {
+    "step": "message 11 guest",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":11,"from":"kai","fromKind":"human","kind":"text","text":"@api@kai /spawn claude worker ~/work check the logs","mentions":["api@kai"],"broadcast":false,"reply":null,"command":"/spawn","event":null,"scheduled":null,"ts":1790761800000}
+      }
+    }
+  },
+  {
+    "step": "message 13 kai",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":13,"from":"helper@lee","fromKind":"agent","kind":"text","text":"@lee see `@kai` in the log; @lee in prose.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790763000000}
+      }
+    }
+  },
+  {
+    "step": "message 13 api",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":13,"from":"helper@lee","fromKind":"agent","kind":"text","text":"@lee see `@kai` in the log; @lee in prose.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790763000000}
+      }
+    }
+  },
+  {
+    "step": "message 13 lee",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":13,"from":"helper@lee","fromKind":"agent","kind":"text","text":"@lee see `@kai` in the log; @lee in prose.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790763000000,"delivery":[{"name":"lee","status":"human"}]}
+      }
+    }
+  },
+  {
+    "step": "message 13 guest",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":13,"from":"helper@lee","fromKind":"agent","kind":"text","text":"@lee see `@kai` in the log; @lee in prose.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790763000000}
+      }
+    }
+  },
+  {
+    "step": "message 115 kai",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":115,"from":"kai","fromKind":"human","kind":"text","text":"@api@kai Please write the summary.","mentions":["api@kai"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790824200000,"delivery":[{"name":"api@kai","status":"queued"}]}
+      }
+    }
+  },
+  {
+    "step": "message 115 api",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":115,"from":"kai","fromKind":"human","kind":"text","text":"@api@kai Please write the summary.","mentions":["api@kai"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790824200000}
+      }
+    }
+  },
+  {
+    "step": "message 115 lee",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":115,"from":"kai","fromKind":"human","kind":"text","text":"@api@kai Please write the summary.","mentions":["api@kai"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790824200000}
+      }
+    }
+  },
+  {
+    "step": "message 115 guest",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":115,"from":"kai","fromKind":"human","kind":"text","text":"@api@kai Please write the summary.","mentions":["api@kai"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790824200000}
+      }
+    }
+  },
+  {
+    "step": "message 117 kai",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":117,"from":"lee","fromKind":"human","kind":"text","text":"@api@kai Agreed.","mentions":["api@kai"],"broadcast":false,"reply":{"seq":116,"from":"api@kai","text":"@kai @lee Summary: T1 is open."},"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"reply","closer":"api@kai"}],"ts":1790825400000}
+      }
+    }
+  },
+  {
+    "step": "message 117 api",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":117,"from":"lee","fromKind":"human","kind":"text","text":"@api@kai Agreed.","mentions":["api@kai"],"broadcast":false,"reply":{"seq":116,"from":"api@kai","text":"@kai @lee Summary: T1 is open."},"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"reply","closer":"api@kai"}],"ts":1790825400000}
+      }
+    }
+  },
+  {
+    "step": "message 117 lee",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":117,"from":"lee","fromKind":"human","kind":"text","text":"@api@kai Agreed.","mentions":["api@kai"],"broadcast":false,"reply":{"seq":116,"from":"api@kai","text":"@kai @lee Summary: T1 is open."},"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"reply","closer":"api@kai"}],"ts":1790825400000,"delivery":[{"name":"api@kai","status":"to_owner"}]}
+      }
+    }
+  },
+  {
+    "step": "message 117 guest",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":117,"from":"lee","fromKind":"human","kind":"text","text":"@api@kai Agreed.","mentions":["api@kai"],"broadcast":false,"reply":{"seq":116,"from":"api@kai","text":"@kai @lee Summary: T1 is open."},"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"reply","closer":"api@kai"}],"ts":1790825400000}
+      }
+    }
+  },
+  {
+    "step": "message 118 kai",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":118,"from":"kai","fromKind":"human","kind":"text","text":"@lee see `@api@kai` in code, @lee in prose.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790826000000,"delivery":[{"name":"lee","status":"human"}]}
+      }
+    }
+  },
+  {
+    "step": "message 118 api",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":118,"from":"kai","fromKind":"human","kind":"text","text":"@lee see `@api@kai` in code, @lee in prose.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790826000000}
+      }
+    }
+  },
+  {
+    "step": "message 118 lee",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":118,"from":"kai","fromKind":"human","kind":"text","text":"@lee see `@api@kai` in code, @lee in prose.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790826000000}
+      }
+    }
+  },
+  {
+    "step": "message 118 guest",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":118,"from":"kai","fromKind":"human","kind":"text","text":"@lee see `@api@kai` in code, @lee in prose.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790826000000}
+      }
+    }
+  },
+  {
+    "step": "message 119 kai",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":119,"from":"lee","fromKind":"human","kind":"text","text":"@kai One more question.","mentions":["kai"],"broadcast":false,"reply":{"seq":5,"from":"api@kai","text":"@lee Please review the draft."},"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"reply","closer":"api@kai"}],"ts":1790826600000}
+      }
+    }
+  },
+  {
+    "step": "message 119 api",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":119,"from":"lee","fromKind":"human","kind":"text","text":"@kai One more question.","mentions":["kai"],"broadcast":false,"reply":{"seq":5,"from":"api@kai","text":"@lee Please review the draft."},"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"reply","closer":"api@kai"}],"ts":1790826600000}
+      }
+    }
+  },
+  {
+    "step": "message 119 lee",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":119,"from":"lee","fromKind":"human","kind":"text","text":"@kai One more question.","mentions":["kai"],"broadcast":false,"reply":{"seq":5,"from":"api@kai","text":"@lee Please review the draft."},"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"reply","closer":"api@kai"}],"ts":1790826600000,"delivery":[{"name":"kai","status":"human"},{"name":"api@kai","status":"to_owner"}]}
+      }
+    }
+  },
+  {
+    "step": "message 119 guest",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "message": {"seq":119,"from":"lee","fromKind":"human","kind":"text","text":"@kai One more question.","mentions":["kai"],"broadcast":false,"reply":{"seq":5,"from":"api@kai","text":"@lee Please review the draft."},"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"reply","closer":"api@kai"}],"ts":1790826600000}
+      }
+    }
+  },
+  {
+    "step": "message missing",
+    "result": {
+      "err": {"code":"message_not_found","next":"There is no message #999 in this topic.","status":404}
+    }
+  },
+  {
+    "step": "message stranger",
+    "result": {
+      "err": {"code":"not_member","next":"bot@zed is not in this topic. Join first: scorpio join roomId=reads role=bot roleCard='…' (add code=… if the topic has a passcode; resume=true if it was you before).","status":403}
+    }
+  },
+  {
+    "step": "mentions kai default",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "cursor": 119,
+        "total": 7,
+        "unread": 0,
+        "hasMore": false,
+        "mentions": [
+          {"seq":119,"from":"lee","fromKind":"human","kind":"text","text":"@kai One more question.","mentions":["kai"],"broadcast":false,"reply":{"seq":5,"from":"api@kai","text":"@lee Please review the draft."},"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"reply","closer":"api@kai"}],"ts":1790826600000,"unread":false},
+          {"seq":117,"from":"lee","fromKind":"human","kind":"text","text":"@api@kai Agreed.","mentions":["api@kai"],"broadcast":false,"reply":{"seq":116,"from":"api@kai","text":"@kai @lee Summary: T1 is open."},"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"reply","closer":"api@kai"}],"ts":1790825400000,"unread":false},
+          {"seq":116,"from":"api@kai","fromKind":"agent","kind":"text","text":"@kai @lee Summary: T1 is open.","mentions":["kai","lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"thread"}],"ts":1790824800000,"delivery":[{"name":"kai","status":"human"},{"name":"lee","status":"human"}],"unread":false},
+          {"seq":14,"from":"lee","fromKind":"human","kind":"text","text":"@api@kai What about T1?","mentions":["api@kai"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"reply","closer":"api@kai"}],"ts":1790763600000,"unread":false},
+          {"seq":9,"from":"api@kai","fromKind":"agent","kind":"text","text":"@kai Here is the report.","mentions":["kai"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"files":[{"id":"f-report","name":"report.pdf","type":"application/pdf","size":2048,"url":"/f/reads/f-report","link":"https://scorpio.test/v/f-report","view":false},{"id":"f-old","name":"old.png","type":"image/png","size":512,"url":"/f/reads/f-old","deleted":1790760600000,"link":"https://scorpio.test/v/f-old","view":false}],"ts":1790760600000,"delivery":[{"name":"kai","status":"human"}],"unread":false},
+          {"seq":7,"from":"helper@lee","fromKind":"agent","kind":"text","text":"@kai @lee The logs are clean.","mentions":["kai","lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790759400000,"unread":false},
+          {"seq":6,"from":"lee","fromKind":"human","kind":"text","text":"@api@kai Reviewed, two notes on page 3.","mentions":["api@kai"],"broadcast":false,"reply":{"seq":5,"from":"api@kai","text":"@lee Please review the draft."},"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"reply","closer":"api@kai"}],"ts":1790758800000,"unread":false}
+        ]
+      }
+    }
+  },
+  {
+    "step": "mentions lee default",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "cursor": 100,
+        "total": 7,
+        "unread": 2,
+        "hasMore": false,
+        "mentions": [
+          {"seq":118,"from":"kai","fromKind":"human","kind":"text","text":"@lee see `@api@kai` in code, @lee in prose.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790826000000,"unread":true},
+          {"seq":116,"from":"api@kai","fromKind":"agent","kind":"text","text":"@kai @lee Summary: T1 is open.","mentions":["kai","lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"thread"}],"ts":1790824800000,"unread":true},
+          {"seq":13,"from":"helper@lee","fromKind":"agent","kind":"text","text":"@lee see `@kai` in the log; @lee in prose.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790763000000,"delivery":[{"name":"lee","status":"human"}],"unread":false},
+          {"seq":10,"from":"api@kai","fromKind":"agent","kind":"text","text":"@lee Reminder: standup at ten.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":{"id":"s1","by":"kai","at":1},"ts":1790761200000,"unread":false},
+          {"seq":8,"from":"kai","fromKind":"human","kind":"text","text":"@api@kai @helper@lee Please check T1 before noon.","mentions":["api@kai","helper@lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790760000000,"unread":false},
+          {"seq":7,"from":"helper@lee","fromKind":"agent","kind":"text","text":"@kai @lee The logs are clean.","mentions":["kai","lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790759400000,"delivery":[{"name":"kai","status":"human"},{"name":"lee","status":"human"}],"unread":false},
+          {"seq":5,"from":"api@kai","fromKind":"agent","kind":"text","text":"@lee Please review the draft.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"source"}],"ts":1790758200000,"unread":false}
+        ]
+      }
+    }
+  },
+  {
+    "step": "mentions lee limit 2",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "cursor": 100,
+        "total": 7,
+        "unread": 2,
+        "hasMore": true,
+        "mentions": [
+          {"seq":118,"from":"kai","fromKind":"human","kind":"text","text":"@lee see `@api@kai` in code, @lee in prose.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790826000000,"unread":true},
+          {"seq":116,"from":"api@kai","fromKind":"agent","kind":"text","text":"@kai @lee Summary: T1 is open.","mentions":["kai","lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"thread"}],"ts":1790824800000,"unread":true}
+        ]
+      }
+    }
+  },
+  {
+    "step": "mentions lee before 116 limit 2",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "cursor": 100,
+        "total": 7,
+        "unread": 2,
+        "hasMore": true,
+        "mentions": [
+          {"seq":13,"from":"helper@lee","fromKind":"agent","kind":"text","text":"@lee see `@kai` in the log; @lee in prose.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790763000000,"delivery":[{"name":"lee","status":"human"}],"unread":false},
+          {"seq":10,"from":"api@kai","fromKind":"agent","kind":"text","text":"@lee Reminder: standup at ten.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":{"id":"s1","by":"kai","at":1},"ts":1790761200000,"unread":false}
+        ]
+      }
+    }
+  },
+  {
+    "step": "mentions lee before 10 limit 2",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "cursor": 100,
+        "total": 7,
+        "unread": 2,
+        "hasMore": true,
+        "mentions": [
+          {"seq":8,"from":"kai","fromKind":"human","kind":"text","text":"@api@kai @helper@lee Please check T1 before noon.","mentions":["api@kai","helper@lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790760000000,"unread":false},
+          {"seq":7,"from":"helper@lee","fromKind":"agent","kind":"text","text":"@kai @lee The logs are clean.","mentions":["kai","lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790759400000,"delivery":[{"name":"kai","status":"human"},{"name":"lee","status":"human"}],"unread":false}
+        ]
+      }
+    }
+  },
+  {
+    "step": "mentions lee before 7 limit 2",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "cursor": 100,
+        "total": 7,
+        "unread": 2,
+        "hasMore": false,
+        "mentions": [
+          {"seq":5,"from":"api@kai","fromKind":"agent","kind":"text","text":"@lee Please review the draft.","mentions":["lee"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"todo":[{"id":"T1","title":"Review the draft","assignee":"lee","status":"todo","round":1,"rel":"source"}],"ts":1790758200000,"unread":false}
+        ]
+      }
+    }
+  },
+  {
+    "step": "mentions guest",
+    "result": {
+      "err": {"code":"not_member","next":"You are viewing this topic. Press Join to take part.","status":403}
+    }
+  },
+  {
+    "step": "listen api",
+    "result": {
+      "ok": {
+        "roomId": "reads",
+        "me": "api@kai",
+        "cursor": 60,
+        "total": 119,
+        "mentions": [
+          {"seq":115,"from":"kai","fromKind":"human","kind":"text","text":"@api@kai Please write the summary.","mentions":["api@kai"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790824200000}
+        ],
+        "broadcasts": [
+          {"seq":61,"from":"kai","fromKind":"human","kind":"text","text":"note 61","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790791800000},
+          {"seq":63,"from":"kai","fromKind":"human","kind":"text","text":"note 63","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790793000000},
+          {"seq":65,"from":"kai","fromKind":"human","kind":"text","text":"note 65","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790794200000},
+          {"seq":67,"from":"kai","fromKind":"human","kind":"text","text":"note 67","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790795400000},
+          {"seq":69,"from":"kai","fromKind":"human","kind":"text","text":"note 69","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790796600000},
+          {"seq":71,"from":"kai","fromKind":"human","kind":"text","text":"note 71","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790797800000},
+          {"seq":73,"from":"kai","fromKind":"human","kind":"text","text":"note 73","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790799000000},
+          {"seq":75,"from":"kai","fromKind":"human","kind":"text","text":"note 75","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790800200000},
+          {"seq":77,"from":"kai","fromKind":"human","kind":"text","text":"note 77","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790801400000},
+          {"seq":79,"from":"kai","fromKind":"human","kind":"text","text":"note 79","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790802600000},
+          {"seq":81,"from":"kai","fromKind":"human","kind":"text","text":"note 81","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790803800000},
+          {"seq":83,"from":"kai","fromKind":"human","kind":"text","text":"note 83","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790805000000},
+          {"seq":85,"from":"kai","fromKind":"human","kind":"text","text":"note 85","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790806200000},
+          {"seq":87,"from":"kai","fromKind":"human","kind":"text","text":"note 87","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790807400000},
+          {"seq":89,"from":"kai","fromKind":"human","kind":"text","text":"note 89","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790808600000},
+          {"seq":91,"from":"kai","fromKind":"human","kind":"text","text":"note 91","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790809800000},
+          {"seq":93,"from":"kai","fromKind":"human","kind":"text","text":"note 93","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790811000000},
+          {"seq":95,"from":"kai","fromKind":"human","kind":"text","text":"note 95","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790812200000},
+          {"seq":97,"from":"kai","fromKind":"human","kind":"text","text":"note 97","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790813400000},
+          {"seq":99,"from":"kai","fromKind":"human","kind":"text","text":"note 99","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790814600000},
+          {"seq":101,"from":"kai","fromKind":"human","kind":"text","text":"note 101","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790815800000},
+          {"seq":103,"from":"kai","fromKind":"human","kind":"text","text":"note 103","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790817000000},
+          {"seq":105,"from":"kai","fromKind":"human","kind":"text","text":"note 105","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790818200000},
+          {"seq":107,"from":"kai","fromKind":"human","kind":"text","text":"note 107","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790819400000},
+          {"seq":109,"from":"kai","fromKind":"human","kind":"text","text":"note 109","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790820600000},
+          {"seq":111,"from":"kai","fromKind":"human","kind":"text","text":"note 111","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790821800000},
+          {"seq":113,"from":"kai","fromKind":"human","kind":"text","text":"note 113","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790823000000}
+        ],
+        "others": 30,
+        "members": [
+          {"name":"kai","kind":"human","owner":"kai","displayName":"kai","roleCard":null,"roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":false,"cursor":119,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},
+          {"name":"lee","kind":"human","owner":"lee","displayName":"Lee","roleCard":null,"roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":false,"cursor":100,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"perm":null,"perms":null,"handoff":null},
+          {"name":"api@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":false,"cursor":60,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},
+          {"name":"helper@lee","kind":"agent","owner":"lee","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":false,"cursor":2,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"perm":null,"perms":null,"handoff":null}
+        ],
+        "round": {
+          "n": 1,
+          "title": null,
+          "status": "open",
+          "openedMs": 0,
+          "doneMs": null,
+          "counts": {"todo":1,"doing":0,"done":0,"total":1}
+        },
+        "items": [
+          {
+            "id": "T1",
+            "round": 1,
+            "title": "Review the draft",
+            "desc": null,
+            "blockedBy": [],
+            "blocked": false,
+            "status": "todo",
+            "assignee": "lee",
+            "createdBy": "api@kai",
+            "createdSeq": 5,
+            "doneSeq": null,
+            "createdMs": 0,
+            "doneMs": null,
+            "updatedBy": "api@kai",
+            "updatedMs": 0,
+            "current": {"seq":116,"from":"api@kai","ts":1790824800000,"line":"Summary: T1 is open."},
+            "reply": {"seq":119,"from":"lee","ts":1790826600000,"closer":"api@kai"}
+          }
+        ],
+        "counts": {"todo":1,"doing":0,"done":0,"total":1},
+        "deleted": [],
+        "memo": {"nextId":"M1","long":[{"slot":"L1","version":0,"text":"","by":null,"byKind":null,"ms":null,"refs":[],"merged":[],"big":false,"restoredFrom":null,"lost":[],"shorter":null},{"slot":"L2","version":0,"text":"","by":null,"byKind":null,"ms":null,"refs":[],"merged":[],"big":false,"restoredFrom":null,"lost":[],"shorter":null}],"short":[],"retired":0,"pending":[],"round":0,"cites":0,"log":[],"logLast":0}
+      }
+    }
+  },
+  {
+    "step": "listen stranger",
+    "result": {
+      "err": {"code":"not_member","next":"bot@zed is not in this topic. Join first: scorpio join roomId=reads role=bot roleCard='…' (add code=… if the topic has a passcode; resume=true if it was you before).","status":403}
+    }
+  },
+  {
+    "step": "pending api 60",
+    "result": [
+      {"seq":61,"from":"kai","fromKind":"human","kind":"text","text":"note 61","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790791800000},
+      {"seq":63,"from":"kai","fromKind":"human","kind":"text","text":"note 63","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790793000000},
+      {"seq":65,"from":"kai","fromKind":"human","kind":"text","text":"note 65","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790794200000},
+      {"seq":67,"from":"kai","fromKind":"human","kind":"text","text":"note 67","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790795400000},
+      {"seq":69,"from":"kai","fromKind":"human","kind":"text","text":"note 69","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790796600000},
+      {"seq":71,"from":"kai","fromKind":"human","kind":"text","text":"note 71","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790797800000},
+      {"seq":73,"from":"kai","fromKind":"human","kind":"text","text":"note 73","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790799000000},
+      {"seq":75,"from":"kai","fromKind":"human","kind":"text","text":"note 75","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790800200000},
+      {"seq":77,"from":"kai","fromKind":"human","kind":"text","text":"note 77","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790801400000},
+      {"seq":79,"from":"kai","fromKind":"human","kind":"text","text":"note 79","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790802600000},
+      {"seq":81,"from":"kai","fromKind":"human","kind":"text","text":"note 81","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790803800000},
+      {"seq":83,"from":"kai","fromKind":"human","kind":"text","text":"note 83","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790805000000},
+      {"seq":85,"from":"kai","fromKind":"human","kind":"text","text":"note 85","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790806200000},
+      {"seq":87,"from":"kai","fromKind":"human","kind":"text","text":"note 87","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790807400000},
+      {"seq":89,"from":"kai","fromKind":"human","kind":"text","text":"note 89","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790808600000},
+      {"seq":91,"from":"kai","fromKind":"human","kind":"text","text":"note 91","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790809800000},
+      {"seq":93,"from":"kai","fromKind":"human","kind":"text","text":"note 93","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790811000000},
+      {"seq":95,"from":"kai","fromKind":"human","kind":"text","text":"note 95","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790812200000},
+      {"seq":97,"from":"kai","fromKind":"human","kind":"text","text":"note 97","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790813400000},
+      {"seq":99,"from":"kai","fromKind":"human","kind":"text","text":"note 99","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790814600000},
+      {"seq":101,"from":"kai","fromKind":"human","kind":"text","text":"note 101","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790815800000},
+      {"seq":103,"from":"kai","fromKind":"human","kind":"text","text":"note 103","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790817000000},
+      {"seq":105,"from":"kai","fromKind":"human","kind":"text","text":"note 105","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790818200000},
+      {"seq":107,"from":"kai","fromKind":"human","kind":"text","text":"note 107","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790819400000},
+      {"seq":109,"from":"kai","fromKind":"human","kind":"text","text":"note 109","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790820600000},
+      {"seq":111,"from":"kai","fromKind":"human","kind":"text","text":"note 111","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790821800000},
+      {"seq":113,"from":"kai","fromKind":"human","kind":"text","text":"note 113","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790823000000},
+      {"seq":115,"from":"kai","fromKind":"human","kind":"text","text":"@api@kai Please write the summary.","mentions":["api@kai"],"broadcast":false,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790824200000}
+    ]
+  },
+  {
+    "step": "pending helper 100",
+    "result": [
+      {"seq":102,"from":"lee","fromKind":"human","kind":"text","text":"note 102","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790816400000},
+      {"seq":104,"from":"lee","fromKind":"human","kind":"text","text":"note 104","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790817600000},
+      {"seq":106,"from":"lee","fromKind":"human","kind":"text","text":"note 106","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790818800000},
+      {"seq":108,"from":"lee","fromKind":"human","kind":"text","text":"note 108","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790820000000},
+      {"seq":110,"from":"lee","fromKind":"human","kind":"text","text":"note 110","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790821200000},
+      {"seq":112,"from":"lee","fromKind":"human","kind":"text","text":"note 112","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790822400000},
+      {"seq":114,"from":"lee","fromKind":"human","kind":"text","text":"note 114","mentions":[],"broadcast":true,"reply":null,"command":null,"event":null,"scheduled":null,"ts":1790823600000}
+    ]
+  },
+  {
+    "step": "pending kai 0",
+    "result": []
+  },
+  {
+    "step": "myData kai since base",
+    "result": {
+      "ok": {
+        "humanMessages": 55,
+        "agentMessages": 4,
+        "lastActive": 1790826600000,
+        "daily": [
+          {"day":20726,"human":44,"agents":3},
+          {"day":20727,"human":11,"agents":1}
+        ]
+      }
+    }
+  },
+  {
+    "step": "myData kai since base cached",
+    "result": {
+      "ok": {
+        "humanMessages": 55,
+        "agentMessages": 4,
+        "lastActive": 1790826600000,
+        "daily": [
+          {"day":20726,"human":44,"agents":3},
+          {"day":20727,"human":11,"agents":1}
+        ]
+      }
+    }
+  },
+  {
+    "step": "myData kai since next day",
+    "result": {
+      "ok": {
+        "humanMessages": 55,
+        "agentMessages": 4,
+        "lastActive": 1790826600000,
+        "daily": [
+          {"day":20727,"human":11,"agents":1}
+        ]
+      }
+    }
+  },
+  {
+    "step": "myData lee since base",
+    "result": {
+      "ok": {
+        "humanMessages": 55,
+        "agentMessages": 2,
+        "lastActive": 1790826600000,
+        "daily": [
+          {"day":20726,"human":43,"agents":2},
+          {"day":20727,"human":12,"agents":0}
+        ]
+      }
+    }
+  },
+  {
+    "step": "myData api",
+    "result": {
+      "err": {"code":"not_member","next":"This data belongs to a signed-in topic member.","status":403}
+    }
+  },
+  {
+    "step": "myData guest",
+    "result": {
+      "err": {"code":"not_member","next":"You are viewing this topic. Press Join to take part.","status":403}
+    }
+  },
+  {
+    "step": "activitySince base",
+    "result": {
+      "ok": [
+        {"day":"2026-09-30","kind":"agent","account":"kai"},
+        {"day":"2026-09-30","kind":"agent","account":"lee"},
+        {"day":"2026-09-30","kind":"human","account":"kai"},
+        {"day":"2026-09-30","kind":"human","account":"lee"},
+        {"day":"2026-10-01","kind":"agent","account":"kai"},
+        {"day":"2026-10-01","kind":"human","account":"kai"},
+        {"day":"2026-10-01","kind":"human","account":"lee"}
+      ]
+    }
+  },
+  {
+    "step": "activitySince next day",
+    "result": {
+      "ok": [
+        {"day":"2026-10-01","kind":"agent","account":"kai"},
+        {"day":"2026-10-01","kind":"human","account":"kai"},
+        {"day":"2026-10-01","kind":"human","account":"lee"}
+      ]
+    }
+  },
+  {
+    "step": "countSince 0 -",
+    "result": {"n":116,"first":1790757600000}
+  },
+  {
+    "step": "countSince 1790757000000 -",
+    "result": {"n":116,"first":1790757600000}
+  },
+  {
+    "step": "countSince 1790757000001 -",
+    "result": {"n":116,"first":1790757600000}
+  },
+  {
+    "step": "countSince 1790791200000 -",
+    "result": {"n":60,"first":1790791200000}
+  },
+  {
+    "step": "countSince 1790791200000 100",
+    "result": {"n":19,"first":1790815800000}
+  },
+  {
+    "step": "countSince 1790826600000 -",
+    "result": {"n":1,"first":1790826600000}
+  },
+  {
+    "step": "countSince 1790826600001 -",
+    "result": {"n":0,"first":null}
+  },
+  {
+    "step": "countSince 1790875200000 0",
+    "result": {"n":0,"first":null}
+  },
+  {"step":"lastCountedAt","result":1790826600000},
+  {
+    "step": "countSince empty",
+    "result": {"n":0,"first":null}
+  },
+  {"step":"lastCountedAt empty","result":7}
+]

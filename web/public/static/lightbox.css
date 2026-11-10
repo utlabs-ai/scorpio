@@ -1,0 +1,128 @@
+.scorpio-lightbox[hidden], .scorpio-lightbox [hidden] { display: none !important; }
+.scorpio-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  color: var(--fg);
+  background: var(--bar);
+  font: 14px/1.4 var(--font);
+  overscroll-behavior: contain;
+  outline: none;
+}
+.scorpio-lightbox .lb-toolbar {
+  z-index: 2;
+  order: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 56px;
+  padding: 8px 60px calc(env(safe-area-inset-bottom) + 8px);
+  flex: none;
+  background: var(--surface);
+}
+.scorpio-lightbox .lb-tools { display: flex; align-items: center; justify-content: center; gap: 5px; }
+.scorpio-lightbox button, .scorpio-lightbox .lb-original {
+  display: inline-grid;
+  place-items: center;
+  min-width: 40px;
+  height: 40px;
+  padding: 0 9px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--hl);
+  color: var(--fg);
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+.scorpio-lightbox button:hover, .scorpio-lightbox .lb-original:hover { background: var(--code-bg); }
+.scorpio-lightbox button:focus-visible, .scorpio-lightbox .lb-original:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+.scorpio-lightbox button:disabled { opacity: 0.4; cursor: default; }
+.scorpio-lightbox .lb-percent { min-width: 48px; text-align: center; font-variant-numeric: tabular-nums; }
+.scorpio-lightbox .lb-original { font-size: 12px; color: var(--muted); }
+.scorpio-lightbox .lb-close {
+  position: absolute;
+  z-index: 3;
+  top: calc(env(safe-area-inset-top) + 8px);
+  right: calc(env(safe-area-inset-right) + 12px);
+  min-width: 44px;
+  height: 44px;
+  font-size: 26px;
+  line-height: 1;
+}
+.scorpio-lightbox .lb-stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  touch-action: none;
+  cursor: zoom-in;
+}
+.scorpio-lightbox .lb-stage.can-drag { cursor: grab; }
+.scorpio-lightbox .lb-stage.can-drag:active { cursor: grabbing; }
+.scorpio-lightbox .lb-stage img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  max-width: none;
+  max-height: none;
+  object-fit: contain;
+  transform-origin: center;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+.scorpio-lightbox .lb-arrow {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  width: 44px;
+  height: 52px;
+  font-size: 32px;
+  transform: translateY(-50%);
+}
+.scorpio-lightbox .lb-prev { left: max(8px, env(safe-area-inset-left)); }
+.scorpio-lightbox .lb-next { right: max(8px, env(safe-area-inset-right)); }
+.scorpio-lightbox .lb-counter {
+  position: absolute;
+  bottom: calc(env(safe-area-inset-bottom) + 80px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--fg);
+  font-variant-numeric: tabular-nums;
+}
+@media (max-width: 480px) {
+  .scorpio-lightbox .lb-toolbar { padding-left: 44px; padding-right: 44px; }
+  .scorpio-lightbox .lb-tools { gap: 3px; }
+  .scorpio-lightbox button, .scorpio-lightbox .lb-original { min-width: 36px; height: 38px; padding: 0 6px; }
+  .scorpio-lightbox .lb-close { min-width: 44px; height: 44px; }
+  .scorpio-lightbox .lb-reset { font-size: 12px; }
+  .scorpio-lightbox .lb-percent { min-width: 43px; }
+}
+/* The picture's own page (/v/<id>): left of ×, a pill like it. */
+.scorpio-lightbox .lb-page {
+  position: absolute;
+  z-index: 3;
+  top: calc(env(safe-area-inset-top) + 10px);
+  right: calc(env(safe-area-inset-right) + 64px);
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 40px;
+  padding: 0 15px;
+  border-radius: 999px;
+  font: 650 14.5px/1 var(--font);
+  text-decoration: none;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+}
+.scorpio-lightbox .lb-page[hidden] { display: none; }
+.scorpio-lightbox .lb-page svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+:root:not([data-scorpio-effective-theme="dark"]) .scorpio-lightbox .lb-page { color: var(--fg); background: var(--surface); box-shadow: 0 0 0 1px var(--line), 0 2px 8px rgba(16, 22, 40, 0.18); }
+.scorpio-lightbox .lb-page:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }

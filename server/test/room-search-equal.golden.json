@@ -1,0 +1,2113 @@
+[
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "珍珠",
+      "terms": [
+        "珍珠"
+      ],
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "珍珠",
+        "groups": {
+          "messages": [
+            {"type":"message","id":"#5","seq":5,"who":"api@kai","displayName":null,"ts":2000,"snippet":"珍珠奶茶 deploy ok"},
+            {"type":"message","id":"#12","seq":12,"who":"api@kai","displayName":null,"ts":1500,"snippet":"deploy again, 珍珠 too"},
+            {"type":"message","id":"#2","seq":2,"who":"kai","displayName":"Kai","ts":1000,"snippet":"deploy plan for the 珍珠 shop"}
+          ],
+          "todo": [
+            {"type":"todo","id":"T6","seq":null,"who":"kai","displayName":"Kai","ts":4000,"title":"Another 珍珠","status":"todo","assignee":null,"snippet":"Another 珍珠"},
+            {"type":"todo","id":"T2","seq":3,"who":"lee","displayName":null,"ts":2000,"title":"珍珠 menu","status":"doing","assignee":"api@kai","snippet":"珍珠 menu deploy later"},
+            {"type":"todo","id":"T8","seq":12,"who":"lee","displayName":null,"ts":1500,"title":"deploy 珍珠 both","status":"todo","assignee":"lee","snippet":"deploy 珍珠 both x"}
+          ],
+          "files": [
+            {"type":"file","id":"#12","seq":12,"who":"api@kai","displayName":null,"ts":1500,"title":"deploy-珍珠.zip","snippet":"deploy-珍珠.zip","fileId":"fz","size":42},
+            {"type":"file","id":"#8","seq":8,"who":"kai","displayName":"Kai","ts":4000,"title":"珍珠.png","snippet":"珍珠.png","fileId":"fc","size":42}
+          ]
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 6,
+    "rowsRead": 51
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "珍珠",
+      "terms": [
+        "珍珠"
+      ],
+      "in": "messages",
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "珍珠",
+        "groups": {
+          "messages": [
+            {"type":"message","id":"#5","seq":5,"who":"api@kai","displayName":null,"ts":2000,"snippet":"珍珠奶茶 deploy ok"},
+            {"type":"message","id":"#12","seq":12,"who":"api@kai","displayName":null,"ts":1500,"snippet":"deploy again, 珍珠 too"},
+            {"type":"message","id":"#2","seq":2,"who":"kai","displayName":"Kai","ts":1000,"snippet":"deploy plan for the 珍珠 shop"}
+          ],
+          "todo": [],
+          "files": []
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 22
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "珍珠",
+      "terms": [
+        "珍珠"
+      ],
+      "in": "todo",
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "珍珠",
+        "groups": {
+          "messages": [],
+          "todo": [
+            {"type":"todo","id":"T6","seq":null,"who":"kai","displayName":"Kai","ts":4000,"title":"Another 珍珠","status":"todo","assignee":null,"snippet":"Another 珍珠"},
+            {"type":"todo","id":"T2","seq":3,"who":"lee","displayName":null,"ts":2000,"title":"珍珠 menu","status":"doing","assignee":"api@kai","snippet":"珍珠 menu deploy later"},
+            {"type":"todo","id":"T8","seq":12,"who":"lee","displayName":null,"ts":1500,"title":"deploy 珍珠 both","status":"todo","assignee":"lee","snippet":"deploy 珍珠 both x"}
+          ],
+          "files": []
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 17
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "珍珠",
+      "terms": [
+        "珍珠"
+      ],
+      "in": "files",
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "珍珠",
+        "groups": {
+          "messages": [],
+          "todo": [],
+          "files": [
+            {"type":"file","id":"#12","seq":12,"who":"api@kai","displayName":null,"ts":1500,"title":"deploy-珍珠.zip","snippet":"deploy-珍珠.zip","fileId":"fz","size":42},
+            {"type":"file","id":"#8","seq":8,"who":"kai","displayName":"Kai","ts":4000,"title":"珍珠.png","snippet":"珍珠.png","fileId":"fc","size":42}
+          ]
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 18
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "deploy",
+      "terms": [
+        "deploy"
+      ],
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "deploy",
+        "groups": {
+          "messages": [
+            {"type":"message","id":"#13","seq":13,"who":"kai","displayName":"Kai","ts":6000,"snippet":"a%_b again, then deploy"},
+            {"type":"message","id":"#10","seq":10,"who":"lee","displayName":null,"ts":5000,"snippet":"DEPLOY in capitals"},
+            {"type":"message","id":"#5","seq":5,"who":"api@kai","displayName":null,"ts":2000,"snippet":"珍珠奶茶 deploy ok"},
+            {"type":"message","id":"#4","seq":4,"who":"ghost","displayName":null,"ts":2000,"snippet":"ghost says deploy"},
+            {"type":"message","id":"#3","seq":3,"who":"lee","displayName":null,"ts":2000,"snippet":"deploy done on staging"},
+            {"type":"message","id":"#12","seq":12,"who":"api@kai","displayName":null,"ts":1500,"snippet":"deploy again, 珍珠 too"},
+            {"type":"message","id":"#2","seq":2,"who":"kai","displayName":"Kai","ts":1000,"snippet":"deploy plan for the 珍珠 shop"},
+            {"type":"message","id":"#1","seq":1,"who":"system","displayName":null,"ts":500,"snippet":"deploy@kai joined"}
+          ],
+          "todo": [
+            {"type":"todo","id":"T5","seq":10,"who":"api@kai","displayName":null,"ts":3000,"title":"Plain title","status":"todo","assignee":"kai","snippet":"Plain title deploy in the description"},
+            {"type":"todo","id":"T3","seq":null,"who":"ghost","displayName":null,"ts":2000,"title":"Ghost task: deploy","status":"todo","assignee":null,"snippet":"Ghost task: deploy"},
+            {"type":"todo","id":"T2","seq":3,"who":"lee","displayName":null,"ts":2000,"title":"珍珠 menu","status":"doing","assignee":"api@kai","snippet":"珍珠 menu deploy later"},
+            {"type":"todo","id":"T8","seq":12,"who":"lee","displayName":null,"ts":1500,"title":"deploy 珍珠 both","status":"todo","assignee":"lee","snippet":"deploy 珍珠 both x"},
+            {"type":"todo","id":"T1","seq":2,"who":"kai","displayName":"Kai","ts":1000,"title":"Deploy the shop","status":"todo","assignee":"lee","snippet":"Deploy the shop"}
+          ],
+          "files": [
+            {"type":"file","id":"#12","seq":12,"who":"api@kai","displayName":null,"ts":1500,"title":"deploy-珍珠.zip","snippet":"deploy-珍珠.zip","fileId":"fz","size":42},
+            {"type":"file","id":"#9","seq":9,"who":"ghost","displayName":null,"ts":4000,"title":"deploy-ghost.log","snippet":"deploy-ghost.log","fileId":"fg","size":42},
+            {"type":"file","id":"#8","seq":8,"who":"kai","displayName":"Kai","ts":4000,"title":"deploy-b.txt","snippet":"deploy-b.txt","fileId":"fb","size":42},
+            {"type":"file","id":"#8","seq":8,"who":"kai","displayName":"Kai","ts":4000,"title":"deploy-a.txt","snippet":"deploy-a.txt","fileId":"fa","size":42}
+          ]
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 6,
+    "rowsRead": 78
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "deploy",
+      "terms": [
+        "deploy"
+      ],
+      "in": "messages",
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "deploy",
+        "groups": {
+          "messages": [
+            {"type":"message","id":"#13","seq":13,"who":"kai","displayName":"Kai","ts":6000,"snippet":"a%_b again, then deploy"},
+            {"type":"message","id":"#10","seq":10,"who":"lee","displayName":null,"ts":5000,"snippet":"DEPLOY in capitals"},
+            {"type":"message","id":"#5","seq":5,"who":"api@kai","displayName":null,"ts":2000,"snippet":"珍珠奶茶 deploy ok"},
+            {"type":"message","id":"#4","seq":4,"who":"ghost","displayName":null,"ts":2000,"snippet":"ghost says deploy"},
+            {"type":"message","id":"#3","seq":3,"who":"lee","displayName":null,"ts":2000,"snippet":"deploy done on staging"},
+            {"type":"message","id":"#12","seq":12,"who":"api@kai","displayName":null,"ts":1500,"snippet":"deploy again, 珍珠 too"},
+            {"type":"message","id":"#2","seq":2,"who":"kai","displayName":"Kai","ts":1000,"snippet":"deploy plan for the 珍珠 shop"},
+            {"type":"message","id":"#1","seq":1,"who":"system","displayName":null,"ts":500,"snippet":"deploy@kai joined"}
+          ],
+          "todo": [],
+          "files": []
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 41
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "deploy",
+      "terms": [
+        "deploy"
+      ],
+      "in": "todo",
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "deploy",
+        "groups": {
+          "messages": [],
+          "todo": [
+            {"type":"todo","id":"T5","seq":10,"who":"api@kai","displayName":null,"ts":3000,"title":"Plain title","status":"todo","assignee":"kai","snippet":"Plain title deploy in the description"},
+            {"type":"todo","id":"T3","seq":null,"who":"ghost","displayName":null,"ts":2000,"title":"Ghost task: deploy","status":"todo","assignee":null,"snippet":"Ghost task: deploy"},
+            {"type":"todo","id":"T2","seq":3,"who":"lee","displayName":null,"ts":2000,"title":"珍珠 menu","status":"doing","assignee":"api@kai","snippet":"珍珠 menu deploy later"},
+            {"type":"todo","id":"T8","seq":12,"who":"lee","displayName":null,"ts":1500,"title":"deploy 珍珠 both","status":"todo","assignee":"lee","snippet":"deploy 珍珠 both x"},
+            {"type":"todo","id":"T1","seq":2,"who":"kai","displayName":"Kai","ts":1000,"title":"Deploy the shop","status":"todo","assignee":"lee","snippet":"Deploy the shop"}
+          ],
+          "files": []
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 20
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "deploy",
+      "terms": [
+        "deploy"
+      ],
+      "in": "files",
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "deploy",
+        "groups": {
+          "messages": [],
+          "todo": [],
+          "files": [
+            {"type":"file","id":"#12","seq":12,"who":"api@kai","displayName":null,"ts":1500,"title":"deploy-珍珠.zip","snippet":"deploy-珍珠.zip","fileId":"fz","size":42},
+            {"type":"file","id":"#9","seq":9,"who":"ghost","displayName":null,"ts":4000,"title":"deploy-ghost.log","snippet":"deploy-ghost.log","fileId":"fg","size":42},
+            {"type":"file","id":"#8","seq":8,"who":"kai","displayName":"Kai","ts":4000,"title":"deploy-b.txt","snippet":"deploy-b.txt","fileId":"fb","size":42},
+            {"type":"file","id":"#8","seq":8,"who":"kai","displayName":"Kai","ts":4000,"title":"deploy-a.txt","snippet":"deploy-a.txt","fileId":"fa","size":42}
+          ]
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 23
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "a%_b",
+      "terms": [
+        "a%_b"
+      ],
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "a%_b",
+        "groups": {
+          "messages": [
+            {"type":"message","id":"#13","seq":13,"who":"kai","displayName":"Kai","ts":6000,"snippet":"a%_b again, then deploy"},
+            {"type":"message","id":"#6","seq":6,"who":"kai","displayName":"Kai","ts":3000,"snippet":"literal a%_b here"}
+          ],
+          "todo": [
+            {"type":"todo","id":"T4","seq":6,"who":"kai","displayName":"Kai","ts":3000,"title":"Literal a%_b task","status":"done","assignee":"kai","snippet":"Literal a%_b task nothing here"}
+          ],
+          "files": [
+            {"type":"file","id":"#6","seq":6,"who":"kai","displayName":"Kai","ts":3000,"title":"a%_b.csv","snippet":"a%_b.csv","fileId":"fl","size":42}
+          ]
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 6,
+    "rowsRead": 42
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "a%_b",
+      "terms": [
+        "a%_b"
+      ],
+      "in": "messages",
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "a%_b",
+        "groups": {
+          "messages": [
+            {"type":"message","id":"#13","seq":13,"who":"kai","displayName":"Kai","ts":6000,"snippet":"a%_b again, then deploy"},
+            {"type":"message","id":"#6","seq":6,"who":"kai","displayName":"Kai","ts":3000,"snippet":"literal a%_b here"}
+          ],
+          "todo": [],
+          "files": []
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 20
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "a%_b",
+      "terms": [
+        "a%_b"
+      ],
+      "in": "todo",
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "a%_b",
+        "groups": {
+          "messages": [],
+          "todo": [
+            {"type":"todo","id":"T4","seq":6,"who":"kai","displayName":"Kai","ts":3000,"title":"Literal a%_b task","status":"done","assignee":"kai","snippet":"Literal a%_b task nothing here"}
+          ],
+          "files": []
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 13
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "a%_b",
+      "terms": [
+        "a%_b"
+      ],
+      "in": "files",
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "a%_b",
+        "groups": {
+          "messages": [],
+          "todo": [],
+          "files": [
+            {"type":"file","id":"#6","seq":6,"who":"kai","displayName":"Kai","ts":3000,"title":"a%_b.csv","snippet":"a%_b.csv","fileId":"fl","size":42}
+          ]
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 15
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "珍珠 deploy",
+      "terms": [
+        "珍珠",
+        "deploy"
+      ],
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "珍珠 deploy",
+        "groups": {
+          "messages": [
+            {"type":"message","id":"#5","seq":5,"who":"api@kai","displayName":null,"ts":2000,"snippet":"珍珠奶茶 deploy ok"},
+            {"type":"message","id":"#12","seq":12,"who":"api@kai","displayName":null,"ts":1500,"snippet":"deploy again, 珍珠 too"},
+            {"type":"message","id":"#2","seq":2,"who":"kai","displayName":"Kai","ts":1000,"snippet":"deploy plan for the 珍珠 shop"}
+          ],
+          "todo": [
+            {"type":"todo","id":"T2","seq":3,"who":"lee","displayName":null,"ts":2000,"title":"珍珠 menu","status":"doing","assignee":"api@kai","snippet":"珍珠 menu deploy later"},
+            {"type":"todo","id":"T8","seq":12,"who":"lee","displayName":null,"ts":1500,"title":"deploy 珍珠 both","status":"todo","assignee":"lee","snippet":"deploy 珍珠 both x"}
+          ],
+          "files": [
+            {"type":"file","id":"#12","seq":12,"who":"api@kai","displayName":null,"ts":1500,"title":"deploy-珍珠.zip","snippet":"deploy-珍珠.zip","fileId":"fz","size":42}
+          ]
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 6,
+    "rowsRead": 57
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "珍珠 deploy",
+      "terms": [
+        "珍珠",
+        "deploy"
+      ],
+      "in": "messages",
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "珍珠 deploy",
+        "groups": {
+          "messages": [
+            {"type":"message","id":"#5","seq":5,"who":"api@kai","displayName":null,"ts":2000,"snippet":"珍珠奶茶 deploy ok"},
+            {"type":"message","id":"#12","seq":12,"who":"api@kai","displayName":null,"ts":1500,"snippet":"deploy again, 珍珠 too"},
+            {"type":"message","id":"#2","seq":2,"who":"kai","displayName":"Kai","ts":1000,"snippet":"deploy plan for the 珍珠 shop"}
+          ],
+          "todo": [],
+          "files": []
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 33
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "珍珠 deploy",
+      "terms": [
+        "珍珠",
+        "deploy"
+      ],
+      "in": "todo",
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "珍珠 deploy",
+        "groups": {
+          "messages": [],
+          "todo": [
+            {"type":"todo","id":"T2","seq":3,"who":"lee","displayName":null,"ts":2000,"title":"珍珠 menu","status":"doing","assignee":"api@kai","snippet":"珍珠 menu deploy later"},
+            {"type":"todo","id":"T8","seq":12,"who":"lee","displayName":null,"ts":1500,"title":"deploy 珍珠 both","status":"todo","assignee":"lee","snippet":"deploy 珍珠 both x"}
+          ],
+          "files": []
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 15
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "珍珠 deploy",
+      "terms": [
+        "珍珠",
+        "deploy"
+      ],
+      "in": "files",
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "珍珠 deploy",
+        "groups": {
+          "messages": [],
+          "todo": [],
+          "files": [
+            {"type":"file","id":"#12","seq":12,"who":"api@kai","displayName":null,"ts":1500,"title":"deploy-珍珠.zip","snippet":"deploy-珍珠.zip","fileId":"fz","size":42}
+          ]
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 15
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "珍珠",
+      "terms": [
+        "珍珠"
+      ],
+      "in": "messages",
+      "limit": 3
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "珍珠",
+        "groups": {
+          "messages": [
+            {"type":"message","id":"#5","seq":5,"who":"api@kai","displayName":null,"ts":2000,"snippet":"珍珠奶茶 deploy ok"},
+            {"type":"message","id":"#12","seq":12,"who":"api@kai","displayName":null,"ts":1500,"snippet":"deploy again, 珍珠 too"},
+            {"type":"message","id":"#2","seq":2,"who":"kai","displayName":"Kai","ts":1000,"snippet":"deploy plan for the 珍珠 shop"}
+          ],
+          "todo": [],
+          "files": []
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 22
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "珍珠",
+      "terms": [
+        "珍珠"
+      ],
+      "in": "messages",
+      "limit": 2
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "珍珠",
+        "groups": {
+          "messages": [
+            {"type":"message","id":"#5","seq":5,"who":"api@kai","displayName":null,"ts":2000,"snippet":"珍珠奶茶 deploy ok"},
+            {"type":"message","id":"#12","seq":12,"who":"api@kai","displayName":null,"ts":1500,"snippet":"deploy again, 珍珠 too"}
+          ],
+          "todo": [],
+          "files": []
+        },
+        "hasMore": {"messages":true,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 22
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "珍珠",
+      "terms": [
+        "珍珠"
+      ],
+      "in": "todo",
+      "limit": 3
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "珍珠",
+        "groups": {
+          "messages": [],
+          "todo": [
+            {"type":"todo","id":"T6","seq":null,"who":"kai","displayName":"Kai","ts":4000,"title":"Another 珍珠","status":"todo","assignee":null,"snippet":"Another 珍珠"},
+            {"type":"todo","id":"T2","seq":3,"who":"lee","displayName":null,"ts":2000,"title":"珍珠 menu","status":"doing","assignee":"api@kai","snippet":"珍珠 menu deploy later"},
+            {"type":"todo","id":"T8","seq":12,"who":"lee","displayName":null,"ts":1500,"title":"deploy 珍珠 both","status":"todo","assignee":"lee","snippet":"deploy 珍珠 both x"}
+          ],
+          "files": []
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 17
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "珍珠",
+      "terms": [
+        "珍珠"
+      ],
+      "in": "todo",
+      "limit": 2
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "珍珠",
+        "groups": {
+          "messages": [],
+          "todo": [
+            {"type":"todo","id":"T6","seq":null,"who":"kai","displayName":"Kai","ts":4000,"title":"Another 珍珠","status":"todo","assignee":null,"snippet":"Another 珍珠"},
+            {"type":"todo","id":"T2","seq":3,"who":"lee","displayName":null,"ts":2000,"title":"珍珠 menu","status":"doing","assignee":"api@kai","snippet":"珍珠 menu deploy later"}
+          ],
+          "files": []
+        },
+        "hasMore": {"messages":false,"todo":true,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 17
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "珍珠",
+      "terms": [
+        "珍珠"
+      ],
+      "in": "files",
+      "limit": 2
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "珍珠",
+        "groups": {
+          "messages": [],
+          "todo": [],
+          "files": [
+            {"type":"file","id":"#12","seq":12,"who":"api@kai","displayName":null,"ts":1500,"title":"deploy-珍珠.zip","snippet":"deploy-珍珠.zip","fileId":"fz","size":42},
+            {"type":"file","id":"#8","seq":8,"who":"kai","displayName":"Kai","ts":4000,"title":"珍珠.png","snippet":"珍珠.png","fileId":"fc","size":42}
+          ]
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 18
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "珍珠",
+      "terms": [
+        "珍珠"
+      ],
+      "in": "files",
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "珍珠",
+        "groups": {
+          "messages": [],
+          "todo": [],
+          "files": [
+            {"type":"file","id":"#12","seq":12,"who":"api@kai","displayName":null,"ts":1500,"title":"deploy-珍珠.zip","snippet":"deploy-珍珠.zip","fileId":"fz","size":42}
+          ]
+        },
+        "hasMore": {"messages":false,"todo":false,"files":true}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 18
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "deploy",
+      "terms": [
+        "deploy"
+      ],
+      "in": "messages",
+      "limit": 8
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "deploy",
+        "groups": {
+          "messages": [
+            {"type":"message","id":"#13","seq":13,"who":"kai","displayName":"Kai","ts":6000,"snippet":"a%_b again, then deploy"},
+            {"type":"message","id":"#10","seq":10,"who":"lee","displayName":null,"ts":5000,"snippet":"DEPLOY in capitals"},
+            {"type":"message","id":"#5","seq":5,"who":"api@kai","displayName":null,"ts":2000,"snippet":"珍珠奶茶 deploy ok"},
+            {"type":"message","id":"#4","seq":4,"who":"ghost","displayName":null,"ts":2000,"snippet":"ghost says deploy"},
+            {"type":"message","id":"#3","seq":3,"who":"lee","displayName":null,"ts":2000,"snippet":"deploy done on staging"},
+            {"type":"message","id":"#12","seq":12,"who":"api@kai","displayName":null,"ts":1500,"snippet":"deploy again, 珍珠 too"},
+            {"type":"message","id":"#2","seq":2,"who":"kai","displayName":"Kai","ts":1000,"snippet":"deploy plan for the 珍珠 shop"},
+            {"type":"message","id":"#1","seq":1,"who":"system","displayName":null,"ts":500,"snippet":"deploy@kai joined"}
+          ],
+          "todo": [],
+          "files": []
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 41
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "deploy",
+      "terms": [
+        "deploy"
+      ],
+      "in": "messages",
+      "limit": 7
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "deploy",
+        "groups": {
+          "messages": [
+            {"type":"message","id":"#13","seq":13,"who":"kai","displayName":"Kai","ts":6000,"snippet":"a%_b again, then deploy"},
+            {"type":"message","id":"#10","seq":10,"who":"lee","displayName":null,"ts":5000,"snippet":"DEPLOY in capitals"},
+            {"type":"message","id":"#5","seq":5,"who":"api@kai","displayName":null,"ts":2000,"snippet":"珍珠奶茶 deploy ok"},
+            {"type":"message","id":"#4","seq":4,"who":"ghost","displayName":null,"ts":2000,"snippet":"ghost says deploy"},
+            {"type":"message","id":"#3","seq":3,"who":"lee","displayName":null,"ts":2000,"snippet":"deploy done on staging"},
+            {"type":"message","id":"#12","seq":12,"who":"api@kai","displayName":null,"ts":1500,"snippet":"deploy again, 珍珠 too"},
+            {"type":"message","id":"#2","seq":2,"who":"kai","displayName":"Kai","ts":1000,"snippet":"deploy plan for the 珍珠 shop"}
+          ],
+          "todo": [],
+          "files": []
+        },
+        "hasMore": {"messages":true,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 41
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "deploy",
+      "terms": [
+        "deploy"
+      ],
+      "in": "todo",
+      "limit": 5
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "deploy",
+        "groups": {
+          "messages": [],
+          "todo": [
+            {"type":"todo","id":"T5","seq":10,"who":"api@kai","displayName":null,"ts":3000,"title":"Plain title","status":"todo","assignee":"kai","snippet":"Plain title deploy in the description"},
+            {"type":"todo","id":"T3","seq":null,"who":"ghost","displayName":null,"ts":2000,"title":"Ghost task: deploy","status":"todo","assignee":null,"snippet":"Ghost task: deploy"},
+            {"type":"todo","id":"T2","seq":3,"who":"lee","displayName":null,"ts":2000,"title":"珍珠 menu","status":"doing","assignee":"api@kai","snippet":"珍珠 menu deploy later"},
+            {"type":"todo","id":"T8","seq":12,"who":"lee","displayName":null,"ts":1500,"title":"deploy 珍珠 both","status":"todo","assignee":"lee","snippet":"deploy 珍珠 both x"},
+            {"type":"todo","id":"T1","seq":2,"who":"kai","displayName":"Kai","ts":1000,"title":"Deploy the shop","status":"todo","assignee":"lee","snippet":"Deploy the shop"}
+          ],
+          "files": []
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 20
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "deploy",
+      "terms": [
+        "deploy"
+      ],
+      "in": "todo",
+      "limit": 4
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "deploy",
+        "groups": {
+          "messages": [],
+          "todo": [
+            {"type":"todo","id":"T5","seq":10,"who":"api@kai","displayName":null,"ts":3000,"title":"Plain title","status":"todo","assignee":"kai","snippet":"Plain title deploy in the description"},
+            {"type":"todo","id":"T3","seq":null,"who":"ghost","displayName":null,"ts":2000,"title":"Ghost task: deploy","status":"todo","assignee":null,"snippet":"Ghost task: deploy"},
+            {"type":"todo","id":"T2","seq":3,"who":"lee","displayName":null,"ts":2000,"title":"珍珠 menu","status":"doing","assignee":"api@kai","snippet":"珍珠 menu deploy later"},
+            {"type":"todo","id":"T8","seq":12,"who":"lee","displayName":null,"ts":1500,"title":"deploy 珍珠 both","status":"todo","assignee":"lee","snippet":"deploy 珍珠 both x"}
+          ],
+          "files": []
+        },
+        "hasMore": {"messages":false,"todo":true,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 20
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "deploy",
+      "terms": [
+        "deploy"
+      ],
+      "in": "files",
+      "limit": 4
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "deploy",
+        "groups": {
+          "messages": [],
+          "todo": [],
+          "files": [
+            {"type":"file","id":"#12","seq":12,"who":"api@kai","displayName":null,"ts":1500,"title":"deploy-珍珠.zip","snippet":"deploy-珍珠.zip","fileId":"fz","size":42},
+            {"type":"file","id":"#9","seq":9,"who":"ghost","displayName":null,"ts":4000,"title":"deploy-ghost.log","snippet":"deploy-ghost.log","fileId":"fg","size":42},
+            {"type":"file","id":"#8","seq":8,"who":"kai","displayName":"Kai","ts":4000,"title":"deploy-b.txt","snippet":"deploy-b.txt","fileId":"fb","size":42},
+            {"type":"file","id":"#8","seq":8,"who":"kai","displayName":"Kai","ts":4000,"title":"deploy-a.txt","snippet":"deploy-a.txt","fileId":"fa","size":42}
+          ]
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 23
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "deploy",
+      "terms": [
+        "deploy"
+      ],
+      "in": "files",
+      "limit": 3
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "deploy",
+        "groups": {
+          "messages": [],
+          "todo": [],
+          "files": [
+            {"type":"file","id":"#12","seq":12,"who":"api@kai","displayName":null,"ts":1500,"title":"deploy-珍珠.zip","snippet":"deploy-珍珠.zip","fileId":"fz","size":42},
+            {"type":"file","id":"#9","seq":9,"who":"ghost","displayName":null,"ts":4000,"title":"deploy-ghost.log","snippet":"deploy-ghost.log","fileId":"fg","size":42},
+            {"type":"file","id":"#8","seq":8,"who":"kai","displayName":"Kai","ts":4000,"title":"deploy-b.txt","snippet":"deploy-b.txt","fileId":"fb","size":42}
+          ]
+        },
+        "hasMore": {"messages":false,"todo":false,"files":true}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 23
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "a%_b",
+      "terms": [
+        "a%_b"
+      ],
+      "in": "messages",
+      "limit": 2
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "a%_b",
+        "groups": {
+          "messages": [
+            {"type":"message","id":"#13","seq":13,"who":"kai","displayName":"Kai","ts":6000,"snippet":"a%_b again, then deploy"},
+            {"type":"message","id":"#6","seq":6,"who":"kai","displayName":"Kai","ts":3000,"snippet":"literal a%_b here"}
+          ],
+          "todo": [],
+          "files": []
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 20
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "a%_b",
+      "terms": [
+        "a%_b"
+      ],
+      "in": "messages",
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "a%_b",
+        "groups": {
+          "messages": [
+            {"type":"message","id":"#13","seq":13,"who":"kai","displayName":"Kai","ts":6000,"snippet":"a%_b again, then deploy"}
+          ],
+          "todo": [],
+          "files": []
+        },
+        "hasMore": {"messages":true,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 20
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "a%_b",
+      "terms": [
+        "a%_b"
+      ],
+      "in": "todo",
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "a%_b",
+        "groups": {
+          "messages": [],
+          "todo": [
+            {"type":"todo","id":"T4","seq":6,"who":"kai","displayName":"Kai","ts":3000,"title":"Literal a%_b task","status":"done","assignee":"kai","snippet":"Literal a%_b task nothing here"}
+          ],
+          "files": []
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 13
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "a%_b",
+      "terms": [
+        "a%_b"
+      ],
+      "in": "files",
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "a%_b",
+        "groups": {
+          "messages": [],
+          "todo": [],
+          "files": [
+            {"type":"file","id":"#6","seq":6,"who":"kai","displayName":"Kai","ts":3000,"title":"a%_b.csv","snippet":"a%_b.csv","fileId":"fl","size":42}
+          ]
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 15
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "珍珠 deploy",
+      "terms": [
+        "珍珠",
+        "deploy"
+      ],
+      "in": "messages",
+      "limit": 3
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "珍珠 deploy",
+        "groups": {
+          "messages": [
+            {"type":"message","id":"#5","seq":5,"who":"api@kai","displayName":null,"ts":2000,"snippet":"珍珠奶茶 deploy ok"},
+            {"type":"message","id":"#12","seq":12,"who":"api@kai","displayName":null,"ts":1500,"snippet":"deploy again, 珍珠 too"},
+            {"type":"message","id":"#2","seq":2,"who":"kai","displayName":"Kai","ts":1000,"snippet":"deploy plan for the 珍珠 shop"}
+          ],
+          "todo": [],
+          "files": []
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 33
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "珍珠 deploy",
+      "terms": [
+        "珍珠",
+        "deploy"
+      ],
+      "in": "messages",
+      "limit": 2
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "珍珠 deploy",
+        "groups": {
+          "messages": [
+            {"type":"message","id":"#5","seq":5,"who":"api@kai","displayName":null,"ts":2000,"snippet":"珍珠奶茶 deploy ok"},
+            {"type":"message","id":"#12","seq":12,"who":"api@kai","displayName":null,"ts":1500,"snippet":"deploy again, 珍珠 too"}
+          ],
+          "todo": [],
+          "files": []
+        },
+        "hasMore": {"messages":true,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 33
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "珍珠 deploy",
+      "terms": [
+        "珍珠",
+        "deploy"
+      ],
+      "in": "todo",
+      "limit": 2
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "珍珠 deploy",
+        "groups": {
+          "messages": [],
+          "todo": [
+            {"type":"todo","id":"T2","seq":3,"who":"lee","displayName":null,"ts":2000,"title":"珍珠 menu","status":"doing","assignee":"api@kai","snippet":"珍珠 menu deploy later"},
+            {"type":"todo","id":"T8","seq":12,"who":"lee","displayName":null,"ts":1500,"title":"deploy 珍珠 both","status":"todo","assignee":"lee","snippet":"deploy 珍珠 both x"}
+          ],
+          "files": []
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 15
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "珍珠 deploy",
+      "terms": [
+        "珍珠",
+        "deploy"
+      ],
+      "in": "todo",
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "珍珠 deploy",
+        "groups": {
+          "messages": [],
+          "todo": [
+            {"type":"todo","id":"T2","seq":3,"who":"lee","displayName":null,"ts":2000,"title":"珍珠 menu","status":"doing","assignee":"api@kai","snippet":"珍珠 menu deploy later"}
+          ],
+          "files": []
+        },
+        "hasMore": {"messages":false,"todo":true,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 15
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "珍珠 deploy",
+      "terms": [
+        "珍珠",
+        "deploy"
+      ],
+      "in": "files",
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "珍珠 deploy",
+        "groups": {
+          "messages": [],
+          "todo": [],
+          "files": [
+            {"type":"file","id":"#12","seq":12,"who":"api@kai","displayName":null,"ts":1500,"title":"deploy-珍珠.zip","snippet":"deploy-珍珠.zip","fileId":"fz","size":42}
+          ]
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 15
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "deploy",
+      "terms": [
+        "deploy"
+      ],
+      "before": 5,
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "deploy",
+        "groups": {
+          "messages": [
+            {"type":"message","id":"#4","seq":4,"who":"ghost","displayName":null,"ts":2000,"snippet":"ghost says deploy"},
+            {"type":"message","id":"#3","seq":3,"who":"lee","displayName":null,"ts":2000,"snippet":"deploy done on staging"},
+            {"type":"message","id":"#2","seq":2,"who":"kai","displayName":"Kai","ts":1000,"snippet":"deploy plan for the 珍珠 shop"},
+            {"type":"message","id":"#1","seq":1,"who":"system","displayName":null,"ts":500,"snippet":"deploy@kai joined"}
+          ],
+          "todo": [
+            {"type":"todo","id":"T2","seq":3,"who":"lee","displayName":null,"ts":2000,"title":"珍珠 menu","status":"doing","assignee":"api@kai","snippet":"珍珠 menu deploy later"},
+            {"type":"todo","id":"T1","seq":2,"who":"kai","displayName":"Kai","ts":1000,"title":"Deploy the shop","status":"todo","assignee":"lee","snippet":"Deploy the shop"}
+          ],
+          "files": []
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 6,
+    "rowsRead": 42
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "deploy",
+      "terms": [
+        "deploy"
+      ],
+      "in": "messages",
+      "before": 5,
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "deploy",
+        "groups": {
+          "messages": [
+            {"type":"message","id":"#4","seq":4,"who":"ghost","displayName":null,"ts":2000,"snippet":"ghost says deploy"},
+            {"type":"message","id":"#3","seq":3,"who":"lee","displayName":null,"ts":2000,"snippet":"deploy done on staging"},
+            {"type":"message","id":"#2","seq":2,"who":"kai","displayName":"Kai","ts":1000,"snippet":"deploy plan for the 珍珠 shop"},
+            {"type":"message","id":"#1","seq":1,"who":"system","displayName":null,"ts":500,"snippet":"deploy@kai joined"}
+          ],
+          "todo": [],
+          "files": []
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 33
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "deploy",
+      "terms": [
+        "deploy"
+      ],
+      "in": "todo",
+      "before": 5,
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "deploy",
+        "groups": {
+          "messages": [],
+          "todo": [
+            {"type":"todo","id":"T2","seq":3,"who":"lee","displayName":null,"ts":2000,"title":"珍珠 menu","status":"doing","assignee":"api@kai","snippet":"珍珠 menu deploy later"},
+            {"type":"todo","id":"T1","seq":2,"who":"kai","displayName":"Kai","ts":1000,"title":"Deploy the shop","status":"todo","assignee":"lee","snippet":"Deploy the shop"}
+          ],
+          "files": []
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 10
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "deploy",
+      "terms": [
+        "deploy"
+      ],
+      "in": "files",
+      "before": 5,
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "deploy",
+        "groups": {
+          "messages": [],
+          "todo": [],
+          "files": []
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 5
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "deploy",
+      "terms": [
+        "deploy"
+      ],
+      "before": 9,
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "deploy",
+        "groups": {
+          "messages": [
+            {"type":"message","id":"#5","seq":5,"who":"api@kai","displayName":null,"ts":2000,"snippet":"珍珠奶茶 deploy ok"},
+            {"type":"message","id":"#4","seq":4,"who":"ghost","displayName":null,"ts":2000,"snippet":"ghost says deploy"},
+            {"type":"message","id":"#3","seq":3,"who":"lee","displayName":null,"ts":2000,"snippet":"deploy done on staging"},
+            {"type":"message","id":"#2","seq":2,"who":"kai","displayName":"Kai","ts":1000,"snippet":"deploy plan for the 珍珠 shop"},
+            {"type":"message","id":"#1","seq":1,"who":"system","displayName":null,"ts":500,"snippet":"deploy@kai joined"}
+          ],
+          "todo": [
+            {"type":"todo","id":"T2","seq":3,"who":"lee","displayName":null,"ts":2000,"title":"珍珠 menu","status":"doing","assignee":"api@kai","snippet":"珍珠 menu deploy later"},
+            {"type":"todo","id":"T1","seq":2,"who":"kai","displayName":"Kai","ts":1000,"title":"Deploy the shop","status":"todo","assignee":"lee","snippet":"Deploy the shop"}
+          ],
+          "files": [
+            {"type":"file","id":"#8","seq":8,"who":"kai","displayName":"Kai","ts":4000,"title":"deploy-b.txt","snippet":"deploy-b.txt","fileId":"fb","size":42},
+            {"type":"file","id":"#8","seq":8,"who":"kai","displayName":"Kai","ts":4000,"title":"deploy-a.txt","snippet":"deploy-a.txt","fileId":"fa","size":42}
+          ]
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 6,
+    "rowsRead": 57
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "deploy",
+      "terms": [
+        "deploy"
+      ],
+      "in": "messages",
+      "before": 9,
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "deploy",
+        "groups": {
+          "messages": [
+            {"type":"message","id":"#5","seq":5,"who":"api@kai","displayName":null,"ts":2000,"snippet":"珍珠奶茶 deploy ok"},
+            {"type":"message","id":"#4","seq":4,"who":"ghost","displayName":null,"ts":2000,"snippet":"ghost says deploy"},
+            {"type":"message","id":"#3","seq":3,"who":"lee","displayName":null,"ts":2000,"snippet":"deploy done on staging"},
+            {"type":"message","id":"#2","seq":2,"who":"kai","displayName":"Kai","ts":1000,"snippet":"deploy plan for the 珍珠 shop"},
+            {"type":"message","id":"#1","seq":1,"who":"system","displayName":null,"ts":500,"snippet":"deploy@kai joined"}
+          ],
+          "todo": [],
+          "files": []
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 35
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "deploy",
+      "terms": [
+        "deploy"
+      ],
+      "in": "todo",
+      "before": 9,
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "deploy",
+        "groups": {
+          "messages": [],
+          "todo": [
+            {"type":"todo","id":"T2","seq":3,"who":"lee","displayName":null,"ts":2000,"title":"珍珠 menu","status":"doing","assignee":"api@kai","snippet":"珍珠 menu deploy later"},
+            {"type":"todo","id":"T1","seq":2,"who":"kai","displayName":"Kai","ts":1000,"title":"Deploy the shop","status":"todo","assignee":"lee","snippet":"Deploy the shop"}
+          ],
+          "files": []
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 12
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "deploy",
+      "terms": [
+        "deploy"
+      ],
+      "in": "files",
+      "before": 9,
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "deploy",
+        "groups": {
+          "messages": [],
+          "todo": [],
+          "files": [
+            {"type":"file","id":"#8","seq":8,"who":"kai","displayName":"Kai","ts":4000,"title":"deploy-b.txt","snippet":"deploy-b.txt","fileId":"fb","size":42},
+            {"type":"file","id":"#8","seq":8,"who":"kai","displayName":"Kai","ts":4000,"title":"deploy-a.txt","snippet":"deploy-a.txt","fileId":"fa","size":42}
+          ]
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 16
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "deploy",
+      "terms": [
+        "deploy"
+      ],
+      "before": 13,
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "deploy",
+        "groups": {
+          "messages": [
+            {"type":"message","id":"#10","seq":10,"who":"lee","displayName":null,"ts":5000,"snippet":"DEPLOY in capitals"},
+            {"type":"message","id":"#5","seq":5,"who":"api@kai","displayName":null,"ts":2000,"snippet":"珍珠奶茶 deploy ok"},
+            {"type":"message","id":"#4","seq":4,"who":"ghost","displayName":null,"ts":2000,"snippet":"ghost says deploy"},
+            {"type":"message","id":"#3","seq":3,"who":"lee","displayName":null,"ts":2000,"snippet":"deploy done on staging"},
+            {"type":"message","id":"#12","seq":12,"who":"api@kai","displayName":null,"ts":1500,"snippet":"deploy again, 珍珠 too"},
+            {"type":"message","id":"#2","seq":2,"who":"kai","displayName":"Kai","ts":1000,"snippet":"deploy plan for the 珍珠 shop"},
+            {"type":"message","id":"#1","seq":1,"who":"system","displayName":null,"ts":500,"snippet":"deploy@kai joined"}
+          ],
+          "todo": [
+            {"type":"todo","id":"T5","seq":10,"who":"api@kai","displayName":null,"ts":3000,"title":"Plain title","status":"todo","assignee":"kai","snippet":"Plain title deploy in the description"},
+            {"type":"todo","id":"T2","seq":3,"who":"lee","displayName":null,"ts":2000,"title":"珍珠 menu","status":"doing","assignee":"api@kai","snippet":"珍珠 menu deploy later"},
+            {"type":"todo","id":"T8","seq":12,"who":"lee","displayName":null,"ts":1500,"title":"deploy 珍珠 both","status":"todo","assignee":"lee","snippet":"deploy 珍珠 both x"},
+            {"type":"todo","id":"T1","seq":2,"who":"kai","displayName":"Kai","ts":1000,"title":"Deploy the shop","status":"todo","assignee":"lee","snippet":"Deploy the shop"}
+          ],
+          "files": [
+            {"type":"file","id":"#12","seq":12,"who":"api@kai","displayName":null,"ts":1500,"title":"deploy-珍珠.zip","snippet":"deploy-珍珠.zip","fileId":"fz","size":42},
+            {"type":"file","id":"#9","seq":9,"who":"ghost","displayName":null,"ts":4000,"title":"deploy-ghost.log","snippet":"deploy-ghost.log","fileId":"fg","size":42},
+            {"type":"file","id":"#8","seq":8,"who":"kai","displayName":"Kai","ts":4000,"title":"deploy-b.txt","snippet":"deploy-b.txt","fileId":"fb","size":42},
+            {"type":"file","id":"#8","seq":8,"who":"kai","displayName":"Kai","ts":4000,"title":"deploy-a.txt","snippet":"deploy-a.txt","fileId":"fa","size":42}
+          ]
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 6,
+    "rowsRead": 73
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "deploy",
+      "terms": [
+        "deploy"
+      ],
+      "in": "messages",
+      "before": 13,
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "deploy",
+        "groups": {
+          "messages": [
+            {"type":"message","id":"#10","seq":10,"who":"lee","displayName":null,"ts":5000,"snippet":"DEPLOY in capitals"},
+            {"type":"message","id":"#5","seq":5,"who":"api@kai","displayName":null,"ts":2000,"snippet":"珍珠奶茶 deploy ok"},
+            {"type":"message","id":"#4","seq":4,"who":"ghost","displayName":null,"ts":2000,"snippet":"ghost says deploy"},
+            {"type":"message","id":"#3","seq":3,"who":"lee","displayName":null,"ts":2000,"snippet":"deploy done on staging"},
+            {"type":"message","id":"#12","seq":12,"who":"api@kai","displayName":null,"ts":1500,"snippet":"deploy again, 珍珠 too"},
+            {"type":"message","id":"#2","seq":2,"who":"kai","displayName":"Kai","ts":1000,"snippet":"deploy plan for the 珍珠 shop"},
+            {"type":"message","id":"#1","seq":1,"who":"system","displayName":null,"ts":500,"snippet":"deploy@kai joined"}
+          ],
+          "todo": [],
+          "files": []
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 39
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "deploy",
+      "terms": [
+        "deploy"
+      ],
+      "in": "todo",
+      "before": 13,
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "deploy",
+        "groups": {
+          "messages": [],
+          "todo": [
+            {"type":"todo","id":"T5","seq":10,"who":"api@kai","displayName":null,"ts":3000,"title":"Plain title","status":"todo","assignee":"kai","snippet":"Plain title deploy in the description"},
+            {"type":"todo","id":"T2","seq":3,"who":"lee","displayName":null,"ts":2000,"title":"珍珠 menu","status":"doing","assignee":"api@kai","snippet":"珍珠 menu deploy later"},
+            {"type":"todo","id":"T8","seq":12,"who":"lee","displayName":null,"ts":1500,"title":"deploy 珍珠 both","status":"todo","assignee":"lee","snippet":"deploy 珍珠 both x"},
+            {"type":"todo","id":"T1","seq":2,"who":"kai","displayName":"Kai","ts":1000,"title":"Deploy the shop","status":"todo","assignee":"lee","snippet":"Deploy the shop"}
+          ],
+          "files": []
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 17
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "deploy",
+      "terms": [
+        "deploy"
+      ],
+      "in": "files",
+      "before": 13,
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "deploy",
+        "groups": {
+          "messages": [],
+          "todo": [],
+          "files": [
+            {"type":"file","id":"#12","seq":12,"who":"api@kai","displayName":null,"ts":1500,"title":"deploy-珍珠.zip","snippet":"deploy-珍珠.zip","fileId":"fz","size":42},
+            {"type":"file","id":"#9","seq":9,"who":"ghost","displayName":null,"ts":4000,"title":"deploy-ghost.log","snippet":"deploy-ghost.log","fileId":"fg","size":42},
+            {"type":"file","id":"#8","seq":8,"who":"kai","displayName":"Kai","ts":4000,"title":"deploy-b.txt","snippet":"deploy-b.txt","fileId":"fb","size":42},
+            {"type":"file","id":"#8","seq":8,"who":"kai","displayName":"Kai","ts":4000,"title":"deploy-a.txt","snippet":"deploy-a.txt","fileId":"fa","size":42}
+          ]
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 23
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "珍珠",
+      "terms": [
+        "珍珠"
+      ],
+      "before": 5,
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "珍珠",
+        "groups": {
+          "messages": [
+            {"type":"message","id":"#2","seq":2,"who":"kai","displayName":"Kai","ts":1000,"snippet":"deploy plan for the 珍珠 shop"}
+          ],
+          "todo": [
+            {"type":"todo","id":"T2","seq":3,"who":"lee","displayName":null,"ts":2000,"title":"珍珠 menu","status":"doing","assignee":"api@kai","snippet":"珍珠 menu deploy later"}
+          ],
+          "files": []
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 6,
+    "rowsRead": 17
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "珍珠",
+      "terms": [
+        "珍珠"
+      ],
+      "in": "messages",
+      "before": 5,
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "珍珠",
+        "groups": {
+          "messages": [
+            {"type":"message","id":"#2","seq":2,"who":"kai","displayName":"Kai","ts":1000,"snippet":"deploy plan for the 珍珠 shop"}
+          ],
+          "todo": [],
+          "files": []
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 10
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "珍珠",
+      "terms": [
+        "珍珠"
+      ],
+      "in": "todo",
+      "before": 5,
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "珍珠",
+        "groups": {
+          "messages": [],
+          "todo": [
+            {"type":"todo","id":"T2","seq":3,"who":"lee","displayName":null,"ts":2000,"title":"珍珠 menu","status":"doing","assignee":"api@kai","snippet":"珍珠 menu deploy later"}
+          ],
+          "files": []
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 8
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "珍珠",
+      "terms": [
+        "珍珠"
+      ],
+      "in": "files",
+      "before": 5,
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "珍珠",
+        "groups": {
+          "messages": [],
+          "todo": [],
+          "files": []
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 5
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "珍珠",
+      "terms": [
+        "珍珠"
+      ],
+      "before": 9,
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "珍珠",
+        "groups": {
+          "messages": [
+            {"type":"message","id":"#5","seq":5,"who":"api@kai","displayName":null,"ts":2000,"snippet":"珍珠奶茶 deploy ok"},
+            {"type":"message","id":"#2","seq":2,"who":"kai","displayName":"Kai","ts":1000,"snippet":"deploy plan for the 珍珠 shop"}
+          ],
+          "todo": [
+            {"type":"todo","id":"T2","seq":3,"who":"lee","displayName":null,"ts":2000,"title":"珍珠 menu","status":"doing","assignee":"api@kai","snippet":"珍珠 menu deploy later"}
+          ],
+          "files": [
+            {"type":"file","id":"#8","seq":8,"who":"kai","displayName":"Kai","ts":4000,"title":"珍珠.png","snippet":"珍珠.png","fileId":"fc","size":42}
+          ]
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 6,
+    "rowsRead": 33
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "珍珠",
+      "terms": [
+        "珍珠"
+      ],
+      "in": "messages",
+      "before": 9,
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "珍珠",
+        "groups": {
+          "messages": [
+            {"type":"message","id":"#5","seq":5,"who":"api@kai","displayName":null,"ts":2000,"snippet":"珍珠奶茶 deploy ok"},
+            {"type":"message","id":"#2","seq":2,"who":"kai","displayName":"Kai","ts":1000,"snippet":"deploy plan for the 珍珠 shop"}
+          ],
+          "todo": [],
+          "files": []
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 16
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "珍珠",
+      "terms": [
+        "珍珠"
+      ],
+      "in": "todo",
+      "before": 9,
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "珍珠",
+        "groups": {
+          "messages": [],
+          "todo": [
+            {"type":"todo","id":"T2","seq":3,"who":"lee","displayName":null,"ts":2000,"title":"珍珠 menu","status":"doing","assignee":"api@kai","snippet":"珍珠 menu deploy later"}
+          ],
+          "files": []
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 10
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "珍珠",
+      "terms": [
+        "珍珠"
+      ],
+      "in": "files",
+      "before": 9,
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "珍珠",
+        "groups": {
+          "messages": [],
+          "todo": [],
+          "files": [
+            {"type":"file","id":"#8","seq":8,"who":"kai","displayName":"Kai","ts":4000,"title":"珍珠.png","snippet":"珍珠.png","fileId":"fc","size":42}
+          ]
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 13
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "珍珠",
+      "terms": [
+        "珍珠"
+      ],
+      "before": 13,
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "珍珠",
+        "groups": {
+          "messages": [
+            {"type":"message","id":"#5","seq":5,"who":"api@kai","displayName":null,"ts":2000,"snippet":"珍珠奶茶 deploy ok"},
+            {"type":"message","id":"#12","seq":12,"who":"api@kai","displayName":null,"ts":1500,"snippet":"deploy again, 珍珠 too"},
+            {"type":"message","id":"#2","seq":2,"who":"kai","displayName":"Kai","ts":1000,"snippet":"deploy plan for the 珍珠 shop"}
+          ],
+          "todo": [
+            {"type":"todo","id":"T2","seq":3,"who":"lee","displayName":null,"ts":2000,"title":"珍珠 menu","status":"doing","assignee":"api@kai","snippet":"珍珠 menu deploy later"},
+            {"type":"todo","id":"T8","seq":12,"who":"lee","displayName":null,"ts":1500,"title":"deploy 珍珠 both","status":"todo","assignee":"lee","snippet":"deploy 珍珠 both x"}
+          ],
+          "files": [
+            {"type":"file","id":"#12","seq":12,"who":"api@kai","displayName":null,"ts":1500,"title":"deploy-珍珠.zip","snippet":"deploy-珍珠.zip","fileId":"fz","size":42},
+            {"type":"file","id":"#8","seq":8,"who":"kai","displayName":"Kai","ts":4000,"title":"珍珠.png","snippet":"珍珠.png","fileId":"fc","size":42}
+          ]
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 6,
+    "rowsRead": 47
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "珍珠",
+      "terms": [
+        "珍珠"
+      ],
+      "in": "messages",
+      "before": 13,
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "珍珠",
+        "groups": {
+          "messages": [
+            {"type":"message","id":"#5","seq":5,"who":"api@kai","displayName":null,"ts":2000,"snippet":"珍珠奶茶 deploy ok"},
+            {"type":"message","id":"#12","seq":12,"who":"api@kai","displayName":null,"ts":1500,"snippet":"deploy again, 珍珠 too"},
+            {"type":"message","id":"#2","seq":2,"who":"kai","displayName":"Kai","ts":1000,"snippet":"deploy plan for the 珍珠 shop"}
+          ],
+          "todo": [],
+          "files": []
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 22
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "珍珠",
+      "terms": [
+        "珍珠"
+      ],
+      "in": "todo",
+      "before": 13,
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "珍珠",
+        "groups": {
+          "messages": [],
+          "todo": [
+            {"type":"todo","id":"T2","seq":3,"who":"lee","displayName":null,"ts":2000,"title":"珍珠 menu","status":"doing","assignee":"api@kai","snippet":"珍珠 menu deploy later"},
+            {"type":"todo","id":"T8","seq":12,"who":"lee","displayName":null,"ts":1500,"title":"deploy 珍珠 both","status":"todo","assignee":"lee","snippet":"deploy 珍珠 both x"}
+          ],
+          "files": []
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 13
+  },
+  {
+    "topic": "pub",
+    "actor": "kai",
+    "query": {
+      "q": "珍珠",
+      "terms": [
+        "珍珠"
+      ],
+      "in": "files",
+      "before": 13,
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "珍珠",
+        "groups": {
+          "messages": [],
+          "todo": [],
+          "files": [
+            {"type":"file","id":"#12","seq":12,"who":"api@kai","displayName":null,"ts":1500,"title":"deploy-珍珠.zip","snippet":"deploy-珍珠.zip","fileId":"fz","size":42},
+            {"type":"file","id":"#8","seq":8,"who":"kai","displayName":"Kai","ts":4000,"title":"珍珠.png","snippet":"珍珠.png","fileId":"fc","size":42}
+          ]
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 18
+  },
+  {
+    "topic": "pub",
+    "actor": "api@kai",
+    "query": {
+      "q": "deploy",
+      "terms": [
+        "deploy"
+      ],
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "deploy",
+        "groups": {
+          "messages": [
+            {"type":"message","id":"#13","seq":13,"who":"kai","displayName":"Kai","ts":6000,"snippet":"a%_b again, then deploy"},
+            {"type":"message","id":"#10","seq":10,"who":"lee","displayName":null,"ts":5000,"snippet":"DEPLOY in capitals"},
+            {"type":"message","id":"#5","seq":5,"who":"api@kai","displayName":null,"ts":2000,"snippet":"珍珠奶茶 deploy ok"},
+            {"type":"message","id":"#4","seq":4,"who":"ghost","displayName":null,"ts":2000,"snippet":"ghost says deploy"},
+            {"type":"message","id":"#3","seq":3,"who":"lee","displayName":null,"ts":2000,"snippet":"deploy done on staging"},
+            {"type":"message","id":"#12","seq":12,"who":"api@kai","displayName":null,"ts":1500,"snippet":"deploy again, 珍珠 too"},
+            {"type":"message","id":"#2","seq":2,"who":"kai","displayName":"Kai","ts":1000,"snippet":"deploy plan for the 珍珠 shop"},
+            {"type":"message","id":"#1","seq":1,"who":"system","displayName":null,"ts":500,"snippet":"deploy@kai joined"}
+          ],
+          "todo": [
+            {"type":"todo","id":"T5","seq":10,"who":"api@kai","displayName":null,"ts":3000,"title":"Plain title","status":"todo","assignee":"kai","snippet":"Plain title deploy in the description"},
+            {"type":"todo","id":"T3","seq":null,"who":"ghost","displayName":null,"ts":2000,"title":"Ghost task: deploy","status":"todo","assignee":null,"snippet":"Ghost task: deploy"},
+            {"type":"todo","id":"T2","seq":3,"who":"lee","displayName":null,"ts":2000,"title":"珍珠 menu","status":"doing","assignee":"api@kai","snippet":"珍珠 menu deploy later"},
+            {"type":"todo","id":"T8","seq":12,"who":"lee","displayName":null,"ts":1500,"title":"deploy 珍珠 both","status":"todo","assignee":"lee","snippet":"deploy 珍珠 both x"},
+            {"type":"todo","id":"T1","seq":2,"who":"kai","displayName":"Kai","ts":1000,"title":"Deploy the shop","status":"todo","assignee":"lee","snippet":"Deploy the shop"}
+          ],
+          "files": [
+            {"type":"file","id":"#12","seq":12,"who":"api@kai","displayName":null,"ts":1500,"title":"deploy-珍珠.zip","snippet":"deploy-珍珠.zip","fileId":"fz","size":42},
+            {"type":"file","id":"#9","seq":9,"who":"ghost","displayName":null,"ts":4000,"title":"deploy-ghost.log","snippet":"deploy-ghost.log","fileId":"fg","size":42},
+            {"type":"file","id":"#8","seq":8,"who":"kai","displayName":"Kai","ts":4000,"title":"deploy-b.txt","snippet":"deploy-b.txt","fileId":"fb","size":42},
+            {"type":"file","id":"#8","seq":8,"who":"kai","displayName":"Kai","ts":4000,"title":"deploy-a.txt","snippet":"deploy-a.txt","fileId":"fa","size":42}
+          ]
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 6,
+    "rowsRead": 78
+  },
+  {
+    "topic": "pub",
+    "actor": "guest",
+    "query": {
+      "q": "deploy",
+      "terms": [
+        "deploy"
+      ],
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "deploy",
+        "groups": {
+          "messages": [
+            {"type":"message","id":"#13","seq":13,"who":"kai","displayName":"Kai","ts":6000,"snippet":"a%_b again, then deploy"},
+            {"type":"message","id":"#10","seq":10,"who":"lee","displayName":null,"ts":5000,"snippet":"DEPLOY in capitals"},
+            {"type":"message","id":"#5","seq":5,"who":"api@kai","displayName":null,"ts":2000,"snippet":"珍珠奶茶 deploy ok"},
+            {"type":"message","id":"#4","seq":4,"who":"ghost","displayName":null,"ts":2000,"snippet":"ghost says deploy"},
+            {"type":"message","id":"#3","seq":3,"who":"lee","displayName":null,"ts":2000,"snippet":"deploy done on staging"},
+            {"type":"message","id":"#12","seq":12,"who":"api@kai","displayName":null,"ts":1500,"snippet":"deploy again, 珍珠 too"},
+            {"type":"message","id":"#2","seq":2,"who":"kai","displayName":"Kai","ts":1000,"snippet":"deploy plan for the 珍珠 shop"},
+            {"type":"message","id":"#1","seq":1,"who":"system","displayName":null,"ts":500,"snippet":"deploy@kai joined"}
+          ],
+          "todo": [
+            {"type":"todo","id":"T5","seq":10,"who":"api@kai","displayName":null,"ts":3000,"title":"Plain title","status":"todo","assignee":"kai","snippet":"Plain title deploy in the description"},
+            {"type":"todo","id":"T3","seq":null,"who":"ghost","displayName":null,"ts":2000,"title":"Ghost task: deploy","status":"todo","assignee":null,"snippet":"Ghost task: deploy"},
+            {"type":"todo","id":"T2","seq":3,"who":"lee","displayName":null,"ts":2000,"title":"珍珠 menu","status":"doing","assignee":"api@kai","snippet":"珍珠 menu deploy later"},
+            {"type":"todo","id":"T8","seq":12,"who":"lee","displayName":null,"ts":1500,"title":"deploy 珍珠 both","status":"todo","assignee":"lee","snippet":"deploy 珍珠 both x"},
+            {"type":"todo","id":"T1","seq":2,"who":"kai","displayName":"Kai","ts":1000,"title":"Deploy the shop","status":"todo","assignee":"lee","snippet":"Deploy the shop"}
+          ],
+          "files": [
+            {"type":"file","id":"#12","seq":12,"who":"api@kai","displayName":null,"ts":1500,"title":"deploy-珍珠.zip","snippet":"deploy-珍珠.zip","fileId":"fz","size":42},
+            {"type":"file","id":"#9","seq":9,"who":"ghost","displayName":null,"ts":4000,"title":"deploy-ghost.log","snippet":"deploy-ghost.log","fileId":"fg","size":42},
+            {"type":"file","id":"#8","seq":8,"who":"kai","displayName":"Kai","ts":4000,"title":"deploy-b.txt","snippet":"deploy-b.txt","fileId":"fb","size":42},
+            {"type":"file","id":"#8","seq":8,"who":"kai","displayName":"Kai","ts":4000,"title":"deploy-a.txt","snippet":"deploy-a.txt","fileId":"fa","size":42}
+          ]
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 6,
+    "rowsRead": 77
+  },
+  {
+    "topic": "pub",
+    "actor": "guest",
+    "query": {
+      "q": "珍珠",
+      "terms": [
+        "珍珠"
+      ],
+      "in": "todo",
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "pub",
+        "q": "珍珠",
+        "groups": {
+          "messages": [],
+          "todo": [
+            {"type":"todo","id":"T6","seq":null,"who":"kai","displayName":"Kai","ts":4000,"title":"Another 珍珠","status":"todo","assignee":null,"snippet":"Another 珍珠"},
+            {"type":"todo","id":"T2","seq":3,"who":"lee","displayName":null,"ts":2000,"title":"珍珠 menu","status":"doing","assignee":"api@kai","snippet":"珍珠 menu deploy later"},
+            {"type":"todo","id":"T8","seq":12,"who":"lee","displayName":null,"ts":1500,"title":"deploy 珍珠 both","status":"todo","assignee":"lee","snippet":"deploy 珍珠 both x"}
+          ],
+          "files": []
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 4,
+    "rowsRead": 16
+  },
+  {
+    "topic": "pub",
+    "actor": "bot@zed",
+    "query": {
+      "q": "deploy",
+      "terms": [
+        "deploy"
+      ],
+      "limit": 20
+    },
+    "result": {
+      "err": {"code":"not_member","next":"bot@zed is not in this topic. Join first: scorpio join roomId=pub role=bot roleCard='…' (add code=… if the topic has a passcode; resume=true if it was you before).","status":403}
+    },
+    "queries": 6,
+    "rowsRead": 4
+  },
+  {
+    "topic": "priv",
+    "actor": "guest",
+    "query": {
+      "q": "deploy",
+      "terms": [
+        "deploy"
+      ],
+      "limit": 20
+    },
+    "result": {
+      "err": {"code":"not_member","next":"You are not in this topic. Open the topic link and enter the passcode.","status":403}
+    },
+    "queries": 5,
+    "rowsRead": 3
+  },
+  {
+    "topic": "priv",
+    "actor": "kai",
+    "query": {
+      "q": "deploy",
+      "terms": [
+        "deploy"
+      ],
+      "limit": 20
+    },
+    "result": {
+      "ok": {
+        "roomId": "priv",
+        "q": "deploy",
+        "groups": {
+          "messages": [
+            {"type":"message","id":"#1","seq":1,"who":"kai","displayName":"Kai","ts":1000,"snippet":"deploy here"}
+          ],
+          "todo": [],
+          "files": []
+        },
+        "hasMore": {"messages":false,"todo":false,"files":false}
+      }
+    },
+    "queries": 6,
+    "rowsRead": 12
+  },
+  {
+    "topic": "gone",
+    "actor": "guest",
+    "query": {
+      "q": "deploy",
+      "terms": [
+        "deploy"
+      ],
+      "limit": 20
+    },
+    "result": {
+      "err": {"code":"room_deleted","next":"This topic has been deleted. Its messages, files and tasks cannot be read or restored.","status":410}
+    },
+    "queries": 1,
+    "rowsRead": 1
+  },
+  {
+    "topic": "gone",
+    "actor": "kai",
+    "query": {
+      "q": "deploy",
+      "terms": [
+        "deploy"
+      ],
+      "limit": 20
+    },
+    "result": {
+      "err": {"code":"room_deleted","next":"This topic has been deleted. Its messages, files and tasks cannot be read or restored.","status":410}
+    },
+    "queries": 1,
+    "rowsRead": 1
+  }
+]

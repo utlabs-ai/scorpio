@@ -1,0 +1,5388 @@
+[
+  {
+    "query": {
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": null,
+        "files": [
+          {
+            "id": "pic",
+            "name": "珍珠.png",
+            "type": "image/png",
+            "size": 42,
+            "url": "/f/topic1/pic",
+            "link": "https://scorpio.test/v/pic",
+            "view": false,
+            "from": "ghost",
+            "displayName": null,
+            "seq": 11,
+            "ts": 2000
+          }
+        ],
+        "hasMore": true,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "limit": 3
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": null,
+        "files": [
+          {
+            "id": "pic",
+            "name": "珍珠.png",
+            "type": "image/png",
+            "size": 42,
+            "url": "/f/topic1/pic",
+            "link": "https://scorpio.test/v/pic",
+            "view": false,
+            "from": "ghost",
+            "displayName": null,
+            "seq": 11,
+            "ts": 2000
+          },
+          {
+            "id": "f8",
+            "name": "note-8.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f8",
+            "link": "https://scorpio.test/v/f8",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f7",
+            "name": "note-7.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f7",
+            "link": "https://scorpio.test/v/f7",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          }
+        ],
+        "hasMore": true,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "limit": 8
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": null,
+        "files": [
+          {
+            "id": "pic",
+            "name": "珍珠.png",
+            "type": "image/png",
+            "size": 42,
+            "url": "/f/topic1/pic",
+            "link": "https://scorpio.test/v/pic",
+            "view": false,
+            "from": "ghost",
+            "displayName": null,
+            "seq": 11,
+            "ts": 2000
+          },
+          {
+            "id": "f8",
+            "name": "note-8.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f8",
+            "link": "https://scorpio.test/v/f8",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f7",
+            "name": "note-7.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f7",
+            "link": "https://scorpio.test/v/f7",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f6",
+            "name": "note-6.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f6",
+            "link": "https://scorpio.test/v/f6",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f5",
+            "name": "note-5.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f5",
+            "link": "https://scorpio.test/v/f5",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f4",
+            "name": "note-4.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f4",
+            "link": "https://scorpio.test/v/f4",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f3",
+            "name": "note-3.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f3",
+            "link": "https://scorpio.test/v/f3",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f2",
+            "name": "note-2.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f2",
+            "link": "https://scorpio.test/v/f2",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          }
+        ],
+        "hasMore": true,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "from": "kai",
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": null,
+        "files": [
+          {
+            "id": "f8",
+            "name": "note-8.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f8",
+            "link": "https://scorpio.test/v/f8",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          }
+        ],
+        "hasMore": true,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "from": "kai",
+      "limit": 3
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": null,
+        "files": [
+          {
+            "id": "f8",
+            "name": "note-8.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f8",
+            "link": "https://scorpio.test/v/f8",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f7",
+            "name": "note-7.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f7",
+            "link": "https://scorpio.test/v/f7",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f6",
+            "name": "note-6.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f6",
+            "link": "https://scorpio.test/v/f6",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          }
+        ],
+        "hasMore": true,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "from": "kai",
+      "limit": 8
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": null,
+        "files": [
+          {
+            "id": "f8",
+            "name": "note-8.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f8",
+            "link": "https://scorpio.test/v/f8",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f7",
+            "name": "note-7.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f7",
+            "link": "https://scorpio.test/v/f7",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f6",
+            "name": "note-6.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f6",
+            "link": "https://scorpio.test/v/f6",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f5",
+            "name": "note-5.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f5",
+            "link": "https://scorpio.test/v/f5",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f4",
+            "name": "note-4.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f4",
+            "link": "https://scorpio.test/v/f4",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f3",
+            "name": "note-3.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f3",
+            "link": "https://scorpio.test/v/f3",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f2",
+            "name": "note-2.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f2",
+            "link": "https://scorpio.test/v/f2",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f1",
+            "name": "note-1.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f1",
+            "link": "https://scorpio.test/v/f1",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          }
+        ],
+        "hasMore": true,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "from": "ghost",
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": null,
+        "files": [
+          {
+            "id": "pic",
+            "name": "珍珠.png",
+            "type": "image/png",
+            "size": 42,
+            "url": "/f/topic1/pic",
+            "link": "https://scorpio.test/v/pic",
+            "view": false,
+            "from": "ghost",
+            "displayName": null,
+            "seq": 11,
+            "ts": 2000
+          }
+        ],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "from": "ghost",
+      "limit": 3
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": null,
+        "files": [
+          {
+            "id": "pic",
+            "name": "珍珠.png",
+            "type": "image/png",
+            "size": 42,
+            "url": "/f/topic1/pic",
+            "link": "https://scorpio.test/v/pic",
+            "view": false,
+            "from": "ghost",
+            "displayName": null,
+            "seq": 11,
+            "ts": 2000
+          }
+        ],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "from": "ghost",
+      "limit": 8
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": null,
+        "files": [
+          {
+            "id": "pic",
+            "name": "珍珠.png",
+            "type": "image/png",
+            "size": 42,
+            "url": "/f/topic1/pic",
+            "link": "https://scorpio.test/v/pic",
+            "view": false,
+            "from": "ghost",
+            "displayName": null,
+            "seq": 11,
+            "ts": 2000
+          }
+        ],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "q": "note",
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": null,
+        "files": [
+          {
+            "id": "f8",
+            "name": "note-8.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f8",
+            "link": "https://scorpio.test/v/f8",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          }
+        ],
+        "hasMore": true,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "q": "note",
+      "limit": 3
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": null,
+        "files": [
+          {
+            "id": "f8",
+            "name": "note-8.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f8",
+            "link": "https://scorpio.test/v/f8",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f7",
+            "name": "note-7.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f7",
+            "link": "https://scorpio.test/v/f7",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f6",
+            "name": "note-6.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f6",
+            "link": "https://scorpio.test/v/f6",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          }
+        ],
+        "hasMore": true,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "q": "note",
+      "limit": 8
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": null,
+        "files": [
+          {
+            "id": "f8",
+            "name": "note-8.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f8",
+            "link": "https://scorpio.test/v/f8",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f7",
+            "name": "note-7.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f7",
+            "link": "https://scorpio.test/v/f7",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f6",
+            "name": "note-6.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f6",
+            "link": "https://scorpio.test/v/f6",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f5",
+            "name": "note-5.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f5",
+            "link": "https://scorpio.test/v/f5",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f4",
+            "name": "note-4.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f4",
+            "link": "https://scorpio.test/v/f4",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f3",
+            "name": "note-3.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f3",
+            "link": "https://scorpio.test/v/f3",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f2",
+            "name": "note-2.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f2",
+            "link": "https://scorpio.test/v/f2",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f1",
+            "name": "note-1.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f1",
+            "link": "https://scorpio.test/v/f1",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          }
+        ],
+        "hasMore": true,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "q": "note",
+      "from": "kai",
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": null,
+        "files": [
+          {
+            "id": "f8",
+            "name": "note-8.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f8",
+            "link": "https://scorpio.test/v/f8",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          }
+        ],
+        "hasMore": true,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "q": "note",
+      "from": "kai",
+      "limit": 3
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": null,
+        "files": [
+          {
+            "id": "f8",
+            "name": "note-8.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f8",
+            "link": "https://scorpio.test/v/f8",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f7",
+            "name": "note-7.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f7",
+            "link": "https://scorpio.test/v/f7",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f6",
+            "name": "note-6.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f6",
+            "link": "https://scorpio.test/v/f6",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          }
+        ],
+        "hasMore": true,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "q": "note",
+      "from": "kai",
+      "limit": 8
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": null,
+        "files": [
+          {
+            "id": "f8",
+            "name": "note-8.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f8",
+            "link": "https://scorpio.test/v/f8",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f7",
+            "name": "note-7.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f7",
+            "link": "https://scorpio.test/v/f7",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f6",
+            "name": "note-6.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f6",
+            "link": "https://scorpio.test/v/f6",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f5",
+            "name": "note-5.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f5",
+            "link": "https://scorpio.test/v/f5",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f4",
+            "name": "note-4.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f4",
+            "link": "https://scorpio.test/v/f4",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f3",
+            "name": "note-3.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f3",
+            "link": "https://scorpio.test/v/f3",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f2",
+            "name": "note-2.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f2",
+            "link": "https://scorpio.test/v/f2",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f1",
+            "name": "note-1.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f1",
+            "link": "https://scorpio.test/v/f1",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          }
+        ],
+        "hasMore": true,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "q": "note",
+      "from": "ghost",
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": null,
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "q": "note",
+      "from": "ghost",
+      "limit": 3
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": null,
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "q": "note",
+      "from": "ghost",
+      "limit": 8
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": null,
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "q": "珍",
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": null,
+        "files": [
+          {
+            "id": "pic",
+            "name": "珍珠.png",
+            "type": "image/png",
+            "size": 42,
+            "url": "/f/topic1/pic",
+            "link": "https://scorpio.test/v/pic",
+            "view": false,
+            "from": "ghost",
+            "displayName": null,
+            "seq": 11,
+            "ts": 2000
+          }
+        ],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "q": "珍",
+      "limit": 3
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": null,
+        "files": [
+          {
+            "id": "pic",
+            "name": "珍珠.png",
+            "type": "image/png",
+            "size": 42,
+            "url": "/f/topic1/pic",
+            "link": "https://scorpio.test/v/pic",
+            "view": false,
+            "from": "ghost",
+            "displayName": null,
+            "seq": 11,
+            "ts": 2000
+          }
+        ],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "q": "珍",
+      "limit": 8
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": null,
+        "files": [
+          {
+            "id": "pic",
+            "name": "珍珠.png",
+            "type": "image/png",
+            "size": 42,
+            "url": "/f/topic1/pic",
+            "link": "https://scorpio.test/v/pic",
+            "view": false,
+            "from": "ghost",
+            "displayName": null,
+            "seq": 11,
+            "ts": 2000
+          }
+        ],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "q": "珍",
+      "from": "kai",
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": null,
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "q": "珍",
+      "from": "kai",
+      "limit": 3
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": null,
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "q": "珍",
+      "from": "kai",
+      "limit": 8
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": null,
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "q": "珍",
+      "from": "ghost",
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": null,
+        "files": [
+          {
+            "id": "pic",
+            "name": "珍珠.png",
+            "type": "image/png",
+            "size": 42,
+            "url": "/f/topic1/pic",
+            "link": "https://scorpio.test/v/pic",
+            "view": false,
+            "from": "ghost",
+            "displayName": null,
+            "seq": 11,
+            "ts": 2000
+          }
+        ],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "q": "珍",
+      "from": "ghost",
+      "limit": 3
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": null,
+        "files": [
+          {
+            "id": "pic",
+            "name": "珍珠.png",
+            "type": "image/png",
+            "size": 42,
+            "url": "/f/topic1/pic",
+            "link": "https://scorpio.test/v/pic",
+            "view": false,
+            "from": "ghost",
+            "displayName": null,
+            "seq": 11,
+            "ts": 2000
+          }
+        ],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "q": "珍",
+      "from": "ghost",
+      "limit": 8
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": null,
+        "files": [
+          {
+            "id": "pic",
+            "name": "珍珠.png",
+            "type": "image/png",
+            "size": 42,
+            "url": "/f/topic1/pic",
+            "link": "https://scorpio.test/v/pic",
+            "view": false,
+            "from": "ghost",
+            "displayName": null,
+            "seq": 11,
+            "ts": 2000
+          }
+        ],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "q": "zz",
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": null,
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "q": "zz",
+      "limit": 3
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": null,
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "q": "zz",
+      "limit": 8
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": null,
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "q": "zz",
+      "from": "kai",
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": null,
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "q": "zz",
+      "from": "kai",
+      "limit": 3
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": null,
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "q": "zz",
+      "from": "kai",
+      "limit": 8
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": null,
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "q": "zz",
+      "from": "ghost",
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": null,
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "q": "zz",
+      "from": "ghost",
+      "limit": 3
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": null,
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "q": "zz",
+      "from": "ghost",
+      "limit": 8
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": null,
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "files",
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "files",
+        "files": [
+          {
+            "id": "f8",
+            "name": "note-8.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f8",
+            "link": "https://scorpio.test/v/f8",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          }
+        ],
+        "hasMore": true,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "files",
+      "limit": 3
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "files",
+        "files": [
+          {
+            "id": "f8",
+            "name": "note-8.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f8",
+            "link": "https://scorpio.test/v/f8",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f7",
+            "name": "note-7.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f7",
+            "link": "https://scorpio.test/v/f7",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f6",
+            "name": "note-6.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f6",
+            "link": "https://scorpio.test/v/f6",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          }
+        ],
+        "hasMore": true,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "files",
+      "limit": 8
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "files",
+        "files": [
+          {
+            "id": "f8",
+            "name": "note-8.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f8",
+            "link": "https://scorpio.test/v/f8",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f7",
+            "name": "note-7.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f7",
+            "link": "https://scorpio.test/v/f7",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f6",
+            "name": "note-6.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f6",
+            "link": "https://scorpio.test/v/f6",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f5",
+            "name": "note-5.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f5",
+            "link": "https://scorpio.test/v/f5",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f4",
+            "name": "note-4.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f4",
+            "link": "https://scorpio.test/v/f4",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f3",
+            "name": "note-3.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f3",
+            "link": "https://scorpio.test/v/f3",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f2",
+            "name": "note-2.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f2",
+            "link": "https://scorpio.test/v/f2",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f1",
+            "name": "note-1.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f1",
+            "link": "https://scorpio.test/v/f1",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          }
+        ],
+        "hasMore": true,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "files",
+      "from": "kai",
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "files",
+        "files": [
+          {
+            "id": "f8",
+            "name": "note-8.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f8",
+            "link": "https://scorpio.test/v/f8",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          }
+        ],
+        "hasMore": true,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "files",
+      "from": "kai",
+      "limit": 3
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "files",
+        "files": [
+          {
+            "id": "f8",
+            "name": "note-8.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f8",
+            "link": "https://scorpio.test/v/f8",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f7",
+            "name": "note-7.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f7",
+            "link": "https://scorpio.test/v/f7",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f6",
+            "name": "note-6.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f6",
+            "link": "https://scorpio.test/v/f6",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          }
+        ],
+        "hasMore": true,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "files",
+      "from": "kai",
+      "limit": 8
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "files",
+        "files": [
+          {
+            "id": "f8",
+            "name": "note-8.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f8",
+            "link": "https://scorpio.test/v/f8",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f7",
+            "name": "note-7.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f7",
+            "link": "https://scorpio.test/v/f7",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f6",
+            "name": "note-6.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f6",
+            "link": "https://scorpio.test/v/f6",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f5",
+            "name": "note-5.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f5",
+            "link": "https://scorpio.test/v/f5",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f4",
+            "name": "note-4.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f4",
+            "link": "https://scorpio.test/v/f4",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f3",
+            "name": "note-3.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f3",
+            "link": "https://scorpio.test/v/f3",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f2",
+            "name": "note-2.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f2",
+            "link": "https://scorpio.test/v/f2",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f1",
+            "name": "note-1.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f1",
+            "link": "https://scorpio.test/v/f1",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          }
+        ],
+        "hasMore": true,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "files",
+      "from": "ghost",
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "files",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "files",
+      "from": "ghost",
+      "limit": 3
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "files",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "files",
+      "from": "ghost",
+      "limit": 8
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "files",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "files",
+      "q": "note",
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "files",
+        "files": [
+          {
+            "id": "f8",
+            "name": "note-8.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f8",
+            "link": "https://scorpio.test/v/f8",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          }
+        ],
+        "hasMore": true,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "files",
+      "q": "note",
+      "limit": 3
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "files",
+        "files": [
+          {
+            "id": "f8",
+            "name": "note-8.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f8",
+            "link": "https://scorpio.test/v/f8",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f7",
+            "name": "note-7.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f7",
+            "link": "https://scorpio.test/v/f7",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f6",
+            "name": "note-6.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f6",
+            "link": "https://scorpio.test/v/f6",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          }
+        ],
+        "hasMore": true,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "files",
+      "q": "note",
+      "limit": 8
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "files",
+        "files": [
+          {
+            "id": "f8",
+            "name": "note-8.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f8",
+            "link": "https://scorpio.test/v/f8",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f7",
+            "name": "note-7.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f7",
+            "link": "https://scorpio.test/v/f7",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f6",
+            "name": "note-6.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f6",
+            "link": "https://scorpio.test/v/f6",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f5",
+            "name": "note-5.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f5",
+            "link": "https://scorpio.test/v/f5",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f4",
+            "name": "note-4.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f4",
+            "link": "https://scorpio.test/v/f4",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f3",
+            "name": "note-3.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f3",
+            "link": "https://scorpio.test/v/f3",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f2",
+            "name": "note-2.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f2",
+            "link": "https://scorpio.test/v/f2",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f1",
+            "name": "note-1.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f1",
+            "link": "https://scorpio.test/v/f1",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          }
+        ],
+        "hasMore": true,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "files",
+      "q": "note",
+      "from": "kai",
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "files",
+        "files": [
+          {
+            "id": "f8",
+            "name": "note-8.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f8",
+            "link": "https://scorpio.test/v/f8",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          }
+        ],
+        "hasMore": true,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "files",
+      "q": "note",
+      "from": "kai",
+      "limit": 3
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "files",
+        "files": [
+          {
+            "id": "f8",
+            "name": "note-8.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f8",
+            "link": "https://scorpio.test/v/f8",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f7",
+            "name": "note-7.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f7",
+            "link": "https://scorpio.test/v/f7",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f6",
+            "name": "note-6.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f6",
+            "link": "https://scorpio.test/v/f6",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          }
+        ],
+        "hasMore": true,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "files",
+      "q": "note",
+      "from": "kai",
+      "limit": 8
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "files",
+        "files": [
+          {
+            "id": "f8",
+            "name": "note-8.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f8",
+            "link": "https://scorpio.test/v/f8",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f7",
+            "name": "note-7.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f7",
+            "link": "https://scorpio.test/v/f7",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f6",
+            "name": "note-6.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f6",
+            "link": "https://scorpio.test/v/f6",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f5",
+            "name": "note-5.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f5",
+            "link": "https://scorpio.test/v/f5",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f4",
+            "name": "note-4.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f4",
+            "link": "https://scorpio.test/v/f4",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f3",
+            "name": "note-3.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f3",
+            "link": "https://scorpio.test/v/f3",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f2",
+            "name": "note-2.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f2",
+            "link": "https://scorpio.test/v/f2",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          },
+          {
+            "id": "f1",
+            "name": "note-1.txt",
+            "type": "text/plain",
+            "size": 42,
+            "url": "/f/topic1/f1",
+            "link": "https://scorpio.test/v/f1",
+            "view": true,
+            "from": "kai",
+            "displayName": "Kai",
+            "seq": 10,
+            "ts": 1000
+          }
+        ],
+        "hasMore": true,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "files",
+      "q": "note",
+      "from": "ghost",
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "files",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "files",
+      "q": "note",
+      "from": "ghost",
+      "limit": 3
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "files",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "files",
+      "q": "note",
+      "from": "ghost",
+      "limit": 8
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "files",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "files",
+      "q": "珍",
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "files",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "files",
+      "q": "珍",
+      "limit": 3
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "files",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "files",
+      "q": "珍",
+      "limit": 8
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "files",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "files",
+      "q": "珍",
+      "from": "kai",
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "files",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "files",
+      "q": "珍",
+      "from": "kai",
+      "limit": 3
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "files",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "files",
+      "q": "珍",
+      "from": "kai",
+      "limit": 8
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "files",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "files",
+      "q": "珍",
+      "from": "ghost",
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "files",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "files",
+      "q": "珍",
+      "from": "ghost",
+      "limit": 3
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "files",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "files",
+      "q": "珍",
+      "from": "ghost",
+      "limit": 8
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "files",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "files",
+      "q": "zz",
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "files",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "files",
+      "q": "zz",
+      "limit": 3
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "files",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "files",
+      "q": "zz",
+      "limit": 8
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "files",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "files",
+      "q": "zz",
+      "from": "kai",
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "files",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "files",
+      "q": "zz",
+      "from": "kai",
+      "limit": 3
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "files",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "files",
+      "q": "zz",
+      "from": "kai",
+      "limit": 8
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "files",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "files",
+      "q": "zz",
+      "from": "ghost",
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "files",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "files",
+      "q": "zz",
+      "from": "ghost",
+      "limit": 3
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "files",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "files",
+      "q": "zz",
+      "from": "ghost",
+      "limit": 8
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "files",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "pics",
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "pics",
+        "files": [
+          {
+            "id": "pic",
+            "name": "珍珠.png",
+            "type": "image/png",
+            "size": 42,
+            "url": "/f/topic1/pic",
+            "link": "https://scorpio.test/v/pic",
+            "view": false,
+            "from": "ghost",
+            "displayName": null,
+            "seq": 11,
+            "ts": 2000
+          }
+        ],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "pics",
+      "limit": 3
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "pics",
+        "files": [
+          {
+            "id": "pic",
+            "name": "珍珠.png",
+            "type": "image/png",
+            "size": 42,
+            "url": "/f/topic1/pic",
+            "link": "https://scorpio.test/v/pic",
+            "view": false,
+            "from": "ghost",
+            "displayName": null,
+            "seq": 11,
+            "ts": 2000
+          }
+        ],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "pics",
+      "limit": 8
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "pics",
+        "files": [
+          {
+            "id": "pic",
+            "name": "珍珠.png",
+            "type": "image/png",
+            "size": 42,
+            "url": "/f/topic1/pic",
+            "link": "https://scorpio.test/v/pic",
+            "view": false,
+            "from": "ghost",
+            "displayName": null,
+            "seq": 11,
+            "ts": 2000
+          }
+        ],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "pics",
+      "from": "kai",
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "pics",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "pics",
+      "from": "kai",
+      "limit": 3
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "pics",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "pics",
+      "from": "kai",
+      "limit": 8
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "pics",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "pics",
+      "from": "ghost",
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "pics",
+        "files": [
+          {
+            "id": "pic",
+            "name": "珍珠.png",
+            "type": "image/png",
+            "size": 42,
+            "url": "/f/topic1/pic",
+            "link": "https://scorpio.test/v/pic",
+            "view": false,
+            "from": "ghost",
+            "displayName": null,
+            "seq": 11,
+            "ts": 2000
+          }
+        ],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "pics",
+      "from": "ghost",
+      "limit": 3
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "pics",
+        "files": [
+          {
+            "id": "pic",
+            "name": "珍珠.png",
+            "type": "image/png",
+            "size": 42,
+            "url": "/f/topic1/pic",
+            "link": "https://scorpio.test/v/pic",
+            "view": false,
+            "from": "ghost",
+            "displayName": null,
+            "seq": 11,
+            "ts": 2000
+          }
+        ],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "pics",
+      "from": "ghost",
+      "limit": 8
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "pics",
+        "files": [
+          {
+            "id": "pic",
+            "name": "珍珠.png",
+            "type": "image/png",
+            "size": 42,
+            "url": "/f/topic1/pic",
+            "link": "https://scorpio.test/v/pic",
+            "view": false,
+            "from": "ghost",
+            "displayName": null,
+            "seq": 11,
+            "ts": 2000
+          }
+        ],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "pics",
+      "q": "note",
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "pics",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "pics",
+      "q": "note",
+      "limit": 3
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "pics",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "pics",
+      "q": "note",
+      "limit": 8
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "pics",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "pics",
+      "q": "note",
+      "from": "kai",
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "pics",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "pics",
+      "q": "note",
+      "from": "kai",
+      "limit": 3
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "pics",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "pics",
+      "q": "note",
+      "from": "kai",
+      "limit": 8
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "pics",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "pics",
+      "q": "note",
+      "from": "ghost",
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "pics",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "pics",
+      "q": "note",
+      "from": "ghost",
+      "limit": 3
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "pics",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "pics",
+      "q": "note",
+      "from": "ghost",
+      "limit": 8
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "pics",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "pics",
+      "q": "珍",
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "pics",
+        "files": [
+          {
+            "id": "pic",
+            "name": "珍珠.png",
+            "type": "image/png",
+            "size": 42,
+            "url": "/f/topic1/pic",
+            "link": "https://scorpio.test/v/pic",
+            "view": false,
+            "from": "ghost",
+            "displayName": null,
+            "seq": 11,
+            "ts": 2000
+          }
+        ],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "pics",
+      "q": "珍",
+      "limit": 3
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "pics",
+        "files": [
+          {
+            "id": "pic",
+            "name": "珍珠.png",
+            "type": "image/png",
+            "size": 42,
+            "url": "/f/topic1/pic",
+            "link": "https://scorpio.test/v/pic",
+            "view": false,
+            "from": "ghost",
+            "displayName": null,
+            "seq": 11,
+            "ts": 2000
+          }
+        ],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "pics",
+      "q": "珍",
+      "limit": 8
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "pics",
+        "files": [
+          {
+            "id": "pic",
+            "name": "珍珠.png",
+            "type": "image/png",
+            "size": 42,
+            "url": "/f/topic1/pic",
+            "link": "https://scorpio.test/v/pic",
+            "view": false,
+            "from": "ghost",
+            "displayName": null,
+            "seq": 11,
+            "ts": 2000
+          }
+        ],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "pics",
+      "q": "珍",
+      "from": "kai",
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "pics",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "pics",
+      "q": "珍",
+      "from": "kai",
+      "limit": 3
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "pics",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "pics",
+      "q": "珍",
+      "from": "kai",
+      "limit": 8
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "pics",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "pics",
+      "q": "珍",
+      "from": "ghost",
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "pics",
+        "files": [
+          {
+            "id": "pic",
+            "name": "珍珠.png",
+            "type": "image/png",
+            "size": 42,
+            "url": "/f/topic1/pic",
+            "link": "https://scorpio.test/v/pic",
+            "view": false,
+            "from": "ghost",
+            "displayName": null,
+            "seq": 11,
+            "ts": 2000
+          }
+        ],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "pics",
+      "q": "珍",
+      "from": "ghost",
+      "limit": 3
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "pics",
+        "files": [
+          {
+            "id": "pic",
+            "name": "珍珠.png",
+            "type": "image/png",
+            "size": 42,
+            "url": "/f/topic1/pic",
+            "link": "https://scorpio.test/v/pic",
+            "view": false,
+            "from": "ghost",
+            "displayName": null,
+            "seq": 11,
+            "ts": 2000
+          }
+        ],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "pics",
+      "q": "珍",
+      "from": "ghost",
+      "limit": 8
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "pics",
+        "files": [
+          {
+            "id": "pic",
+            "name": "珍珠.png",
+            "type": "image/png",
+            "size": 42,
+            "url": "/f/topic1/pic",
+            "link": "https://scorpio.test/v/pic",
+            "view": false,
+            "from": "ghost",
+            "displayName": null,
+            "seq": 11,
+            "ts": 2000
+          }
+        ],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "pics",
+      "q": "zz",
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "pics",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "pics",
+      "q": "zz",
+      "limit": 3
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "pics",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "pics",
+      "q": "zz",
+      "limit": 8
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "pics",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "pics",
+      "q": "zz",
+      "from": "kai",
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "pics",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "pics",
+      "q": "zz",
+      "from": "kai",
+      "limit": 3
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "pics",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "pics",
+      "q": "zz",
+      "from": "kai",
+      "limit": 8
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "pics",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "pics",
+      "q": "zz",
+      "from": "ghost",
+      "limit": 1
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "pics",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "pics",
+      "q": "zz",
+      "from": "ghost",
+      "limit": 3
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "pics",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "query": {
+      "kind": "pics",
+      "q": "zz",
+      "from": "ghost",
+      "limit": 8
+    },
+    "result": {
+      "ok": {
+        "roomId": "topic1",
+        "kind": "pics",
+        "files": [],
+        "hasMore": false,
+        "counts": {
+          "files": 10,
+          "pics": 1,
+          "gone": 2
+        }
+      }
+    }
+  },
+  {
+    "walk": {
+      "kind": null,
+      "limit": 1
+    },
+    "pages": [
+      {
+        "ok": {
+          "roomId": "topic1",
+          "kind": null,
+          "files": [
+            {
+              "id": "pic",
+              "name": "珍珠.png",
+              "type": "image/png",
+              "size": 42,
+              "url": "/f/topic1/pic",
+              "link": "https://scorpio.test/v/pic",
+              "view": false,
+              "from": "ghost",
+              "displayName": null,
+              "seq": 11,
+              "ts": 2000
+            }
+          ],
+          "hasMore": true,
+          "counts": {
+            "files": 10,
+            "pics": 1,
+            "gone": 2
+          }
+        }
+      },
+      {
+        "ok": {
+          "roomId": "topic1",
+          "kind": null,
+          "files": [
+            {
+              "id": "f8",
+              "name": "note-8.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f8",
+              "link": "https://scorpio.test/v/f8",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            }
+          ],
+          "hasMore": true,
+          "counts": {
+            "files": 10,
+            "pics": 1,
+            "gone": 2
+          }
+        }
+      },
+      {
+        "ok": {
+          "roomId": "topic1",
+          "kind": null,
+          "files": [
+            {
+              "id": "f7",
+              "name": "note-7.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f7",
+              "link": "https://scorpio.test/v/f7",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            }
+          ],
+          "hasMore": true,
+          "counts": {
+            "files": 10,
+            "pics": 1,
+            "gone": 2
+          }
+        }
+      },
+      {
+        "ok": {
+          "roomId": "topic1",
+          "kind": null,
+          "files": [
+            {
+              "id": "f6",
+              "name": "note-6.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f6",
+              "link": "https://scorpio.test/v/f6",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            }
+          ],
+          "hasMore": true,
+          "counts": {
+            "files": 10,
+            "pics": 1,
+            "gone": 2
+          }
+        }
+      },
+      {
+        "ok": {
+          "roomId": "topic1",
+          "kind": null,
+          "files": [
+            {
+              "id": "f5",
+              "name": "note-5.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f5",
+              "link": "https://scorpio.test/v/f5",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            }
+          ],
+          "hasMore": true,
+          "counts": {
+            "files": 10,
+            "pics": 1,
+            "gone": 2
+          }
+        }
+      },
+      {
+        "ok": {
+          "roomId": "topic1",
+          "kind": null,
+          "files": [
+            {
+              "id": "f4",
+              "name": "note-4.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f4",
+              "link": "https://scorpio.test/v/f4",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            }
+          ],
+          "hasMore": true,
+          "counts": {
+            "files": 10,
+            "pics": 1,
+            "gone": 2
+          }
+        }
+      },
+      {
+        "ok": {
+          "roomId": "topic1",
+          "kind": null,
+          "files": [
+            {
+              "id": "f3",
+              "name": "note-3.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f3",
+              "link": "https://scorpio.test/v/f3",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            }
+          ],
+          "hasMore": true,
+          "counts": {
+            "files": 10,
+            "pics": 1,
+            "gone": 2
+          }
+        }
+      },
+      {
+        "ok": {
+          "roomId": "topic1",
+          "kind": null,
+          "files": [
+            {
+              "id": "f2",
+              "name": "note-2.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f2",
+              "link": "https://scorpio.test/v/f2",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            }
+          ],
+          "hasMore": true,
+          "counts": {
+            "files": 10,
+            "pics": 1,
+            "gone": 2
+          }
+        }
+      },
+      {
+        "ok": {
+          "roomId": "topic1",
+          "kind": null,
+          "files": [
+            {
+              "id": "f1",
+              "name": "note-1.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f1",
+              "link": "https://scorpio.test/v/f1",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            }
+          ],
+          "hasMore": true,
+          "counts": {
+            "files": 10,
+            "pics": 1,
+            "gone": 2
+          }
+        }
+      },
+      {
+        "ok": {
+          "roomId": "topic1",
+          "kind": null,
+          "files": [
+            {
+              "id": "f0",
+              "name": "note-0.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f0",
+              "link": "https://scorpio.test/v/f0",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            }
+          ],
+          "hasMore": true,
+          "counts": {
+            "files": 10,
+            "pics": 1,
+            "gone": 2
+          }
+        }
+      },
+      {
+        "ok": {
+          "roomId": "topic1",
+          "kind": null,
+          "files": [
+            {
+              "id": "f8",
+              "name": "note-8.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f8",
+              "link": "https://scorpio.test/v/f8",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            }
+          ],
+          "hasMore": false,
+          "counts": {
+            "files": 10,
+            "pics": 1,
+            "gone": 2
+          }
+        }
+      }
+    ]
+  },
+  {
+    "walk": {
+      "kind": null,
+      "limit": 2
+    },
+    "pages": [
+      {
+        "ok": {
+          "roomId": "topic1",
+          "kind": null,
+          "files": [
+            {
+              "id": "pic",
+              "name": "珍珠.png",
+              "type": "image/png",
+              "size": 42,
+              "url": "/f/topic1/pic",
+              "link": "https://scorpio.test/v/pic",
+              "view": false,
+              "from": "ghost",
+              "displayName": null,
+              "seq": 11,
+              "ts": 2000
+            },
+            {
+              "id": "f8",
+              "name": "note-8.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f8",
+              "link": "https://scorpio.test/v/f8",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            }
+          ],
+          "hasMore": true,
+          "counts": {
+            "files": 10,
+            "pics": 1,
+            "gone": 2
+          }
+        }
+      },
+      {
+        "ok": {
+          "roomId": "topic1",
+          "kind": null,
+          "files": [
+            {
+              "id": "f7",
+              "name": "note-7.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f7",
+              "link": "https://scorpio.test/v/f7",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            },
+            {
+              "id": "f6",
+              "name": "note-6.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f6",
+              "link": "https://scorpio.test/v/f6",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            }
+          ],
+          "hasMore": true,
+          "counts": {
+            "files": 10,
+            "pics": 1,
+            "gone": 2
+          }
+        }
+      },
+      {
+        "ok": {
+          "roomId": "topic1",
+          "kind": null,
+          "files": [
+            {
+              "id": "f5",
+              "name": "note-5.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f5",
+              "link": "https://scorpio.test/v/f5",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            },
+            {
+              "id": "f4",
+              "name": "note-4.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f4",
+              "link": "https://scorpio.test/v/f4",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            }
+          ],
+          "hasMore": true,
+          "counts": {
+            "files": 10,
+            "pics": 1,
+            "gone": 2
+          }
+        }
+      },
+      {
+        "ok": {
+          "roomId": "topic1",
+          "kind": null,
+          "files": [
+            {
+              "id": "f3",
+              "name": "note-3.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f3",
+              "link": "https://scorpio.test/v/f3",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            },
+            {
+              "id": "f2",
+              "name": "note-2.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f2",
+              "link": "https://scorpio.test/v/f2",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            }
+          ],
+          "hasMore": true,
+          "counts": {
+            "files": 10,
+            "pics": 1,
+            "gone": 2
+          }
+        }
+      },
+      {
+        "ok": {
+          "roomId": "topic1",
+          "kind": null,
+          "files": [
+            {
+              "id": "f1",
+              "name": "note-1.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f1",
+              "link": "https://scorpio.test/v/f1",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            },
+            {
+              "id": "f0",
+              "name": "note-0.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f0",
+              "link": "https://scorpio.test/v/f0",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            }
+          ],
+          "hasMore": true,
+          "counts": {
+            "files": 10,
+            "pics": 1,
+            "gone": 2
+          }
+        }
+      },
+      {
+        "ok": {
+          "roomId": "topic1",
+          "kind": null,
+          "files": [
+            {
+              "id": "f8",
+              "name": "note-8.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f8",
+              "link": "https://scorpio.test/v/f8",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            }
+          ],
+          "hasMore": false,
+          "counts": {
+            "files": 10,
+            "pics": 1,
+            "gone": 2
+          }
+        }
+      }
+    ]
+  },
+  {
+    "walk": {
+      "kind": null,
+      "limit": 4
+    },
+    "pages": [
+      {
+        "ok": {
+          "roomId": "topic1",
+          "kind": null,
+          "files": [
+            {
+              "id": "pic",
+              "name": "珍珠.png",
+              "type": "image/png",
+              "size": 42,
+              "url": "/f/topic1/pic",
+              "link": "https://scorpio.test/v/pic",
+              "view": false,
+              "from": "ghost",
+              "displayName": null,
+              "seq": 11,
+              "ts": 2000
+            },
+            {
+              "id": "f8",
+              "name": "note-8.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f8",
+              "link": "https://scorpio.test/v/f8",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            },
+            {
+              "id": "f7",
+              "name": "note-7.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f7",
+              "link": "https://scorpio.test/v/f7",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            },
+            {
+              "id": "f6",
+              "name": "note-6.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f6",
+              "link": "https://scorpio.test/v/f6",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            }
+          ],
+          "hasMore": true,
+          "counts": {
+            "files": 10,
+            "pics": 1,
+            "gone": 2
+          }
+        }
+      },
+      {
+        "ok": {
+          "roomId": "topic1",
+          "kind": null,
+          "files": [
+            {
+              "id": "f5",
+              "name": "note-5.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f5",
+              "link": "https://scorpio.test/v/f5",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            },
+            {
+              "id": "f4",
+              "name": "note-4.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f4",
+              "link": "https://scorpio.test/v/f4",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            },
+            {
+              "id": "f3",
+              "name": "note-3.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f3",
+              "link": "https://scorpio.test/v/f3",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            },
+            {
+              "id": "f2",
+              "name": "note-2.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f2",
+              "link": "https://scorpio.test/v/f2",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            }
+          ],
+          "hasMore": true,
+          "counts": {
+            "files": 10,
+            "pics": 1,
+            "gone": 2
+          }
+        }
+      },
+      {
+        "ok": {
+          "roomId": "topic1",
+          "kind": null,
+          "files": [
+            {
+              "id": "f1",
+              "name": "note-1.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f1",
+              "link": "https://scorpio.test/v/f1",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            },
+            {
+              "id": "f0",
+              "name": "note-0.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f0",
+              "link": "https://scorpio.test/v/f0",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            },
+            {
+              "id": "f8",
+              "name": "note-8.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f8",
+              "link": "https://scorpio.test/v/f8",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            }
+          ],
+          "hasMore": false,
+          "counts": {
+            "files": 10,
+            "pics": 1,
+            "gone": 2
+          }
+        }
+      }
+    ]
+  },
+  {
+    "walk": {
+      "kind": "files",
+      "limit": 1
+    },
+    "pages": [
+      {
+        "ok": {
+          "roomId": "topic1",
+          "kind": "files",
+          "files": [
+            {
+              "id": "f8",
+              "name": "note-8.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f8",
+              "link": "https://scorpio.test/v/f8",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            }
+          ],
+          "hasMore": true,
+          "counts": {
+            "files": 10,
+            "pics": 1,
+            "gone": 2
+          }
+        }
+      },
+      {
+        "ok": {
+          "roomId": "topic1",
+          "kind": "files",
+          "files": [
+            {
+              "id": "f7",
+              "name": "note-7.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f7",
+              "link": "https://scorpio.test/v/f7",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            }
+          ],
+          "hasMore": true,
+          "counts": {
+            "files": 10,
+            "pics": 1,
+            "gone": 2
+          }
+        }
+      },
+      {
+        "ok": {
+          "roomId": "topic1",
+          "kind": "files",
+          "files": [
+            {
+              "id": "f6",
+              "name": "note-6.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f6",
+              "link": "https://scorpio.test/v/f6",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            }
+          ],
+          "hasMore": true,
+          "counts": {
+            "files": 10,
+            "pics": 1,
+            "gone": 2
+          }
+        }
+      },
+      {
+        "ok": {
+          "roomId": "topic1",
+          "kind": "files",
+          "files": [
+            {
+              "id": "f5",
+              "name": "note-5.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f5",
+              "link": "https://scorpio.test/v/f5",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            }
+          ],
+          "hasMore": true,
+          "counts": {
+            "files": 10,
+            "pics": 1,
+            "gone": 2
+          }
+        }
+      },
+      {
+        "ok": {
+          "roomId": "topic1",
+          "kind": "files",
+          "files": [
+            {
+              "id": "f4",
+              "name": "note-4.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f4",
+              "link": "https://scorpio.test/v/f4",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            }
+          ],
+          "hasMore": true,
+          "counts": {
+            "files": 10,
+            "pics": 1,
+            "gone": 2
+          }
+        }
+      },
+      {
+        "ok": {
+          "roomId": "topic1",
+          "kind": "files",
+          "files": [
+            {
+              "id": "f3",
+              "name": "note-3.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f3",
+              "link": "https://scorpio.test/v/f3",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            }
+          ],
+          "hasMore": true,
+          "counts": {
+            "files": 10,
+            "pics": 1,
+            "gone": 2
+          }
+        }
+      },
+      {
+        "ok": {
+          "roomId": "topic1",
+          "kind": "files",
+          "files": [
+            {
+              "id": "f2",
+              "name": "note-2.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f2",
+              "link": "https://scorpio.test/v/f2",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            }
+          ],
+          "hasMore": true,
+          "counts": {
+            "files": 10,
+            "pics": 1,
+            "gone": 2
+          }
+        }
+      },
+      {
+        "ok": {
+          "roomId": "topic1",
+          "kind": "files",
+          "files": [
+            {
+              "id": "f1",
+              "name": "note-1.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f1",
+              "link": "https://scorpio.test/v/f1",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            }
+          ],
+          "hasMore": true,
+          "counts": {
+            "files": 10,
+            "pics": 1,
+            "gone": 2
+          }
+        }
+      },
+      {
+        "ok": {
+          "roomId": "topic1",
+          "kind": "files",
+          "files": [
+            {
+              "id": "f0",
+              "name": "note-0.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f0",
+              "link": "https://scorpio.test/v/f0",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            }
+          ],
+          "hasMore": true,
+          "counts": {
+            "files": 10,
+            "pics": 1,
+            "gone": 2
+          }
+        }
+      },
+      {
+        "ok": {
+          "roomId": "topic1",
+          "kind": "files",
+          "files": [
+            {
+              "id": "f8",
+              "name": "note-8.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f8",
+              "link": "https://scorpio.test/v/f8",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            }
+          ],
+          "hasMore": false,
+          "counts": {
+            "files": 10,
+            "pics": 1,
+            "gone": 2
+          }
+        }
+      }
+    ]
+  },
+  {
+    "walk": {
+      "kind": "files",
+      "limit": 2
+    },
+    "pages": [
+      {
+        "ok": {
+          "roomId": "topic1",
+          "kind": "files",
+          "files": [
+            {
+              "id": "f8",
+              "name": "note-8.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f8",
+              "link": "https://scorpio.test/v/f8",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            },
+            {
+              "id": "f7",
+              "name": "note-7.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f7",
+              "link": "https://scorpio.test/v/f7",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            }
+          ],
+          "hasMore": true,
+          "counts": {
+            "files": 10,
+            "pics": 1,
+            "gone": 2
+          }
+        }
+      },
+      {
+        "ok": {
+          "roomId": "topic1",
+          "kind": "files",
+          "files": [
+            {
+              "id": "f6",
+              "name": "note-6.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f6",
+              "link": "https://scorpio.test/v/f6",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            },
+            {
+              "id": "f5",
+              "name": "note-5.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f5",
+              "link": "https://scorpio.test/v/f5",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            }
+          ],
+          "hasMore": true,
+          "counts": {
+            "files": 10,
+            "pics": 1,
+            "gone": 2
+          }
+        }
+      },
+      {
+        "ok": {
+          "roomId": "topic1",
+          "kind": "files",
+          "files": [
+            {
+              "id": "f4",
+              "name": "note-4.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f4",
+              "link": "https://scorpio.test/v/f4",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            },
+            {
+              "id": "f3",
+              "name": "note-3.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f3",
+              "link": "https://scorpio.test/v/f3",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            }
+          ],
+          "hasMore": true,
+          "counts": {
+            "files": 10,
+            "pics": 1,
+            "gone": 2
+          }
+        }
+      },
+      {
+        "ok": {
+          "roomId": "topic1",
+          "kind": "files",
+          "files": [
+            {
+              "id": "f2",
+              "name": "note-2.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f2",
+              "link": "https://scorpio.test/v/f2",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            },
+            {
+              "id": "f1",
+              "name": "note-1.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f1",
+              "link": "https://scorpio.test/v/f1",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            }
+          ],
+          "hasMore": true,
+          "counts": {
+            "files": 10,
+            "pics": 1,
+            "gone": 2
+          }
+        }
+      },
+      {
+        "ok": {
+          "roomId": "topic1",
+          "kind": "files",
+          "files": [
+            {
+              "id": "f0",
+              "name": "note-0.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f0",
+              "link": "https://scorpio.test/v/f0",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            },
+            {
+              "id": "f8",
+              "name": "note-8.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f8",
+              "link": "https://scorpio.test/v/f8",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            }
+          ],
+          "hasMore": false,
+          "counts": {
+            "files": 10,
+            "pics": 1,
+            "gone": 2
+          }
+        }
+      }
+    ]
+  },
+  {
+    "walk": {
+      "kind": "files",
+      "limit": 4
+    },
+    "pages": [
+      {
+        "ok": {
+          "roomId": "topic1",
+          "kind": "files",
+          "files": [
+            {
+              "id": "f8",
+              "name": "note-8.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f8",
+              "link": "https://scorpio.test/v/f8",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            },
+            {
+              "id": "f7",
+              "name": "note-7.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f7",
+              "link": "https://scorpio.test/v/f7",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            },
+            {
+              "id": "f6",
+              "name": "note-6.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f6",
+              "link": "https://scorpio.test/v/f6",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            },
+            {
+              "id": "f5",
+              "name": "note-5.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f5",
+              "link": "https://scorpio.test/v/f5",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            }
+          ],
+          "hasMore": true,
+          "counts": {
+            "files": 10,
+            "pics": 1,
+            "gone": 2
+          }
+        }
+      },
+      {
+        "ok": {
+          "roomId": "topic1",
+          "kind": "files",
+          "files": [
+            {
+              "id": "f4",
+              "name": "note-4.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f4",
+              "link": "https://scorpio.test/v/f4",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            },
+            {
+              "id": "f3",
+              "name": "note-3.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f3",
+              "link": "https://scorpio.test/v/f3",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            },
+            {
+              "id": "f2",
+              "name": "note-2.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f2",
+              "link": "https://scorpio.test/v/f2",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            },
+            {
+              "id": "f1",
+              "name": "note-1.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f1",
+              "link": "https://scorpio.test/v/f1",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            }
+          ],
+          "hasMore": true,
+          "counts": {
+            "files": 10,
+            "pics": 1,
+            "gone": 2
+          }
+        }
+      },
+      {
+        "ok": {
+          "roomId": "topic1",
+          "kind": "files",
+          "files": [
+            {
+              "id": "f0",
+              "name": "note-0.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f0",
+              "link": "https://scorpio.test/v/f0",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            },
+            {
+              "id": "f8",
+              "name": "note-8.txt",
+              "type": "text/plain",
+              "size": 42,
+              "url": "/f/topic1/f8",
+              "link": "https://scorpio.test/v/f8",
+              "view": true,
+              "from": "kai",
+              "displayName": "Kai",
+              "seq": 10,
+              "ts": 1000
+            }
+          ],
+          "hasMore": false,
+          "counts": {
+            "files": 10,
+            "pics": 1,
+            "gone": 2
+          }
+        }
+      }
+    ]
+  },
+  {
+    "walk": {
+      "kind": "pics",
+      "limit": 1
+    },
+    "pages": [
+      {
+        "ok": {
+          "roomId": "topic1",
+          "kind": "pics",
+          "files": [
+            {
+              "id": "pic",
+              "name": "珍珠.png",
+              "type": "image/png",
+              "size": 42,
+              "url": "/f/topic1/pic",
+              "link": "https://scorpio.test/v/pic",
+              "view": false,
+              "from": "ghost",
+              "displayName": null,
+              "seq": 11,
+              "ts": 2000
+            }
+          ],
+          "hasMore": false,
+          "counts": {
+            "files": 10,
+            "pics": 1,
+            "gone": 2
+          }
+        }
+      }
+    ]
+  },
+  {
+    "walk": {
+      "kind": "pics",
+      "limit": 2
+    },
+    "pages": [
+      {
+        "ok": {
+          "roomId": "topic1",
+          "kind": "pics",
+          "files": [
+            {
+              "id": "pic",
+              "name": "珍珠.png",
+              "type": "image/png",
+              "size": 42,
+              "url": "/f/topic1/pic",
+              "link": "https://scorpio.test/v/pic",
+              "view": false,
+              "from": "ghost",
+              "displayName": null,
+              "seq": 11,
+              "ts": 2000
+            }
+          ],
+          "hasMore": false,
+          "counts": {
+            "files": 10,
+            "pics": 1,
+            "gone": 2
+          }
+        }
+      }
+    ]
+  },
+  {
+    "walk": {
+      "kind": "pics",
+      "limit": 4
+    },
+    "pages": [
+      {
+        "ok": {
+          "roomId": "topic1",
+          "kind": "pics",
+          "files": [
+            {
+              "id": "pic",
+              "name": "珍珠.png",
+              "type": "image/png",
+              "size": 42,
+              "url": "/f/topic1/pic",
+              "link": "https://scorpio.test/v/pic",
+              "view": false,
+              "from": "ghost",
+              "displayName": null,
+              "seq": 11,
+              "ts": 2000
+            }
+          ],
+          "hasMore": false,
+          "counts": {
+            "files": 10,
+            "pics": 1,
+            "gone": 2
+          }
+        }
+      }
+    ]
+  },
+  {
+    "view": "f8",
+    "result": {
+      "ok": {
+        "room": {
+          "id": "topic1",
+          "name": "Topic",
+          "public": false,
+          "archived": false
+        },
+        "file": {
+          "id": "f8",
+          "name": "note-8.txt",
+          "type": "text/plain",
+          "size": 42,
+          "by": "kai",
+          "byDisplay": "Kai",
+          "ts": 1000,
+          "seq": 10,
+          "deleted": null,
+          "hash": "hash-f8"
+        },
+        "siblings": [
+          {
+            "id": "f8",
+            "name": "note-8.txt",
+            "type": "text/plain",
+            "size": 42
+          },
+          {
+            "id": "f7",
+            "name": "note-7.txt",
+            "type": "text/plain",
+            "size": 42
+          },
+          {
+            "id": "f6",
+            "name": "note-6.txt",
+            "type": "text/plain",
+            "size": 42
+          },
+          {
+            "id": "f5",
+            "name": "note-5.txt",
+            "type": "text/plain",
+            "size": 42
+          },
+          {
+            "id": "f4",
+            "name": "note-4.txt",
+            "type": "text/plain",
+            "size": 42
+          },
+          {
+            "id": "f3",
+            "name": "note-3.txt",
+            "type": "text/plain",
+            "size": 42
+          },
+          {
+            "id": "f2",
+            "name": "note-2.txt",
+            "type": "text/plain",
+            "size": 42
+          },
+          {
+            "id": "f1",
+            "name": "note-1.txt",
+            "type": "text/plain",
+            "size": 42
+          },
+          {
+            "id": "f0",
+            "name": "note-0.txt",
+            "type": "text/plain",
+            "size": 42
+          },
+          {
+            "id": "f8",
+            "name": "note-8.txt",
+            "type": "text/plain",
+            "size": 42
+          }
+        ]
+      }
+    }
+  },
+  {
+    "view": "unsent",
+    "result": {
+      "ok": {
+        "room": {
+          "id": "topic1",
+          "name": "Topic",
+          "public": false,
+          "archived": false
+        },
+        "file": {
+          "id": "unsent",
+          "name": "draft.zip",
+          "type": "application/zip",
+          "size": 42,
+          "by": "kai",
+          "byDisplay": "Kai",
+          "ts": 100,
+          "seq": null,
+          "deleted": null,
+          "hash": "hash-unsent"
+        },
+        "siblings": []
+      }
+    }
+  },
+  {
+    "view": "gone",
+    "result": {
+      "ok": {
+        "room": {
+          "id": "topic1",
+          "name": "Topic",
+          "public": false,
+          "archived": false
+        },
+        "file": {
+          "id": "gone",
+          "name": "gone.pdf",
+          "type": "application/pdf",
+          "size": 42,
+          "by": "kai",
+          "byDisplay": "Kai",
+          "ts": 4000,
+          "seq": 13,
+          "deleted": 444,
+          "hash": null
+        },
+        "siblings": [
+          {
+            "id": "gone",
+            "name": "gone.pdf",
+            "type": "application/pdf",
+            "size": 42,
+            "deleted": 444
+          }
+        ]
+      }
+    }
+  }
+]

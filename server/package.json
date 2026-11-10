@@ -1,0 +1,25 @@
+{
+  "name": "scorpio-server",
+  "version": "0.1.0",
+  "private": true,
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/build-skill.mjs && wrangler dev -c ../wrangler.jsonc --local-upstream localhost:8787",
+    "types": "wrangler types -c ../wrangler.jsonc",
+    "check": "wrangler types -c ../wrangler.jsonc >/dev/null && tsc --noEmit",
+    "migrate:local": "wrangler d1 migrations apply DB --local -c ../wrangler.jsonc",
+    "migrate:remote": "wrangler d1 migrations apply DB --remote -c ../wrangler.jsonc",
+    "build:skill": "node scripts/build-skill.mjs",
+    "deploy": "node scripts/build-skill.mjs && node scripts/deploy.mjs"
+  },
+  "devDependencies": {
+    "@types/markdown-it": "14.1.2",
+    "miniflare": "5.20261001.0-alpha",
+    "typescript": "5.9.3",
+    "wrangler": "4.147.0"
+  },
+  "dependencies": {
+    "markdown-it": "14.3.2"
+  }
+}

@@ -1,0 +1,38 @@
+/* The topic's composer. Linked last, after room-integration.css: these rules
+   tie on specificity with room-ui.css and room-integration.css, so they win only by coming later. */
+
+/* send is an ↑ in a circle, like the /app big box (sx-go), drawn so it sits in the middle;
+   grey while there is nothing to send (no text, no attachment), as the big box is. */
+.ui .cmp .send { width: 42px; height: 42px; padding: 0; border-radius: 50%; display: grid; place-items: center; }
+.ui .cmp .send svg { display: block; width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2px; stroke-linecap: round; stroke-linejoin: round; }
+.ui .cmp .send svg path { vector-effect: non-scaling-stroke; }
+.ui .cmp:has(textarea#input:placeholder-shown):has(#strip.hidden) .send { background: var(--hl); color: var(--muted); }
+.ui .cmp .ib .ic-img, .ui .cmp .ib .ic-clip { display: block; }
+/* ⤢ once the text is past two lines (room.js puts cx-multi on the composer then) */
+@media (max-width: 760px) {
+  .ui .cmp:not(.cx-multi) .ta .grow { display: none; }
+  .ui .cmp .ta .grow { color: var(--fg); }
+  /* the box shows where the typing goes (there was no focus mark before) */
+  .ui .cmp textarea#input:focus { box-shadow: inset 0 0 0 1px var(--line-strong); }
+}
+
+/* Phone (两层): on a phone the box takes the full width; its buttons sit on a line inside it, under the text:
+   图片 附件 ⤢ on the left, ↑ alone on the right. */
+@media (max-width: 760px) {
+  .ui .cmp .row { display: grid; grid-template-columns: auto auto auto 1fr auto; grid-template-rows: auto auto; gap: 0 2px; align-items: center;
+    background: var(--code-bg); border-radius: 22px; box-shadow: inset 0 0 0 1px var(--line); padding: 0 6px 6px; }
+  .ui .cmp .ta { display: contents; }
+  .ui .cmp textarea#input { grid-column: 1 / -1; grid-row: 1; background: none; box-shadow: none; border-radius: 0; min-height: 0; padding: 11px 10px 3px; }
+  .ui .cmp .ib { width: 40px; height: 40px; background: none; }
+  .ui .cmp #btn-pic { grid-column: 1; grid-row: 2; }
+  .ui .cmp #btn-file { grid-column: 2; grid-row: 2; }
+  .ui .cmp .ta .grow { position: static; grid-column: 3; grid-row: 2; width: 40px; height: 40px; border-radius: 50%; background: none; }
+  .ui .cmp #btn-send { grid-column: 5; grid-row: 2; width: 40px; height: 40px; }
+  .ui .cmp .ib:active, .ui .cmp .ta .grow:active { background: var(--hl); }
+  .ui .cmp .row:focus-within { box-shadow: inset 0 0 0 1px var(--line-strong); }
+  .ui .cmp textarea#input:focus { box-shadow: none; }
+  /* the full-screen editor (⤢): the same box, all the height */
+  body.tall .ui .cmp .row { grid-template-columns: auto auto auto 1fr auto; grid-template-rows: 1fr auto; gap: 0 2px; align-items: center; }
+  body.tall .ui .cmp textarea#input { grid-column: 1 / -1; grid-row: 1; align-self: stretch; height: 100%; padding: 12px 10px; }
+  body.tall .ui .cmp #btn-send { grid-column: 5; }
+}

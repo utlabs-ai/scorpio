@@ -1,0 +1,233 @@
+/* The public homepage's additions to the site kit. */
+/* The Google data link in 「你的代码和账号」. */
+.sx-trust span a { display: inline-block; margin-top: 8px; color: var(--link); }
+/* Playing: the poster button is now the video's frame (landing.js), no longer something to click. */
+div.hx-poster { cursor: auto; }
+
+/* Homepage redesign.
+   Everything the new homepage adds on top of site.css + landing.css. Classes hx-*; the rest are the live sx-* ones.
+   No inline styles anywhere (the page's CSP is style-src 'self'). The theme comes from data-scorpio-effective-theme. */
+
+/* ================================================================ first screen
+   Words + install box left, film right (≥1101); one column with the film above the box (761–1100, phone).
+   Night sky in the dark theme (sx-sky, as live); white in the light theme. */
+.hx-hero {
+  --hx-fg: #ffffff; --hx-lede: #c6cde0; --hx-muted: var(--sky-muted); --hx-link: #b4cafd;
+  --hx-box: #141c33; --hx-box-ring: inset 0 0 0 1px rgba(255, 255, 255, 0.14); --hx-box-shadow: none;
+  --hx-poster-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12), 0 36px 80px -28px rgba(0, 0, 0, 0.75), 0 0 140px -30px rgba(255, 226, 180, 0.22);
+  position: relative; overflow: hidden;
+}
+:root:not([data-scorpio-effective-theme="dark"]) .hx-hero {
+  --hx-fg: #131927; --hx-lede: #4a5263; --hx-muted: #6b7385; --hx-link: #2f5bd3;
+  --hx-box: #ffffff; --hx-box-ring: inset 0 0 0 1px rgba(19, 25, 39, 0.14); --hx-box-shadow: 0 18px 40px -28px rgba(19, 25, 39, 0.35);
+  --hx-poster-shadow: 0 0 0 1px rgba(19, 25, 39, 0.08), 0 30px 70px -34px rgba(19, 25, 39, 0.45);
+  background: radial-gradient(70% 70% at 76% 46%, #f7f5ef 0%, rgba(247, 245, 239, 0) 70%), linear-gradient(180deg, #ffffff 0%, #fbfbfd 100%);
+  color: var(--hx-fg);
+}
+/* the top bar on white */
+:root:not([data-scorpio-effective-theme="dark"]) .hx-hero .s-lockup { color: #131927; }
+:root:not([data-scorpio-effective-theme="dark"]) .hx-hero .sx-top nav { color: #5c6374; }
+:root:not([data-scorpio-effective-theme="dark"]) .hx-hero .sx-top nav a:hover { color: #131927; }
+:root:not([data-scorpio-effective-theme="dark"]) .hx-hero .sx-btn.sx-line { color: #131927; box-shadow: inset 0 0 0 1px rgba(19, 25, 39, 0.24); }
+:root:not([data-scorpio-effective-theme="dark"]) .hx-hero .sx-btn.sx-primary { background: #131927; color: #ffffff; box-shadow: 0 10px 24px -12px rgba(19, 25, 39, 0.55); }
+/* the invite banner (/i/<code>) on white: the film's warm paper; dark keeps the live glass */
+:root:not([data-scorpio-effective-theme="dark"]) .hx-hero .sx-invited { background: #f7f5ef; box-shadow: inset 0 0 0 1px rgba(110, 90, 50, 0.16); }
+:root:not([data-scorpio-effective-theme="dark"]) .hx-hero .sx-invited b { color: #131927; }
+:root:not([data-scorpio-effective-theme="dark"]) .hx-hero .sx-invited small { color: #5c6374; }
+
+.hx-inner {
+  position: relative; z-index: 1; display: grid; max-width: calc(var(--wrap) + 2 * var(--pad)); margin: 0 auto; padding: 44px var(--pad) 84px;
+  /* even columns: the left one needs ~530 px for the whole command and 复制 on one line */
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-areas: "copy film" "box film"; column-gap: 48px; align-items: center;
+}
+.hx-copy { grid-area: copy; align-self: end; }
+.hx-film { grid-area: film; margin: 0; min-width: 0; }
+.hx-boxwrap { grid-area: box; min-width: 0; align-self: start; margin-top: 32px; }
+
+.hx-say { margin: 0; font-size: 54px; line-height: 1.12; font-weight: 800; letter-spacing: -0.012em; color: var(--hx-fg); text-wrap: balance; }
+.hx-lede { margin: 18px 0 0; max-width: 25em; font-size: 19px; line-height: 1.6; color: var(--hx-lede); text-wrap: pretty; }
+.hx-nw { white-space: nowrap; }
+
+/* the film: poster + play pill; a click swaps in the video in the same frame */
+.hx-poster { position: relative; display: block; width: 100%; aspect-ratio: 16 / 9; padding: 0; border: 0; border-radius: 18px; overflow: hidden; background: #f3f1ea; box-shadow: var(--hx-poster-shadow); cursor: pointer; }
+.hx-poster img, .hx-poster video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.hx-play { position: absolute; left: 18px; bottom: 18px; display: inline-flex; align-items: center; gap: 10px; height: 50px; padding: 0 20px 0 7px; border-radius: 999px; background: rgba(19, 25, 39, 0.92); color: #ffffff; box-shadow: 0 12px 28px -12px rgba(19, 25, 39, 0.7); font-size: 15.5px; white-space: nowrap; transition: transform 0.15s ease; }
+.hx-play i { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: #ffffff; }
+.hx-play svg { width: 18px; height: 18px; fill: #131927; margin-left: 2px; }
+.hx-play b { font-weight: 700; }
+.hx-play small { font-size: 14px; color: #aab3c6; }
+.hx-play small::before { content: "·"; margin-right: 8px; color: #6e788d; }
+.hx-poster:hover .hx-play { transform: translateY(-2px); }
+.hx-poster:focus-visible { outline: 3px solid var(--hx-link); outline-offset: 4px; }
+
+/* ================================================================ the install box (first screen and 开始用)
+   Label line, then the whole command with 复制 on its right; a phone keeps 发到电脑 / 复制 under it. */
+.hx-start { --hx-fg: #ffffff; --hx-muted: var(--sky-muted); --hx-box: #141c33; --hx-box-ring: inset 0 0 0 1px rgba(255, 255, 255, 0.14); --hx-box-shadow: none; }
+.hx-box { border-radius: 16px; background: var(--hx-box); box-shadow: var(--hx-box-ring), var(--hx-box-shadow); padding: 13px 14px 14px 16px; text-align: left; }
+.hx-blabel { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 8px; font-size: 13px; font-weight: 700; letter-spacing: 0.02em; color: var(--hx-muted); }
+.hx-blabel .hx-agents { font-weight: 600; letter-spacing: 0; white-space: nowrap; }
+.hx-run.hx-ok { color: var(--live-ink, #1f9d62); }   /* the label line while it says 「已复制，去终端运行」 */
+.hx-cmdrow { display: flex; align-items: center; gap: 12px; }
+/* breaks only between 「curl -fsSL」 and the address (two hx-nw spans in the markup), never after 「|」 */
+.hx-cmd { flex: 1 1 auto; min-width: 0; font: 13px/1.6 var(--mono); color: var(--hx-fg); background: none; padding: 0; white-space: normal; }
+.hx-copybtn.sx-btn { flex: none; height: 38px; padding: 0 15px 0 13px; gap: 7px; font-size: 14.5px; }
+.hx-copybtn .sx-ic { width: 16px; height: 16px; }
+.hx-copybtn.hx-done .sx-ic { stroke-width: 2.4; }   /* copied: the icon becomes a check, the width stays */
+.hx-bar { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
+.hx-sbox { margin-top: 22px; }
+
+/* ================================================================ 真的在用: the case alone (section gets sx-alt; 价格 loses it)
+   Its messages right under 「下面的消息是示意」, the three numbers stacked beside; on a phone in a row under them. */
+.hx-case { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr); gap: 36px; padding: 32px; align-items: center; }
+.hx-cl { display: flex; flex-direction: column; gap: 16px; }
+.hx-cl .sx-feed2 { margin-top: 4px; overflow: hidden; }
+.hx-cr .sx-nums { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+.hx-cr .sx-nums div { padding: 18px 22px; }
+.hx-cr .sx-nums b { font-size: 34px; }
+.sx-sec.sx-alt .hx-case { background: var(--bg); box-shadow: none; }
+.sx-sec.sx-alt .hx-case .sx-feed2, .sx-sec.sx-alt .hx-case .sx-nums div { background: var(--surface); }
+
+/* ================================================================ no lone last word in English; Chinese gets hx-nw spans in
+   the markup instead (pretty and balance split Chinese phrases) */
+html[lang="en"] .sx-sec h2, html[lang="en"] .sx-case h3, html[lang="en"] .sx-steps li span, html[lang="en"] .sx-trust span,
+html[lang="en"] .sx-feed2 .sx-r div, html[lang="en"] .hx-pt p { text-wrap: pretty; }
+
+/* ================================================================ narrow computers and tablets (761–1100): one column, so the
+   command and 复制 still fit one line (a column here is narrower than the 41-character address plus the button) */
+@media (min-width: 761px) and (max-width: 1100px) {
+  .hx-inner { grid-template-columns: minmax(0, 1fr); grid-template-areas: "copy" "film" "box"; }
+  .hx-film { margin-top: 32px; max-width: 720px; }
+  .hx-boxwrap { max-width: 720px; }
+  .hx-start .sx-start { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  .hx-start .hx-sbox { max-width: 720px; }
+}
+
+/* ================================================================ phone: words → film → box, one column, 20 px edges */
+@media (max-width: 760px) {
+  .hx-inner { grid-template-columns: minmax(0, 1fr); grid-template-areas: "copy" "film" "box"; justify-items: stretch; text-align: left; padding: 14px 20px 36px; }
+  .hx-say { font-size: 34px; line-height: 1.18; }
+  html[lang="en"] .hx-say { font-size: 31px; }
+  .hx-lede { margin: 10px 0 0; font-size: 16px; line-height: 1.55; max-width: none; }
+  html[lang="en"] .hx-lede { text-wrap: balance; }   /* no lone 「your desk.」 */
+  .hx-film { width: auto; margin-top: 18px; }
+  .hx-poster { border-radius: 14px; }
+  .hx-play { left: 10px; bottom: 10px; height: 34px; gap: 7px; padding: 0 12px 0 4px; font-size: 13.5px; }
+  .hx-play i { width: 26px; height: 26px; }
+  .hx-play svg { width: 14px; height: 14px; }
+  .hx-play small { font-size: 12.5px; }
+  .hx-play small::before { margin-right: 6px; }
+  .hx-boxwrap { width: auto; margin-top: 16px; }
+  .hx-box { padding: 12px 14px 14px; }
+  .hx-blabel { font-size: 12.5px; margin-bottom: 6px; }
+  .hx-cmd { font-size: min(13px, 3.25vw); line-height: 1.65; }
+  .hx-bar .sx-btn { flex: 1; height: 42px; padding: 0 12px; }
+  /* with an invite banner the box comes before the film, so it stays in the first screen */
+  .sx-has-inv .hx-inner { grid-template-areas: "copy" "box" "film"; }
+  .sx-has-inv .hx-boxwrap { margin-top: 14px; }
+  .sx-has-inv .hx-film { margin-top: 16px; }
+  .hx-sbox { margin-top: 18px; }
+  .hx-case { grid-template-columns: minmax(0, 1fr); gap: 14px; padding: 22px 20px; }
+  .hx-cr .sx-nums { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  .hx-cr .sx-nums div { padding: 14px; }
+  .hx-cr .sx-nums b { font-size: 21px; }
+}
+/* a short phone (iPhone SE and the like): the box before the film, so it stays in the first screen */
+@media (max-width: 760px) and (max-height: 620px) {
+  .hx-inner { grid-template-areas: "copy" "box" "film"; }
+  .hx-boxwrap { margin-top: 14px; }
+  .hx-film { margin-top: 16px; }
+}
+
+/* The language switch as a globe with a menu (siteTop is shared, so every site page gets it).
+   Night sky (dark theme) by default; in the light theme the homepage's first screen (hx-hero) and the other pages' bar
+   (sx-pagebar, paper in light) are white, so the light rules follow both. It is a <details>: no marker on its summary. */
+.hx-langwrap { position: relative; display: inline-flex; }
+.hx-lang::-webkit-details-marker { display: none; }
+.hx-lang { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 10px 0 9px; border: 0; border-radius: 999px; font: inherit; font-size: 14px; cursor: pointer; list-style: none;
+  color: var(--sky-fg); background: rgba(255, 255, 255, 0.07); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12); }
+.hx-lang:hover, .hx-open .hx-lang { background: rgba(255, 255, 255, 0.13); }
+.hx-lang .hx-globe { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.6; }
+.hx-lang .hx-caret { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 1.6; opacity: 0.7; transition: transform 0.15s ease; }
+.hx-open .hx-lang .hx-caret { transform: rotate(180deg); }
+.hx-lang.hx-icononly { width: 34px; padding: 0; justify-content: center; }
+.hx-lang:focus-visible { outline: 2px solid #b4cafd; outline-offset: 2px; }
+/* the menu: under the button, its right edge on the button's */
+.hx-langmenu { position: absolute; top: calc(100% + 8px); right: 0; z-index: 20; min-width: 168px; padding: 6px; border-radius: 14px;
+  background: #141c33; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14), 0 18px 40px -16px rgba(0, 0, 0, 0.6); }
+.hx-langmenu a { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 40px; padding: 0 12px; border-radius: 9px; font-size: 15px; color: #dfe5f3; white-space: nowrap; }
+.hx-langmenu a:hover { background: rgba(255, 255, 255, 0.08); color: #ffffff; }
+.hx-langmenu a.hx-on { color: #ffffff; font-weight: 650; }
+.hx-langmenu .hx-check { width: 18px; height: 18px; fill: none; stroke: #b4cafd; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+
+:root:not([data-scorpio-effective-theme="dark"]) .hx-hero .hx-lang, :root:not([data-scorpio-effective-theme="dark"]) .sx-pagebar .hx-lang { color: #131927; background: rgba(19, 25, 39, 0.05); box-shadow: inset 0 0 0 1px rgba(19, 25, 39, 0.1); }
+:root:not([data-scorpio-effective-theme="dark"]) .hx-hero .hx-lang:hover, :root:not([data-scorpio-effective-theme="dark"]) .sx-pagebar .hx-lang:hover, :root:not([data-scorpio-effective-theme="dark"]) .hx-hero .hx-open .hx-lang, :root:not([data-scorpio-effective-theme="dark"]) .sx-pagebar .hx-open .hx-lang { background: rgba(19, 25, 39, 0.09); }
+:root:not([data-scorpio-effective-theme="dark"]) .hx-hero .hx-langmenu, :root:not([data-scorpio-effective-theme="dark"]) .sx-pagebar .hx-langmenu { background: #ffffff; box-shadow: 0 0 0 1px rgba(19, 25, 39, 0.1), 0 18px 40px -18px rgba(19, 25, 39, 0.35); }
+:root:not([data-scorpio-effective-theme="dark"]) .hx-hero .hx-langmenu a, :root:not([data-scorpio-effective-theme="dark"]) .sx-pagebar .hx-langmenu a { color: #3a4254; }
+:root:not([data-scorpio-effective-theme="dark"]) .hx-hero .hx-langmenu a:hover, :root:not([data-scorpio-effective-theme="dark"]) .sx-pagebar .hx-langmenu a:hover { background: #f1f3f8; color: #131927; }
+:root:not([data-scorpio-effective-theme="dark"]) .hx-hero .hx-langmenu a.hx-on, :root:not([data-scorpio-effective-theme="dark"]) .sx-pagebar .hx-langmenu a.hx-on { color: #131927; }
+:root:not([data-scorpio-effective-theme="dark"]) .hx-hero .hx-langmenu .hx-check, :root:not([data-scorpio-effective-theme="dark"]) .sx-pagebar .hx-langmenu .hx-check { stroke: #2f5bd3; }
+
+@media (max-width: 760px) {
+  .hx-lang.hx-icononly { width: 36px; height: 36px; }
+  .hx-langmenu { min-width: 156px; }
+  .hx-langmenu a { height: 44px; font-size: 16px; }
+}
+
+/* The introduction: explanation, features, and the diagram. */
+.mk-two{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:20px}
+.mk-col p{margin:0 0 10px;line-height:1.7}
+.mk-ans{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
+.mk-k{font-size:13px;font-weight:600;color:var(--you-ink);margin-bottom:8px;letter-spacing:.02em}
+.mk-list{margin:6px 0 12px;padding-left:1.2em;line-height:1.75}
+
+.mk-three{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.mk-p h3,.mk-f h3{font-size:17px;margin:0 0 6px}
+.mk-p p{margin:0;line-height:1.7;color:var(--fg)}
+.mk-foot{margin-top:20px;font-weight:600}
+.mk-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px}
+.mk-f{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
+.mk-pain{font-size:13px;color:var(--you-ink);background:var(--you-soft);border-radius:6px;padding:4px 8px;display:inline-block;margin-bottom:10px;line-height:1.5}
+.mk-why{margin:0;color:var(--muted);font-size:14px}
+@media (max-width:760px){
+ .mk-two,.mk-grid,.mk-three{grid-template-columns:1fr}
+
+}
+
+.mk-need{margin:14px 0 0;opacity:.85}
+/* 「怎么运转」图：内联 SVG，只用页面 token。 */
+.hv{margin:28px 0 32px}
+.hv svg{display:block;width:100%;height:auto;overflow:visible;font-family:var(--font, system-ui, sans-serif)}
+.hv .hv-m{display:none}
+@media (max-width:760px){.hv .hv-d{display:none}.hv .hv-m{display:block;max-width:420px}}
+.hv .hv-b{fill:var(--surface);stroke:var(--line-strong);stroke-width:1.2}
+.hv .hv-topic{stroke:var(--link);stroke-width:1.6}
+.hv .hv-pc{fill:none;stroke:var(--line-strong);stroke-width:1.4;stroke-dasharray:6 5}
+.hv .hv-pcz{fill:color-mix(in srgb,var(--hl) 55%,transparent);stroke:var(--line-strong);stroke-width:1;stroke-dasharray:6 5}
+.hv .hv-p{fill:var(--code-bg,var(--bg));stroke:var(--line);stroke-width:1}
+.hv .hv-dot{fill:var(--line-strong)}
+.hv text{fill:var(--fg);font-size:13px}
+.hv .hv-h{font-size:16px;font-weight:700}
+.hv .hv-h2{font-size:15px;font-weight:700}
+.hv .hv-s{fill:var(--muted);font-size:12.5px}
+.hv .hv-s2{fill:var(--fg);font-size:13px}
+.hv .hv-s3{fill:var(--muted);font-size:11.5px}
+.hv .hv-pt{font-size:11.5px;font-weight:600}
+.hv .hv-l{fill:none;stroke:var(--muted);stroke-width:1.5}
+.hv .hv-dash{stroke-dasharray:4 4}
+.hv .hv-ah{fill:var(--muted)}
+.hv .hv-life{stroke:var(--line-strong);stroke-width:1;stroke-dasharray:3 4}
+.hv .hv-n circle{fill:var(--link)}
+.hv .hv-n text{fill:var(--surface);font-size:12px;font-weight:700;text-anchor:middle}
+.hv .hv-x rect{fill:var(--surface);stroke:var(--line-strong);stroke-dasharray:4 3}
+.hv .hv-x text{font-size:12px;font-weight:600}
+.hv .hv-ml{font-size:12.5px}
+.hv .hv-mu{fill:var(--muted)}
+.hv .hv-lk{fill:none;stroke:var(--muted)}
+.hv .hv-dev rect{fill:none;stroke:var(--fg);stroke-width:1.3}
+.hv-leg{list-style:none;margin:18px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px 22px;font-size:14px;line-height:1.5}
+.hv-leg li{display:flex;gap:8px}
+.hv-leg b{flex:none;display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;margin-top:1px;border-radius:50%;background:var(--link);color:var(--surface);font-size:12px;font-weight:700;line-height:1}
+.hv-line{margin:12px 0 0;font-size:14px;color:var(--muted)}
+@media (max-width:760px){.hv .hv-ml{font-size:11px}}
+
+@media (max-width: 480px) { .sx-plan .sx-ribbon { position: static; display: inline-block; margin: 0 0 12px; border-radius: 8px; } }

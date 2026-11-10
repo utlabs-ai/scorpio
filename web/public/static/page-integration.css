@@ -1,0 +1,143 @@
+html:has(body.homeview), html:has(body.settingsview) { height: 100%; overflow: hidden; }
+body.homeview, body.settingsview { height: 100vh; height: 100dvh; overflow: hidden; background: var(--bg); }
+.ui.home, .ui.settings { width: 100%; height: 100%; display: flex; flex-direction: column; }
+.ui.home .dcol, .ui.settings .dcol { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.ui.home .page, .ui.settings .page { flex: 1; min-height: 0; }
+.ui.home .pagein, .ui.settings .pagein { padding-top: 12px; }
+.ui.home .brand svg { height: 22px; }
+.ui.home .hh b { font-variant-numeric: tabular-nums; }
+.ui.home li.yi a { display: flex; align-items: center; gap: 12px; width: 100%; color: var(--fg); text-decoration: none; }
+.ui.home li.yi .w { display: flex; flex-direction: column; }
+.ui.home ul.rooms { gap: 0; }
+.ui.home li.ri > a.w { display: block; padding: 0; color: var(--fg); background: none; border: 0; border-radius: 0; text-decoration: none; }
+.ui.home li.ri > a.w .l1 b { color: var(--fg); }
+.ui.home li.ri > a.todochip { display: inline-flex; flex-direction: row; align-items: stretch; width: auto; height: 28px; padding: 0; color: var(--bar-fg); background: var(--bar-chip); border: 0; border-radius: 999px; text-decoration: none; overflow: hidden; flex: none; }
+.ui.home li.ri.arch .l1 b { color: var(--muted); font-weight: 600; }
+.ui.home li.ri.arch .l2 b { color: var(--fg); font-weight: 600; }
+.ui.home li.ri.arch > button { flex: none; height: 28px; padding: 0 10px; font-size: 12px; }
+.ui.home .foldgroup > summary { list-style: none; cursor: pointer; }
+.ui.home .foldgroup > summary::-webkit-details-marker { display: none; }
+.ui.home .foldgroup[open] .fold .chev { transform: rotate(90deg); }
+.ui.home .hfoot { position: relative; }
+.ui.home .newroom > summary { list-style: none; cursor: pointer; }
+.ui.home .newroom > summary::-webkit-details-marker { display: none; }
+.ui.home .newroom[open] form { position: absolute; right: 0; bottom: calc(100% + 8px); z-index: 4; width: min(330px, 100%); background: var(--surface); box-shadow: 0 12px 36px rgba(0, 0, 0, .25); }
+.ui.home .pop form { margin: 0; }
+.ui.home .pop a.pi { color: var(--fg); text-decoration: none; }
+.ui footer.site { margin: 24px 0 8px; }
+/* its links quiet: grey, underlined only under the pointer */
+.ui footer.site nav a { color: var(--muted); text-decoration: none; }
+.ui footer.site nav a:hover { text-decoration: underline; }
+.ui.settings .bar .title { min-width: 0; }
+.ui.settings .guide { display: none; }
+.ui.settings #push[data-state="ios"] + .guide { display: block; }
+.ui.settings #push { margin: 6px 0; }
+.ui.settings #push .btns { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.ui.settings li.row.push-master { padding: 0; }
+.ui.settings li.row.push-master > button { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 48px; padding: 7px 0; border: 0; background: none; color: var(--fg); text-align: left; cursor: pointer; }
+.ui.settings li.row.push-master > button:disabled { cursor: default; }
+.ui.settings #notifications:has(#push[data-state="on"]) .push-master .sw { background: var(--live); opacity: 1; }
+.ui.settings #notifications:has(#push[data-state="on"]) .push-master .sw::after { left: 21px; }
+.ui.settings li.row.pref { padding: 0; }
+.ui.settings li.row.pref > button { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 48px; padding: 7px 0; border: 0; background: none; color: var(--fg); text-align: left; cursor: pointer; }
+.ui.settings li.row.pref > button:disabled { cursor: default; }
+.ui.settings li.row.pref .sw.on { opacity: 1; }
+.ui.settings li.row.pref.dis { opacity: 0.5; pointer-events: none; }
+.ui.settings li.row.pref.dis .sw.dis { opacity: 1; }
+/* 「交接只存在 agent 的电脑上」: the switch, its three sentences under it */
+.ui.settings li.row.pref.handoff-pref { display: block; padding: 0 0 12px; }
+.ui.settings li.row.pref.handoff-pref small { display: block; margin-top: -2px; font-size: 13px; line-height: 1.55; white-space: normal; overflow: visible; }
+.ui.settings li.row.push-hint { min-height: 0; padding: 2px 0 8px; box-shadow: none; }
+.ui.settings #muted-rooms { padding: 4px 0 10px; }
+.ui.settings #muted-rooms a { color: var(--link); }
+.ui.settings li.row > a.t { color: var(--fg); text-decoration: none; }
+.ui.settings li.row .sp { min-width: 5px; }
+.ui.settings li.row .v { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ui.settings li.row.dev form { flex: none; }
+.ui.settings li.row.dev .l1 { flex-wrap: wrap; }
+.ui.settings li.row.dev .l1 b { overflow-wrap: anywhere; }
+.ui.settings .device-rename { margin-top: 7px; }
+.ui.settings .device-rename summary { color: var(--link); cursor: pointer; font-size: 13px; }
+.ui.settings .device-rename form { display: grid; gap: 6px; margin-top: 8px; }
+.ui.settings .device-rename label { display: grid; gap: 3px; font-size: 13px; }
+.ui.settings .device-rename input { width: 100%; min-width: 0; }
+.ui.settings .device-rename small { color: var(--muted); line-height: 1.35; }
+.ui.settings .device-rename .btn { justify-self: start; }
+.ui.settings .btn.xs { height: 28px; padding: 0 10px; font-size: 12px; }
+.ui.settings .name-row .name-setting { width: 100%; }
+.ui.settings .name-row summary { display: flex; align-items: center; gap: 8px; list-style: none; width: 100%; cursor: pointer; }
+.ui.settings .name-row summary::-webkit-details-marker { display: none; }
+.ui.settings .name-row form { display: flex; align-items: center; gap: 8px; width: 100%; margin-top: 8px; }
+.ui.settings .name-row input { flex: 1; min-width: 0; }
+.ui.settings .name-row .btn { flex: none; }
+.ui.settings .name-row small { display: block; margin: 6px 0; white-space: normal; }
+/* 日历订阅: the address (read-only, cut with …), 加到日历 and 复制 on one line when they fit, else the buttons wrap under it */
+.ui.settings .cal-link { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; width: 100%; margin-top: 8px; }
+.ui.settings .cal-link input { flex: 1 1 160px; min-width: 0; font: 13px/1.4 var(--mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* the two buttons move to the next line together, never one at a time */
+.ui.settings .cal-btns { display: flex; flex: none; gap: 8px; }
+.ui.settings .cal-sub { display: block; margin-top: 12px; font-size: 13px; font-weight: 600; }
+.ui.settings .cal-item { flex-wrap: nowrap; }
+.ui.settings .cal-item label { flex: none; width: 4.8em; font-size: 13px; color: var(--muted); }
+.ui.settings .cal-item input { flex: 1 1 0; }
+.ui.settings .cal-item .btn { flex: none; }
+/* on a phone the label goes above its field, so `https://…/dav/` and the account are read in full; the password may still be cut (it is copied) */
+@media (max-width: 760px) { .ui.settings .cal-item { flex-wrap: wrap; } .ui.settings .cal-item label { flex: 1 0 100%; width: auto; } }
+/* 重置地址: a small muted link under the explanation, not a row title */
+.ui.settings .cal-reset { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; min-height: 28px; }
+.ui.settings .cal-reset button.link { padding: 0; font-size: 13px; line-height: 1.4; color: var(--muted); text-decoration: underline; text-underline-offset: 2px; }
+.ui.settings .cal-reset button.link:hover:not(:disabled) { color: var(--accent); }
+.ui.settings .cal-reset button.link:disabled { text-decoration: none; cursor: default; opacity: 0.6; }
+.ui.settings .cal-reset small { margin: 0; }
+.ui.settings .plan .use { min-width: 0; flex-wrap: nowrap; gap: 6px; }
+.ui.settings .plan .use span { width: 56px; }
+.ui.settings .plan .use .pb { min-width: 20px; }
+.ui.settings .plan .use > b { flex: none; font-size: 12px; text-align: right; white-space: nowrap; }
+.ui.settings .plan .use > small { flex: none; font-size: 11px; white-space: nowrap; }
+.ui.settings .plan .use .pb b[data-pct="100"] { background: var(--wait); }
+/* the plan card's rows in two layers: name and numbers, then the bar the full width; not the invite card */
+.ui.settings .plan:not(.inv) .use { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; grid-template-areas: "l n s" "p p p"; align-items: baseline; column-gap: 6px; row-gap: 6px; margin-top: 11px; }
+.ui.settings .plan:not(.inv) .use > span { grid-area: l; width: auto; min-width: 0; }
+.ui.settings .plan:not(.inv) .use > b { grid-area: n; }
+.ui.settings .plan:not(.inv) .use > small { grid-area: s; }
+.ui.settings .plan:not(.inv) .use > .pb { grid-area: p; width: 100%; min-width: 0; }
+/* 邀请朋友, under the plan card and drawn like it */
+.ui.settings .plan.inv { margin-top: 10px; }
+.ui.settings .plan.inv .renew { margin: 0 0 10px; line-height: 1.55; }
+.ui.settings .inv-link { display: flex; align-items: center; gap: 8px; padding: 5px 5px 5px 12px; border-radius: 12px; background: var(--surface); box-shadow: inset 0 0 0 1px var(--line-strong); }
+.ui.settings .inv-link .u { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 14px/1.4 var(--mono); color: var(--fg); }
+.ui.settings .inv-link .btn { flex: none; }
+.ui.settings .inv-link.inv-out { background: transparent; box-shadow: none; border: 1px dashed var(--line-strong); padding: 9px 11px; font-size: 14px; line-height: 1.45; color: var(--muted); }   /* the month's invites are all used: an empty slot, not a field */
+.ui.settings .plan.inv .use span { width: auto; flex: none; }
+.ui.settings .plan.inv .use .pb b[data-pct="100"] { background: var(--live); }   /* 3 / 3 is a full month, not a warning */
+.ui.settings .plan.inv .inv-days > b { font-size: 13px; }
+.ui.settings .inv-people { list-style: none; margin: 10px 0 0; padding: 0; }
+.ui.settings .inv-people li { display: flex; align-items: baseline; gap: 10px; padding: 9px 0; font-size: 14.5px; box-shadow: inset 0 1px 0 var(--line); }
+.ui.settings .inv-people li b { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
+.ui.settings .inv-people li span { flex: none; font-size: 13px; color: var(--muted); }
+.ui.settings .inv-people li span.ok { color: var(--live-ink); font-weight: 600; }
+.ui.settings .sec-lead { margin: 2px 0 8px; font-size: 13px; line-height: 1.55; color: var(--muted); }   /* under Devices */
+.ui.settings #invite-code-result.err { color: var(--you-ink); }
+.ui.settings .inv-note { margin: 10px 0 0; font-size: 12.5px; line-height: 1.55; color: var(--muted); }
+.ui.settings #invite-code { text-transform: uppercase; letter-spacing: 0.08em; font-family: var(--mono); }
+.ui.settings #invite-code::placeholder { text-transform: none; letter-spacing: 0; font-family: inherit; }
+@media (min-width: 761px) {
+  .ui.desk.col.home .dcol, .ui.desk.col.settings .dcol { overflow: hidden; }
+}
+
+/* Account permission choices: one native radio per row, with the selected check at the right. */
+.settings #spawn-perm .row { padding: 0; }
+.settings .row .spawn-perm-choice { position: relative; display: flex; flex-direction: row; min-width: 0; color: var(--fg); font: inherit; align-items: center; gap: 14px; width: 100%; padding: 12px 0; cursor: pointer; }
+.spawn-perm-choice input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.spawn-perm-choice .w { flex: 1; min-width: 0; }
+.spawn-perm-choice b { display: block; font-weight: 500; }
+.settings .row .spawn-perm-choice small { display: block; margin-top: 3px; color: var(--muted); font-size: 12.5px; line-height: 1.55; white-space: normal; overflow: visible; }
+.spawn-perm-choice code { font-family: var(--mono); font-size: .93em; white-space: nowrap; }
+.spawn-perm-choice .perm-check { flex: none; width: 20px; height: 20px; border: 2px solid var(--line-strong); border-radius: 50%; }
+.spawn-perm-choice input:checked ~ .w b { font-weight: 750; }
+.spawn-perm-choice input:checked ~ .perm-check { background: var(--link); border-color: var(--link); }
+.spawn-perm-choice input:checked ~ .perm-check::after { content: ""; display: block; width: 5px; height: 9px; margin: 2px 0 0 5px; border: solid var(--surface); border-width: 0 2px 2px 0; transform: rotate(45deg); }
+.spawn-perm-choice input:focus-visible ~ .perm-check { outline: 2px solid var(--link); outline-offset: 3px; }
+.spawn-perm-choice:has(input:disabled) { opacity: .65; cursor: wait; }
+#spawn-perm-result.ok { color: var(--live-ink); }
+#spawn-perm-result.err { color: var(--danger); }

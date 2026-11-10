@@ -1,0 +1,26 @@
+# Cache headers for the static files (Cloudflare serves them without the Worker). Scripts and styles: a year,
+# untouched: every page links them with ?v=<deployed version> (pages.ts versioned()), so a deploy is a new
+# address and shows at once, and opening a page asks nothing of the server for them. Images change only with a new name.
+/static/*.css
+  Cache-Control: public, max-age=31536000, immutable
+/static/*.js
+  Cache-Control: public, max-age=31536000, immutable
+/static/*.png
+  Cache-Control: public, max-age=604800
+/dl/*.tgz
+  Cache-Control: public, max-age=31536000, immutable
+/dl/latest.json
+  Cache-Control: no-cache
+/dl/latest
+  Cache-Control: no-cache
+  Content-Type: application/gzip
+/sw.js
+  Cache-Control: no-cache
+/*
+  X-Content-Type-Options: nosniff
+
+# The content domain: these files are served before the Worker on every host, that domain's too, so there they get its
+# bare policy and nothing a file's page runs can lean on them. Add your CONTENT_DOMAIN here the same way, as
+# https://:label.<content domain>/* (localhost: the local tests').
+https://:label.localhost/*
+  Content-Security-Policy: default-src 'none'; form-action 'none'; base-uri 'none'; sandbox

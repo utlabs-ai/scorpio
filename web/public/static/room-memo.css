@@ -1,0 +1,123 @@
+.ui .mm-head { display: flex; align-items: center; gap: 8px; padding: 2px 0 10px; }
+.ui .mm-sum { font-size: 13px; font-weight: 650; color: var(--muted); font-variant-numeric: tabular-nums; }
+.ui .mm-scroll { padding: 10px 0 0; }
+
+/* L1 / L2: a paragraph on the panel, four lines then a fade; a tap opens the editor */
+.ui .ml { padding: 12px 14px 12px; border-radius: 14px; background: var(--hl); margin: 0 0 10px; cursor: pointer; }
+.ui .ml-h { display: flex; align-items: center; gap: 8px; margin: 0 0 6px; }
+.ui .ml-h b { font-size: 15px; font-weight: 750; }
+.ui .ml-v { font-size: 12.5px; font-weight: 600; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ui .ml-t { margin: 0; font-size: 14.5px; line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+.ui .ml-t.mm-none { color: var(--muted); }
+
+/* small text keys inside a card: 32 high, no fill until pressed */
+.ui .mm-k { height: 32px; padding: 0 10px; border-radius: 999px; font-size: 13.5px; font-weight: 650; color: var(--muted); background: none; }
+.ui .ml .mm-k { margin-right: -6px; }
+
+.ui .mm-pending { margin: 0 0 8px; font-size: 13px; line-height: 1.5; color: var(--wait-ink); }
+
+/* a short memo */
+.ui .mm { padding: 11px 12px 6px 14px; border-radius: 14px; box-shadow: inset 0 0 0 1px var(--line); margin: 0 0 8px; }
+.ui .mm.merge { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--wait) 55%, transparent); }
+.ui .mm-top { display: flex; align-items: center; gap: 7px; min-width: 0; font-size: 13px; }
+.ui .mm-id { font: 700 13px var(--mono); color: var(--fg); }
+.ui .mm-who { display: inline-flex; align-items: center; gap: 4px; min-width: 0; color: var(--muted); }
+.ui .mm-who b { font-weight: 650; color: var(--fg); white-space: nowrap; }
+.ui .mm-who .bot, .ui .mm-who svg { width: 18px; height: 18px; }
+.ui .mm-who .pav { width: 18px; height: 18px; font-size: 10px; }
+.ui .mm-kind { font-size: 12.5px; font-weight: 600; color: var(--muted); }
+.ui .mm-kind::before { content: "· "; }
+.ui .mm-src { font-size: 13px; font-weight: 650; color: var(--link); font-variant-numeric: tabular-nums; }
+.ui .mm-flag { margin-left: auto; font-size: 12px; font-weight: 700; color: var(--wait-ink); background: var(--wait-soft); padding: 0 8px; height: 22px; line-height: 22px; border-radius: 999px; white-space: nowrap; }
+.ui .mm-bad { margin-left: auto; font-size: 12px; font-weight: 650; color: var(--wait-ink); white-space: nowrap; }
+.ui .mm-t { white-space: pre-wrap; overflow-wrap: anywhere; margin: 7px 0 4px; font-size: 15px; line-height: 1.55; }
+.ui .mm.merge .mm-k { padding: 0 7px; }
+.ui .mm-act { display: flex; align-items: center; gap: 2px; margin: 0 -4px 0 -4px; }
+.ui .mm-score { display: inline-flex; align-items: center; height: 32px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--line-strong); }
+.ui .mm-score.mm-ro { padding: 0 10px; }
+.ui .mm-v { height: 32px; min-width: 40px; padding: 0 11px; border-radius: 999px; font-size: 13.5px; font-weight: 650; color: var(--fg); background: none; }
+.ui .mm-v.on { color: var(--link); background: color-mix(in srgb, var(--link) 15%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--link) 45%, transparent); }
+.ui .mm-n { height: 32px; padding: 0 4px; font-size: 13px; font-weight: 700; color: var(--fg); background: none; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* 并进 L1 / L2: one key in two halves, only on a card marked 待并入 */
+.ui .mm-merge { display: inline-flex; align-items: center; height: 32px; margin: 0 0 0 6px; border-radius: 999px; background: var(--hl); padding: 0 3px 0 12px; gap: 2px; }
+.ui .mm-merge > span { font-size: 13.5px; font-weight: 650; color: var(--fg); margin-right: 4px; }
+.ui .mm-merge button { height: 32px; padding: 0 10px; border-radius: 999px; font-size: 13.5px; font-weight: 700; color: var(--fg); background: var(--surface); box-shadow: 0 0 0 1px var(--line); }
+
+.ui .mm-retired { width: 100%; padding: 12px 2px; margin: 4px 0 0; border: 0; background: none; text-align: left; font-size: 13.5px; }
+.ui .mm-retired .chev { margin-left: 4px; }
+.ui .mm-end { height: 24px; }
+
+/* the editors: a sheet over the page; the textarea is the topic description's (.topicedit) */
+.ui .mmed { padding-bottom: 20px; }
+.ui .mmed .sh { margin-bottom: 10px; }
+.ui .mmed-t { font-size: 17px; font-weight: 750; }
+.ui .mmed-sub { font-size: 13px; font-weight: 650; color: var(--muted); }
+.ui .mmed .sbody { overflow: visible; }
+.ui .mmed-ed textarea { font-size: 16px; min-height: 120px; }
+.ui .mmed-ed textarea.tall { height: 380px; max-height: none; }
+.ui .mmed-src a { color: var(--link); font-weight: 650; }
+.ui .mmed-note { margin: 10px 0 0; font-size: 13px; line-height: 1.5; color: var(--muted); }
+.ui .mmed-btns { display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px; }
+.ui .mmed-chips { display: flex; gap: 6px; margin: 0 0 10px; }
+.ui .mmed-chip { height: 28px; line-height: 28px; padding: 0 11px; border-radius: 999px; font-size: 13px; font-weight: 650; color: var(--wait-ink); background: var(--wait-soft); }
+.ui .mm-scrim { z-index: 7; }
+
+/* beside a message: what it cited (send cite=) or reported (send misled=); a tap opens the memo tab on that card */
+.ui .mtags { display: flex; gap: 6px; margin: 6px 0 0; }
+.ui .mtag { height: 32px; padding: 0; display: inline-flex; align-items: center; border-radius: 999px; font-size: 12.5px; font-weight: 650; color: var(--link); background: none; }
+.ui .mtag > span { height: 24px; padding: 0 9px; display: inline-flex; align-items: center; border-radius: 999px; background: color-mix(in srgb, var(--link) 10%, transparent); }
+.ui .mtag.bad { color: var(--wait-ink); }
+.ui .mtag.bad > span { background: var(--wait-soft); }
+
+/* lists in a sheet: 已淘汰 (each row: M · one line of text / where it went · score · 捞回) and L 历史 (version · who · when · 大改 / what it carries · 恢复) */
+.ui .mr-note { margin: 0 0 6px; }
+.ui .mr-list { list-style: none; margin: 0; padding: 0; }
+.ui .mr { padding: 10px 0 8px; border-bottom: 1px solid var(--line); }
+.ui .mr:last-child { border-bottom: 0; }
+.ui .mr-l { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.ui .mr-t { min-width: 0; flex: 1; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ui .mr-m { display: flex; align-items: center; gap: 8px; margin-top: 4px; min-height: 32px; }
+.ui .mr-tag { font-size: 12.5px; font-weight: 650; color: var(--muted); padding: 0 8px; height: 22px; line-height: 22px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--line-strong); }
+.ui .mr-s { font-size: 13px; font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums; }
+.ui .mv-v { font-size: 15px; font-weight: 700; white-space: nowrap; }
+.ui .mv-who { flex: 0 1 auto; color: var(--muted); font-size: 13.5px; }
+.ui .mv-cur { font-size: 13px; font-weight: 650; color: var(--muted); padding-right: 4px; }
+.ui .mr .mm-flag { margin-left: auto; }
+.ui .mmed .sbody.mr-body, .ui .mmed:has(.mr-list) .sbody { overflow-y: auto; }
+/* 写一条: the source is typed */
+.ui .mmed-from { display: flex; flex-direction: row; align-items: center; gap: 10px; margin-top: 12px; }
+.ui .mmed-from span { font-size: 13.5px; font-weight: 650; color: var(--muted); flex: none; }
+.ui .mmed-from input { flex: 1; min-width: 0; height: 42px; padding: 0 14px; border-radius: 12px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--fg); font: 16px var(--font); }
+
+/* 「?」 beside the tab head: a 32 tap target drawn as a 22 ring; it opens 「memo 是什么」 */
+.ui .mm-q { width: 32px; height: 32px; margin: 0 -4px 0 -2px; display: grid; place-items: center; border-radius: 50%; background: none; font-size: 0; color: var(--muted); }
+.ui .mm-q::before { content: "?"; width: 22px; height: 22px; display: grid; place-items: center; border-radius: 50%; box-shadow: inset 0 0 0 1.5px var(--line-strong); font: 700 13px/1 var(--font); }
+/* the six lines: the help sheet, and the empty tab in place of the list */
+.ui .mh-t { margin: 6px 0 10px; font-size: 17px; font-weight: 750; }
+.ui .mh-list { list-style: none; margin: 0; padding: 0; }
+.ui .mh-list li { position: relative; padding: 0 0 0 16px; margin: 0 0 12px; font-size: 15px; line-height: 1.6; }
+.ui .mh-list li::before { content: ""; position: absolute; left: 2px; top: 0.72em; width: 5px; height: 5px; border-radius: 50%; background: var(--muted); }
+
+.ui .ml-body { min-height:32px; display:block; width:100%; padding:0; background:none; color:var(--fg); text-align:left; font:inherit; }
+.ui .mm-top, .ui .mm-act, .ui .mm-head { flex-wrap:wrap; }
+.ui .mm-who b { white-space:normal; overflow-wrap:anywhere; }
+.ui .mm-src { background:none; min-height:32px; padding:0; }
+.ui .mm .mm-who svg { flex-shrink:0; }
+.ui .mm-note { font-size:13px; line-height:1.5; color:var(--muted); }
+.ui .mmed { z-index:8; }
+.ui .mmed .sbody { overflow-y:auto; }
+.ui .mm-scroll { overflow-y:auto; }
+.ui .mm-q { border:0; }
+.ui .mm-src:focus-visible, .ui .ml-body:focus-visible, .ui .mm-k:focus-visible, .ui .mtag:focus-visible, .ui .mm-q:focus-visible, .ui .mm-v:focus-visible { outline:2px solid var(--link); outline-offset:2px; }
+.ui .ml-t, .ui .ml-read { white-space:pre-wrap; overflow-wrap:anywhere; }
+.ui .ml-read { font-size:15.5px; line-height:1.6; }
+.ui .mm-error { color:var(--you-ink); font-size:13px; line-height:1.5; }
+.ui button.mr-l { min-height:32px; width:100%; padding:0; background:none; color:var(--fg); text-align:left; }
+.ui .mmed .sh { flex-wrap:wrap; }
+.ui .mmed-ed textarea { width:100%; resize:vertical; }
+@media (hover:hover) {
+  .ui .mm-k:hover, .ui .mm-src:hover, .ui .ml-body:hover { color:var(--link); }
+}
+.ui .mmed { padding-bottom:max(20px,env(safe-area-inset-bottom)); }
+.ui .mmed button:focus-visible, .ui .mm-merge button:focus-visible, .ui .mmed textarea:focus-visible, .ui .mmed input:focus-visible { outline:2px solid var(--link); outline-offset:2px; }

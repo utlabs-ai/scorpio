@@ -1,0 +1,4 @@
+/* Home's bar and account menu, with room for data tables on desktop. */
+@media (min-width: 761px) {
+  .ui.desk.col.data-view .dcol { max-width: 1200px; }
+}

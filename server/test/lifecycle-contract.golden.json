@@ -1,0 +1,767 @@
+[
+  {
+    "case": "1 leave helper@lee",
+    "steps": [
+      {
+        "call": "helper@lee leaves",
+        "answer": {
+          "status": 200,
+          "body": {
+            "roomId": "<topic>",
+            "name": "helper@lee",
+            "status": "left",
+            "accountActive": true,
+            "open": [
+              {
+                "id": "T1",
+                "title": "Check the logs",
+                "status": "todo",
+                "assignee": "helper@lee",
+                "by": "helper@lee",
+                "after": [],
+                "blocked": false,
+                "since": 0,
+                "reply": null,
+                "left": true
+              }
+            ]
+          }
+        },
+        "frames": {
+          "kai": [
+            {"type":"message","message":{"seq":10,"from":"system","fromKind":"system","kind":"text","text":"helper@lee left","mentions":[],"broadcast":false,"reply":null,"command":null,"event":{"type":"leave","name":"helper@lee"},"scheduled":null,"ts":0}},
+            {"type":"members","members":[{"name":"kai","kind":"human","owner":"kai","displayName":"kai","roleCard":null,"roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":0,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"lee","kind":"human","owner":"lee","displayName":"lee","roleCard":null,"roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":0,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"handoff":null,"perm":null,"perms":null,"device":null},{"name":"api@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":1,"work":null,"workSince":null,"workReason":null,"host":"computer-1-daemon@kai","hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"old@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":2,"work":null,"workSince":null,"workReason":null,"host":"computer-1-daemon@kai","hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"helper@lee","kind":"agent","owner":"lee","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"left","lastActive":0,"online":false,"cursor":3,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"handoff":{"size":15,"updatedAt":0,"computer":null},"perm":null,"perms":null,"device":null},{"name":"computer-1-daemon@kai","kind":"host","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":4,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":{"name":"computer-1","hostname":"box","note":null},"clis":null,"perm":null,"perms":null,"handoff":null}]},
+            {"type":"todo","round":{"n":1,"title":null,"status":"open","openedMs":0,"doneMs":null,"counts":{"todo":2,"doing":0,"done":0,"total":2}},"items":[{"id":"T1","round":1,"title":"Check the logs","desc":null,"blockedBy":[],"blocked":false,"status":"todo","assignee":"helper@lee","createdBy":"helper@lee","createdSeq":6,"doneSeq":null,"createdMs":0,"doneMs":null,"updatedBy":"helper@lee","updatedMs":0,"current":{"seq":6,"from":"api@kai","ts":0,"line":"Kick-off for the lifecycle case."},"reply":null},{"id":"T2","round":1,"title":"Check the copy","desc":null,"blockedBy":[],"blocked":false,"status":"todo","assignee":"lee","createdBy":"api@kai","createdSeq":7,"doneSeq":null,"createdMs":0,"doneMs":null,"updatedBy":"api@kai","updatedMs":0,"current":{"seq":7,"from":"api@kai","ts":0,"line":"Please check the copy."},"reply":null}],"rounds":[{"n":1,"title":null,"status":"open","openedMs":0,"doneMs":null,"counts":{"todo":2,"doing":0,"done":0,"total":2}}],"counts":{"todo":2,"doing":0,"done":0,"total":2},"deleted":[],"done":[]}
+          ],
+          "lee": [
+            {"type":"message","message":{"seq":10,"from":"system","fromKind":"system","kind":"text","text":"helper@lee left","mentions":[],"broadcast":false,"reply":null,"command":null,"event":{"type":"leave","name":"helper@lee"},"scheduled":null,"ts":0}},
+            {"type":"members","members":[{"name":"kai","kind":"human","owner":"kai","displayName":"kai","roleCard":null,"roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":0,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"handoff":null,"perm":null,"perms":null,"device":null},{"name":"lee","kind":"human","owner":"lee","displayName":"lee","roleCard":null,"roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":0,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"api@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":1,"work":null,"workSince":null,"workReason":null,"host":"computer-1-daemon@kai","hostOfflineSince":null,"idleHandoffMinutes":null,"handoff":null,"perm":null,"perms":null,"device":null},{"name":"old@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":2,"work":null,"workSince":null,"workReason":null,"host":"computer-1-daemon@kai","hostOfflineSince":null,"idleHandoffMinutes":null,"handoff":null,"perm":null,"perms":null,"device":null},{"name":"helper@lee","kind":"agent","owner":"lee","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"left","lastActive":0,"online":false,"cursor":3,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":{"size":15,"updatedAt":0,"computer":null}},{"name":"computer-1-daemon@kai","kind":"host","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":4,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"handoff":null,"perm":null,"perms":null,"device":{"name":"computer-1","note":null}}]},
+            {"type":"todo","round":{"n":1,"title":null,"status":"open","openedMs":0,"doneMs":null,"counts":{"todo":2,"doing":0,"done":0,"total":2}},"items":[{"id":"T1","round":1,"title":"Check the logs","desc":null,"blockedBy":[],"blocked":false,"status":"todo","assignee":"helper@lee","createdBy":"helper@lee","createdSeq":6,"doneSeq":null,"createdMs":0,"doneMs":null,"updatedBy":"helper@lee","updatedMs":0,"current":{"seq":6,"from":"api@kai","ts":0,"line":"Kick-off for the lifecycle case."},"reply":null},{"id":"T2","round":1,"title":"Check the copy","desc":null,"blockedBy":[],"blocked":false,"status":"todo","assignee":"lee","createdBy":"api@kai","createdSeq":7,"doneSeq":null,"createdMs":0,"doneMs":null,"updatedBy":"api@kai","updatedMs":0,"current":{"seq":7,"from":"api@kai","ts":0,"line":"Please check the copy."},"reply":null}],"rounds":[{"n":1,"title":null,"status":"open","openedMs":0,"doneMs":null,"counts":{"todo":2,"doing":0,"done":0,"total":2}}],"counts":{"todo":2,"doing":0,"done":0,"total":2},"deleted":[],"done":[]}
+          ],
+          "helper": [],
+          "daemon": [
+            {"type":"room","room":{"id":"<topic>","name":"Route test topic","topic":"","owner":"kai","public":false,"archived":false},"members":[{"name":"kai","kind":"human","owner":"kai","displayName":"kai","roleCard":null,"roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":0,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"lee","kind":"human","owner":"lee","displayName":"lee","roleCard":null,"roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":0,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"handoff":null,"perm":null,"perms":null,"device":null},{"name":"api@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":1,"work":null,"workSince":null,"workReason":null,"host":"computer-1-daemon@kai","hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"old@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":2,"work":null,"workSince":null,"workReason":null,"host":"computer-1-daemon@kai","hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"helper@lee","kind":"agent","owner":"lee","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"left","lastActive":0,"online":true,"cursor":3,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"handoff":{"size":15,"updatedAt":0,"computer":null},"perm":null,"perms":null,"device":null},{"name":"computer-1-daemon@kai","kind":"host","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":4,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":{"name":"computer-1","hostname":"box","note":null},"clis":null,"perm":null,"perms":null,"handoff":null}],"last_human_ts":null},
+            {"type":"todo","round":{"n":1,"title":null,"status":"open","openedMs":0,"doneMs":null,"counts":{"todo":2,"doing":0,"done":0,"total":2}},"items":[{"id":"T1","round":1,"title":"Check the logs","desc":null,"blockedBy":[],"blocked":false,"status":"todo","assignee":"helper@lee","createdBy":"helper@lee","createdSeq":6,"doneSeq":null,"createdMs":0,"doneMs":null,"updatedBy":"helper@lee","updatedMs":0,"current":{"seq":6,"from":"api@kai","ts":0,"line":"Kick-off for the lifecycle case."},"reply":null},{"id":"T2","round":1,"title":"Check the copy","desc":null,"blockedBy":[],"blocked":false,"status":"todo","assignee":"lee","createdBy":"api@kai","createdSeq":7,"doneSeq":null,"createdMs":0,"doneMs":null,"updatedBy":"api@kai","updatedMs":0,"current":{"seq":7,"from":"api@kai","ts":0,"line":"Please check the copy."},"reply":null}],"rounds":[{"n":1,"title":null,"status":"open","openedMs":0,"doneMs":null,"counts":{"todo":2,"doing":0,"done":0,"total":2}}],"counts":{"todo":2,"doing":0,"done":0,"total":2},"deleted":[]},
+            {"type":"room","room":{"id":"<topic>","name":"Route test topic","topic":"","owner":"kai","public":false,"archived":false},"members":[{"name":"kai","kind":"human","owner":"kai","displayName":"kai","roleCard":null,"roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":0,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"lee","kind":"human","owner":"lee","displayName":"lee","roleCard":null,"roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":0,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"handoff":null,"perm":null,"perms":null,"device":null},{"name":"api@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":1,"work":null,"workSince":null,"workReason":null,"host":"computer-1-daemon@kai","hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"old@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":2,"work":null,"workSince":null,"workReason":null,"host":"computer-1-daemon@kai","hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"helper@lee","kind":"agent","owner":"lee","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"left","lastActive":0,"online":false,"cursor":3,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"handoff":{"size":15,"updatedAt":0,"computer":null},"perm":null,"perms":null,"device":null},{"name":"computer-1-daemon@kai","kind":"host","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":4,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":{"name":"computer-1","hostname":"box","note":null},"clis":null,"perm":null,"perms":null,"handoff":null}],"last_human_ts":null}
+          ]
+        }
+      }
+    ],
+    "rows": {
+      "members": [
+        {"name":"api@kai","kind":"agent","owner":"kai","host_id":"computer-1-daemon@kai","role_card":"","cursor":1,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":"computer-1-daemon@kai","joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"computer-1-daemon@kai","kind":"host","owner":"kai","host_id":null,"role_card":"","cursor":4,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":"computer-1-daemon@kai","joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":"name:box","device":"{\"name\":\"computer-1\",\"hostname\":\"box\",\"note\":null}","clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"helper@lee","kind":"agent","owner":"lee","host_id":null,"role_card":"","cursor":3,"last_active":0,"status":"left","runtime":"local","backing":"subscription","seat_id":null,"joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"kai","kind":"human","owner":"kai","host_id":null,"role_card":null,"cursor":0,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":null,"joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"lee","kind":"human","owner":"lee","host_id":null,"role_card":null,"cursor":0,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":null,"joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"old@kai","kind":"agent","owner":"kai","host_id":"computer-1-daemon@kai","role_card":"","cursor":2,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":"computer-1-daemon@kai","joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null}
+      ],
+      "removed_computers": [],
+      "items": [
+        {"n":1,"status":"todo","assignee":"helper@lee"},
+        {"n":2,"status":"todo","assignee":"lee"}
+      ],
+      "item_log": [
+        {"id":4,"n":1,"ms":0,"by_name":"helper@lee","op":"left","from_json":"{\"status\":\"doing\"}","to_json":"{\"status\":\"todo\"}"}
+      ],
+      "schedules": [
+        {"n":1,"by":"lee","by_account":"lee","text":"Weekly notes","to_names":"[]","rule":"{\"kind\":\"once\",\"at\":1893488400000}","revive":1,"revive_name":null,"enabled":1,"next_at":0,"last_at":null,"last_seq":null,"last_error":null,"stopped_by":null,"stopped_reason":null,"created_at":0,"updated_at":0,"calendar":0},
+        {"n":2,"by":"kai","by_account":"kai","text":"Monthly review","to_names":"[]","rule":"{\"kind\":\"once\",\"at\":1896166800000}","revive":1,"revive_name":null,"enabled":1,"next_at":0,"last_at":null,"last_seq":null,"last_error":null,"stopped_by":null,"stopped_reason":null,"created_at":0,"updated_at":0,"calendar":0}
+      ],
+      "handoffs": [
+        "helper@lee"
+      ],
+      "room": {"archived_at":null,"archived_reason":null,"deleted_at":null,"public":0},
+      "messages": [
+        {"from_kind":"system","text":"helper@lee left","event":"{\"type\":\"leave\",\"name\":\"helper@lee\"}"}
+      ],
+      "kv": {"roomFrameDue":false,"publicSnap":false}
+    },
+    "closes": {
+      "kai": null,
+      "lee": null,
+      "helper": [
+        1000,
+        "left"
+      ],
+      "daemon": null
+    }
+  },
+  {
+    "case": "2 leave carried api@kai",
+    "steps": [
+      {
+        "call": "api@kai leaves",
+        "answer": {
+          "status": 200,
+          "body": {
+            "roomId": "<topic>",
+            "name": "api@kai",
+            "status": "left",
+            "accountActive": true,
+            "open": []
+          }
+        },
+        "frames": {
+          "kai": [
+            {"type":"message","message":{"seq":10,"from":"system","fromKind":"system","kind":"text","text":"api@kai left","mentions":[],"broadcast":false,"reply":null,"command":null,"event":{"type":"leave","name":"api@kai"},"scheduled":null,"ts":0}},
+            {"type":"members","members":[{"name":"kai","kind":"human","owner":"kai","displayName":"kai","roleCard":null,"roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":0,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"lee","kind":"human","owner":"lee","displayName":"lee","roleCard":null,"roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":0,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"handoff":null,"perm":null,"perms":null,"device":null},{"name":"api@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"left","lastActive":0,"online":true,"cursor":1,"work":null,"workSince":null,"workReason":null,"host":"computer-1-daemon@kai","hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"old@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":2,"work":null,"workSince":null,"workReason":null,"host":"computer-1-daemon@kai","hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"helper@lee","kind":"agent","owner":"lee","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":3,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"handoff":{"size":15,"updatedAt":0,"computer":null},"perm":null,"perms":null,"device":null},{"name":"computer-1-daemon@kai","kind":"host","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":4,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":{"name":"computer-1","hostname":"box","note":null},"clis":null,"perm":null,"perms":null,"handoff":null}]}
+          ],
+          "lee": [
+            {"type":"message","message":{"seq":10,"from":"system","fromKind":"system","kind":"text","text":"api@kai left","mentions":[],"broadcast":false,"reply":null,"command":null,"event":{"type":"leave","name":"api@kai"},"scheduled":null,"ts":0}},
+            {"type":"members","members":[{"name":"kai","kind":"human","owner":"kai","displayName":"kai","roleCard":null,"roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":0,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"handoff":null,"perm":null,"perms":null,"device":null},{"name":"lee","kind":"human","owner":"lee","displayName":"lee","roleCard":null,"roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":0,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"api@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"left","lastActive":0,"online":true,"cursor":1,"work":null,"workSince":null,"workReason":null,"host":"computer-1-daemon@kai","hostOfflineSince":null,"idleHandoffMinutes":null,"handoff":null,"perm":null,"perms":null,"device":null},{"name":"old@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":2,"work":null,"workSince":null,"workReason":null,"host":"computer-1-daemon@kai","hostOfflineSince":null,"idleHandoffMinutes":null,"handoff":null,"perm":null,"perms":null,"device":null},{"name":"helper@lee","kind":"agent","owner":"lee","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":3,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":{"size":15,"updatedAt":0,"computer":null}},{"name":"computer-1-daemon@kai","kind":"host","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":4,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"handoff":null,"perm":null,"perms":null,"device":{"name":"computer-1","note":null}}]}
+          ],
+          "helper": [],
+          "daemon": [
+            {"type":"room","room":{"id":"<topic>","name":"Route test topic","topic":"","owner":"kai","public":false,"archived":false},"members":[{"name":"kai","kind":"human","owner":"kai","displayName":"kai","roleCard":null,"roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":0,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"lee","kind":"human","owner":"lee","displayName":"lee","roleCard":null,"roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":0,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"handoff":null,"perm":null,"perms":null,"device":null},{"name":"api@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"left","lastActive":0,"online":true,"cursor":1,"work":null,"workSince":null,"workReason":null,"host":"computer-1-daemon@kai","hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"old@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":2,"work":null,"workSince":null,"workReason":null,"host":"computer-1-daemon@kai","hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"helper@lee","kind":"agent","owner":"lee","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":3,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"handoff":{"size":15,"updatedAt":0,"computer":null},"perm":null,"perms":null,"device":null},{"name":"computer-1-daemon@kai","kind":"host","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":4,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":{"name":"computer-1","hostname":"box","note":null},"clis":null,"perm":null,"perms":null,"handoff":null}],"last_human_ts":null}
+          ]
+        }
+      }
+    ],
+    "rows": {
+      "members": [
+        {"name":"api@kai","kind":"agent","owner":"kai","host_id":"computer-1-daemon@kai","role_card":"","cursor":1,"last_active":0,"status":"left","runtime":"local","backing":"subscription","seat_id":"computer-1-daemon@kai","joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"computer-1-daemon@kai","kind":"host","owner":"kai","host_id":null,"role_card":"","cursor":4,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":"computer-1-daemon@kai","joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":"name:box","device":"{\"name\":\"computer-1\",\"hostname\":\"box\",\"note\":null}","clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"helper@lee","kind":"agent","owner":"lee","host_id":null,"role_card":"","cursor":3,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":null,"joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"kai","kind":"human","owner":"kai","host_id":null,"role_card":null,"cursor":0,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":null,"joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"lee","kind":"human","owner":"lee","host_id":null,"role_card":null,"cursor":0,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":null,"joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"old@kai","kind":"agent","owner":"kai","host_id":"computer-1-daemon@kai","role_card":"","cursor":2,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":"computer-1-daemon@kai","joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null}
+      ],
+      "removed_computers": [],
+      "items": [
+        {"n":1,"status":"doing","assignee":"helper@lee"},
+        {"n":2,"status":"todo","assignee":"lee"}
+      ],
+      "item_log": [],
+      "schedules": [
+        {"n":1,"by":"lee","by_account":"lee","text":"Weekly notes","to_names":"[]","rule":"{\"kind\":\"once\",\"at\":1893488400000}","revive":1,"revive_name":null,"enabled":1,"next_at":0,"last_at":null,"last_seq":null,"last_error":null,"stopped_by":null,"stopped_reason":null,"created_at":0,"updated_at":0,"calendar":0},
+        {"n":2,"by":"kai","by_account":"kai","text":"Monthly review","to_names":"[]","rule":"{\"kind\":\"once\",\"at\":1896166800000}","revive":1,"revive_name":null,"enabled":1,"next_at":0,"last_at":null,"last_seq":null,"last_error":null,"stopped_by":null,"stopped_reason":null,"created_at":0,"updated_at":0,"calendar":0}
+      ],
+      "handoffs": [
+        "helper@lee"
+      ],
+      "room": {"archived_at":null,"archived_reason":null,"deleted_at":null,"public":0},
+      "messages": [
+        {"from_kind":"system","text":"api@kai left","event":"{\"type\":\"leave\",\"name\":\"api@kai\"}"}
+      ],
+      "kv": {"roomFrameDue":false,"publicSnap":false}
+    },
+    "closes": {"kai":null,"lee":null,"helper":null,"daemon":null}
+  },
+  {
+    "case": "3 leaveAccount lee",
+    "steps": [
+      {
+        "call": "lee leaves on the web",
+        "answer": {
+          "status": 200,
+          "body": {
+            "roomId": "<topic>",
+            "left": [
+              "lee",
+              "helper@lee"
+            ],
+            "public": false
+          }
+        },
+        "frames": {
+          "kai": [
+            {"type":"schedules","count":1,"proRequired":false},
+            {"type":"message","message":{"seq":10,"from":"system","fromKind":"system","kind":"text","text":"lee left","mentions":[],"broadcast":false,"reply":null,"command":null,"event":{"type":"leave","name":"lee"},"scheduled":null,"ts":0}},
+            {"type":"message","message":{"seq":11,"from":"system","fromKind":"system","kind":"text","text":"helper@lee left","mentions":[],"broadcast":false,"reply":null,"command":null,"event":{"type":"leave","name":"helper@lee"},"scheduled":null,"ts":0}},
+            {"type":"members","members":[{"name":"kai","kind":"human","owner":"kai","displayName":"kai","roleCard":null,"roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":0,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"lee","kind":"human","owner":"lee","displayName":"lee","roleCard":null,"roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"left","lastActive":0,"online":false,"cursor":0,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"handoff":null,"perm":null,"perms":null,"device":null},{"name":"api@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":1,"work":null,"workSince":null,"workReason":null,"host":"computer-1-daemon@kai","hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"old@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":2,"work":null,"workSince":null,"workReason":null,"host":"computer-1-daemon@kai","hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"helper@lee","kind":"agent","owner":"lee","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"left","lastActive":0,"online":false,"cursor":3,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"handoff":{"size":15,"updatedAt":0,"computer":null},"perm":null,"perms":null,"device":null},{"name":"computer-1-daemon@kai","kind":"host","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":4,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":{"name":"computer-1","hostname":"box","note":null},"clis":null,"perm":null,"perms":null,"handoff":null}]},
+            {"type":"todo","round":{"n":1,"title":null,"status":"open","openedMs":0,"doneMs":null,"counts":{"todo":2,"doing":0,"done":0,"total":2}},"items":[{"id":"T1","round":1,"title":"Check the logs","desc":null,"blockedBy":[],"blocked":false,"status":"todo","assignee":"helper@lee","createdBy":"helper@lee","createdSeq":6,"doneSeq":null,"createdMs":0,"doneMs":null,"updatedBy":"lee","updatedMs":0,"current":{"seq":6,"from":"api@kai","ts":0,"line":"Kick-off for the lifecycle case."},"reply":null},{"id":"T2","round":1,"title":"Check the copy","desc":null,"blockedBy":[],"blocked":false,"status":"todo","assignee":"lee","createdBy":"api@kai","createdSeq":7,"doneSeq":null,"createdMs":0,"doneMs":null,"updatedBy":"api@kai","updatedMs":0,"current":{"seq":7,"from":"api@kai","ts":0,"line":"Please check the copy."},"reply":null}],"rounds":[{"n":1,"title":null,"status":"open","openedMs":0,"doneMs":null,"counts":{"todo":2,"doing":0,"done":0,"total":2}}],"counts":{"todo":2,"doing":0,"done":0,"total":2},"deleted":[],"done":[]}
+          ],
+          "lee": [
+            {"type":"schedules","count":1,"proRequired":false},
+            {"type":"removed","account":"lee","by":"lee"}
+          ],
+          "helper": [
+            {"type":"removed","account":"lee","by":"lee"}
+          ],
+          "daemon": [
+            {"type":"room","room":{"id":"<topic>","name":"Route test topic","topic":"","owner":"kai","public":false,"archived":false},"members":[{"name":"kai","kind":"human","owner":"kai","displayName":"kai","roleCard":null,"roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":0,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"lee","kind":"human","owner":"lee","displayName":"lee","roleCard":null,"roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"left","lastActive":0,"online":true,"cursor":0,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"handoff":null,"perm":null,"perms":null,"device":null},{"name":"api@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":1,"work":null,"workSince":null,"workReason":null,"host":"computer-1-daemon@kai","hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"old@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":2,"work":null,"workSince":null,"workReason":null,"host":"computer-1-daemon@kai","hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"helper@lee","kind":"agent","owner":"lee","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"left","lastActive":0,"online":true,"cursor":3,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"handoff":{"size":15,"updatedAt":0,"computer":null},"perm":null,"perms":null,"device":null},{"name":"computer-1-daemon@kai","kind":"host","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":4,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":{"name":"computer-1","hostname":"box","note":null},"clis":null,"perm":null,"perms":null,"handoff":null}],"last_human_ts":null},
+            {"type":"todo","round":{"n":1,"title":null,"status":"open","openedMs":0,"doneMs":null,"counts":{"todo":2,"doing":0,"done":0,"total":2}},"items":[{"id":"T1","round":1,"title":"Check the logs","desc":null,"blockedBy":[],"blocked":false,"status":"todo","assignee":"helper@lee","createdBy":"helper@lee","createdSeq":6,"doneSeq":null,"createdMs":0,"doneMs":null,"updatedBy":"lee","updatedMs":0,"current":{"seq":6,"from":"api@kai","ts":0,"line":"Kick-off for the lifecycle case."},"reply":null},{"id":"T2","round":1,"title":"Check the copy","desc":null,"blockedBy":[],"blocked":false,"status":"todo","assignee":"lee","createdBy":"api@kai","createdSeq":7,"doneSeq":null,"createdMs":0,"doneMs":null,"updatedBy":"api@kai","updatedMs":0,"current":{"seq":7,"from":"api@kai","ts":0,"line":"Please check the copy."},"reply":null}],"rounds":[{"n":1,"title":null,"status":"open","openedMs":0,"doneMs":null,"counts":{"todo":2,"doing":0,"done":0,"total":2}}],"counts":{"todo":2,"doing":0,"done":0,"total":2},"deleted":[]},
+            {"type":"room","room":{"id":"<topic>","name":"Route test topic","topic":"","owner":"kai","public":false,"archived":false},"members":[{"name":"kai","kind":"human","owner":"kai","displayName":"kai","roleCard":null,"roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":0,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"lee","kind":"human","owner":"lee","displayName":"lee","roleCard":null,"roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"left","lastActive":0,"online":false,"cursor":0,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"handoff":null,"perm":null,"perms":null,"device":null},{"name":"api@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":1,"work":null,"workSince":null,"workReason":null,"host":"computer-1-daemon@kai","hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"old@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":2,"work":null,"workSince":null,"workReason":null,"host":"computer-1-daemon@kai","hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"helper@lee","kind":"agent","owner":"lee","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"left","lastActive":0,"online":false,"cursor":3,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"handoff":{"size":15,"updatedAt":0,"computer":null},"perm":null,"perms":null,"device":null},{"name":"computer-1-daemon@kai","kind":"host","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":4,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":{"name":"computer-1","hostname":"box","note":null},"clis":null,"perm":null,"perms":null,"handoff":null}],"last_human_ts":null}
+          ]
+        }
+      }
+    ],
+    "rows": {
+      "members": [
+        {"name":"api@kai","kind":"agent","owner":"kai","host_id":"computer-1-daemon@kai","role_card":"","cursor":1,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":"computer-1-daemon@kai","joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"computer-1-daemon@kai","kind":"host","owner":"kai","host_id":null,"role_card":"","cursor":4,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":"computer-1-daemon@kai","joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":"name:box","device":"{\"name\":\"computer-1\",\"hostname\":\"box\",\"note\":null}","clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"helper@lee","kind":"agent","owner":"lee","host_id":null,"role_card":"","cursor":3,"last_active":0,"status":"left","runtime":"local","backing":"subscription","seat_id":null,"joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"kai","kind":"human","owner":"kai","host_id":null,"role_card":null,"cursor":0,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":null,"joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"lee","kind":"human","owner":"lee","host_id":null,"role_card":null,"cursor":0,"last_active":0,"status":"left","runtime":"local","backing":"subscription","seat_id":null,"joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"old@kai","kind":"agent","owner":"kai","host_id":"computer-1-daemon@kai","role_card":"","cursor":2,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":"computer-1-daemon@kai","joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null}
+      ],
+      "removed_computers": [],
+      "items": [
+        {"n":1,"status":"todo","assignee":"helper@lee"},
+        {"n":2,"status":"todo","assignee":"lee"}
+      ],
+      "item_log": [
+        {"id":4,"n":1,"ms":0,"by_name":"lee","op":"left","from_json":"{\"status\":\"doing\"}","to_json":"{\"status\":\"todo\"}"}
+      ],
+      "schedules": [
+        {"n":2,"by":"kai","by_account":"kai","text":"Monthly review","to_names":"[]","rule":"{\"kind\":\"once\",\"at\":1896166800000}","revive":1,"revive_name":null,"enabled":1,"next_at":0,"last_at":null,"last_seq":null,"last_error":null,"stopped_by":null,"stopped_reason":null,"created_at":0,"updated_at":0,"calendar":0}
+      ],
+      "handoffs": [
+        "helper@lee"
+      ],
+      "room": {"archived_at":null,"archived_reason":null,"deleted_at":null,"public":0},
+      "messages": [
+        {"from_kind":"system","text":"lee left","event":"{\"type\":\"leave\",\"name\":\"lee\"}"},
+        {"from_kind":"system","text":"helper@lee left","event":"{\"type\":\"leave\",\"name\":\"helper@lee\"}"}
+      ],
+      "kv": {"roomFrameDue":false,"publicSnap":false}
+    },
+    "closes": {
+      "kai": null,
+      "lee": [
+        4004,
+        "left"
+      ],
+      "helper": [
+        4004,
+        "left"
+      ],
+      "daemon": null
+    }
+  },
+  {
+    "case": "4 removeAccount lee",
+    "steps": [
+      {
+        "call": "kai removes kai",
+        "answer": {
+          "status": 409,
+          "body": {"error":"the_owner_stays","next":"The creator cannot be removed from their own topic."}
+        },
+        "frames": {
+          "kai": [],
+          "lee": [],
+          "helper": [],
+          "daemon": []
+        }
+      },
+      {
+        "call": "kai removes zoe, who has nobody here",
+        "answer": {
+          "status": 404,
+          "body": {"error":"not_member","next":"zoe has nobody in this topic."}
+        },
+        "frames": {
+          "kai": [],
+          "lee": [],
+          "helper": [],
+          "daemon": []
+        }
+      },
+      {
+        "call": "kai removes lee",
+        "answer": {
+          "status": 200,
+          "body": {
+            "roomId": "<topic>",
+            "account": "lee",
+            "removed": [
+              "lee",
+              "helper@lee"
+            ]
+          }
+        },
+        "frames": {
+          "kai": [
+            {"type":"schedules","count":1,"proRequired":false},
+            {"type":"members","members":[{"name":"kai","kind":"human","owner":"kai","displayName":"kai","roleCard":null,"roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":0,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"api@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":1,"work":null,"workSince":null,"workReason":null,"host":"computer-1-daemon@kai","hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"old@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":2,"work":null,"workSince":null,"workReason":null,"host":"computer-1-daemon@kai","hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"computer-1-daemon@kai","kind":"host","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":4,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":{"name":"computer-1","hostname":"box","note":null},"clis":null,"perm":null,"perms":null,"handoff":null}]},
+            {"type":"todo","round":{"n":1,"title":null,"status":"open","openedMs":0,"doneMs":null,"counts":{"todo":2,"doing":0,"done":0,"total":2}},"items":[{"id":"T1","round":1,"title":"Check the logs","desc":null,"blockedBy":[],"blocked":false,"status":"todo","assignee":"helper@lee","createdBy":"helper@lee","createdSeq":6,"doneSeq":null,"createdMs":0,"doneMs":null,"updatedBy":"kai","updatedMs":0,"current":{"seq":6,"from":"api@kai","ts":0,"line":"Kick-off for the lifecycle case."},"reply":null},{"id":"T2","round":1,"title":"Check the copy","desc":null,"blockedBy":[],"blocked":false,"status":"todo","assignee":"lee","createdBy":"api@kai","createdSeq":7,"doneSeq":null,"createdMs":0,"doneMs":null,"updatedBy":"api@kai","updatedMs":0,"current":{"seq":7,"from":"api@kai","ts":0,"line":"Please check the copy."},"reply":null}],"rounds":[{"n":1,"title":null,"status":"open","openedMs":0,"doneMs":null,"counts":{"todo":2,"doing":0,"done":0,"total":2}}],"counts":{"todo":2,"doing":0,"done":0,"total":2},"deleted":[],"done":[]}
+          ],
+          "lee": [
+            {"type":"schedules","count":1,"proRequired":false},
+            {"type":"removed","account":"lee","by":"kai"}
+          ],
+          "helper": [
+            {"type":"removed","account":"lee","by":"kai"}
+          ],
+          "daemon": [
+            {"type":"room","room":{"id":"<topic>","name":"Route test topic","topic":"","owner":"kai","public":false,"archived":false},"members":[{"name":"kai","kind":"human","owner":"kai","displayName":"kai","roleCard":null,"roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":0,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"api@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":1,"work":null,"workSince":null,"workReason":null,"host":"computer-1-daemon@kai","hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"old@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":2,"work":null,"workSince":null,"workReason":null,"host":"computer-1-daemon@kai","hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"computer-1-daemon@kai","kind":"host","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":4,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":{"name":"computer-1","hostname":"box","note":null},"clis":null,"perm":null,"perms":null,"handoff":null}],"last_human_ts":null},
+            {"type":"todo","round":{"n":1,"title":null,"status":"open","openedMs":0,"doneMs":null,"counts":{"todo":2,"doing":0,"done":0,"total":2}},"items":[{"id":"T1","round":1,"title":"Check the logs","desc":null,"blockedBy":[],"blocked":false,"status":"todo","assignee":"helper@lee","createdBy":"helper@lee","createdSeq":6,"doneSeq":null,"createdMs":0,"doneMs":null,"updatedBy":"kai","updatedMs":0,"current":{"seq":6,"from":"api@kai","ts":0,"line":"Kick-off for the lifecycle case."},"reply":null},{"id":"T2","round":1,"title":"Check the copy","desc":null,"blockedBy":[],"blocked":false,"status":"todo","assignee":"lee","createdBy":"api@kai","createdSeq":7,"doneSeq":null,"createdMs":0,"doneMs":null,"updatedBy":"api@kai","updatedMs":0,"current":{"seq":7,"from":"api@kai","ts":0,"line":"Please check the copy."},"reply":null}],"rounds":[{"n":1,"title":null,"status":"open","openedMs":0,"doneMs":null,"counts":{"todo":2,"doing":0,"done":0,"total":2}}],"counts":{"todo":2,"doing":0,"done":0,"total":2},"deleted":[]},
+            {"type":"room","room":{"id":"<topic>","name":"Route test topic","topic":"","owner":"kai","public":false,"archived":false},"members":[{"name":"kai","kind":"human","owner":"kai","displayName":"kai","roleCard":null,"roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":0,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"api@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":1,"work":null,"workSince":null,"workReason":null,"host":"computer-1-daemon@kai","hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"old@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":2,"work":null,"workSince":null,"workReason":null,"host":"computer-1-daemon@kai","hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"computer-1-daemon@kai","kind":"host","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":4,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":{"name":"computer-1","hostname":"box","note":null},"clis":null,"perm":null,"perms":null,"handoff":null}],"last_human_ts":null}
+          ]
+        }
+      }
+    ],
+    "rows": {
+      "members": [
+        {"name":"api@kai","kind":"agent","owner":"kai","host_id":"computer-1-daemon@kai","role_card":"","cursor":1,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":"computer-1-daemon@kai","joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"computer-1-daemon@kai","kind":"host","owner":"kai","host_id":null,"role_card":"","cursor":4,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":"computer-1-daemon@kai","joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":"name:box","device":"{\"name\":\"computer-1\",\"hostname\":\"box\",\"note\":null}","clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"kai","kind":"human","owner":"kai","host_id":null,"role_card":null,"cursor":0,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":null,"joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"old@kai","kind":"agent","owner":"kai","host_id":"computer-1-daemon@kai","role_card":"","cursor":2,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":"computer-1-daemon@kai","joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null}
+      ],
+      "removed_computers": [],
+      "items": [
+        {"n":1,"status":"todo","assignee":"helper@lee"},
+        {"n":2,"status":"todo","assignee":"lee"}
+      ],
+      "item_log": [
+        {"id":4,"n":1,"ms":0,"by_name":"kai","op":"left","from_json":"{\"status\":\"doing\"}","to_json":"{\"status\":\"todo\"}"}
+      ],
+      "schedules": [
+        {"n":2,"by":"kai","by_account":"kai","text":"Monthly review","to_names":"[]","rule":"{\"kind\":\"once\",\"at\":1896166800000}","revive":1,"revive_name":null,"enabled":1,"next_at":0,"last_at":null,"last_seq":null,"last_error":null,"stopped_by":null,"stopped_reason":null,"created_at":0,"updated_at":0,"calendar":0}
+      ],
+      "handoffs": [],
+      "room": {"archived_at":null,"archived_reason":null,"deleted_at":null,"public":0},
+      "messages": [],
+      "kv": {"roomFrameDue":false,"publicSnap":false}
+    },
+    "closes": {
+      "kai": null,
+      "lee": [
+        4004,
+        "removed"
+      ],
+      "helper": [
+        4004,
+        "removed"
+      ],
+      "daemon": null
+    }
+  },
+  {
+    "case": "5 accountGone lee, a viewer",
+    "steps": [
+      {
+        "call": "accountGone lee",
+        "answer": {
+          "removed": [
+            "lee",
+            "helper@lee"
+          ]
+        },
+        "frames": {
+          "kai": [
+            {"type":"members","members":[{"name":"kai","kind":"human","owner":"kai","displayName":"kai","roleCard":null,"roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":0,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"api@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":1,"work":null,"workSince":null,"workReason":null,"host":"computer-1-daemon@kai","hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"old@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":2,"work":null,"workSince":null,"workReason":null,"host":"computer-1-daemon@kai","hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"computer-1-daemon@kai","kind":"host","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":4,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":{"name":"computer-1","hostname":"box","note":null},"clis":null,"perm":null,"perms":null,"handoff":null}]}
+          ],
+          "daemon": [
+            {"type":"room","room":{"id":"<topic>","name":"Route test topic","topic":"","owner":"kai","public":true,"archived":false},"members":[{"name":"kai","kind":"human","owner":"kai","displayName":"kai","roleCard":null,"roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":0,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"api@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":1,"work":null,"workSince":null,"workReason":null,"host":"computer-1-daemon@kai","hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"old@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":2,"work":null,"workSince":null,"workReason":null,"host":"computer-1-daemon@kai","hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"computer-1-daemon@kai","kind":"host","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":4,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":{"name":"computer-1","hostname":"box","note":null},"clis":null,"perm":null,"perms":null,"handoff":null}],"last_human_ts":null}
+          ],
+          "viewer": [
+            {"type":"removed","account":"lee","by":"scorpio"}
+          ]
+        }
+      }
+    ],
+    "rows": {
+      "members": [
+        {"name":"api@kai","kind":"agent","owner":"kai","host_id":"computer-1-daemon@kai","role_card":"","cursor":1,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":"computer-1-daemon@kai","joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"computer-1-daemon@kai","kind":"host","owner":"kai","host_id":null,"role_card":"","cursor":4,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":"computer-1-daemon@kai","joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":"name:box","device":"{\"name\":\"computer-1\",\"hostname\":\"box\",\"note\":null}","clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"kai","kind":"human","owner":"kai","host_id":null,"role_card":null,"cursor":0,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":null,"joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"old@kai","kind":"agent","owner":"kai","host_id":"computer-1-daemon@kai","role_card":"","cursor":2,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":"computer-1-daemon@kai","joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null}
+      ],
+      "removed_computers": [],
+      "items": [
+        {"n":1,"status":"todo","assignee":"helper@lee"},
+        {"n":2,"status":"todo","assignee":"lee"}
+      ],
+      "item_log": [],
+      "schedules": [
+        {"n":2,"by":"kai","by_account":"kai","text":"Monthly review","to_names":"[]","rule":"{\"kind\":\"once\",\"at\":1896166800000}","revive":1,"revive_name":null,"enabled":1,"next_at":0,"last_at":null,"last_seq":null,"last_error":null,"stopped_by":null,"stopped_reason":null,"created_at":0,"updated_at":0,"calendar":0}
+      ],
+      "handoffs": [],
+      "room": {"archived_at":null,"archived_reason":null,"deleted_at":null,"public":1},
+      "messages": [],
+      "kv": {"roomFrameDue":false,"publicSnap":true}
+    },
+    "closes": {
+      "kai": null,
+      "daemon": null,
+      "viewer": [
+        4004,
+        "account deleted"
+      ]
+    }
+  },
+  {
+    "case": "6 removeOwnComputer",
+    "steps": [
+      {
+        "call": "lee removes kai's computer",
+        "answer": {
+          "status": 403,
+          "body": {"error":"forbidden","next":"Only the computer's account can remove it."}
+        },
+        "frames": {
+          "kai": [],
+          "lee": [],
+          "helper": [],
+          "daemon": []
+        }
+      },
+      {
+        "call": "kai removes the computer",
+        "answer": {
+          "status": 200,
+          "body": {
+            "roomId": "<topic>",
+            "removed": [
+              "computer-1-daemon@kai"
+            ],
+            "left": [
+              "api@kai",
+              "old@kai"
+            ]
+          }
+        },
+        "frames": {
+          "kai": [
+            {"type":"message","message":{"seq":10,"from":"system","fromKind":"system","kind":"text","text":"api@kai left","mentions":[],"broadcast":false,"reply":null,"command":null,"event":{"type":"leave","name":"api@kai"},"scheduled":null,"ts":0}},
+            {"type":"message","message":{"seq":11,"from":"system","fromKind":"system","kind":"text","text":"old@kai left","mentions":[],"broadcast":false,"reply":null,"command":null,"event":{"type":"leave","name":"old@kai"},"scheduled":null,"ts":0}},
+            {"type":"members","members":[{"name":"kai","kind":"human","owner":"kai","displayName":"kai","roleCard":null,"roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":0,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"lee","kind":"human","owner":"lee","displayName":"lee","roleCard":null,"roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":0,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"handoff":null,"perm":null,"perms":null,"device":null},{"name":"api@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"left","lastActive":0,"online":false,"cursor":1,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"old@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"left","lastActive":0,"online":false,"cursor":2,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"helper@lee","kind":"agent","owner":"lee","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":3,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"handoff":{"size":15,"updatedAt":0,"computer":null},"perm":null,"perms":null,"device":null}]}
+          ],
+          "lee": [
+            {"type":"message","message":{"seq":10,"from":"system","fromKind":"system","kind":"text","text":"api@kai left","mentions":[],"broadcast":false,"reply":null,"command":null,"event":{"type":"leave","name":"api@kai"},"scheduled":null,"ts":0}},
+            {"type":"message","message":{"seq":11,"from":"system","fromKind":"system","kind":"text","text":"old@kai left","mentions":[],"broadcast":false,"reply":null,"command":null,"event":{"type":"leave","name":"old@kai"},"scheduled":null,"ts":0}},
+            {"type":"members","members":[{"name":"kai","kind":"human","owner":"kai","displayName":"kai","roleCard":null,"roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":0,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"handoff":null,"perm":null,"perms":null,"device":null},{"name":"lee","kind":"human","owner":"lee","displayName":"lee","roleCard":null,"roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":0,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"api@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"left","lastActive":0,"online":false,"cursor":1,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"handoff":null,"perm":null,"perms":null,"device":null},{"name":"old@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"left","lastActive":0,"online":false,"cursor":2,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"handoff":null,"perm":null,"perms":null,"device":null},{"name":"helper@lee","kind":"agent","owner":"lee","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":3,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":{"size":15,"updatedAt":0,"computer":null}}]}
+          ],
+          "helper": [],
+          "daemon": [
+            {"type":"removed","account":"kai","by":"kai"}
+          ]
+        }
+      }
+    ],
+    "rows": {
+      "members": [
+        {"name":"api@kai","kind":"agent","owner":"kai","host_id":null,"role_card":"","cursor":1,"last_active":0,"status":"left","runtime":"local","backing":"subscription","seat_id":"computer-1-daemon@kai","joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"helper@lee","kind":"agent","owner":"lee","host_id":null,"role_card":"","cursor":3,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":null,"joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"kai","kind":"human","owner":"kai","host_id":null,"role_card":null,"cursor":0,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":null,"joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"lee","kind":"human","owner":"lee","host_id":null,"role_card":null,"cursor":0,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":null,"joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"old@kai","kind":"agent","owner":"kai","host_id":null,"role_card":"","cursor":2,"last_active":0,"status":"left","runtime":"local","backing":"subscription","seat_id":"computer-1-daemon@kai","joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null}
+      ],
+      "removed_computers": [
+        {"name":"computer-1-daemon@kai","owner":"kai","device_id":"name:box"}
+      ],
+      "items": [
+        {"n":1,"status":"doing","assignee":"helper@lee"},
+        {"n":2,"status":"todo","assignee":"lee"}
+      ],
+      "item_log": [],
+      "schedules": [
+        {"n":1,"by":"lee","by_account":"lee","text":"Weekly notes","to_names":"[]","rule":"{\"kind\":\"once\",\"at\":1893488400000}","revive":1,"revive_name":null,"enabled":1,"next_at":0,"last_at":null,"last_seq":null,"last_error":null,"stopped_by":null,"stopped_reason":null,"created_at":0,"updated_at":0,"calendar":0},
+        {"n":2,"by":"kai","by_account":"kai","text":"Monthly review","to_names":"[]","rule":"{\"kind\":\"once\",\"at\":1896166800000}","revive":1,"revive_name":null,"enabled":1,"next_at":0,"last_at":null,"last_seq":null,"last_error":null,"stopped_by":null,"stopped_reason":null,"created_at":0,"updated_at":0,"calendar":0}
+      ],
+      "handoffs": [
+        "helper@lee"
+      ],
+      "room": {"archived_at":null,"archived_reason":null,"deleted_at":null,"public":0},
+      "messages": [
+        {"from_kind":"system","text":"api@kai left","event":"{\"type\":\"leave\",\"name\":\"api@kai\"}"},
+        {"from_kind":"system","text":"old@kai left","event":"{\"type\":\"leave\",\"name\":\"old@kai\"}"}
+      ],
+      "kv": {"roomFrameDue":false,"publicSnap":false}
+    },
+    "closes": {
+      "kai": null,
+      "lee": null,
+      "helper": null,
+      "daemon": [
+        4004,
+        "computer removed"
+      ]
+    }
+  },
+  {
+    "case": "7 archive and restore",
+    "steps": [
+      {
+        "call": "kai archives",
+        "answer": {
+          "status": 200,
+          "body": {"id":"<topic>","name":"Route test topic","topic":"","owner":"kai","hasCode":true,"public":false,"archived":true,"archivedAt":0,"archivedReason":null,"createdAt":0,"code":"XK7-9QD-4M2"}
+        },
+        "frames": {
+          "kai": [
+            {"type":"schedules","count":0,"proRequired":false},
+            {"type":"room","room":{"id":"<topic>","name":"Route test topic","topic":"","owner":"kai","hasCode":true,"public":false,"archived":true,"archivedAt":0,"archivedReason":null,"createdAt":0,"code":"XK7-9QD-4M2"}}
+          ],
+          "lee": [
+            {"type":"schedules","count":0,"proRequired":false},
+            {"type":"room","room":{"id":"<topic>","name":"Route test topic","topic":"","owner":"kai","hasCode":true,"public":false,"archived":true,"archivedAt":0,"archivedReason":null,"createdAt":0,"code":"XK7-9QD-4M2"}}
+          ],
+          "helper": [],
+          "daemon": [
+            {"type":"room","room":{"id":"<topic>","name":"Route test topic","topic":"","owner":"kai","public":false,"archived":true},"members":[{"name":"kai","kind":"human","owner":"kai","displayName":"kai","roleCard":null,"roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":0,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"lee","kind":"human","owner":"lee","displayName":"lee","roleCard":null,"roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":0,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"handoff":null,"perm":null,"perms":null,"device":null},{"name":"api@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":1,"work":null,"workSince":null,"workReason":null,"host":"computer-1-daemon@kai","hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"old@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":2,"work":null,"workSince":null,"workReason":null,"host":"computer-1-daemon@kai","hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"helper@lee","kind":"agent","owner":"lee","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":3,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"handoff":{"size":15,"updatedAt":0,"computer":null},"perm":null,"perms":null,"device":null},{"name":"computer-1-daemon@kai","kind":"host","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":4,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":{"name":"computer-1","hostname":"box","note":null},"clis":null,"perm":null,"perms":null,"handoff":null}],"last_human_ts":null}
+          ]
+        }
+      },
+      {
+        "call": "kai restores",
+        "answer": {
+          "status": 200,
+          "body": {"id":"<topic>","name":"Route test topic","topic":"","owner":"kai","hasCode":true,"public":false,"archived":false,"archivedAt":null,"archivedReason":null,"createdAt":0,"code":"XK7-9QD-4M2"}
+        },
+        "frames": {
+          "kai": [
+            {"type":"room","room":{"id":"<topic>","name":"Route test topic","topic":"","owner":"kai","hasCode":true,"public":false,"archived":false,"archivedAt":null,"archivedReason":null,"createdAt":0,"code":"XK7-9QD-4M2"}}
+          ],
+          "lee": [
+            {"type":"room","room":{"id":"<topic>","name":"Route test topic","topic":"","owner":"kai","hasCode":true,"public":false,"archived":false,"archivedAt":null,"archivedReason":null,"createdAt":0,"code":"XK7-9QD-4M2"}}
+          ],
+          "helper": [],
+          "daemon": [
+            {"type":"room","room":{"id":"<topic>","name":"Route test topic","topic":"","owner":"kai","public":false,"archived":false},"members":[{"name":"kai","kind":"human","owner":"kai","displayName":"kai","roleCard":null,"roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":0,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"lee","kind":"human","owner":"lee","displayName":"lee","roleCard":null,"roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":0,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"handoff":null,"perm":null,"perms":null,"device":null},{"name":"api@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":1,"work":null,"workSince":null,"workReason":null,"host":"computer-1-daemon@kai","hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"old@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":2,"work":null,"workSince":null,"workReason":null,"host":"computer-1-daemon@kai","hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"helper@lee","kind":"agent","owner":"lee","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":3,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"handoff":{"size":15,"updatedAt":0,"computer":null},"perm":null,"perms":null,"device":null},{"name":"computer-1-daemon@kai","kind":"host","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":4,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":{"name":"computer-1","hostname":"box","note":null},"clis":null,"perm":null,"perms":null,"handoff":null}],"last_human_ts":null}
+          ]
+        }
+      },
+      {
+        "call": "planArchive true",
+        "answer": true,
+        "frames": {
+          "kai": [
+            {"type":"room","room":{"id":"<topic>","name":"Route test topic","topic":"","owner":"kai","hasCode":true,"public":false,"archived":true,"archivedAt":0,"archivedReason":"downgrade","createdAt":0,"code":"XK7-9QD-4M2"}}
+          ],
+          "lee": [
+            {"type":"room","room":{"id":"<topic>","name":"Route test topic","topic":"","owner":"kai","hasCode":true,"public":false,"archived":true,"archivedAt":0,"archivedReason":"downgrade","createdAt":0,"code":"XK7-9QD-4M2"}}
+          ],
+          "helper": [],
+          "daemon": [
+            {"type":"room","room":{"id":"<topic>","name":"Route test topic","topic":"","owner":"kai","public":false,"archived":true},"members":[{"name":"kai","kind":"human","owner":"kai","displayName":"kai","roleCard":null,"roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":0,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"lee","kind":"human","owner":"lee","displayName":"lee","roleCard":null,"roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":0,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"handoff":null,"perm":null,"perms":null,"device":null},{"name":"api@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":1,"work":null,"workSince":null,"workReason":null,"host":"computer-1-daemon@kai","hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"old@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":2,"work":null,"workSince":null,"workReason":null,"host":"computer-1-daemon@kai","hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"helper@lee","kind":"agent","owner":"lee","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":3,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"handoff":{"size":15,"updatedAt":0,"computer":null},"perm":null,"perms":null,"device":null},{"name":"computer-1-daemon@kai","kind":"host","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":4,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":{"name":"computer-1","hostname":"box","note":null},"clis":null,"perm":null,"perms":null,"handoff":null}],"last_human_ts":null}
+          ]
+        }
+      },
+      {
+        "call": "planArchive false",
+        "answer": true,
+        "frames": {
+          "kai": [
+            {"type":"room","room":{"id":"<topic>","name":"Route test topic","topic":"","owner":"kai","hasCode":true,"public":false,"archived":false,"archivedAt":null,"archivedReason":null,"createdAt":0,"code":"XK7-9QD-4M2"}}
+          ],
+          "lee": [
+            {"type":"room","room":{"id":"<topic>","name":"Route test topic","topic":"","owner":"kai","hasCode":true,"public":false,"archived":false,"archivedAt":null,"archivedReason":null,"createdAt":0,"code":"XK7-9QD-4M2"}}
+          ],
+          "helper": [],
+          "daemon": [
+            {"type":"room","room":{"id":"<topic>","name":"Route test topic","topic":"","owner":"kai","public":false,"archived":false},"members":[{"name":"kai","kind":"human","owner":"kai","displayName":"kai","roleCard":null,"roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":0,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"lee","kind":"human","owner":"lee","displayName":"lee","roleCard":null,"roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":0,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"handoff":null,"perm":null,"perms":null,"device":null},{"name":"api@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":1,"work":null,"workSince":null,"workReason":null,"host":"computer-1-daemon@kai","hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"old@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":2,"work":null,"workSince":null,"workReason":null,"host":"computer-1-daemon@kai","hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"helper@lee","kind":"agent","owner":"lee","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":3,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"handoff":{"size":15,"updatedAt":0,"computer":null},"perm":null,"perms":null,"device":null},{"name":"computer-1-daemon@kai","kind":"host","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":4,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":{"name":"computer-1","hostname":"box","note":null},"clis":null,"perm":null,"perms":null,"handoff":null}],"last_human_ts":null}
+          ]
+        }
+      },
+      {
+        "call": "quietArchive",
+        "answer": {
+          "ok": {"archivedAt":0,"archivedReason":"retention","lastAt":0}
+        },
+        "frames": {
+          "kai": [
+            {"type":"room","room":{"id":"<topic>","name":"Route test topic","topic":"","owner":"kai","hasCode":true,"public":false,"archived":true,"archivedAt":0,"archivedReason":"retention","createdAt":0,"code":"XK7-9QD-4M2"}}
+          ],
+          "lee": [
+            {"type":"room","room":{"id":"<topic>","name":"Route test topic","topic":"","owner":"kai","hasCode":true,"public":false,"archived":true,"archivedAt":0,"archivedReason":"retention","createdAt":0,"code":"XK7-9QD-4M2"}}
+          ],
+          "helper": [],
+          "daemon": [
+            {"type":"room","room":{"id":"<topic>","name":"Route test topic","topic":"","owner":"kai","public":false,"archived":true},"members":[{"name":"kai","kind":"human","owner":"kai","displayName":"kai","roleCard":null,"roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":0,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"lee","kind":"human","owner":"lee","displayName":"lee","roleCard":null,"roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":0,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"handoff":null,"perm":null,"perms":null,"device":null},{"name":"api@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":1,"work":null,"workSince":null,"workReason":null,"host":"computer-1-daemon@kai","hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"old@kai","kind":"agent","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":2,"work":null,"workSince":null,"workReason":null,"host":"computer-1-daemon@kai","hostOfflineSince":null,"idleHandoffMinutes":null,"device":null,"clis":null,"perm":null,"perms":null,"handoff":null},{"name":"helper@lee","kind":"agent","owner":"lee","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":3,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"handoff":{"size":15,"updatedAt":0,"computer":null},"perm":null,"perms":null,"device":null},{"name":"computer-1-daemon@kai","kind":"host","owner":"kai","displayName":null,"roleCard":"","roleCardBy":null,"roleCardAt":null,"lane":null,"laneBy":null,"laneAt":null,"status":"active","lastActive":0,"online":true,"cursor":4,"work":null,"workSince":null,"workReason":null,"host":null,"hostOfflineSince":null,"idleHandoffMinutes":null,"device":{"name":"computer-1","hostname":"box","note":null},"clis":null,"perm":null,"perms":null,"handoff":null}],"last_human_ts":null}
+          ]
+        }
+      }
+    ],
+    "rows": {
+      "members": [
+        {"name":"api@kai","kind":"agent","owner":"kai","host_id":"computer-1-daemon@kai","role_card":"","cursor":1,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":"computer-1-daemon@kai","joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"computer-1-daemon@kai","kind":"host","owner":"kai","host_id":null,"role_card":"","cursor":4,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":"computer-1-daemon@kai","joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":"name:box","device":"{\"name\":\"computer-1\",\"hostname\":\"box\",\"note\":null}","clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"helper@lee","kind":"agent","owner":"lee","host_id":null,"role_card":"","cursor":3,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":null,"joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"kai","kind":"human","owner":"kai","host_id":null,"role_card":null,"cursor":0,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":null,"joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"lee","kind":"human","owner":"lee","host_id":null,"role_card":null,"cursor":0,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":null,"joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"old@kai","kind":"agent","owner":"kai","host_id":"computer-1-daemon@kai","role_card":"","cursor":2,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":"computer-1-daemon@kai","joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null}
+      ],
+      "removed_computers": [],
+      "items": [
+        {"n":1,"status":"doing","assignee":"helper@lee"},
+        {"n":2,"status":"todo","assignee":"lee"}
+      ],
+      "item_log": [],
+      "schedules": [
+        {"n":1,"by":"lee","by_account":"lee","text":"Weekly notes","to_names":"[]","rule":"{\"kind\":\"once\",\"at\":1893488400000}","revive":1,"revive_name":null,"enabled":0,"next_at":null,"last_at":null,"last_seq":null,"last_error":null,"stopped_by":null,"stopped_reason":"archived","created_at":0,"updated_at":0,"calendar":0},
+        {"n":2,"by":"kai","by_account":"kai","text":"Monthly review","to_names":"[]","rule":"{\"kind\":\"once\",\"at\":1896166800000}","revive":1,"revive_name":null,"enabled":0,"next_at":null,"last_at":null,"last_seq":null,"last_error":null,"stopped_by":null,"stopped_reason":"archived","created_at":0,"updated_at":0,"calendar":0}
+      ],
+      "handoffs": [
+        "helper@lee"
+      ],
+      "room": {"archived_at":0,"archived_reason":"retention","deleted_at":null,"public":0},
+      "messages": [],
+      "kv": {"roomFrameDue":false,"publicSnap":false}
+    },
+    "closes": {"kai":null,"lee":null,"helper":null,"daemon":null}
+  },
+  {
+    "case": "8a deleteRoom",
+    "steps": [
+      {
+        "call": "deleteRoom",
+        "answer": {
+          "ok": {"roomId":"<topic>","deletedAt":0}
+        },
+        "frames": {
+          "kai": [
+            {"type":"deleted","by":"kai"}
+          ],
+          "lee": [
+            {"type":"deleted","by":"kai"}
+          ],
+          "helper": [],
+          "daemon": []
+        }
+      }
+    ],
+    "rows": {
+      "members": [
+        {"name":"api@kai","kind":"agent","owner":"kai","host_id":"computer-1-daemon@kai","role_card":"","cursor":1,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":"computer-1-daemon@kai","joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"computer-1-daemon@kai","kind":"host","owner":"kai","host_id":null,"role_card":"","cursor":4,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":"computer-1-daemon@kai","joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":"name:box","device":"{\"name\":\"computer-1\",\"hostname\":\"box\",\"note\":null}","clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"helper@lee","kind":"agent","owner":"lee","host_id":null,"role_card":"","cursor":3,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":null,"joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"kai","kind":"human","owner":"kai","host_id":null,"role_card":null,"cursor":0,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":null,"joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"lee","kind":"human","owner":"lee","host_id":null,"role_card":null,"cursor":0,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":null,"joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"old@kai","kind":"agent","owner":"kai","host_id":"computer-1-daemon@kai","role_card":"","cursor":2,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":"computer-1-daemon@kai","joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null}
+      ],
+      "removed_computers": [],
+      "items": [
+        {"n":1,"status":"doing","assignee":"helper@lee"},
+        {"n":2,"status":"todo","assignee":"lee"}
+      ],
+      "item_log": [],
+      "schedules": [],
+      "handoffs": [
+        "helper@lee"
+      ],
+      "room": {"archived_at":null,"archived_reason":null,"deleted_at":0,"public":0},
+      "messages": [],
+      "kv": {"roomFrameDue":false,"publicSnap":false}
+    },
+    "closes": {
+      "kai": [
+        4010,
+        "room deleted"
+      ],
+      "lee": [
+        4010,
+        "room deleted"
+      ],
+      "helper": [
+        4010,
+        "room deleted"
+      ],
+      "daemon": [
+        4010,
+        "room deleted"
+      ]
+    }
+  },
+  {
+    "case": "8b retentionPurge",
+    "steps": [
+      {
+        "call": "retentionPurge",
+        "answer": {
+          "ok": {"deletedAt":0}
+        },
+        "frames": {
+          "kai": [
+            {"type":"deleted","reason":"retention"}
+          ],
+          "lee": [
+            {"type":"deleted","reason":"retention"}
+          ],
+          "helper": [],
+          "daemon": []
+        }
+      }
+    ],
+    "rows": {
+      "members": [
+        {"name":"api@kai","kind":"agent","owner":"kai","host_id":"computer-1-daemon@kai","role_card":"","cursor":1,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":"computer-1-daemon@kai","joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"computer-1-daemon@kai","kind":"host","owner":"kai","host_id":null,"role_card":"","cursor":4,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":"computer-1-daemon@kai","joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":"name:box","device":"{\"name\":\"computer-1\",\"hostname\":\"box\",\"note\":null}","clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"helper@lee","kind":"agent","owner":"lee","host_id":null,"role_card":"","cursor":3,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":null,"joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"kai","kind":"human","owner":"kai","host_id":null,"role_card":null,"cursor":0,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":null,"joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"lee","kind":"human","owner":"lee","host_id":null,"role_card":null,"cursor":0,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":null,"joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"old@kai","kind":"agent","owner":"kai","host_id":"computer-1-daemon@kai","role_card":"","cursor":2,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":"computer-1-daemon@kai","joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null}
+      ],
+      "removed_computers": [],
+      "items": [
+        {"n":1,"status":"doing","assignee":"helper@lee"},
+        {"n":2,"status":"todo","assignee":"lee"}
+      ],
+      "item_log": [],
+      "schedules": [],
+      "handoffs": [
+        "helper@lee"
+      ],
+      "room": {"archived_at":0,"archived_reason":null,"deleted_at":0,"public":0},
+      "messages": [],
+      "kv": {"roomFrameDue":false,"publicSnap":false}
+    },
+    "closes": {
+      "kai": [
+        4010,
+        "room deleted"
+      ],
+      "lee": [
+        4010,
+        "room deleted"
+      ],
+      "helper": [
+        4010,
+        "room deleted"
+      ],
+      "daemon": [
+        4010,
+        "room deleted"
+      ]
+    }
+  },
+  {
+    "case": "9 planChanged to free",
+    "steps": [
+      {
+        "call": "planChanged",
+        "answer": null,
+        "frames": {
+          "kai": [
+            {"type":"schedules","count":0,"proRequired":false}
+          ],
+          "lee": [
+            {"type":"schedules","count":0,"proRequired":false}
+          ],
+          "helper": [],
+          "daemon": []
+        }
+      }
+    ],
+    "rows": {
+      "members": [
+        {"name":"api@kai","kind":"agent","owner":"kai","host_id":"computer-1-daemon@kai","role_card":"","cursor":1,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":"computer-1-daemon@kai","joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"computer-1-daemon@kai","kind":"host","owner":"kai","host_id":null,"role_card":"","cursor":4,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":"computer-1-daemon@kai","joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":"name:box","device":"{\"name\":\"computer-1\",\"hostname\":\"box\",\"note\":null}","clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"helper@lee","kind":"agent","owner":"lee","host_id":null,"role_card":"","cursor":3,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":null,"joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"kai","kind":"human","owner":"kai","host_id":null,"role_card":null,"cursor":0,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":null,"joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"lee","kind":"human","owner":"lee","host_id":null,"role_card":null,"cursor":0,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":null,"joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null},
+        {"name":"old@kai","kind":"agent","owner":"kai","host_id":"computer-1-daemon@kai","role_card":"","cursor":2,"last_active":0,"status":"active","runtime":"local","backing":"subscription","seat_id":"computer-1-daemon@kai","joined_at":0,"offline_since":null,"display_name":null,"work":null,"work_since":null,"work_reason":null,"idle_handoff":null,"takeover_checked":0,"takeover_command":null,"takeover_seq":null,"role_card_by":null,"role_card_at":null,"lane":null,"lane_by":null,"lane_at":null,"device_id":null,"device":null,"clis":null,"perm_level":null,"perm_from":null,"perm_parent":null,"perms":null}
+      ],
+      "removed_computers": [],
+      "items": [
+        {"n":1,"status":"doing","assignee":"helper@lee"},
+        {"n":2,"status":"todo","assignee":"lee"}
+      ],
+      "item_log": [],
+      "schedules": [
+        {"n":1,"by":"lee","by_account":"lee","text":"Weekly notes","to_names":"[]","rule":"{\"kind\":\"once\",\"at\":1893488400000}","revive":1,"revive_name":null,"enabled":0,"next_at":null,"last_at":null,"last_seq":null,"last_error":null,"stopped_by":null,"stopped_reason":"pro_expired","created_at":0,"updated_at":0,"calendar":0},
+        {"n":2,"by":"kai","by_account":"kai","text":"Monthly review","to_names":"[]","rule":"{\"kind\":\"once\",\"at\":1896166800000}","revive":1,"revive_name":null,"enabled":0,"next_at":null,"last_at":null,"last_seq":null,"last_error":null,"stopped_by":null,"stopped_reason":"pro_expired","created_at":0,"updated_at":0,"calendar":0}
+      ],
+      "handoffs": [
+        "helper@lee"
+      ],
+      "room": {"archived_at":null,"archived_reason":null,"deleted_at":null,"public":0},
+      "messages": [],
+      "kv": {"roomFrameDue":false,"publicSnap":false}
+    },
+    "closes": {"kai":null,"lee":null,"helper":null,"daemon":null}
+  }
+]

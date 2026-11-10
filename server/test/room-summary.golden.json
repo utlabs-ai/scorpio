@@ -1,0 +1,334 @@
+[
+  {
+    "step": "summary sum owner",
+    "result": {
+      "ok": {
+        "counts": {"todo":3,"doing":0,"done":1,"total":4},
+        "todayMessages": 12,
+        "working": 1,
+        "workingNames": [
+          "api@kai"
+        ],
+        "mine": [
+          {
+            "id": "T3",
+            "round": 1,
+            "title": "My own task",
+            "desc": null,
+            "blockedBy": [],
+            "blocked": false,
+            "status": "todo",
+            "assignee": "kai",
+            "createdBy": "kai",
+            "createdSeq": 13,
+            "doneSeq": null,
+            "createdMs": 0,
+            "doneMs": null,
+            "updatedBy": "kai",
+            "updatedMs": 0,
+            "current": null,
+            "reply": null
+          }
+        ],
+        "public": true,
+        "archived": false,
+        "lastMs": 1790756400000,
+        "humans": 2,
+        "agents": 3,
+        "unread": 2,
+        "mentionUnread": 1
+      }
+    }
+  },
+  {
+    "step": "summary sum member",
+    "result": {
+      "ok": {
+        "counts": {"todo":3,"doing":0,"done":1,"total":4},
+        "todayMessages": 12,
+        "working": 1,
+        "workingNames": [
+          "api@kai"
+        ],
+        "mine": [
+          {
+            "id": "T1",
+            "round": 1,
+            "title": "Review the draft",
+            "desc": null,
+            "blockedBy": [],
+            "blocked": false,
+            "status": "todo",
+            "assignee": "lee",
+            "createdBy": "api@kai",
+            "createdSeq": 9,
+            "doneSeq": null,
+            "createdMs": 0,
+            "doneMs": null,
+            "updatedBy": "api@kai",
+            "updatedMs": 0,
+            "current": {"seq":9,"from":"api@kai","ts":1790755740000,"line":"Please review the draft."},
+            "reply": {"seq":14,"from":"lee","ts":1790756040000,"closer":"api@kai"}
+          }
+        ],
+        "public": true,
+        "archived": false,
+        "lastMs": 1790756400000,
+        "humans": 2,
+        "agents": 3,
+        "unread": 4,
+        "mentionUnread": 3
+      }
+    }
+  },
+  {
+    "step": "summary sum viewer",
+    "result": {
+      "ok": {
+        "counts": {"todo":3,"doing":0,"done":1,"total":4},
+        "todayMessages": 12,
+        "working": 1,
+        "workingNames": [
+          "api@kai"
+        ],
+        "mine": [],
+        "public": true,
+        "archived": false,
+        "lastMs": 1790756400000,
+        "humans": 2,
+        "agents": 3,
+        "unread": null,
+        "mentionUnread": 0
+      }
+    }
+  },
+  {
+    "step": "summary sum left",
+    "result": {
+      "ok": {
+        "counts": {"todo":3,"doing":0,"done":1,"total":4},
+        "todayMessages": 12,
+        "working": 1,
+        "workingNames": [
+          "api@kai"
+        ],
+        "mine": [],
+        "public": true,
+        "archived": false,
+        "lastMs": 1790756400000,
+        "humans": 2,
+        "agents": 3,
+        "unread": null,
+        "mentionUnread": 0
+      }
+    }
+  },
+  {
+    "step": "summary sum agent",
+    "result": {
+      "ok": {
+        "counts": {"todo":3,"doing":0,"done":1,"total":4},
+        "todayMessages": 12,
+        "working": 1,
+        "workingNames": [
+          "api@kai"
+        ],
+        "mine": [
+          {
+            "id": "T2",
+            "round": 1,
+            "title": "Write the summary",
+            "desc": null,
+            "blockedBy": [],
+            "blocked": false,
+            "status": "todo",
+            "assignee": "api@kai",
+            "createdBy": "kai",
+            "createdSeq": 12,
+            "doneSeq": null,
+            "createdMs": 0,
+            "doneMs": null,
+            "updatedBy": "kai",
+            "updatedMs": 0,
+            "current": {"seq":12,"from":"kai","ts":1790755920000,"line":"Write the summary."},
+            "reply": null
+          }
+        ],
+        "public": true,
+        "archived": false,
+        "lastMs": 1790756400000,
+        "humans": 2,
+        "agents": 3,
+        "unread": 10,
+        "mentionUnread": 0
+      }
+    }
+  },
+  {
+    "step": "summary sum nobody",
+    "result": {
+      "ok": {
+        "counts": {"todo":3,"doing":0,"done":1,"total":4},
+        "todayMessages": 12,
+        "working": 1,
+        "workingNames": [
+          "api@kai"
+        ],
+        "mine": [],
+        "public": true,
+        "archived": false,
+        "lastMs": 1790756400000,
+        "humans": 2,
+        "agents": 3,
+        "unread": null,
+        "mentionUnread": 0
+      }
+    }
+  },
+  {
+    "step": "summary quiet owner",
+    "result": {
+      "ok": {
+        "counts": {"todo":0,"doing":0,"done":0,"total":0},
+        "todayMessages": 0,
+        "working": 0,
+        "workingNames": [],
+        "mine": [],
+        "public": false,
+        "archived": true,
+        "lastMs": 7,
+        "humans": 1,
+        "agents": 0,
+        "unread": 0,
+        "mentionUnread": 0
+      }
+    }
+  },
+  {
+    "step": "summary quiet viewer",
+    "result": {
+      "err": {"code":"not_member","next":"You are not in this topic. Open the topic link and enter the passcode.","status":403}
+    }
+  },
+  {
+    "step": "summary gone owner",
+    "result": {
+      "err": {"code":"room_deleted","next":"This topic has been deleted. Its messages, files and tasks cannot be read or restored.","status":410}
+    }
+  },
+  {
+    "step": "indexState sum",
+    "result": {
+      "ok": {
+        "topic": "The home row",
+        "public": true,
+        "archivedAt": null,
+        "archivedReason": null,
+        "deletedAt": null,
+        "accounts": [
+          {"account":"ana","active":false,"human":true},
+          {"account":"ash","active":false,"human":false},
+          {"account":"kai","active":true,"human":true},
+          {"account":"lee","active":true,"human":true}
+        ]
+      }
+    }
+  },
+  {
+    "step": "indexState quiet",
+    "result": {
+      "ok": {
+        "topic": "",
+        "public": false,
+        "archivedAt": 0,
+        "archivedReason": null,
+        "deletedAt": null,
+        "accounts": [
+          {"account":"kai","active":true,"human":true}
+        ]
+      }
+    }
+  },
+  {
+    "step": "indexState gone",
+    "result": {
+      "ok": {
+        "topic": "Deleted",
+        "public": true,
+        "archivedAt": null,
+        "archivedReason": null,
+        "deletedAt": 0,
+        "accounts": [
+          {"account":"kai","active":true,"human":true},
+          {"account":"lee","active":true,"human":true}
+        ]
+      }
+    }
+  },
+  {
+    "step": "peek sum kai",
+    "result": {
+      "ok": {
+        "room": {"id":"sum","name":"Summary","topic":"The home row","owner":"kai","hasCode":false,"public":true,"archived":false,"archivedAt":null,"archivedReason":null,"createdAt":1790755200000},
+        "member": true,
+        "displayName": null
+      }
+    }
+  },
+  {
+    "step": "peek sum lee",
+    "result": {
+      "ok": {
+        "room": {"id":"sum","name":"Summary","topic":"The home row","owner":"kai","hasCode":false,"public":true,"archived":false,"archivedAt":null,"archivedReason":null,"createdAt":1790755200000},
+        "member": true,
+        "displayName": "Lee"
+      }
+    }
+  },
+  {
+    "step": "peek sum guest",
+    "result": {
+      "ok": {
+        "room": {"id":"sum","name":"Summary","topic":"The home row","owner":"kai","hasCode":false,"public":true,"archived":false,"archivedAt":null,"archivedReason":null,"createdAt":1790755200000},
+        "member": false,
+        "displayName": null
+      }
+    }
+  },
+  {
+    "step": "peek sum ana",
+    "result": {
+      "ok": {
+        "room": {"id":"sum","name":"Summary","topic":"The home row","owner":"kai","hasCode":false,"public":true,"archived":false,"archivedAt":null,"archivedReason":null,"createdAt":1790755200000},
+        "member": false,
+        "displayName": "Ana"
+      }
+    }
+  },
+  {
+    "step": "peek sum api@kai",
+    "result": {
+      "ok": {
+        "room": {"id":"sum","name":"Summary","topic":"The home row","owner":"kai","hasCode":false,"public":true,"archived":false,"archivedAt":null,"archivedReason":null,"createdAt":1790755200000},
+        "member": true,
+        "displayName": null
+      }
+    }
+  },
+  {
+    "step": "peek quiet guest",
+    "result": {
+      "ok": {
+        "room": {"id":"quiet","name":"Quiet","topic":"","owner":"kai","hasCode":true,"public":false,"archived":true,"archivedAt":0,"archivedReason":null,"createdAt":7},
+        "member": false,
+        "displayName": null
+      }
+    }
+  },
+  {
+    "step": "peek gone kai",
+    "result": {
+      "err": {"code":"room_deleted","next":"This topic has been deleted. Its messages, files and tasks cannot be read or restored.","status":410}
+    }
+  }
+]

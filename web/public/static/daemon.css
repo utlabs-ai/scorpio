@@ -1,0 +1,39 @@
+/* Daemon icon. Pairs with daemon.js (daemonSvg). Colours: the robots' --bot-* tokens (app.css), so
+   light / dark follow the room's one effective theme. Sizes: (none) 20px chat avatar, s15 members' computer row,
+   s16 inline in text, s24, big 48, big s96. State: (none) on, offline. Static: no animation. */
+.dmn { display: inline-block; vertical-align: middle; flex: none; width: 20px; height: 20px; overflow: visible; }
+.dmn.s15 { width: 15px; height: 15px; }
+.dmn.s16 { width: 16px; height: 16px; }
+.dmn.s24 { width: 24px; height: 24px; }
+.dmn.big { width: 48px; height: 48px; }
+.dmn.big.s96 { width: 96px; height: 96px; }
+.dmn:not(.big) .fine { display: none; }
+
+.dmn .shell { fill: var(--bot-shell); stroke: var(--bot-edge); stroke-width: 2; }
+.dmn.big .shell { stroke-width: 1.2; }
+.dmn .dome { fill: var(--bot-face); stroke: var(--bot-edge); stroke-width: 2; }
+.dmn.big .dome { stroke-width: 1.2; }
+.dmn .visor, .dmn .port { fill: var(--bot-face); }
+.dmn .glare { fill: none; stroke: #ffffff; stroke-opacity: 0.2; stroke-width: 1.5; stroke-linecap: round; }
+.dmn .glint { fill: #ffffff; opacity: 0.45; }
+.dmn .shade { fill: var(--bot-edge); opacity: 0.18; }
+.dmn .sheen { fill: none; stroke: var(--bot-sheen); stroke-width: 1.5; stroke-linecap: round; }
+.dmn .stem { fill: none; stroke: var(--bot-edge); stroke-width: 2.2; stroke-linecap: round; }
+.dmn .star { fill: var(--bot-edge); }
+.dmn .base, .dmn .neck, .dmn .ear, .dmn .belly { fill: var(--bot-edge); }
+.dmn .slash { fill: none; stroke: var(--bot-eye); stroke-width: 4.2; stroke-linecap: round; }
+.dmn.big .slash { stroke-width: 3.6; }
+.dmn .cursor, .dmn .bar, .dmn .lt { fill: var(--bot-eye); }
+
+/* its computer is offline: the lights go out, like a robot's eyes */
+.dmn.offline { opacity: 0.6; }
+.dmn.offline .slash { stroke: var(--bot-eye-dim); }
+.dmn.offline .cursor, .dmn.offline .bar, .dmn.offline .lt { fill: var(--bot-eye-dim); }
+
+/* where it sits (room page) */
+.ui .msg .mh .dmn { width: 20px; height: 20px; }                 /* chat avatar, like .mh .bot */
+.ui .grp.sub.computer .dmn { margin-left: -1px; }                /* members: the computer row (s15) */
+.ui .picker .phead .dmn { margin: -3px 6px 0 0; }                /* slash popup, one computer: 「发给 daemon@…（box）」 */
+.ui .picker button.dseat { display: flex; align-items: center; gap: 10px; }   /* slash popup, several computers: one row each */
+.ui .picker button.dseat b { flex: none; }
+.ui .picker button.dseat small { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

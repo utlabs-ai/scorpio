@@ -1,0 +1,144 @@
+/* The topic's overview, /r/<id>/view (gv.js): the person at the left, the agents in lane columns, lines between
+   those who talked, the activity ranking at the right. Tokens only (docs/design.md §2); dark rules under
+   :root[data-scorpio-effective-theme="dark"]. Dynamic values (line widths, dot positions) are SVG attributes and
+   the CSSOM, never inline styles (the page's CSP). Desktop only: the same page on a phone, not re-laid out. */
+:root {
+  --gv-glow: var(--muted);                                            /* the one colour that moves: lit lines, dots, the breathing ring (light: ink is too heavy) */
+  --gv-line: color-mix(in srgb, var(--link) 60%, var(--muted));       /* static lines (dim; opacity carries the count) */
+  --gv-lane-bg: color-mix(in srgb, var(--link) 6%, transparent);
+  --gv-lane-line: color-mix(in srgb, var(--link) 18%, transparent);
+  --gv-card-bg: color-mix(in srgb, var(--surface) 72%, transparent);
+  --gv-card-line: color-mix(in srgb, var(--link) 22%, transparent);
+  --gv-shadow: 0 0 6px var(--bg), 0 0 3px var(--bg);                 /* names stay readable over lines */
+  --gv-lane-w: 164px;                                                 /* a lane column: the width eight lanes get at 1440 (five columns and the stack beside the person); fixed, never stretched */
+}
+:root[data-scorpio-effective-theme="dark"] {
+  --gv-glow: var(--fg);
+  --gv-line: var(--link);
+  --gv-lane-bg: color-mix(in srgb, var(--link) 7%, transparent);
+  --gv-lane-line: color-mix(in srgb, var(--link) 14%, transparent);
+  --gv-card-bg: color-mix(in srgb, var(--surface) 62%, transparent);
+  --gv-card-line: color-mix(in srgb, var(--link) 16%, transparent);
+}
+
+body.gv { height: 100vh; height: 100dvh; overflow: hidden; }
+body.gv .fv-top { z-index: 2; position: relative; }
+body.gv .fv-bar { min-height: 56px; padding: 8px 20px; }
+body.gv .fv-name { font-size: 16px; }
+.gv-sub { font-size: 12.5px; font-weight: 650; color: var(--fv-bar-muted); margin-left: 10px; }
+.gv-counts { display: flex; align-items: baseline; gap: 16px; margin-left: 14px; flex: none; white-space: nowrap; }
+.gv-count { display: inline-flex; align-items: baseline; gap: 5px; }
+.gv-count b { font-size: 15px; font-weight: 750; font-variant-numeric: tabular-nums; display: inline-block; transform-origin: 0 60%; }
+.gv-count b.live { color: var(--live); }
+.gv-count b.you { color: var(--you); }
+.gv-count span { font-size: 11.5px; font-weight: 650; color: var(--fv-bar-muted); }
+
+/* the page: map | ranking. The .ui class brings the sheet and popup parts (room-ui.css, room-cards.css). */
+.gv .ui.gv-desk { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 300px; overflow: hidden; }
+.gv-mapcol { position: relative; min-width: 0; min-height: 0; display: flex; flex-direction: column; }
+.gv-map { position: relative; flex: 1; min-height: 0; overflow: auto; }
+.gv-lines, .gv-fly { position: absolute; left: 0; top: 0; pointer-events: none; overflow: visible; }
+.gv-fly { z-index: 3; }
+.gv-lines path { fill: none; stroke: var(--gv-line); stroke-linecap: round; transition: stroke .18s; }
+.gv-lines path.gv-lit { stroke: var(--gv-glow); }
+.gv-fly circle { fill: var(--gv-glow); }
+:root:not([data-scorpio-effective-theme="dark"]) .gv-fly .gv-blur { opacity: .15; }   /* the dot's halo, lighter on a light page */
+.gv-legend { position: absolute; left: 0; bottom: 6px; z-index: 4; margin: 0; padding: 0 16px; font-size: 12px; line-height: 1.6; color: var(--muted); pointer-events: none; text-shadow: var(--gv-shadow); }
+.gv-empty { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); font-size: 15px; }
+
+/* the board: the whole group sits on the middle of the map, both ways; lanes are as tall as the tallest. With few lanes
+   the right stays empty; with more than fit, the map scrolls (min-width: max-content keeps the columns at their width) */
+.gv-board { position: relative; z-index: 2; min-height: 100%; min-width: max-content; display: flex; align-items: center; justify-content: center; padding: 14px 0 36px; box-sizing: border-box; }
+.gv-left { flex: none; width: 108px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 40px; align-self: stretch; }
+.gv-person, .gv-clock { display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; }
+.gv-pav { position: relative; width: 50px; height: 50px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: 21px; text-transform: lowercase; background: var(--hl); color: var(--fg); box-shadow: inset 0 0 0 1px var(--line-strong); }
+.gv-person.me .gv-pav { background: var(--action); color: var(--action-fg); box-shadow: 0 0 0 3px var(--you), 0 0 40px 8px color-mix(in srgb, var(--fg) 20%, transparent); }
+.gv-person .gv-cnt { position: absolute; top: -6px; right: -8px; min-width: 22px; height: 22px; padding: 0 5px; border-radius: 11px; background: var(--you); color: var(--you-fg); font-size: 13px; font-weight: 800; display: grid; place-items: center; box-sizing: border-box; }
+.gv-person .gv-cnt:empty, .gv-person .gv-cnt.zero { display: none; }
+.gv-person .gv-nm { font-size: 12.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-shadow: var(--gv-shadow); }
+.gv-person.other .gv-pav { width: 38px; height: 38px; font-size: 16px; }
+.gv-person.other .gv-nm { font-size: 11.5px; letter-spacing: .04em; text-transform: none; }
+.gv-clock .gv-av { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; color: var(--muted); background: var(--hl); box-shadow: inset 0 0 0 1.5px var(--line-strong); }
+.gv-clock .gv-av svg { width: 22px; height: 22px; }
+.gv-clock .gv-nm { font-size: 11.5px; font-weight: 700; color: var(--muted); }
+
+.gv-lanes { flex: none; display: flex; align-items: stretch; gap: 0; }
+.gv-lane { flex: none; width: var(--gv-lane-w); box-sizing: border-box; margin: 0 4px; padding: 10px 6px 8px; border-radius: 12px; background: var(--gv-lane-bg); box-shadow: inset 0 0 0 1px var(--gv-lane-line); display: flex; flex-direction: column; }
+.gv-lt { margin: 0 0 10px; text-align: center; font-size: 13px; font-weight: 750; letter-spacing: .04em; color: var(--fg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; }
+.gv-cards { display: flex; flex-direction: column; gap: 6px; }
+/* lanes with nobody running: small cards, stacked in the last column, each under its title */
+.gv-stack { flex: none; width: var(--gv-lane-w); display: flex; flex-direction: column; gap: 8px; margin: 0 4px; }
+.gv-stack .gv-lane { flex: none; margin: 0; }
+.gv-stack .gv-lane:last-child { flex: 1; }
+.gv-stack .gv-lt { text-align: left; padding-left: 8px; color: var(--muted); margin-bottom: 6px; }
+
+/* cards: big for an agent in the topic now, small for one that is not */
+.gv-card { position: relative; text-align: left; border-radius: 11px; background: var(--gv-card-bg); box-shadow: inset 0 0 0 1px var(--gv-card-line); padding: 8px 9px 7px 10px; overflow: hidden; cursor: pointer; min-width: 0; }
+.gv-card .gv-r1 { display: flex; flex-direction: column; justify-content: center; min-height: 44px; padding-left: 50px; }
+.gv-card .gv-n { font-size: 12.5px; font-weight: 750; line-height: 1.2; white-space: normal; overflow-wrap: anywhere; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.gv-card .gv-m { font-size: 10.5px; font-weight: 700; color: var(--muted); }
+.gv-card .gv-m.live { color: var(--live); }
+.gv-card .gv-m.wait { color: var(--wait-ink); }
+.gv-card .gv-ln { font-size: 10.5px; line-height: 1.4; color: var(--muted); margin-top: 5px; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow-wrap: anywhere; }
+.gv-card .gv-mh, .gv-card .gv-pr { font-size: 9.5px; font-weight: 600; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 3px; }
+.gv-card .gv-mh:empty, .gv-card .gv-pr:empty { display: none; }
+.gv-card.big .gv-ln { color: color-mix(in srgb, var(--fg) 60%, var(--muted)); }   /* the one line about it reads a step above the computer and the partners */
+.gv-card .gv-av { position: absolute; left: 10px; top: 10px; width: 40px; height: 40px; border-radius: 50%; }
+.gv-card .gv-av > svg.bot { width: 100%; height: 100%; display: block; }
+/* working: a ring that breathes (the one moving thing per agent besides its robot). Light: opacity only, no glow */
+.gv-ring { position: absolute; inset: -5px; border-radius: 50%; border: 2px solid var(--gv-glow); opacity: 0; pointer-events: none; }
+.gv-card.wk .gv-ring { opacity: .75; animation: gv-breathe-light 2.6s ease-in-out infinite; }
+:root[data-scorpio-effective-theme="dark"] .gv-card.wk .gv-ring { box-shadow: 0 0 14px 1px color-mix(in srgb, var(--gv-glow) 45%, transparent); animation: gv-breathe 2.6s ease-in-out infinite; }
+@keyframes gv-breathe-light { 0%, 100% { opacity: .3; } 50% { opacity: 1; } }
+@keyframes gv-breathe {
+  0%, 100% { opacity: .25; box-shadow: 0 0 4px 0 color-mix(in srgb, var(--gv-glow) 20%, transparent); }
+  50% { opacity: 1; box-shadow: 0 0 20px 4px color-mix(in srgb, var(--gv-glow) 60%, transparent); }
+}
+.gv-card.sm { padding: 6px 8px 5px 24px; background: color-mix(in srgb, var(--gv-card-bg) 75%, transparent); }
+.gv-card.sm .gv-r1 { flex-direction: row; align-items: center; justify-content: flex-start; gap: 6px; min-height: 0; padding-left: 0; }
+.gv-card.sm .gv-n { font-size: 11.5px; font-weight: 650; color: var(--muted); }
+.gv-card.sm .gv-ln { margin-top: 2px; font-size: 10px; -webkit-line-clamp: 1; }
+.gv-card.sm .gv-sqs { margin: 0; }
+.gv-dot { position: absolute; left: 9px; top: 11px; width: 7px; height: 7px; border-radius: 50%; background: var(--muted); }
+.gv-card.gone .gv-n { color: var(--muted); }
+/* open tasks: one square each; the person's are red (they wait on the viewer) */
+.gv-sqs { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 4px; }
+.gv-sqs:empty { display: none; }
+.gv-sqs i { display: block; width: 7px; height: 7px; border-radius: 2px; background: var(--line-strong); }
+.gv-sqs.you i { background: var(--you); width: 8px; height: 8px; }
+.gv-person .gv-sqs { justify-content: center; max-width: 100px; }
+
+/* the ranking */
+.gv-side { min-height: 0; overflow-y: auto; padding: 16px 18px 56px; border-left: 1px solid var(--line); background: color-mix(in srgb, var(--surface) 55%, transparent); }
+.gv-hd { font-size: 12px; font-weight: 750; letter-spacing: .02em; color: var(--muted); margin: 0 0 8px; }
+.gv-rank { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.gv-rank tr { cursor: pointer; }
+.gv-rank td { padding: 5px 0; border-top: 1px solid var(--line); font-weight: 650; white-space: nowrap; }
+.gv-rank td.i { width: 26px; color: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+.gv-rank td.nm { overflow: hidden; text-overflow: ellipsis; max-width: 150px; }
+.gv-rank td.r { text-align: right; font-variant-numeric: tabular-nums; padding-left: 10px; }
+.gv-rank tr.gone td.nm { color: var(--muted); }
+.gv-tag { display: inline-block; font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 6px; background: var(--hl); color: var(--fg); max-width: 90px; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom; }
+.gv-tag.none { color: var(--muted); }
+
+/* the lane panel (the member popup's engine) */
+.gv .sbody.mpop .gv-lrow { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-top: 1px solid var(--line); font-size: 14px; }
+.gv .sbody.mpop .gv-lrow .gv-n { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.gv .sbody.mpop .gv-lrow .r { color: var(--muted); font-variant-numeric: tabular-nums; }
+.gv .sbody.mpop .gv-lrow .gv-sqs { margin: 0; }
+.gv #item-panel { max-height: 75vh; }
+@media (min-width: 761px) {
+  .gv .ui .sheet.up { left: auto; right: 316px; bottom: 16px; width: 420px; max-height: calc(100vh - 100px); border-radius: 22px; }
+  .gv .ui .sheet .grab { display: none; }
+}
+/* the one flash: the 等你 count changed. Plays once; a swell, not a blink */
+@keyframes gv-swell { 0% { transform: scale(1); } 35% { transform: scale(1.38); } 100% { transform: scale(1); } }
+.gv-count b.fresh, .gv-cnt.fresh { animation: gv-swell .6s cubic-bezier(.3, .7, .4, 1) 1; }
+@media (hover: hover) {
+  .gv-card:hover, .gv-rank tr:hover td { background: color-mix(in srgb, var(--link) 10%, transparent); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gv-card.wk .gv-ring, .gv-count b.fresh, .gv-cnt.fresh { animation: none !important; }
+  .gv-lines path { transition: none; }
+  .gv-fly { display: none; }
+}

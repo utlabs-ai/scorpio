@@ -1,0 +1,117 @@
+/* Messages as rows. Linked after the room's other sheets.
+   No card and no bubble: an avatar column, one top line (name … #n · time · ✓), the text exactly as written, and a bottom
+   line only when something hangs under it. A hairline between rows; every row has its avatar and name; my own rows a faint tint;
+   a row for me a red edge on the screen side. Actions: long-press on a phone, ⋯ on hover with a mouse. */
+
+/* the feed: one surface, rows touch, the lines and the tint do the separating; in the dark the stars show through */
+.ui .feed { gap: 0; padding: 4px 12px 10px; background: var(--surface); }
+:root[data-scorpio-effective-theme="dark"] .ui .feed { background: transparent; }
+.ui #outbox { gap: 0; }
+.ui .feed > .sys { margin: 8px 0; }
+.ui .feed > .divider, .ui .feed > .newdiv { margin: 6px 0; }
+
+/* a row */
+.ui .msg.fm { position: relative; display: grid; grid-template-columns: 22px minmax(0, 1fr); column-gap: 9px; align-self: stretch;
+  margin: 0; padding: 10px 0 9px; border: 0; border-radius: 0; background: none; }
+.ui .msg.fm + .msg.fm, .ui #outbox > .msg.fm:first-child { box-shadow: inset 0 1px 0 var(--line); }
+.ui .feed > .msg.fm:first-child { margin-top: auto; }                    /* the feed still sits at the bottom */
+.ui .msg.fm + .msg.fm, .ui #outbox > .msg.fm + .msg.fm { margin-top: 6px; }   /* rows breathe; a run never melts into one block */
+.ui .fm-av { padding-top: 1px; }
+.ui .fm-av .bot, .ui .fm-av .dmn, .ui .fm-av .pav { width: 22px; height: 22px; }
+.ui .fm-av .pav { font-size: 11px; }
+.ui .fm-col { min-width: 0; }
+
+/* the top line: name … #n · time · ✓ (⋯ with a mouse) */
+.ui .fm-top { display: flex; align-items: center; gap: 6px; height: 22px; margin: 0 0 2px; font-size: 12px; color: var(--muted); white-space: nowrap; min-width: 0; }
+.ui .fm-top .who { min-width: 0; overflow: hidden; text-overflow: ellipsis; font-size: 14.5px; font-weight: 700; color: var(--fg); }
+.ui .fm-top .who .acct { font-size: 12px; font-weight: 500; color: var(--muted); }
+.ui .fm-top .tag { flex: none; }
+.ui .fm-top .sp { flex: 1; min-width: 4px; }
+.ui .fm-top .seq { flex: none; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.ui .fm-top time { flex: none; font-variant-numeric: tabular-nums; }
+/* In the feed the time hides but for about one a screen (.t-show, room-feed.js placeTimes), the row under the mouse and
+   the row whose menu is open; the menu's top line has the full time. Elsewhere (the task card, a sending card) it stays. */
+.ui #feed .msg.fm .fm-top time { display: none; }
+.ui #feed .msg.fm.t-show .fm-top time, .ui #feed .msg.fm.menued .fm-top time { display: inline; }
+@media (hover: hover) { .ui #feed .msg.fm:hover .fm-top time { display: inline; } }
+.ui .fm-top .rc { flex: none; gap: 0; cursor: pointer; }
+.ui .fm-top .rc span { display: none; }                                   /* ✓ / ✓✓ only: a tap says who has read it */
+.ui .msg.fm.out .fm-top .rc span { display: inline; margin-left: 3px; }   /* sending / not sent: said in words */
+.ui .fm-top .dots { flex: none; min-width: 20px; min-height: 20px; height: 20px; margin: 0 -4px 0 -2px; padding: 0; visibility: hidden; }
+.ui .msg.fm:hover .fm-top .dots, .ui .msg.fm.menued .fm-top .dots { visibility: visible; }
+@media (hover: none) { .ui .fm-top .dots { display: none; } }
+/* Select mode (phones only): ⋯ has become 完成, the way out on screen, so it shows; the bar's buttons keep app.css's
+   pills, which .ui button would otherwise reset to plain text. */
+.ui .msg.selecting .fm-top .dots { display: inline-block; visibility: visible; height: auto; margin: 0; padding: 0 0.6rem; border-radius: 999px; }
+.ui .msg.selecting .selbar button { font: inherit; font-size: 0.8rem; font-weight: 600; border: 0; border-radius: 999px; padding: 0.3rem 0.75rem; background: var(--fg); color: var(--bg); cursor: pointer; }
+
+/* the text, as written: a mention reads like a reference, one of me stays red */
+.ui .msg.fm .md, .ui .sbody.mpop .mcard.md { font-size: 15.5px; line-height: 1.58; }
+.ui .msg.fm .md .mention, .ui .sbody.mpop .mcard.md .mention { font-weight: 600; color: var(--link); }
+.ui .msg.fm .md .mention.me, .ui .sbody.mpop .mcard.md .mention.me { color: var(--you-ink); }
+.ui .msg.fm .body.fm-fold { max-height: 13.2em; overflow: hidden; -webkit-mask-image: linear-gradient(#000 62%, transparent); mask-image: linear-gradient(#000 62%, transparent); }
+.ui .fm-more { display: block; margin: 2px 0 0; padding: 2px 0; font: inherit; font-size: 13.5px; font-weight: 650; color: var(--link); background: none; border: 0; cursor: pointer; }
+
+/* the message it answers: inside the row, a thin line on the left, who, #n, the start of its text */
+.ui .fm-q { display: flex; align-items: baseline; gap: 6px; min-width: 0; margin: 1px 0 5px; padding: 3px 0 3px 9px; box-shadow: inset 2px 0 0 var(--line-strong);
+  font-size: 13px; line-height: 1.4; color: var(--muted); text-decoration: none; }
+.ui .fm-q b { flex: none; color: var(--fg); font-weight: 650; }
+.ui .fm-q b .acct { font-weight: 500; color: var(--muted); }
+.ui .fm-q .qs { flex: none; font-variant-numeric: tabular-nums; }
+.ui .fm-q .qx { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ui .pane-screen .hint { margin: 6px 0 0; font-size: 13px; line-height: 1.45; color: var(--muted); }
+
+/* pictures and files (the picture box is also .pics, for lightbox.js; these rules win over app.css's .pics) */
+.ui .fm-pics { display: grid; gap: 4px; margin-top: 9px; }
+.ui .fm-pics.n1 { grid-template-columns: minmax(0, 260px); }
+.ui .fm-pics.n2 { grid-template-columns: 1fr 1fr; max-width: 360px; }
+.ui .fm-pics.n3 { grid-template-columns: 1fr 1fr 1fr; max-width: 420px; }
+.ui .fm-pics a { display: block; aspect-ratio: auto; border-radius: 10px; overflow: hidden; box-shadow: 0 0 0 1px var(--line); background: var(--hl); }   /* not app.css's square .pics a */
+.ui .fm-pics img { display: block; width: 100%; height: auto; max-height: 300px; object-fit: cover; object-position: top; }
+.ui .fm-pics.n2 img, .ui .fm-pics.n3 img { aspect-ratio: 3 / 4; height: 100%; }
+.ui .fm-pics .nopic { display: grid; place-items: center; aspect-ratio: 3 / 4; font-size: 12px; color: var(--muted); }
+.ui .fm-video { width: min(260px, 100%); margin-top: 9px; }
+.ui .fm-video video { display: block; width: 100%; border-radius: 10px; background: #000; }
+.ui .fm-video-meta { display: flex; justify-content: space-between; gap: 12px; margin-top: 5px; font-size: 12px; }
+.ui .fm-video-meta a:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ui .fm-files { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 6px; margin-top: 9px; }
+.ui .fm-files a { display: flex; align-items: center; gap: 8px; min-width: 0; padding: 7px 9px 7px 7px; border-radius: 10px; background: var(--hl); color: var(--fg); text-decoration: none; font-size: 13px; line-height: 1.2; }
+.ui .fm-files a.gone { color: var(--muted); }
+.ui .fm-files .ext { flex: none; min-width: 32px; padding: 4px 3px; border-radius: 6px; font: 700 9.5px/1 var(--mono); letter-spacing: 0.02em; text-align: center;
+  color: var(--muted); background: var(--surface); box-shadow: inset 0 0 0 1px var(--line-strong); }
+.ui .fm-files .nm { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
+.ui .fm-files .sz { flex: none; color: var(--muted); font-size: 11.5px; }
+
+/* the bottom line: the tasks it made, delivery notes; none, no line */
+.ui .fm-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 7px; }
+.ui .fm-foot:empty { display: none; }
+.ui .fm-foot .todoline { display: flex; flex-wrap: wrap; gap: 6px; max-width: 100%; }
+.ui .fm-foot .ichip { margin: 0; height: 28px; font-size: 12.5px; padding: 0 10px 0 7px; }
+.ui .fm-foot .bring { margin: 0; color: var(--fg); }
+.ui .fm-foot .bring a.ref { color: var(--link); }
+
+/* mine: a faint tinted band of its own, rounded, a hair inside the screen edge (two in a row read as two) */
+.ui .msg.fm.mine { margin-left: -6px; margin-right: -6px; padding-left: 6px; padding-right: 6px; border-radius: 12px; background: color-mix(in srgb, var(--mine) 7%, var(--surface)); }
+:root[data-scorpio-effective-theme="dark"] .ui .msg.fm.mine { background: color-mix(in srgb, var(--mine) 55%, var(--surface)); }
+.ui .msg.fm.mine + .msg.fm, .ui .msg.fm + .msg.fm.mine { box-shadow: none; }
+.ui .msg.fm.out.pending .fm-col { opacity: 0.72; }
+.ui .msg.fm.out.failed::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--you); }
+
+/* for me: a red edge on the screen side */
+.ui .msg.fm.forme { background: none; }
+.ui .msg.fm.forme::before { content: ""; position: absolute; left: -12px; top: 0; bottom: 0; width: 3px; background: var(--you); }
+
+/* a computer: the feed column is 720 wide; the tint and the red edge stay inside it; long messages are not folded */
+@media (min-width: 761px) {
+  .ui.desk .main .feed { gap: 0; padding: 10px 28px 16px; }
+  .ui .msg.fm .body.fm-fold { max-height: none; overflow: visible; -webkit-mask-image: none; mask-image: none; }   /* a computer shows long messages whole */
+  .ui .fm-more { display: none; }
+  .ui.desk .main .feed > .msg.fm.mine, .ui.desk .main .feed > #outbox > .msg.fm.mine { margin-left: auto; margin-right: auto; padding-left: 10px; padding-right: 10px; border-radius: 10px; }
+  .ui.desk .main .feed > #outbox > .msg.fm.mine { margin-left: 0; margin-right: 0; }
+  .ui .msg.fm.forme::before { left: -10px; border-radius: 2px; }
+}
+/* A file's row: ↗ opens its own page (Markdown, plain text, SVG, HTML), with a firmer edge; ↓ downloads. */
+.ui .fm-files a .go, .files a .go { flex: none; width: 16px; height: 16px; color: var(--muted); fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+.ui .fm-files a.view { box-shadow: inset 0 0 0 1px var(--line-strong); background: var(--surface); }
+.ui .fm-files a.view .go, .files a.view .go { color: var(--link); }
+.ui .fm-files a.view .nm { color: var(--fg); }
