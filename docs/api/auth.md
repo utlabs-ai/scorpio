@@ -105,10 +105,10 @@ Open WebSockets made with a token that is revoked, replaced or ended by the plan
 
 ### Unexpected logouts
 
-When a computer's token stops working for a reason the person did not choose (it expired, or the token file was lost), a daemon can ask for a code with `"relogin": true` and its `device_id` in step 1. The server then:
+When a computer's token stops working for a reason the person did not choose (it expired, or the token file was lost), a daemon can ask for a code with `"relogin": true` and its `device_id` in step 1. Only when that computer's newest token has expired (`expired`) does the server then:
 
 - notifies the person that the computer logged out, with a link to approve it again;
 - writes one line in each topic where that computer's daemon is a member: `event: {"type": "logged_out", "name": "<seat>", "device": "<computer name>"}`, waking nobody;
 - answers the same code again to repeated requests for a while, so the person sees one code.
 
-A computer that was revoked (`revoked` or `plan`) gets an ordinary code and nobody is notified. Getting a token ends the episode. Only a daemon that was running, or is starting, should send `relogin`; a person signing in on purpose should not.
+Any other computer gets an ordinary code and nobody is notified: one whose token is still valid (for example, its token file was lost), one that was revoked (`revoked` or `plan`), or one the server does not know. The person runs `scorpio login` on that computer. Getting a token ends the episode. Only a daemon that was running, or is starting, should send `relogin`; a person signing in on purpose should not.
