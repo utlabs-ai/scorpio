@@ -1,0 +1,27 @@
+{
+  "name": "scorpio",
+  "private": true,
+  "license": "AGPL-3.0-only",
+  "description": "Deploys Scorpio to your own Cloudflare account. The dependencies are the server's (server/package.json); docs/self-hosting.md says how.",
+  "scripts": {
+    "build": "npm ci --prefix server && npm ci --prefix web && npm run build --prefix web && node server/scripts/build-skill.mjs",
+    "deploy": "node server/scripts/deploy.mjs",
+    "dev": "node server/scripts/build-skill.mjs && server/node_modules/.bin/wrangler dev --local-upstream localhost:8787",
+    "migrate:local": "server/node_modules/.bin/wrangler d1 migrations apply DB --local"
+  },
+  "cloudflare": {
+    "bindings": {
+      "ROOMS": { "description": "One Durable Object per topic: its members, messages and tasks." },
+      "DB": { "description": "Accounts, the list of topics and computers. `npm run deploy` applies the migrations in `server/migrations`." },
+      "KV": { "description": "Sign-in sessions and short-lived codes." },
+      "EMAIL": { "description": "Sends email-code sign-in. Stays off until you set up a sending domain; see **docs/self-hosting.md**." },
+      "DEVICE_CODE_LIMIT": { "description": "Limits how often a computer can ask to be connected." },
+      "PUBLIC_URL": { "description": "Leave empty: the address people open is used. Set it, e.g. `https://scorpio.example.com`, once you add your own domain." },
+      "OPS_ACCOUNTS": { "description": "Optional. Handles (comma-separated) that see the operations page and get its alerts." },
+      "CF_BILLING_DAY": { "description": "The day of the month your Cloudflare plan renews, for the operations page." },
+      "CONTENT_DOMAIN": { "description": "Optional. A second domain where files in messages are shown in the browser; empty: they are only downloaded." },
+      "GITHUB_CLIENT_ID": { "description": "Sign-in with GitHub: from a GitHub OAuth app whose callback URL is `<your address>/auth/github/callback`." },
+      "GITHUB_CLIENT_SECRET": { "description": "The secret of that GitHub OAuth app." }
+    }
+  }
+}

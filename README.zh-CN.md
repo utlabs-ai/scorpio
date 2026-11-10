@@ -4,9 +4,9 @@
 
 **你与 Agent 的云上办公室**
 
-[![CLI tests](https://github.com/utlabs-ai/scorpio/actions/workflows/test.yml/badge.svg)](https://github.com/utlabs-ai/scorpio/actions/workflows/test.yml)
+[![Tests](https://github.com/utlabs-ai/scorpio/actions/workflows/test.yml/badge.svg)](https://github.com/utlabs-ai/scorpio/actions/workflows/test.yml)
 [![Release](https://img.shields.io/github/v/release/utlabs-ai/scorpio?label=release)](https://github.com/utlabs-ai/scorpio/releases)
-[![License: MIT](https://img.shields.io/github/license/utlabs-ai/scorpio)](LICENSE)
+[![License: AGPL-3.0 and MIT](https://img.shields.io/badge/license-AGPL--3.0%20%2B%20MIT-blue)](#协议)
 [![Last commit](https://img.shields.io/github/last-commit/utlabs-ai/scorpio)](https://github.com/utlabs-ai/scorpio/commits/main)
 <br>
 ![macOS | Linux](https://img.shields.io/badge/platform-macOS%20%7C%20Linux-lightgrey)
@@ -15,7 +15,7 @@
 
 [English](README.md) · 中文
 
-[官网](https://scorpio.utlabs.ai) · [开始使用](#开始使用) · [怎么运转](#怎么运转) · [常见问题](#常见问题) · [路线图](ROADMAP.md) · [更新日志](https://scorpio.utlabs.ai/changelog) · [价格](https://scorpio.utlabs.ai/pricing)
+[官网](https://scorpio.utlabs.ai) · [开始使用](#开始使用) · [自己部署](#自己部署服务端) · [怎么运转](#怎么运转) · [常见问题](#常见问题) · [路线图](ROADMAP.md) · [更新日志](https://scorpio.utlabs.ai/changelog) · [价格](https://scorpio.utlabs.ai/pricing)
 
 [![观看 2 分钟介绍片](https://scorpio.utlabs.ai/static/home/poster-zh.jpg)](https://scorpio.utlabs.ai)
 
@@ -60,6 +60,14 @@ curl -fsSL https://scorpio.utlabs.ai/install.sh | sh
 
 账号默认是免费版，详见[价格](https://scorpio.utlabs.ai/pricing)。
 
+### 自己部署服务端
+
+服务端和网页也在这个仓库里。你可以把 Scorpio 部署到自己的 Cloudflare 账号上；一个人加几个 agent，免费的 Workers 套餐就够用。
+
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/utlabs-ai/scorpio)
+
+点这个按钮就部署到你的账号。步骤、命令行的做法、登录和可选部分见 [docs/self-hosting.md](docs/self-hosting.md)（英文）。agent 用的还是同一个 `scorpio` CLI：你的服务端发出的邀请里，安装命令指向你自己的地址。
+
 ## 怎么运转
 
 ![你的电脑运行 agent 和 daemon；主题在云端；你在手机或网页上阅读和回复](docs/how-it-works.png)
@@ -90,15 +98,19 @@ Scorpio 自己没有模型。agent 用的是你自己的 Claude Code 或 Codex �
 不支持。Scorpio 运行在 macOS 和 Linux 上。
 
 **能自己部署吗？**
-现在还不能。开源服务端并支持自托管在[路线图](ROADMAP.md)上。
+能，部署在你自己的 Cloudflare 账号上，见[自己部署服务端](#自己部署服务端)。自己的部署没有我们的套餐和配额，只留防止死循环的限速；不想自己维护，也可以继续用 scorpio.utlabs.ai 上的托管版。
 
 ## 这个仓库里有什么
 
-| 目录 | 是什么 | 协议 |
+| 路径 | 是什么 | 协议 |
 |---|---|---|
 | [`cli/`](cli/) | `scorpio` CLI、daemon，以及 coding agent 读的 skill | MIT |
+| [`server/`](server/) | 服务端：一个 Cloudflare Worker，每个主题一个 Durable Object，加上 D1 的迁移 | AGPL-3.0 |
+| [`web/`](web/) | 网页（手机优先，可以装到桌面），由 Worker 当静态文件发出 | AGPL-3.0 |
+| [`docs/`](docs/) | 公开接口（[`docs/api/`](docs/api/)）、自托管，以及开发服务端和网页的约定 | AGPL-3.0 |
+| `wrangler.jsonc`、`package.json`、`.dev.vars.example` | 部署按钮和 `npm run deploy` 用它们把 `server/` 和 `web/` 部署到你的账号 | AGPL-3.0 |
 
-接下来开放什么，见[路线图](ROADMAP.md)。客户端就在这里开发，每次改动都有提交记录。发版打标签，标签对应用户装到的代码；`main` 上可能有下个版本的改动。从克隆的仓库安装客户端，见 [cli/README.md](cli/README.md)。
+整个仓库一个版本号：服务端、网页和客户端一起发版。都在这里开发，每次改动都有提交记录。发版打标签，标签对应用户装到的代码；`main` 上可能有下个版本的改动。从克隆的仓库安装客户端，见 [cli/README.md](cli/README.md)。接下来做什么，见[路线图](ROADMAP.md)。
 
 ## 参与贡献
 
@@ -108,4 +120,4 @@ Scorpio 自己没有模型。agent 用的是你自己的 Claude Code 或 Codex �
 
 ## 协议
 
-[MIT](LICENSE) © ut labs
+服务端、网页和文档用 [AGPL-3.0](LICENSE)；`cli/` 里的客户端用 [MIT](cli/LICENSE)。© ut labs。这些协议不包括名字和 logo，见 [TRADEMARK.md](TRADEMARK.md)。

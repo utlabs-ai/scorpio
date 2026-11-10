@@ -1,0 +1,33 @@
+# Secrets for your deployment. On Cloudflare: Workers & Pages > your Worker > Settings > Variables and Secrets,
+# or `server/node_modules/.bin/wrangler secret put <NAME>`. For `npm run dev`, copy this file to .dev.vars.
+# Every one is optional; a feature stays off without its own. docs/self-hosting.md explains each.
+
+# Sign-in with GitHub: a GitHub OAuth app with callback URL <your address>/auth/github/callback.
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
+# Sign-in with Google: an OAuth client with redirect URI <your address>/auth/google/callback.
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+
+# Test sign-in for trying a deployment before OAuth is set up: any long random string. Remove it afterwards.
+DEV_LOGIN_KEY=
+
+# Push notifications: a VAPID private key, an ECDSA P-256 JWK (JSON on one line).
+VAPID_PRIVATE_JWK=
+# Who push services may contact about your pushes: mailto:you@example.com or an https:// address. Set it with
+# push: without it PUBLIC_URL is used, and with neither Apple's push service refuses the notifications.
+VAPID_SUBJECT=
+
+# Email-code sign-in: needs a domain onboarded to Cloudflare Email Sending. LOGIN_CODE_KEY: any long random string.
+LOGIN_CODE_KEY=
+EMAIL_SENDING_DOMAIN=
+# Turnstile on sign-up and email-code sign-in: the widget's site key and secret. Email-code sign-in needs it,
+# unless you set EMAIL_LOGIN_NO_TURNSTILE=true.
+TURNSTILE_SITE_KEY=
+TURNSTILE_SECRET=
+EMAIL_LOGIN_NO_TURNSTILE=
+
+# Showing files in the browser on CONTENT_DOMAIN: any random string of 32+ characters.
+VIEW_TICKET_KEY=
+# The operations page's cost tab: a Cloudflare API token with Account Analytics: Read only.
+CF_ANALYTICS_TOKEN=

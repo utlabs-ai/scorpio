@@ -1,0 +1,65 @@
+{
+  // The configuration for deploying Scorpio to your own Cloudflare account (docs/self-hosting.md). It works as it is:
+  // the D1 database and KV namespace below have no ids, so the first `npm run deploy` creates them. `npm run dev`
+  // runs it on local storage.
+  "$schema": "./server/node_modules/wrangler/config-schema.json",
+  "name": "scorpio",
+  "main": "server/src/index.ts",
+  "compatibility_date": "2026-10-03",
+  "compatibility_flags": ["nodejs_compat"],
+  // To serve on your own domain: "routes": [{ "pattern": "scorpio.example.com", "custom_domain": true }]. For a content
+  // domain (CONTENT_DOMAIN below), also route every host under it here: { "pattern": "*.example-content.com/*", "zone_name": "example-content.com" }.
+  "workers_dev": true,
+  "observability": { "enabled": true },
+  // The web app: static files are served by Cloudflare straight from the assets; anything that is not a file, HTML pages
+  // included, goes to the Worker. Cache headers: web/public/_headers.
+  "assets": {
+    "directory": "web/public",
+    "binding": "ASSETS",
+    "run_worker_first": false
+  },
+  "durable_objects": {
+    "bindings": [{ "name": "ROOMS", "class_name": "RoomDO" }]
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["RoomDO"] }],
+  // 03:17 UTC the daily job (purge, retention, eviction); every 10 minutes the ops page's activity backfill.
+  "triggers": { "crons": ["17 3 * * *", "*/10 * * * *"] },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "scorpio-db",
+      "migrations_dir": "server/migrations"
+    }
+  ],
+  // The deployed version's id: the pages stamp it on every /static/*.css|js they link, so those can be cached for a year.
+  "version_metadata": { "binding": "CF_VERSION_METADATA" },
+  "kv_namespaces": [{ "binding": "KV" }],
+  "ratelimits": [{ "name": "DEVICE_CODE_LIMIT", "namespace_id": "1001", "simple": { "limit": 10, "period": 60 } }],
+  // Email-code sign-in sends from here; it stays off until its secrets are set (below).
+  "send_email": [{ "name": "EMAIL" }],
+  // Files in messages need R2, which Cloudflare turns on only after a payment method is added (there is a free
+  // allowance). Without it everything else works and files cannot be sent. Once R2 is on, uncomment the line below
+  // and deploy again: the bucket is created for you. Files are kept as rooms/<roomId>/files/<sha256>.
+  // "r2_buckets": [{ "binding": "FILES" }],
+  // Keep variables set in the dashboard instead of wiping them on deploy; vars below still win for the names they define.
+  "keep_vars": true,
+  "vars": {
+    // Public origin of this deployment, e.g. https://scorpio.example.com; OAuth callbacks, device links and the install
+    // command in invitations are built from it. Empty: the address the request came to. Set it once you add your own domain.
+    "PUBLIC_URL": "",
+    // Accounts (comma-separated handles) that get the service's alerts by push and see the ops page.
+    "OPS_ACCOUNTS": "",
+    // The day of the month your Workers plan renews: the ops page's billing period.
+    "CF_BILLING_DAY": "1",
+    // Another domain where Markdown, plain text and HTML in files are shown, a new host each time. Empty: files are only downloaded.
+    "CONTENT_DOMAIN": ""
+  }
+  // Secrets: set in the dashboard or with `wrangler secret put` (.dev.vars locally), never here; .dev.vars.example
+  // lists them. Each feature stays off without its own:
+  // GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET (sign-in), and optionally
+  // DEV_LOGIN_KEY (enables the key-protected test sign-in, POST /auth/dev; leave unset in production),
+  // TURNSTILE_SITE_KEY and TURNSTILE_SECRET (Turnstile on sign-up and email-code sign-in),
+  // LOGIN_CODE_KEY, EMAIL_SENDING_DOMAIN and, without Turnstile, EMAIL_LOGIN_NO_TURNSTILE=true (email-code sign-in),
+  // CF_ANALYTICS_TOKEN (Account Analytics: Read only; the ops page's cost tab),
+  // VIEW_TICKET_KEY (a random string of 32+ characters: signs the content domain's tickets).
+}

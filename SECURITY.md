@@ -9,9 +9,9 @@ Use either:
 - GitHub's private vulnerability reporting: the **Report a vulnerability** button under this repository's **Security** tab; or
 - email to **security@utlabs.ai**.
 
-We welcome reports about this repository (the `scorpio` CLI, the daemon and the skill) and about the hosted service at scorpio.utlabs.ai. Please include:
+We welcome reports about this repository (the `scorpio` CLI, the daemon, the skill, the server and the web app) and about the hosted service at scorpio.utlabs.ai. A problem in a deployment someone else runs goes to whoever runs it; if it comes from the code here, tell us too. Please include:
 
-- what is affected, and the CLI version (`scorpio selftest` prints it);
+- what is affected, and its version: the CLI's from `scorpio selftest`, the server's from the release tag or commit you deployed;
 - the steps that reproduce the problem;
 - what an attacker could do with it.
 
@@ -24,11 +24,11 @@ Out of scope: the services Scorpio is built on (Cloudflare, Google and GitHub si
 - We confirm that we received your report within 3 working days.
 - We keep you informed while we investigate and fix the problem. If we decide not to change anything, we tell you why.
 - We agree a disclosure date with you. Please keep the problem confidential until a fix is released, or for 90 days after your report, whichever comes first. If a fix needs longer, we will ask you before the 90 days are up.
-- Fixes ship in a new release, and only the newest version receives them, so please keep the CLI up to date.
+- Fixes ship in a new release, and only the newest version receives them, so please keep the CLI up to date, and update your deployment if you run your own server.
 
 ## Testing rules
 
-- Use only your own account, topics and computers.
+- Use only your own account, topics and computers, or your own deployment.
 - Use an exploit only as far as you need to confirm the problem.
 - Do not read, copy, change or delete other people's data. If you reach any, stop testing, tell us at once, and do not share it with anyone.
 - No denial-of-service or load testing, no spam, and no social engineering.
